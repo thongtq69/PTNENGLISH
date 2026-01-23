@@ -137,6 +137,105 @@ export default function StudentCorner() {
                 </div>
             </section>
 
+            {/* Student Playground - Bento Grid Layout */}
+            <section className="py-24 bg-slate-50 overflow-hidden">
+                <div className="container mx-auto px-6">
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <h2 className="text-primary font-heading text-lg font-bold uppercase tracking-[0.3em] mb-4">
+                            PTN Playground
+                        </h2>
+                        <h3 className="text-4xl md:text-5xl font-heading font-black text-accent leading-tight">
+                            Hoạt động thường nhật <br /> & <span className="text-primary">Sân chơi</span> học viên
+                        </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[800px]">
+                        {/* Main Workshop - Large Box */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            className="md:col-span-2 md:row-span-2 relative group rounded-[2rem] overflow-hidden shadow-2xl"
+                        >
+                            <img
+                                src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/600349560_811824385145541_924529116167773166_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=WrY3AmzobhsQ7kNvwEn4CKw&_nc_oc=Adnmgkplx_LTyk9c-hUbzVarhTwhrLUBSzCD0uiDfoAXYzTQw_bz849RWOQUl3hK3O8&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=x3LbkFcIHWTpcw3xM-kfCA&oh=00_AfprMZKVjjgaBCy1Nvm9AmHxJLbSdtEzmcB6F_9igPgNfw&oe=697937FB"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                alt="Main Workshop"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+                            <div className="absolute bottom-10 left-10 text-white">
+                                <span className="bg-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 inline-block">Featured Workshop</span>
+                                <h4 className="text-3xl font-heading font-black">Academic Mastery <br />& Debate Skills</h4>
+                            </div>
+                        </motion.div>
+
+                        {/* Chill Corner 1 */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.1 }}
+                            className="md:col-span-2 relative group rounded-[2rem] overflow-hidden shadow-xl"
+                        >
+                            <img
+                                src="https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/512614209_670142242647090_8961518773189171975_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=cK75sFRaF_IQ7kNvwGgDA4g&_nc_oc=AdkHowDUM1ksA7R5SgNBUWuiG1MPWNh1t0fAnY6wm923yDIJcRtP1WIwS5AlEXRVzD0&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=gcezZhlCLo3osHQGtAfGfw&oh=00_AfrpDGP0UUafCpx4SFhKepmE1W2SL-Yy-ONQ5-kg3f1BPw&oe=6979550A"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                alt="Chill Corner"
+                            />
+                            <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-slate-900/60 to-transparent">
+                                <p className="text-white font-heading font-bold">PTN Chill Room</p>
+                            </div>
+                        </motion.div>
+
+                        {/* Workshop secondary */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.2 }}
+                            className="relative group rounded-[2rem] overflow-hidden shadow-xl"
+                        >
+                            <img
+                                src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/604346724_815746011420045_1980336211823099106_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=qkLGV5Y5KSgQ7kNvwGJsDoK&_nc_oc=AdntDpZoz4yfKEI0j-Hv878q7mWIWTW5oGmMn9F5fPSS-SlIgkoN1lDvE0yvWJH6q0k&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=u7onphvhD4Z99P4LGaRv_A&oh=00_AfriXULs8DInaQCLKejSaQtSojNbi4ZUTHCZWT2iMQltzQ&oe=69794BE7"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                alt="Workshop 2"
+                            />
+                        </motion.div>
+
+                        {/* Tea Break / Cafe */}
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.3 }}
+                            className="relative group rounded-[2rem] overflow-hidden shadow-xl"
+                        >
+                            <img
+                                src="https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/597251461_806720128989300_4899544521814172881_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=2Oq8wx-fJf4Q7kNvwGJ5r1V&_nc_oc=AdlXmd5w0vZ38pDbd51romsYEKcLIWmebDEnj6yNjGJucDFJWhOoMzt-mwq8kmDkIHI&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=TL2nZsVgFS8B57vSeDOb2A&oh=00_AfqzWqpezjeU14LZv63tB7HOg2tGplHMYcwE60k48sTt9w&oe=69793FC0"
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                alt="Cafe Time"
+                            />
+                        </motion.div>
+                    </div>
+
+                    {/* Secondary Grid for more photos */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                            <img src="https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/605711185_815745994753380_1350455286566131952_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=bbbY55kwlk0Q7kNvwHRa7RP&_nc_oc=Admy6SDvlmTH1Tr72HAjNa_G7eGPNHMK5CIgrYqEbKRjh5Uj_cF6eoZ6aLdvE4K0SDA&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=xoPy26A-wxyUkCQVcUWUkQ&oh=00_AfpKY0mVKSDuTmkccf8YXyg-FWzGwwhpRTVo2XCmpz9O7w&oe=69793079" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 1" />
+                        </div>
+                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                            <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/542167879_726034340391213_5658940871196288765_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=St8AHxsrVR0Q7kNvwFwOmLn&_nc_oc=Adl4Lp49qB-RMMmxbPGKygiUPbK8J1w-4Hf5eStBm49VtwgCm4qhQQNbOZiMwoz3N2Y&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=4g6YCtrOndWcVU0oKj0sfg&oh=00_AfprlDPBuc_MyGOygUib5r29YCf4W16wniEBLf1aVvsM8w&oe=69791B83" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 2" />
+                        </div>
+                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                            <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/525214975_697220113272636_4528856525560068367_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=3vVyVZowSvMQ7kNvwFRwTUp&_nc_oc=AdnRBw0O3ICn3o11Kj3zLnOOG2-emM1DfG1cgc8mnw7C_Ru9NI0suh4t-EGZLWhiaMw&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=jjHX8Hxw9nv6VMh6HDCS8g&oh=00_Afqr46-YmMLLOuFiGyfotdQCfenqJ6hs8HjaxMMCjANu-g&oe=69793F31" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 3" />
+                        </div>
+                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                            <img src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/503126116_651142867880361_4587213466788932149_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwCQsjroqCIQ7kNvwEe3I67&_nc_oc=Adl9pgY9ZbbM8XDTi2IRRtQVpS-EnI2AiGApOF0adVTLk8y0l8DnORpMwmG_XdG1XTE&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=S-dStxBKkC4PjgNayZw-BQ&oh=00_Afq66Dxbl0GpuLOKUMSasJQLaQV7xiefRXktJjMQ3ZhXBA&oe=69795068" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 4" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Hall Of Fame Section */}
             <HallOfFame />
 

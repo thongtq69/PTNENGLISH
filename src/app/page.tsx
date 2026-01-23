@@ -59,7 +59,7 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <p className="text-lg md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-6 py-1">
-              “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-white font-bold">PTN English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
+              “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-primary font-bold">PTN</span> <span className="text-white font-bold">English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
             </p>
             <div className="mt-4 flex justify-center items-center gap-3">
               <div className="h-px w-8 bg-primary/30"></div>
@@ -72,7 +72,7 @@ export default function Home() {
 
       {/* Introduction Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-6 text-center max-w-7xl">
+        <div className="container mx-auto px-6 text-center max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -81,17 +81,17 @@ export default function Home() {
             <h2 className="text-primary font-heading text-lg font-bold uppercase tracking-[0.3em] mb-3">
               Hệ Thống Đào Tạo Academic Master
             </h2>
-            <h3 className="text-3xl md:text-5xl font-heading font-black mb-6 text-accent leading-tight">
+            <h3 className="text-3xl md:text-4xl font-heading font-semibold mb-6 text-accent leading-tight">
               TTNN PHÚ TÀI NĂNG <br />
-              <span className="text-primary text-2xl md:text-3xl">(PTelc - PT English Language Centre)</span>
+              (PTelc - PT English Language Centre)
             </h3>
-            <p className="text-lg md:text-xl text-slate-600 font-body leading-relaxed mb-12 mx-auto max-w-4xl">
-              Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín.
+            <p className="text-lg text-slate-600 font-body leading-relaxed mb-10 mx-auto max-w-4xl">
+              Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
             </p>
           </motion.div>
 
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
             {PROGRAMS.map((prog, idx) => (
               <motion.div
                 key={idx}
@@ -99,15 +99,15 @@ export default function Home() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className={`group cursor-pointer ${idx >= 3 ? 'lg:col-span-1 lg:first:col-start-2' : ''} ${idx === 3 ? 'lg:col-start-auto' : ''}`}
+                className="group cursor-pointer"
               >
-                <div className="relative aspect-square rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                <div className="relative aspect-square rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2">
                   <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   {prog.name === "PTE Academic" && (
-                    <div className="absolute top-6 right-6 bg-primary text-white text-[11px] font-black px-4 py-1.5 rounded-full uppercase tracking-widest z-20 shadow-lg">New</div>
+                    <div className="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest z-20">New</div>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 p-10 pt-20 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent">
-                    <p className="text-white font-heading font-black text-2xl md:text-3xl leading-tight text-left">{prog.name}</p>
+                  <div className="absolute inset-x-0 bottom-0 p-8 pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
+                    <p className="text-white font-heading font-bold text-lg leading-tight">{prog.name}</p>
                   </div>
                 </div>
               </motion.div>
