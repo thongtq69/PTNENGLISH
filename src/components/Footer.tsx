@@ -19,14 +19,14 @@ export default function Footer() {
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
                 <div>
                     <div className="mb-4">
-                        <div className="flex flex-col w-fit bg-white p-3 rounded-xl mb-4 shadow-sm">
-                            <span className="text-xl font-heading font-extrabold tracking-tight">
-                                <span className="text-primary uppercase">PTN</span>
-                                <span className="text-accent uppercase"> ENGLISH</span>
+                        <div className="flex flex-col w-fit">
+                            <span className="text-xl font-heading font-extrabold tracking-tight uppercase">
+                                <span className="text-primary">PTN</span>
+                                <span className="text-white"> ENGLISH</span>
                             </span>
-                            <div className="flex justify-between w-full mt-1 border-t border-slate-100 pt-1 text-[#095e7c]">
+                            <div className="flex justify-between w-full mt-1 border-t border-slate-700 pt-1 text-[#095e7c]">
                                 {"PARTNER TO NAVIGATE".split("").map((char, index) => (
-                                    <span key={index} className="text-[9px] font-bold uppercase leading-none tracking-[0.05em]">
+                                    <span key={index} className="text-[8px] font-bold uppercase leading-none tracking-[0.05em]">
                                         {char === " " ? "\u00A0" : char}
                                     </span>
                                 ))}

@@ -59,7 +59,7 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <p className="text-lg md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-6 py-1">
-              “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-primary font-bold">PTN</span> <span className="text-white font-bold">English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
+              “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-white font-bold">PTN English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
             </p>
             <div className="mt-4 flex justify-center items-center gap-3">
               <div className="h-px w-8 bg-primary/30"></div>
