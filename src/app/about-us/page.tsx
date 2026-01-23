@@ -201,7 +201,7 @@ export default function AboutUs() {
                         >
                             <div className="aspect-[4/3] rounded-[2rem] overflow-hidden shadow-xl">
                                 <img
-                                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200"
+                                    src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/592696975_798019503192696_5381097215126223627_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=y7qZy0WgaVAQ7kNvwHVmX2S&_nc_oc=Adn0UnxILVl60OrEolmTkLzH8Mz93_7A2My7jQn7Ug6yVBkJwSxXoGxc8tNZvOUb5sA&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=HOFT5BaX3DDhVoFuNh3deQ&oh=00_AfrLYWdG1RSv7hkuK8s7RAlVQe-oJ3NdxoD9iS0RLdltPA&oe=69793819"
                                     alt="Founder Story"
                                     className="w-full h-full object-cover"
                                 />
