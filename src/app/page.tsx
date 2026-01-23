@@ -50,24 +50,21 @@ export default function Home() {
       <Header />
       <Hero />
 
-      {/* Philosophy Section */}
-      <section className="py-12 md:py-16 bg-slate-50 border-b border-slate-100">
-        <div className="container mx-auto px-6 text-center max-w-4xl">
+      {/* Philosophy Section - Compact & Dark */}
+      <section className="py-12 bg-slate-900 border-y border-white/5">
+        <div className="container mx-auto px-6 text-center max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="bg-white rounded-[2.5rem] p-10 md:p-16 shadow-2xl shadow-slate-200/50 border border-slate-100">
-              <p className="text-xl md:text-2xl font-serif text-accent leading-relaxed not-italic font-medium border-l-4 border-primary pl-8 py-2">
-                “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
-              </p>
-            </div>
-            <div className="mt-6 flex justify-center items-center gap-4">
-              <div className="h-px w-12 bg-primary/30"></div>
-              <span className="text-primary font-bold uppercase tracking-[0.3em] text-[10px]">PTN Philosophy</span>
-              <div className="h-px w-12 bg-primary/30"></div>
+            <p className="text-lg md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-6 py-1">
+              “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-primary font-bold">PTN</span> <span className="text-white font-bold">English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
+            </p>
+            <div className="mt-4 flex justify-center items-center gap-3">
+              <div className="h-px w-8 bg-primary/30"></div>
+              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[9px]">PTN Philosophy</span>
+              <div className="h-px w-8 bg-primary/30"></div>
             </div>
           </motion.div>
         </div>
