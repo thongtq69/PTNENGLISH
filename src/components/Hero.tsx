@@ -18,9 +18,6 @@ export default function Hero() {
             {/* Content */}
             <div className="container mx-auto px-6 relative z-10 text-center">
                 <div className="max-w-4xl mx-auto">
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest mb-6 border border-white/20">
-                        The Master Standard for English Excellence
-                    </div>
                     <h1 className="text-white text-4xl md:text-6xl font-heading font-normal tracking-tight leading-[1.05] mb-8 animate-fade-in-up max-w-2xl mx-auto">
                         Kiến tạo hành trình <br className="hidden md:block" /> tri thức
                     </h1>

@@ -72,7 +72,7 @@ export default function Header() {
                     <Link href="/" className="flex flex-col group w-fit">
                         <span className="text-2xl font-heading font-extrabold tracking-tight">
                             <span className="text-primary uppercase">PTN</span>
-                            <span className={`uppercase transition-colors ${isTransparent ? "text-white group-hover:text-primary" : "text-accent group-hover:text-primary"}`}> English</span>
+                            <span className="uppercase text-[#1e293b] group-hover:text-primary transition-colors"> English</span>
                         </span>
                         <div className={`flex justify-between w-full mt-1 border-t pt-1 transition-colors ${isTransparent ? "border-white/20 text-white/70" : "border-slate-100 text-[#095e7c]"}`}>
                             {"PARTNER TO NAVIGATE".split("").map((char, index) => (

@@ -59,9 +59,11 @@ export default function Home() {
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <p className="text-xl md:text-2xl font-serif text-accent leading-relaxed not-italic font-medium border-l-4 border-primary pl-8 py-2">
-              “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
-            </p>
+            <div className="bg-white rounded-[2.5rem] p-10 md:p-16 shadow-2xl shadow-slate-200/50 border border-slate-100">
+              <p className="text-xl md:text-2xl font-serif text-accent leading-relaxed not-italic font-medium border-l-4 border-primary pl-8 py-2">
+                “Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu và sự đồng hành bền bỉ, <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> hướng tới việc xây dựng cho người học nền tảng vững chắc, tư duy học tập rõ ràng và sự tự tin cần thiết để định hướng con đường học tập và cuộc sống lâu dài.”
+              </p>
+            </div>
             <div className="mt-6 flex justify-center items-center gap-4">
               <div className="h-px w-12 bg-primary/30"></div>
               <span className="text-primary font-bold uppercase tracking-[0.3em] text-[10px]">PTN Philosophy</span>
