@@ -35,108 +35,6 @@ export default function StudentCorner() {
                 </div>
             </section>
 
-            {/* Main Tools Section */}
-            <section className="py-24 bg-white">
-                <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-
-                        {/* Learning Materials Side */}
-                        <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="group relative bg-slate-50 rounded-[3rem] p-10 md:p-14 overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
-                        >
-                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full translate-x-10 -translate-y-10 group-hover:translate-x-5 group-hover:-translate-y-5 transition-transform duration-700"></div>
-
-                            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-10 transition-transform group-hover:scale-110 duration-500">
-                                <BookOpen size={32} className="text-primary" />
-                            </div>
-
-                            <h2 className="text-3xl font-heading font-bold text-accent mb-6">
-                                Kho Tài Liệu <br /> <span className="text-primary font-bold">Độc Quyền</span>
-                            </h2>
-
-                            <div className="space-y-6 mb-12">
-                                <p className="text-slate-600 font-body leading-relaxed text-lg">
-                                    Truy cập tức thì vào hệ thống học tập LMS hiện đại của <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>. Nơi lưu trữ hàng ngàn slide bài giảng, bài tập bổ trợ, và giáo trình chuyên sâu được biên soạn riêng cho từng khóa học.
-                                </p>
-                                <ul className="space-y-4">
-                                    {[
-                                        "Hệ thống bài tập Online tương tác",
-                                        "Thư viện giáo trình MA.TESOL biên soạn",
-                                        "Theo dõi lộ trình & kết quả học tập",
-                                        "Kho video bài giảng xem lại 24/7"
-                                    ].map((item, idx) => (
-                                        <li key={idx} className="flex items-center gap-3 text-slate-500 font-medium">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <motion.a
-                                href="https://lms.ptelc.edu.vn/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ gap: "20px" }}
-                                className="inline-flex items-center gap-4 bg-primary text-white px-8 py-5 rounded-full font-bold text-lg shadow-xl shadow-primary/20 transition-all"
-                            >
-                                Vào cổng học tập
-                                <ArrowRight size={20} />
-                            </motion.a>
-                        </motion.div>
-
-                        {/* Mock Test Side */}
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
-                            className="group relative bg-accent rounded-[3rem] p-10 md:p-14 overflow-hidden shadow-2xl shadow-accent/20 hover:shadow-primary/10 transition-all duration-500"
-                        >
-                            <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-tr-full -translate-x-10 translate-y-10 group-hover:-translate-x-5 group-hover:translate-y-5 transition-transform duration-700"></div>
-
-                            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-10 border border-white/20 transition-transform group-hover:scale-110 duration-500">
-                                <ClipboardList size={32} className="text-white" />
-                            </div>
-
-                            <h2 className="text-3xl font-heading font-bold text-white mb-6">
-                                Luyện Thi Thử <br /> <span className="text-primary font-bold">Chuẩn Quốc Tế</span>
-                            </h2>
-
-                            <div className="space-y-6 mb-12">
-                                <p className="text-slate-300 font-body leading-relaxed text-lg">
-                                    Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề and nhận phân tích chi tiết kỹ năng ngay lập tức.
-                                </p>
-                                <ul className="space-y-4">
-                                    {[
-                                        "Mock Test IELTS 4 kỹ năng chuẩn IDP/BC",
-                                        "Kho đề thi cập nhật mới nhất hàng quý",
-                                        "Chấm điểm & Phân tích lỗi sai chi tiết",
-                                        "Giao diện chuẩn phòng thi thực tế"
-                                    ].map((item, idx) => (
-                                        <li key={idx} className="flex items-center gap-3 text-slate-400 font-medium">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
-                                            {item}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-
-                            <Link
-                                href="/test"
-                                className="inline-flex items-center gap-4 bg-white text-accent hover:bg-primary hover:text-white px-8 py-5 rounded-full font-bold text-lg transition-all"
-                            >
-                                Bắt đầu thi thử
-                                <ArrowRight size={20} />
-                            </Link>
-                        </motion.div>
-
-                    </div>
-                </div>
-            </section>
-
             {/* Student Playground - Bento Grid Layout */}
             <section className="py-24 bg-slate-50 overflow-hidden">
                 <div className="container mx-auto px-6">
@@ -238,6 +136,108 @@ export default function StudentCorner() {
 
             {/* Hall Of Fame Section */}
             <HallOfFame />
+
+            {/* Main Tools Section */}
+            <section className="py-24 bg-white">
+                <div className="container mx-auto px-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+                        {/* Learning Materials Side */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="group relative bg-slate-50 rounded-[3rem] p-10 md:p-14 overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
+                        >
+                            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full translate-x-10 -translate-y-10 group-hover:translate-x-5 group-hover:-translate-y-5 transition-transform duration-700"></div>
+
+                            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-10 transition-transform group-hover:scale-110 duration-500">
+                                <BookOpen size={32} className="text-primary" />
+                            </div>
+
+                            <h2 className="text-3xl font-heading font-bold text-accent mb-6">
+                                Kho Tài Liệu <br /> <span className="text-primary font-bold">Độc Quyền</span>
+                            </h2>
+
+                            <div className="space-y-6 mb-12">
+                                <p className="text-slate-600 font-body leading-relaxed text-lg">
+                                    Truy cập tức thì vào hệ thống học tập LMS hiện đại của <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>. Nơi lưu trữ hàng ngàn slide bài giảng, bài tập bổ trợ, và giáo trình chuyên sâu được biên soạn riêng cho từng khóa học.
+                                </p>
+                                <ul className="space-y-4">
+                                    {[
+                                        "Hệ thống bài tập Online tương tác",
+                                        "Thư viện giáo trình MA.TESOL biên soạn",
+                                        "Theo dõi lộ trình & kết quả học tập",
+                                        "Kho video bài giảng xem lại 24/7"
+                                    ].map((item, idx) => (
+                                        <li key={idx} className="flex items-center gap-3 text-slate-500 font-medium">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <motion.a
+                                href="https://lms.ptelc.edu.vn/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ gap: "20px" }}
+                                className="inline-flex items-center gap-4 bg-primary text-white px-8 py-5 rounded-full font-bold text-lg shadow-xl shadow-primary/20 transition-all"
+                            >
+                                Vào cổng học tập
+                                <ArrowRight size={20} />
+                            </motion.a>
+                        </motion.div>
+
+                        {/* Mock Test Side */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            className="group relative bg-accent rounded-[3rem] p-10 md:p-14 overflow-hidden shadow-2xl shadow-accent/20 hover:shadow-primary/10 transition-all duration-500"
+                        >
+                            <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-tr-full -translate-x-10 translate-y-10 group-hover:-translate-x-5 group-hover:translate-y-5 transition-transform duration-700"></div>
+
+                            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-10 border border-white/20 transition-transform group-hover:scale-110 duration-500">
+                                <ClipboardList size={32} className="text-white" />
+                            </div>
+
+                            <h2 className="text-3xl font-heading font-bold text-white mb-6">
+                                Luyện Thi Thử <br /> <span className="text-primary font-bold">Chuẩn Quốc Tế</span>
+                            </h2>
+
+                            <div className="space-y-6 mb-12">
+                                <p className="text-slate-300 font-body leading-relaxed text-lg">
+                                    Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề and nhận phân tích chi tiết kỹ năng ngay lập tức.
+                                </p>
+                                <ul className="space-y-4">
+                                    {[
+                                        "Mock Test IELTS 4 kỹ năng chuẩn IDP/BC",
+                                        "Kho đề thi cập nhật mới nhất hàng quý",
+                                        "Chấm điểm & Phân tích lỗi sai chi tiết",
+                                        "Giao diện chuẩn phòng thi thực tế"
+                                    ].map((item, idx) => (
+                                        <li key={idx} className="flex items-center gap-3 text-slate-400 font-medium">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+
+                            <Link
+                                href="/test"
+                                className="inline-flex items-center gap-4 bg-white text-accent hover:bg-primary hover:text-white px-8 py-5 rounded-full font-bold text-lg transition-all"
+                            >
+                                Bắt đầu thi thử
+                                <ArrowRight size={20} />
+                            </Link>
+                        </motion.div>
+
+                    </div>
+                </div>
+            </section>
 
             {/* Support Section */}
             <section className="pb-32 bg-white">
