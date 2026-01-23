@@ -101,12 +101,12 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="group cursor-pointer"
               >
-                <div className="relative h-72 rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2">
+                <div className="relative aspect-square rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2">
                   <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   {prog.name === "PTE Academic" && (
                     <div className="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest z-20">New</div>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 p-8 pt-16 bg-gradient-to-t from-slate-900/90 to-transparent">
+                  <div className="absolute inset-x-0 bottom-0 p-8 pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
                     <p className="text-white font-heading font-bold text-lg leading-tight">{prog.name}</p>
                   </div>
                 </div>
