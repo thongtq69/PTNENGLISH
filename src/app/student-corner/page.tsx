@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
-import { BookOpen, ExternalLink, GraduationCap, ClipboardList, ArrowRight } from "lucide-react";
+import { BookOpen, ExternalLink, GraduationCap, ClipboardList, ArrowRight, Phone, MessageCircle } from "lucide-react";
 import HallOfFame from "@/components/HallOfFame";
 import Link from "next/link";
 
@@ -116,20 +116,49 @@ export default function StudentCorner() {
                         </motion.div>
                     </div>
 
-                    {/* Secondary Grid for more photos */}
+                    {/* Secondary Grid for more photos + Video Placeholder */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
+                        >
                             <img src="https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/605711185_815745994753380_1350455286566131952_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=bbbY55kwlk0Q7kNvwHRa7RP&_nc_oc=Admy6SDvlmTH1Tr72HAjNa_G7eGPNHMK5CIgrYqEbKRjh5Uj_cF6eoZ6aLdvE4K0SDA&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=xoPy26A-wxyUkCQVcUWUkQ&oh=00_AfpKY0mVKSDuTmkccf8YXyg-FWzGwwhpRTVo2XCmpz9O7w&oe=69793079" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 1" />
-                        </div>
-                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                        </motion.div>
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
+                        >
                             <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/542167879_726034340391213_5658940871196288765_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=St8AHxsrVR0Q7kNvwFwOmLn&_nc_oc=Adl4Lp49qB-RMMmxbPGKygiUPbK8J1w-4Hf5eStBm49VtwgCm4qhQQNbOZiMwoz3N2Y&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=4g6YCtrOndWcVU0oKj0sfg&oh=00_AfprlDPBuc_MyGOygUib5r29YCf4W16wniEBLf1aVvsM8w&oe=69791B83" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 2" />
-                        </div>
-                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
+                        </motion.div>
+                        <motion.div
+                            whileHover={{ y: -5 }}
+                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
+                        >
                             <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/525214975_697220113272636_4528856525560068367_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=3vVyVZowSvMQ7kNvwFRwTUp&_nc_oc=AdnRBw0O3ICn3o11Kj3zLnOOG2-emM1DfG1cgc8mnw7C_Ru9NI0suh4t-EGZLWhiaMw&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=jjHX8Hxw9nv6VMh6HDCS8g&oh=00_Afqr46-YmMLLOuFiGyfotdQCfenqJ6hs8HjaxMMCjANu-g&oe=69793F31" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 3" />
-                        </div>
-                        <div className="aspect-square rounded-2xl overflow-hidden shadow-lg group">
-                            <img src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/503126116_651142867880361_4587213466788932149_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwCQsjroqCIQ7kNvwEe3I67&_nc_oc=Adl9pgY9ZbbM8XDTi2IRRtQVpS-EnI2AiGApOF0adVTLk8y0l8DnORpMwmG_XdG1XTE&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=S-dStxBKkC4PjgNayZw-BQ&oh=00_Afq66Dxbl0GpuLOKUMSasJQLaQV7xiefRXktJjMQ3ZhXBA&oe=69795068" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 4" />
-                        </div>
+                        </motion.div>
+
+                        {/* Video Placeholder Card */}
+                        <motion.a
+                            href="https://www.facebook.com/100089539590679/videos/pcb.683230831338231/1234526698354766"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            whileHover={{ y: -5 }}
+                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative bg-accent"
+                        >
+                            <img
+                                src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/503126116_651142867880361_4587213466788932149_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwCQsjroqCIQ7kNvwEe3I67&_nc_oc=Adl9pgY9ZbbM8XDTi2IRRtQVpS-EnI2AiGApOF0adVTLk8y0l8DnORpMwmG_XdG1XTE&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=S-dStxBKkC4PjgNayZw-BQ&oh=00_Afq66Dxbl0GpuLOKUMSasJQLaQV7xiefRXktJjMQ3ZhXBA&oe=69795068"
+                                className="w-full h-full object-cover opacity-60 transition-all group-hover:scale-110 group-hover:opacity-40"
+                                alt="Student Life 4 - Video"
+                            />
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform duration-500">
+                                    <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M8 5v14l11-7z" />
+                                    </svg>
+                                </div>
+                                <span className="mt-4 text-white font-heading font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Xem Video</span>
+                            </div>
+                        </motion.a>
                     </div>
                 </div>
             </section>
@@ -239,20 +268,61 @@ export default function StudentCorner() {
                 </div>
             </section>
 
-            {/* Support Section */}
+            {/* Support Section - Enhanced UI */}
             <section className="pb-32 bg-white">
                 <div className="container mx-auto px-6">
-                    <div className="bg-slate-50 border border-slate-100 rounded-[3rem] p-12 text-center max-w-4xl mx-auto">
-                        <h3 className="text-2xl md:text-3xl font-heading font-bold text-accent mb-6">Bạn gặp khó khăn khi truy cập?</h3>
-                        <p className="text-slate-600 mb-8 max-w-2xl mx-auto">Đội ngũ kỹ thuật and bộ phận Academic luôn sẵn sàng hỗ trợ bạn. Hãy liên hệ hotline hoặc gửi tin nhắn cho chúng tôi ngay.</p>
-                        <div className="flex flex-wrap justify-center gap-6">
-                            <Link href="/contact" className="text-primary font-bold flex items-center gap-2 hover:underline">
-                                Trung tâm hỗ trợ <ArrowRight size={16} />
-                            </Link>
-                            <div className="w-px h-6 bg-slate-300 hidden sm:block"></div>
-                            <a href="tel:0902508290" className="text-accent font-bold">Hotline: 0902 508 290</a>
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="bg-slate-900 rounded-[3rem] p-12 md:p-16 text-center max-w-5xl mx-auto relative overflow-hidden"
+                    >
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
+
+                        <div className="relative z-10">
+                            <h3 className="text-3xl md:text-5xl font-heading font-black text-white mb-6">
+                                Bạn gặp khó khăn <br className="md:hidden" /> <span className="text-primary">khi truy cập?</span>
+                            </h3>
+                            <p className="text-slate-400 mb-12 max-w-2xl mx-auto text-lg">
+                                Đội ngũ kỹ thuật and bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.
+                            </p>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+                                <Link
+                                    href="/contact"
+                                    className="flex items-center justify-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-6 rounded-2xl transition-all group"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <MessageCircle size={24} />
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="font-bold text-lg">Trung tâm hỗ trợ</p>
+                                        <p className="text-xs text-slate-500">Gửi yêu cầu hỗ trợ trực tuyến</p>
+                                    </div>
+                                </Link>
+
+                                <a
+                                    href="tel:0902508290"
+                                    className="flex items-center justify-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-6 rounded-2xl transition-all group"
+                                >
+                                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <Phone size={24} />
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="font-bold text-lg">0902 508 290</p>
+                                        <p className="text-xs text-slate-500">Hotline hỗ trợ kỹ thuật</p>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div className="mt-12 pt-12 border-t border-white/5">
+                                <p className="text-slate-500 text-sm font-medium uppercase tracking-[0.2em]">
+                                    Partner To Navigate · PTN English
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </section>
 
