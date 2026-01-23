@@ -1,92 +1,68 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Headphones, PenTool, CheckCircle, Clock, AlertCircle, ChevronRight, ChevronLeft, Send, Play, Pause } from "lucide-react";
-
-type Question = {
-    id: number;
-    type: "radio" | "checkbox" | "text" | "essay";
-    question: string;
-    options?: string[];
-    section: "reading" | "writing" | "listening";
-};
-
-const TEST_DATA: Question[] = [
-    // Listening
-    {
-        id: 1,
-        section: "listening",
-        type: "radio",
-        question: "What is the main topic of the conversation?",
-        options: ["University admission", "Course selection", "Library registration", "Campus tour"]
-    },
-    {
-        id: 2,
-        section: "listening",
-        type: "radio",
-        question: "When does the library close on Fridays?",
-        options: ["5:00 PM", "7:00 PM", "9:00 PM", "11:00 PM"]
-    },
-    // Reading
-    {
-        id: 3,
-        section: "reading",
-        type: "radio",
-        question: "According to the passage, what is the primary cause of urban heat islands?",
-        options: ["Lack of vegetation", "Traffic congestion", "Industrial emissions", "High-rise buildings"]
-    },
-    {
-        id: 4,
-        section: "reading",
-        type: "checkbox",
-        question: "Which TWO of the following are mentioned as potential solutions? (Select 2)",
-        options: ["Green roofs", "Reflective pavements", "Limiting car usage", "Building underground"]
-    },
-    // Writing
-    {
-        id: 5,
-        section: "writing",
-        type: "essay",
-        question: "Some people believe that artificial intelligence will eventually replace teachers in the classroom. To what extent do you agree or disagree with this statement? (Minimum 250 words)"
-    }
-];
+import {
+    BookOpen, Headphones, PenTool, CheckCircle, Clock,
+    AlertCircle, ChevronRight, ChevronLeft, Send, Play,
+    Pause, FileText, Settings, Maximize2, Minimize2
+} from "lucide-react";
+import { ACADEMIC_TESTS } from "./constants";
+import Link from "next/link";
 
 export default function TestPage() {
-    const [step, setStep] = useState(0); // 0: Intro, 1: Listening, 2: Reading, 3: Writing, 4: Success
-    const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0);
-    const [answers, setAnswers] = useState<Record<number, any>>({});
+    const [selectedTest, setSelectedTest] = useState<typeof ACADEMIC_TESTS[0] | null>(null);
+    const [step, setStep] = useState(0); // 0: Selection, 1: Intro, 2: Testing, 3: Success
+    const [currentSkill, setCurrentSkill] = useState<"listening" | "reading" | "writing">("listening");
+    const [answers, setAnswers] = useState<Record<string, Record<number, string>>>({
+        listening: {},
+        reading: {},
+        writing: {}
+    });
+
+    // UI States
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(3600); // 60 minutes default
+    const [isFullScreen, setIsFullScreen] = useState(false);
+
     const audioRef = useRef<HTMLAudioElement | null>(null);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    const sections = ["Listening", "Reading", "Writing"];
-    const sectionQuestions = TEST_DATA.filter(q => q.section === sections[step - 1]?.toLowerCase());
-
-    const handleNext = () => {
-        if (currentQuestionIdx < sectionQuestions.length - 1) {
-            setCurrentQuestionIdx(prev => prev + 1);
-        } else if (step < 3) {
-            setStep(prev => prev + 1);
-            setCurrentQuestionIdx(0);
+    // Timer Logic
+    useEffect(() => {
+        if (step === 2) {
+            timerRef.current = setInterval(() => {
+                setCurrentTime(prev => {
+                    if (prev <= 0) {
+                        clearInterval(timerRef.current!);
+                        return 0;
+                    }
+                    return prev - 1;
+                });
+            }, 1000);
         } else {
-            setStep(4);
+            if (timerRef.current) clearInterval(timerRef.current);
         }
+        return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    }, [step]);
+
+    const formatTime = (seconds: number) => {
+        const m = Math.floor(seconds / 60);
+        const s = seconds % 60;
+        return `${m}:${s < 10 ? "0" : ""}${s}`;
     };
 
-    const handlePrev = () => {
-        if (currentQuestionIdx > 0) {
-            setCurrentQuestionIdx(prev => prev - 1);
-        } else if (step > 1) {
-            setStep(prev => prev - 1);
-            const prevSectionQuestions = TEST_DATA.filter(q => q.section === sections[step - 2]?.toLowerCase());
-            setCurrentQuestionIdx(prevSectionQuestions.length - 1);
-        }
-    };
-
-    const handleAnswerChange = (qId: number, value: any) => {
-        setAnswers(prev => ({ ...prev, [qId]: value }));
+    const handleAnswerChange = (skill: string, qIdx: number, val: string) => {
+        setAnswers(prev => ({
+            ...prev,
+            [skill]: {
+                ...prev[skill as keyof typeof answers],
+                [qIdx]: val
+            }
+        }));
     };
 
     const toggleAudio = () => {
@@ -97,263 +73,337 @@ export default function TestPage() {
         }
     };
 
-    return (
-        <main className="min-h-screen bg-slate-50">
-            <Header />
+    const handleSubmit = () => {
+        setStep(3);
+    };
 
-            <div className="pt-32 pb-20 container mx-auto px-6 max-w-5xl">
-                <AnimatePresence mode="wait">
-                    {/* Step 0: Introduction */}
-                    {step === 0 && (
-                        <motion.div
-                            key="intro"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="bg-white rounded-[4rem] p-12 md:p-20 shadow-2xl text-center border border-slate-100"
+    const renderAnswerSheet = () => {
+        const count = selectedTest?.[currentSkill]?.questionsCount || 40;
+
+        if (currentSkill === "writing") {
+            return (
+                <div className="space-y-8">
+                    <div className="p-6 bg-primary/5 border border-primary/10 rounded-2xl">
+                        <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
+                            <PenTool size={18} /> Writing Task Response
+                        </h4>
+                        <p className="text-xs text-slate-500">Hãy nhập bài làm của bạn vào ô dưới đây. Định dạng đoạn văn rõ ràng.</p>
+                    </div>
+                    {[1, 2].map(idx => (
+                        <div key={idx} className="space-y-4">
+                            <label className="text-sm font-black text-accent uppercase tracking-widest">Task 0{idx}</label>
+                            <textarea
+                                className="w-full h-80 p-8 rounded-[2rem] bg-slate-50 border border-slate-200 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-body text-slate-700 resize-none shadow-inner"
+                                placeholder={`Type your text for Writing Task ${idx}...`}
+                                value={answers.writing[idx] || ""}
+                                onChange={(e) => handleAnswerChange("writing", idx, e.target.value)}
+                            />
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        return (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {Array.from({ length: count }).map((_, i) => (
+                    <div key={i} className="flex items-center gap-3 group">
+                        <span className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-400 group-focus-within:bg-primary group-focus-within:text-white transition-colors">
+                            {i + 1}
+                        </span>
+                        <input
+                            type="text"
+                            placeholder="Answer..."
+                            className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm"
+                            value={answers[currentSkill][i + 1] || ""}
+                            onChange={(e) => handleAnswerChange(currentSkill, i + 1, e.target.value)}
+                        />
+                    </div>
+                ))}
+            </div>
+        );
+    };
+
+    if (step === 3) {
+        return (
+            <main className="min-h-screen bg-slate-50">
+                <Header />
+                <div className="pt-32 pb-20 container mx-auto px-6 max-w-4xl text-center">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-white rounded-[4rem] p-12 md:p-24 shadow-2xl border border-slate-100"
+                    >
+                        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-10">
+                            <Send size={48} className="text-primary animate-pulse" />
+                        </div>
+                        <h2 className="text-4xl md:text-5xl font-heading font-black text-accent mb-8">
+                            Submission <span className="text-primary">Successful!</span>
+                        </h2>
+                        <p className="text-slate-500 text-lg mb-12 font-body max-w-2xl mx-auto">
+                            Bài làm của bạn đã được ghi nhận. Chuyên gia <span className="text-primary font-bold">PTN</span> sẽ chấm điểm and gửi kết quả chi tiết qua email trong vòng 24h.
+                        </p>
+                        <button
+                            onClick={() => window.location.href = "/"}
+                            className="bg-accent text-white px-12 py-5 rounded-full font-bold shadow-xl hover:bg-slate-900 transition-all active:scale-95"
                         >
-                            <div className="w-24 h-24 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-10">
-                                <BookOpen size={48} className="text-accent" />
-                            </div>
-                            <h1 className="text-4xl md:text-5xl font-heading font-semibold text-accent mb-8 leading-tight">
-                                Academic Placement Test
-                            </h1>
-                            <p className="text-slate-500 text-lg mb-12 font-body max-w-2xl mx-auto leading-relaxed">
-                                Bài kiểm tra năng lực tiếng Anh học thuật chuẩn Châu Âu giúp xác định chính xác trình độ và lộ trình tối ưu cho mục tiêu IELTS của bạn.
-                            </p>
+                            Quay lại Trang Chủ
+                        </button>
+                    </motion.div>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                                <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
-                                    <Headphones className="mx-auto mb-4 text-primary" size={24} />
-                                    <h3 className="font-bold text-slate-900 mb-2">Listening</h3>
-                                    <p className="text-xs text-slate-400">15 Minutes</p>
-                                </div>
-                                <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
-                                    <BookOpen className="mx-auto mb-4 text-accent" size={24} />
-                                    <h3 className="font-bold text-slate-900 mb-2">Reading</h3>
-                                    <p className="text-xs text-slate-400">20 Minutes</p>
-                                </div>
-                                <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100">
-                                    <PenTool className="mx-auto mb-4 text-primary" size={24} />
-                                    <h3 className="font-bold text-slate-900 mb-2">Writing</h3>
-                                    <p className="text-xs text-slate-400">25 Minutes</p>
-                                </div>
-                            </div>
+    if (step === 0) {
+        return (
+            <main className="min-h-screen bg-slate-50">
+                <Header />
+                <div className="pt-40 pb-20 container mx-auto px-6">
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <h1 className="text-5xl md:text-6xl font-heading font-black text-accent mb-6 leading-tight">
+                            IELTS Academic <br /> <span className="text-primary">Mock Test Center</span>
+                        </h1>
+                        <p className="text-slate-500 text-lg font-body">Chọn một trong 4 bộ đề thi chuẩn quốc tế để bắt đầu kiểm tra năng lực.</p>
+                    </div>
 
-                            <div className="flex flex-col gap-6 items-center">
-                                <button
-                                    onClick={() => setStep(1)}
-                                    className="bg-primary hover:bg-red-700 text-white px-12 py-5 rounded-full font-bold text-xl shadow-2xl shadow-red-500/30 transition-all flex items-center"
-                                >
-                                    Bắt Đầu Kiểm Tra <ChevronRight size={20} className="ml-3" />
-                                </button>
-                                <div className="flex items-center text-slate-400 text-sm">
-                                    <AlertCircle size={16} className="mr-2" />
-                                    Lưu ý: Kết quả sẽ được gửi tới Admin để chấm điểm chi tiết.
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* Step 1, 2, 3: Test Sections */}
-                    {(step >= 1 && step <= 3) && (
-                        <motion.div
-                            key={`step-${step}`}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            className="bg-white rounded-[3rem] shadow-xl border border-slate-100 overflow-hidden"
-                        >
-                            {/* Progress Header */}
-                            <div className="bg-accent p-8 text-white flex justify-between items-center">
-                                <div className="flex items-center">
-                                    <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mr-6">
-                                        {step === 1 && <Headphones />}
-                                        {step === 2 && <BookOpen />}
-                                        {step === 3 && <PenTool />}
-                                    </div>
-                                    <div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Section 0{step}</p>
-                                        <h2 className="text-xl font-heading font-semibold">{sections[step - 1]}</h2>
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-[10px] font-bold uppercase tracking-widest opacity-60">Time Remaining</p>
-                                    <div className="flex items-center text-lg font-mono font-bold">
-                                        <Clock size={16} className="mr-2" /> 59:59
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-10 md:p-16">
-                                {/* Section Specific Content */}
-                                {step === 1 && (
-                                    <div className="mb-12 p-8 bg-slate-50 rounded-[2rem] border border-slate-100 flex items-center justify-between">
-                                        <div>
-                                            <h4 className="font-bold text-slate-900 mb-2">Audio Recording</h4>
-                                            <p className="text-xs text-slate-400 font-body">Click play to listen to the recording. You can only play it once in real tests.</p>
-                                        </div>
-                                        <button
-                                            onClick={toggleAudio}
-                                            className="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center hover:scale-110 transition-transform shadow-lg shadow-red-500/20"
-                                        >
-                                            {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
-                                        </button>
-                                        <audio
-                                            ref={audioRef}
-                                            src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-                                            onEnded={() => setIsPlaying(false)}
-                                            className="hidden"
-                                        />
-                                    </div>
-                                )}
-
-                                {step === 2 && (
-                                    <div className="mb-12 p-10 bg-slate-50 rounded-[2.5rem] border border-slate-100 overflow-y-auto max-h-[300px] font-body text-slate-600 leading-relaxed text-sm">
-                                        <h4 className="font-heading font-black text-xl text-accent mb-6 uppercase tracking-tight">Urban Heat Islands</h4>
-                                        <p className="mb-4">An urban heat island (UHI) is a metropolitan area that is significantly warmer than its surrounding rural areas due to human activities. The temperature difference is usually larger at night than during the day, and is most apparent when winds are weak. UHI is most noticeable during the summer and winter.</p>
-                                        <p>The main cause of the urban heat island effect is from the modification of land surfaces. Waste heat generated by energy usage is a secondary contributor. As a population center grows, it tends to expand its area and increase its average temperature...</p>
-                                    </div>
-                                )}
-
-                                {/* Question Content */}
-                                <div className="min-h-[300px]">
-                                    <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">
-                                        Question {currentQuestionIdx + 1} of {sectionQuestions.length}
-                                    </p>
-                                    <h3 className="text-2xl font-heading font-bold text-accent mb-10 leading-snug">
-                                        {sectionQuestions[currentQuestionIdx]?.question}
-                                    </h3>
-
-                                    <div className="space-y-4">
-                                        {sectionQuestions[currentQuestionIdx]?.type === "radio" && sectionQuestions[currentQuestionIdx].options?.map((opt, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={() => handleAnswerChange(sectionQuestions[currentQuestionIdx].id, opt)}
-                                                className={`w-full text-left p-6 rounded-3xl border transition-all flex items-center font-body ${answers[sectionQuestions[currentQuestionIdx].id] === opt ? "bg-accent/5 border-accent text-accent font-bold" : "bg-white border-slate-100 text-slate-600 hover:border-accent/40"}`}
-                                            >
-                                                <div className={`w-5 h-5 rounded-full border-2 mr-6 flex items-center justify-center ${answers[sectionQuestions[currentQuestionIdx].id] === opt ? "border-accent bg-accent" : "border-slate-200"}`}>
-                                                    {answers[sectionQuestions[currentQuestionIdx].id] === opt && <div className="w-1.5 h-1.5 rounded-full bg-white"></div>}
-                                                </div>
-                                                {opt}
-                                            </button>
-                                        ))}
-
-                                        {sectionQuestions[currentQuestionIdx]?.type === "checkbox" && sectionQuestions[currentQuestionIdx].options?.map((opt, i) => {
-                                            const currentAnswers = answers[sectionQuestions[currentQuestionIdx].id] || [];
-                                            const isSelected = currentAnswers.includes(opt);
-                                            return (
-                                                <button
-                                                    key={i}
-                                                    onClick={() => {
-                                                        const newVal = isSelected
-                                                            ? currentAnswers.filter((v: string) => v !== opt)
-                                                            : [...currentAnswers, opt];
-                                                        handleAnswerChange(sectionQuestions[currentQuestionIdx].id, newVal);
-                                                    }}
-                                                    className={`w-full text-left p-6 rounded-3xl border transition-all flex items-center font-body ${isSelected ? "bg-accent/5 border-accent text-accent font-bold" : "bg-white border-slate-100 text-slate-600 hover:border-accent/40"}`}
-                                                >
-                                                    <div className={`w-5 h-5 rounded border-2 mr-6 flex items-center justify-center ${isSelected ? "border-accent bg-accent" : "border-slate-200"}`}>
-                                                        {isSelected && <CheckCircle size={12} className="text-white" />}
-                                                    </div>
-                                                    {opt}
-                                                </button>
-                                            );
-                                        })}
-
-                                        {sectionQuestions[currentQuestionIdx]?.type === "essay" && (
-                                            <textarea
-                                                className="w-full h-80 p-8 rounded-[3rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all font-body text-slate-700 resize-none"
-                                                placeholder="Type your response here..."
-                                                value={answers[sectionQuestions[currentQuestionIdx].id] || ""}
-                                                onChange={(e) => handleAnswerChange(sectionQuestions[currentQuestionIdx].id, e.target.value)}
-                                            ></textarea>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Navigation Footer */}
-                                <div className="mt-16 pt-10 border-t border-slate-50 flex justify-between items-center">
-                                    <button
-                                        onClick={handlePrev}
-                                        disabled={step === 1 && currentQuestionIdx === 0}
-                                        className="flex items-center text-slate-400 font-bold hover:text-accent disabled:opacity-30 disabled:pointer-events-none transition-colors"
-                                    >
-                                        <ChevronLeft size={20} className="mr-2" /> Previous
-                                    </button>
-
-                                    <div className="flex items-center gap-1">
-                                        {[...Array(sectionQuestions.length)].map((_, i) => (
-                                            <div key={i} className={`h-1.5 rounded-full transition-all ${i === currentQuestionIdx ? "w-8 bg-primary" : "w-1.5 bg-slate-200"}`}></div>
-                                        ))}
-                                    </div>
-
-                                    <button
-                                        onClick={handleNext}
-                                        className="bg-accent text-white px-10 py-4 rounded-full font-bold flex items-center hover:bg-slate-900 transition-all shadow-xl shadow-accent/20"
-                                    >
-                                        {step === 3 && currentQuestionIdx === sectionQuestions.length - 1 ? "Submit Test" : "Next Step"}
-                                        <ChevronRight size={20} className="ml-2" />
-                                    </button>
-                                </div>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {/* Step 4: Success Message */}
-                    {step === 4 && (
-                        <motion.div
-                            key="success"
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            className="bg-white rounded-[4rem] p-12 md:p-24 shadow-2xl text-center border border-slate-100"
-                        >
-                            <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-10">
-                                <Send size={48} className="text-primary animate-pulse" />
-                            </div>
-                            <h2 className="text-4xl md:text-5xl font-heading font-semibold text-accent mb-8 leading-tight">
-                                Submission Successful!
-                            </h2>
-                            <p className="text-slate-500 text-lg mb-12 font-body max-w-2xl mx-auto leading-relaxed">
-                                "Cảm ơn bạn đã hoàn thành bài kiểm tra. Dữ liệu bài làm của bạn đã được gửi tới hệ thống chấm điểm của <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>."
-                            </p>
-                            <div className="bg-slate-50 p-10 rounded-[3rem] mb-12 text-left border border-slate-100">
-                                <h4 className="font-bold text-accent uppercase text-xs tracking-widest mb-6 border-b border-slate-200 pb-4 flex items-center">
-                                    <AlertCircle size={16} className="mr-2 text-primary" /> What happens next?
-                                </h4>
-                                <ul className="space-y-6">
-                                    <li className="flex items-start">
-                                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0 mt-0.5">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                                        </div>
-                                        <p className="text-sm text-slate-600">Chuyên gia MA.TESOL sẽ chấm điểm bài Writing của bạn trong 24h.</p>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0 mt-0.5">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                                        </div>
-                                        <p className="text-sm text-slate-600">Phân tích chi tiết từng kỹ năng sẽ được gửi qua Email đăng ký.</p>
-                                    </li>
-                                    <li className="flex items-start">
-                                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center mr-4 shrink-0 mt-0.5">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary"></div>
-                                        </div>
-                                        <p className="text-sm text-slate-600">Tư vấn lộ trình 1-1 miễn phí dựa trên kết quả thực tế.</p>
-                                    </li>
-                                </ul>
-                            </div>
-                            <button
-                                onClick={() => window.location.href = "/"}
-                                className="bg-accent text-white px-12 py-5 rounded-full font-bold shadow-xl hover:bg-slate-900 transition-all"
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {ACADEMIC_TESTS.map((test, idx) => (
+                            <motion.div
+                                key={test.id}
+                                whileHover={{ y: -10 }}
+                                className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-slate-100 flex flex-col items-center group relative overflow-hidden"
                             >
-                                Quay lại Trang Chủ
-                            </button>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full -translate-y-4 translate-x-4"></div>
+                                <div className="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-white mb-8 group-hover:bg-primary transition-colors">
+                                    <FileText size={32} />
+                                </div>
+                                <h3 className="text-xl font-heading font-bold text-accent mb-4">Set 0{idx + 1}</h3>
+                                <div className="space-y-3 mb-8 w-full">
+                                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
+                                        <span>Listening</span> <span className="text-accent underline">40 Qs</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
+                                        <span>Reading</span> <span className="text-accent underline">40 Qs</span>
+                                    </div>
+                                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
+                                        <span>Writing</span> <span className="text-accent underline">2 Tasks</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setSelectedTest(test);
+                                        setStep(1);
+                                    }}
+                                    className="w-full bg-slate-100 hover:bg-primary hover:text-white text-accent py-4 rounded-2xl font-black transition-all group-hover:shadow-lg active:scale-95"
+                                >
+                                    Select Test
+                                </button>
+                            </motion.div>
+                        ))}
+                    </div>
+                </div>
+                <Footer />
+            </main>
+        );
+    }
+
+    if (step === 1) {
+        return (
+            <main className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="bg-white rounded-[3rem] p-12 md:p-20 max-w-3xl w-full text-center shadow-2xl"
+                >
+                    <div className="flex justify-center gap-4 mb-8">
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><Headphones size={20} /></div>
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><BookOpen size={20} /></div>
+                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><PenTool size={20} /></div>
+                    </div>
+                    <h2 className="text-accent font-heading font-black text-4xl mb-6">{selectedTest?.name}</h2>
+                    <p className="text-slate-500 mb-12 text-lg">Chào mừng bạn đến với phòng thi giả lập. <br /> Bài thi gồm 3 phần: Listening (30p), Reading (60p), Writing (60p). Tổng hợp điểm and phản hồi sẽ được xử lý bởi đội ngũ học thuật.</p>
+
+                    <div className="space-y-4 mb-12">
+                        <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl text-left border border-slate-100">
+                            <AlertCircle className="text-primary shrink-0" />
+                            <p className="text-sm text-slate-600">Đảm bảo kết nối internet ổn định and tai nghe hoạt động tốt.</p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button
+                            onClick={() => setStep(0)}
+                            className="px-10 py-5 rounded-full border-2 border-slate-100 font-bold text-slate-400 hover:bg-slate-50 transition-all"
+                        >
+                            Quay lại
+                        </button>
+                        <button
+                            onClick={() => setStep(2)}
+                            className="px-12 py-5 rounded-full bg-primary text-white font-black text-xl shadow-xl shadow-primary/20 hover:bg-red-700 transition-all flex items-center gap-3 active:scale-95"
+                        >
+                            Start Exam <ChevronRight size={20} />
+                        </button>
+                    </div>
+                </motion.div>
+            </main>
+        );
+    }
+
+    return (
+        <main className={`h-screen flex flex-col bg-slate-100 overflow-hidden ${isFullScreen ? 'pt-0' : ''}`}>
+            {/* Exam Top Navbar */}
+            <div className="bg-slate-900 h-20 shrink-0 px-8 flex items-center justify-between text-white border-b border-white/5 relative z-[100]">
+                <div className="flex items-center gap-8">
+                    <div className="flex flex-col group cursor-pointer" onClick={() => window.location.href = "/"}>
+                        <span className="text-xl font-heading font-extrabold tracking-tight">
+                            <span className="text-primary uppercase">PTN</span>
+                            <span className="uppercase text-white"> English</span>
+                        </span>
+                    </div>
+                    <div className="h-8 w-px bg-white/10 hidden md:block"></div>
+                    <div className="hidden md:flex items-center gap-2">
+                        <span className="text-xs font-black uppercase tracking-widest text-slate-500">Exam:</span>
+                        <span className="text-sm font-bold text-primary">{selectedTest?.name}</span>
+                    </div>
+                </div>
+
+                {/* Skill Switcher */}
+                <div className="absolute left-1/2 -translate-x-1/2 bg-white/5 p-1.5 rounded-2xl flex gap-1 border border-white/10">
+                    {(["listening", "reading", "writing"] as const).map(skill => (
+                        <button
+                            key={skill}
+                            onClick={() => {
+                                setCurrentSkill(skill);
+                                setIsPlaying(false);
+                            }}
+                            className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${currentSkill === skill ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white"}`}
+                        >
+                            {skill}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-3 bg-white/5 px-5 py-2.5 rounded-xl border border-white/10">
+                        <Clock size={18} className="text-primary" />
+                        <span className="font-mono text-xl font-bold">{formatTime(currentTime)}</span>
+                    </div>
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-primary hover:bg-red-700 text-white px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-primary/20"
+                    >
+                        Finish Test
+                    </button>
+                </div>
             </div>
 
-            <Footer />
+            {/* Split Screen Area */}
+            <div className="flex-1 flex overflow-hidden">
+                {/* Left Side: PDF Viewer */}
+                <div className={`flex-1 flex flex-col transition-all duration-500 ${isSidebarOpen ? "w-3/5" : "w-full"}`}>
+                    <div className="bg-white h-12 border-b border-slate-200 px-6 flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            {currentSkill === "listening" && <Headphones size={16} className="text-primary" />}
+                            {currentSkill === "reading" && <BookOpen size={16} className="text-primary" />}
+                            {currentSkill === "writing" && <PenTool size={16} className="text-primary" />}
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Exam Sheet (PDF)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors">
+                                {isSidebarOpen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+                            </button>
+                        </div>
+                    </div>
+                    <div className="flex-1 bg-slate-800">
+                        <iframe
+                            src={`${selectedTest?.[currentSkill]?.pdf}#toolbar=0&navpanes=0&scrollbar=1`}
+                            className="w-full h-full border-none"
+                            title="Exam PDF"
+                        />
+                    </div>
+                </div>
+
+                {/* Right Side: Answer Input Sheet */}
+                <div className={`bg-white transition-all duration-500 border-l border-slate-200 flex flex-col ${isSidebarOpen ? "w-2/5" : "w-0 overflow-hidden"}`}>
+                    {/* Control Panel (Audio for Listening) */}
+                    {currentSkill === "listening" && (
+                        <div className="bg-slate-50 p-6 border-b border-slate-200">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-primary">Audio Controller</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tracks: {selectedTest?.listening.audio.length} Sections</span>
+                            </div>
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {selectedTest?.listening.audio.map((track, i) => (
+                                    <button
+                                        key={i}
+                                        onClick={() => {
+                                            if (audioRef.current) {
+                                                audioRef.current.src = track.url;
+                                                audioRef.current.play();
+                                                setIsPlaying(true);
+                                            }
+                                        }}
+                                        className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold hover:border-primary hover:text-primary transition-all shadow-sm"
+                                    >
+                                        Section 0{track.section}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="flex items-center gap-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                                <button
+                                    onClick={toggleAudio}
+                                    className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center hover:scale-110 shadow-lg shadow-primary/20 transition-all active:scale-95"
+                                >
+                                    {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
+                                </button>
+                                <div className="flex-1">
+                                    <p className="text-xs font-bold text-accent mb-1 uppercase tracking-tighter">Now Playing</p>
+                                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                        <motion.div
+                                            animate={{ x: isPlaying ? ["-100%", "100%"] : "0%" }}
+                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                                            className="h-full w-1/3 bg-primary"
+                                        />
+                                    </div>
+                                </div>
+                                <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" />
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="bg-white h-12 px-6 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Answer Sheet</span>
+                        <span className="text-[10px] font-black text-primary uppercase bg-primary/10 px-3 py-1 rounded-full">Automated Saving</span>
+                    </div>
+
+                    {/* Scrollable Answer Sheet */}
+                    <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                        {renderAnswerSheet()}
+
+                        <div className="mt-16 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 text-center">
+                            <h5 className="font-heading font-bold text-accent mb-4">You've reached the end</h5>
+                            <button
+                                onClick={handleSubmit}
+                                className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-widest text-[10px] hover:underline"
+                            >
+                                Finish and Send Results <ChevronRight size={14} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile Warning Overlay */}
+            <div className="lg:hidden fixed inset-0 z-[200] bg-slate-900 flex flex-col items-center justify-center text-center p-10">
+                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-8">
+                    <Maximize2 size={40} className="text-primary" />
+                </div>
+                <h2 className="text-white font-heading font-black text-2xl mb-4 uppercase">Large Screen Required</h2>
+                <p className="text-slate-400 font-body mb-8">Giao diện thi thử học thuật yêu cầu màn hình lớn (Máy tính/Tablet) để hiển thị PDF and Phiếu làm bài đồng thời.</p>
+                <Link href="/" className="text-primary font-bold hover:underline">Quay lại Trang chủ</Link>
+            </div>
         </main>
     );
 }
