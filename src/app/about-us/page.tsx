@@ -495,21 +495,21 @@ function DifferencesHub() {
                             animate={{
                                 x: `calc(${x}px - 50%)`,
                                 y: `calc(${y}px - 50%)`,
-                                scale: hovered === item.id ? 1.15 : 1,
-                                opacity: hovered === null || hovered === item.id ? 1 : 0.4
+                                scale: hovered === item.id ? 1.2 : 1,
+                                opacity: hovered === null || hovered === item.id ? 1 : 0.5
                             }}
                             onMouseEnter={() => setHovered(item.id)}
                             onMouseLeave={() => setHovered(null)}
                         >
-                            <div className="relative flex flex-col items-center group w-40">
-                                {/* The Icon Button */}
-                                <div className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 border-2 ${hovered === item.id ? "bg-primary border-primary shadow-[0_20px_40px_-8px_rgba(var(--primary-rgb),0.5)] text-white" : "bg-white border-slate-100 text-accent group-hover:border-primary/40 shadow-sm"}`}>
-                                    {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-7 h-7" })}
+                            <div className="relative flex flex-col items-center group w-44">
+                                {/* The Icon Button - Glassmorphism Style */}
+                                <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 backdrop-blur-md ${hovered === item.id ? "bg-primary border-2 border-primary shadow-[0_0_40px_8px_rgba(199,0,43,0.4)] text-white" : "bg-white/90 border-2 border-primary/20 text-accent shadow-[0_8px_32px_-4px_rgba(30,10,60,0.15)] group-hover:border-primary/50 group-hover:shadow-[0_12px_40px_-4px_rgba(199,0,43,0.2)]"}`}>
+                                    {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-9 h-9" })}
                                 </div>
 
                                 {/* Always Visible Label */}
-                                <div className={`mt-4 text-center px-2 transition-all duration-300 ${hovered === item.id ? "opacity-100 scale-105" : "opacity-80"}`}>
-                                    <p className={`text-[11px] font-black uppercase tracking-wider leading-tight transition-colors ${hovered === item.id ? "text-primary" : "text-accent"}`}>
+                                <div className={`mt-5 text-center px-2 transition-all duration-300 ${hovered === item.id ? "opacity-100 scale-105" : "opacity-90"}`}>
+                                    <p className={`text-[12px] font-black uppercase tracking-wider leading-tight transition-colors ${hovered === item.id ? "text-primary" : "text-accent"}`}>
                                         {item.title}
                                     </p>
                                 </div>
@@ -517,19 +517,21 @@ function DifferencesHub() {
                         </motion.div>
                     );
                 })}
+
             </div>
 
             {/* Mobile Optimized Layout (Interactive Tabs) */}
             <div className="lg:hidden w-full flex flex-col gap-8">
                 {/* Icon Tabs */}
-                <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar -mx-6 px-6">
+                <div className="flex overflow-x-auto gap-5 pb-4 hide-scrollbar -mx-6 px-6">
                     {NEW_DIFFERENCES.map((item) => (
                         <button
                             key={item.id}
                             onClick={() => setHovered(item.id)}
-                            className={`w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center transition-all border-2 ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-primary text-white shadow-lg" : "bg-white border-slate-100 text-accent shadow-sm"}`}
+                            className={`w-18 h-18 shrink-0 rounded-2xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_30px_6px_rgba(199,0,43,0.35)]" : "bg-white/90 border-2 border-primary/20 text-accent shadow-[0_6px_24px_-4px_rgba(30,10,60,0.12)]"}`}
+                            style={{ width: '72px', height: '72px' }}
                         >
-                            {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-7 h-7" })}
+                            {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-8 h-8" })}
                         </button>
                     ))}
                 </div>
