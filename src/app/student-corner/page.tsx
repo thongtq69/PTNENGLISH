@@ -53,7 +53,7 @@ export default function StudentCorner() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
-                            className="md:col-span-2 md:row-span-2 relative group rounded-[2rem] overflow-hidden shadow-2xl"
+                            className="md:col-span-2 md:row-span-2 relative group rounded-[2rem] overflow-hidden shadow-2xl h-[400px] md:h-auto"
                         >
                             <img
                                 src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/600349560_811824385145541_924529116167773166_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=WrY3AmzobhsQ7kNvwEn4CKw&_nc_oc=Adnmgkplx_LTyk9c-hUbzVarhTwhrLUBSzCD0uiDfoAXYzTQw_bz849RWOQUl3hK3O8&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=x3LbkFcIHWTpcw3xM-kfCA&oh=00_AfprMZKVjjgaBCy1Nvm9AmHxJLbSdtEzmcB6F_9igPgNfw&oe=697937FB"
@@ -61,9 +61,9 @@ export default function StudentCorner() {
                                 alt="Main Workshop"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                            <div className="absolute bottom-10 left-10 text-white">
-                                <span className="bg-primary px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 inline-block">Featured Workshop</span>
-                                <h4 className="text-3xl font-heading font-black">Academic Mastery <br />& Debate Skills</h4>
+                            <div className="absolute bottom-10 left-10 text-white pr-10">
+                                <span className="bg-primary px-4 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest mb-4 inline-block">Featured Workshop</span>
+                                <h4 className="text-2xl md:text-3xl font-heading font-black leading-tight uppercase tracking-tighter">Academic Mastery <br />& Debate Skills</h4>
                             </div>
                         </motion.div>
 
@@ -73,7 +73,7 @@ export default function StudentCorner() {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="md:col-span-2 relative group rounded-[2rem] overflow-hidden shadow-xl"
+                            className="md:col-span-2 relative group rounded-[2rem] overflow-hidden shadow-xl h-[250px] md:h-auto"
                         >
                             <img
                                 src="https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/512614209_670142242647090_8961518773189171975_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=cK75sFRaF_IQ7kNvwGgDA4g&_nc_oc=AdkHowDUM1ksA7R5SgNBUWuiG1MPWNh1t0fAnY6wm923yDIJcRtP1WIwS5AlEXRVzD0&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=gcezZhlCLo3osHQGtAfGfw&oh=00_AfrpDGP0UUafCpx4SFhKepmE1W2SL-Yy-ONQ5-kg3f1BPw&oe=6979550A"
@@ -81,7 +81,7 @@ export default function StudentCorner() {
                                 alt="Chill Corner"
                             />
                             <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-slate-900/60 to-transparent">
-                                <p className="text-white font-heading font-bold">PTN Chill Room</p>
+                                <p className="text-white font-heading font-bold uppercase tracking-widest text-sm">PTN Chill Room</p>
                             </div>
                         </motion.div>
 
@@ -91,7 +91,7 @@ export default function StudentCorner() {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
-                            className="relative group rounded-[2rem] overflow-hidden shadow-xl"
+                            className="relative group rounded-[2rem] overflow-hidden shadow-xl h-[200px] md:h-auto"
                         >
                             <img
                                 src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/604346724_815746011420045_1980336211823099106_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=qkLGV5Y5KSgQ7kNvwGJsDoK&_nc_oc=AdntDpZoz4yfKEI0j-Hv878q7mWIWTW5oGmMn9F5fPSS-SlIgkoN1lDvE0yvWJH6q0k&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=u7onphvhD4Z99P4LGaRv_A&oh=00_AfriXULs8DInaQCLKejSaQtSojNbi4ZUTHCZWT2iMQltzQ&oe=69794BE7"
@@ -106,7 +106,7 @@ export default function StudentCorner() {
                             whileInView={{ opacity: 1, scale: 1 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.3 }}
-                            className="relative group rounded-[2rem] overflow-hidden shadow-xl"
+                            className="relative group rounded-[2rem] overflow-hidden shadow-xl h-[200px] md:h-auto"
                         >
                             <img
                                 src="https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/597251461_806720128989300_4899544521814172881_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=2Oq8wx-fJf4Q7kNvwGJ5r1V&_nc_oc=AdlXmd5w0vZ38pDbd51romsYEKcLIWmebDEnj6yNjGJucDFJWhOoMzt-mwq8kmDkIHI&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=TL2nZsVgFS8B57vSeDOb2A&oh=00_AfqzWqpezjeU14LZv63tB7HOg2tGplHMYcwE60k48sTt9w&oe=69793FC0"
@@ -117,25 +117,20 @@ export default function StudentCorner() {
                     </div>
 
                     {/* Secondary Grid for more photos + Video Placeholder */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                        <motion.div
-                            whileHover={{ y: -5 }}
-                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
-                        >
-                            <img src="https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/605711185_815745994753380_1350455286566131952_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=bbbY55kwlk0Q7kNvwHRa7RP&_nc_oc=Admy6SDvlmTH1Tr72HAjNa_G7eGPNHMK5CIgrYqEbKRjh5Uj_cF6eoZ6aLdvE4K0SDA&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=xoPy26A-wxyUkCQVcUWUkQ&oh=00_AfpKY0mVKSDuTmkccf8YXyg-FWzGwwhpRTVo2XCmpz9O7w&oe=69793079" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 1" />
-                        </motion.div>
-                        <motion.div
-                            whileHover={{ y: -5 }}
-                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
-                        >
-                            <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/542167879_726034340391213_5658940871196288765_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=St8AHxsrVR0Q7kNvwFwOmLn&_nc_oc=Adl4Lp49qB-RMMmxbPGKygiUPbK8J1w-4Hf5eStBm49VtwgCm4qhQQNbOZiMwoz3N2Y&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=4g6YCtrOndWcVU0oKj0sfg&oh=00_AfprlDPBuc_MyGOygUib5r29YCf4W16wniEBLf1aVvsM8w&oe=69791B83" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 2" />
-                        </motion.div>
-                        <motion.div
-                            whileHover={{ y: -5 }}
-                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
-                        >
-                            <img src="https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/525214975_697220113272636_4528856525560068367_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=3vVyVZowSvMQ7kNvwFRwTUp&_nc_oc=AdnRBw0O3ICn3o11Kj3zLnOOG2-emM1DfG1cgc8mnw7C_Ru9NI0suh4t-EGZLWhiaMw&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=jjHX8Hxw9nv6VMh6HDCS8g&oh=00_Afqr46-YmMLLOuFiGyfotdQCfenqJ6hs8HjaxMMCjANu-g&oe=69793F31" className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life 3" />
-                        </motion.div>
+                    <div className="flex overflow-x-auto md:grid md:grid-cols-4 gap-4 mt-4 pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+                        {[
+                            "https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/605711185_815745994753380_1350455286566131952_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=bbbY55kwlk0Q7kNvwHRa7RP&_nc_oc=Admy6SDvlmTH1Tr72HAjNa_G7eGPNHMK5CIgrYqEbKRjh5Uj_cF6eoZ6aLdvE4K0SDA&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=xoPy26A-wxyUkCQVcUWUkQ&oh=00_AfpKY0mVKSDuTmkccf8YXyg-FWzGwwhpRTVo2XCmpz9O7w&oe=69793079",
+                            "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/542167879_726034340391213_5658940871196288765_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=St8AHxsrVR0Q7kNvwFwOmLn&_nc_oc=Adl4Lp49qB-RMMmxbPGKygiUPbK8J1w-4Hf5eStBm49VtwgCm4qhQQNbOZiMwoz3N2Y&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=4g6YCtrOndWcVU0oKj0sfg&oh=00_AfprlDPBuc_MyGOygUib5r29YCf4W16wniEBLf1aVvsM8w&oe=69791B83",
+                            "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/525214975_697220113272636_4528856525560068367_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=3vVyVZowSvMQ7kNvwFRwTUp&_nc_oc=AdnRBw0O3ICn3o11Kj3zLnOOG2-emM1DfG1cgc8mnw7C_Ru9NI0suh4t-EGZLWhiaMw&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=jjHX8Hxw9nv6VMh6HDCS8g&oh=00_Afqr46-YmMLLOuFiGyfotdQCfenqJ6hs8HjaxMMCjANu-g&oe=69793F31"
+                        ].map((src, i) => (
+                            <motion.div
+                                key={i}
+                                whileHover={{ y: -5 }}
+                                className="w-40 md:w-auto flex-shrink-0 aspect-square rounded-2xl overflow-hidden shadow-lg group relative"
+                            >
+                                <img src={src} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt={`Student Life ${i + 1}`} />
+                            </motion.div>
+                        ))}
 
                         {/* Video Placeholder Card */}
                         <motion.a
@@ -143,20 +138,20 @@ export default function StudentCorner() {
                             target="_blank"
                             rel="noopener noreferrer"
                             whileHover={{ y: -5 }}
-                            className="aspect-square rounded-2xl overflow-hidden shadow-lg group relative bg-accent"
+                            className="w-40 md:w-auto flex-shrink-0 aspect-square rounded-2xl overflow-hidden shadow-lg group relative bg-accent"
                         >
                             <img
                                 src="https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/503126116_651142867880361_4587213466788932149_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwCQsjroqCIQ7kNvwEe3I67&_nc_oc=Adl9pgY9ZbbM8XDTi2IRRtQVpS-EnI2AiGApOF0adVTLk8y0l8DnORpMwmG_XdG1XTE&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=S-dStxBKkC4PjgNayZw-BQ&oh=00_Afq66Dxbl0GpuLOKUMSasJQLaQV7xiefRXktJjMQ3ZhXBA&oe=69795068"
                                 className="w-full h-full object-cover opacity-60 transition-all group-hover:scale-110 group-hover:opacity-40"
                                 alt="Student Life 4 - Video"
                             />
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform duration-500">
-                                    <svg className="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/90 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform duration-500">
+                                    <svg className="w-6 h-6 md:w-8 md:h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
                                 </div>
-                                <span className="mt-4 text-white font-heading font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Xem Video</span>
+                                <span className="mt-2 md:mt-4 text-white font-heading font-black text-[8px] md:text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Xem Video</span>
                             </div>
                         </motion.a>
                     </div>

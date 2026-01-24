@@ -60,10 +60,10 @@ export default function Footer() {
 
                 <div>
                     <h4 className="text-sm font-black mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Khóa Học</h4>
-                    <ul className="space-y-2">
+                    <ul className="grid grid-cols-2 md:grid-cols-1 gap-2">
                         {["Academic English (EfT)", "Luyện thi IELTS", "General English (GE)", "Workshop Kỹ năng"].map((course) => (
                             <li key={course}>
-                                <a href="/courses" className="text-slate-400 text-sm hover:text-primary transition-colors">
+                                <a href="/courses" className="text-slate-400 text-[13px] hover:text-primary transition-colors">
                                     {course}
                                 </a>
                             </li>

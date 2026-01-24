@@ -91,7 +91,7 @@ export default function Home() {
           </motion.div>
 
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          <div className="flex md:grid md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 overflow-x-auto md:overflow-visible pb-8 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {PROGRAMS.map((prog, idx) => (
               <motion.div
                 key={idx}
@@ -99,15 +99,15 @@ export default function Home() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="group cursor-pointer"
+                className="min-w-[280px] md:min-w-0 group cursor-pointer snap-center"
               >
-                <div className="relative aspect-square rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2">
+                <div className="relative aspect-[4/5] md:aspect-square rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                   <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   {prog.name === "PTE Academic" && (
                     <div className="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest z-20">New</div>
                   )}
                   <div className="absolute inset-x-0 bottom-0 p-8 pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
-                    <p className="text-white font-heading font-bold text-lg leading-tight">{prog.name}</p>
+                    <p className="text-white font-heading font-black text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
                   </div>
                 </div>
               </motion.div>
@@ -219,14 +219,14 @@ export default function Home() {
       <section className="py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
           <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.3em] mb-8">Đối tác chiến lược & Khảo thí</p>
-          <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16">
+          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-10 md:gap-16 pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {PARTNERS.map((p, idx) => (
               <motion.div
                 key={idx}
                 whileHover={{ scale: 1.05 }}
-                className="flex flex-col items-center group"
+                className="flex-shrink-0 flex flex-col items-center group"
               >
-                <img src={p.logo} alt={p.name} className="h-12 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                <img src={p.logo} alt={p.name} className="h-10 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
               </motion.div>
             ))}
           </div>

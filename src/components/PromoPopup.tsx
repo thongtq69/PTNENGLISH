@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Clock, MapPin, Phone, MessageSquare } from "lucide-react";
 import Link from "next/link";
@@ -36,23 +36,23 @@ export default function PromoPopup() {
                         className="relative w-full max-w-5xl bg-white rounded-none shadow-[0_60px_120px_-20px_rgba(0,0,0,0.4)] overflow-hidden flex flex-col md:flex-row pointer-events-auto max-h-[90vh] border-4 border-accent"
                     >
                         {/* Image Section - Brutal Selection */}
-                        <div className="md:w-5/12 relative min-h-[350px] md:min-h-full bg-accent">
+                        <div className="md:w-5/12 relative min-h-[220px] md:min-h-full bg-accent shrink-0">
                             <img
                                 src="/promo-hero.png"
                                 alt="Academic Master Promotion"
                                 className="absolute inset-0 w-full h-full object-cover grayscale-[0.2] contrast-[1.1]"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/40 to-transparent flex flex-col justify-end p-10 md:p-12">
+                            <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent flex flex-col justify-end p-8 md:p-12">
                                 <div className="text-white relative z-10">
-                                    <div className="inline-block px-4 py-1 bg-primary text-[11px] font-black uppercase tracking-[0.5em] mb-6 rounded-none">
+                                    <div className="inline-block px-3 py-1 bg-primary text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 rounded-none">
                                         Admission 2025
                                     </div>
-                                    <h4 className="text-4xl md:text-6xl font-heading font-black leading-none mb-6 uppercase tracking-tighter">
+                                    <h4 className="text-3xl md:text-6xl font-heading font-black leading-none mb-4 md:mb-6 uppercase tracking-tighter">
                                         CHIÊU SINH <br />
-                                        <span className="text-white bg-primary px-3 py-1">THÁNG 11 & 12</span>
+                                        <span className="text-white bg-primary px-2 py-0.5 md:px-3 md:py-1">THÁNG 11 & 12</span>
                                     </h4>
-                                    <p className="text-sm font-body text-slate-300 max-w-xs leading-relaxed border-l-2 border-primary pl-4">
-                                        Đồng hành cùng đội ngũ chuyên gia <span className="text-white font-bold">MA.TESOL</span> hàng đầu. Nâng tầm học thuật, định hướng tương lai.
+                                    <p className="text-[11px] md:text-sm font-body text-slate-300 max-w-[240px] md:max-w-xs leading-relaxed border-l-2 border-primary pl-4 hidden sm:block">
+                                        Đồng hành cùng đội ngũ chuyên gia <span className="text-white font-bold">MA.TESOL</span> hàng đầu.
                                     </p>
                                 </div>
                             </div>
@@ -83,14 +83,14 @@ export default function PromoPopup() {
                                     { title: "ENGLISH FOR TEENS", detail: "Starter – Booster (A2 - C1)", schedule: "Thứ 7 - CN | Sáng & Chiều", icon: <MessageSquare size={20} /> },
                                     { title: "GENERAL ENGLISH", detail: "Sơ cấp – Trung cấp (A1 - B2)", schedule: "Thứ 3 - 5 - 7 | 19:00 - 21:00", icon: <Clock size={20} /> },
                                 ].map((item, idx) => (
-                                    <div key={idx} className="flex gap-8 p-8 border-2 border-slate-50 hover:border-accent hover:bg-slate-50 transition-all cursor-pointer group rounded-none relative">
-                                        <div className="shrink-0 w-14 h-14 bg-slate-100 flex items-center justify-center text-accent transition-all group-hover:bg-primary group-hover:text-white rounded-none">
-                                            {item.icon}
+                                    <div key={idx} className="flex gap-4 md:gap-8 p-5 md:p-8 border-2 border-slate-50 hover:border-accent hover:bg-slate-50 transition-all cursor-pointer group rounded-none relative">
+                                        <div className="shrink-0 w-10 h-10 md:w-14 md:h-14 bg-slate-100 flex items-center justify-center text-accent transition-all group-hover:bg-primary group-hover:text-white rounded-none">
+                                            {React.cloneElement(item.icon as React.ReactElement<any>, { size: 18 })}
                                         </div>
                                         <div>
-                                            <h5 className="font-heading font-black text-accent text-lg uppercase tracking-tight mb-1">{item.title}</h5>
-                                            <p className="text-[11px] text-primary font-black uppercase mb-1 tracking-[0.2em]">{item.detail}</p>
-                                            <p className="text-xs text-slate-400 font-bold font-mono">{item.schedule}</p>
+                                            <h5 className="font-heading font-black text-accent text-sm md:text-lg uppercase tracking-tight mb-1">{item.title}</h5>
+                                            <p className="text-[9px] md:text-[11px] text-primary font-black uppercase mb-1 tracking-[0.2em]">{item.detail}</p>
+                                            <p className="text-[10px] md:text-xs text-slate-400 font-bold font-mono">{item.schedule}</p>
                                         </div>
                                         {/* Corner accent for active item feel */}
                                         <div className="absolute top-0 right-0 w-2 h-2 bg-primary opacity-0 group-hover:opacity-100"></div>

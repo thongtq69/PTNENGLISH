@@ -304,14 +304,14 @@ export default function AboutUs() {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                    <div className="flex md:grid md:grid-cols-2 xl:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible pb-12 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
                         {TEACHERS.map((teacher, idx) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
-                                className="group relative"
+                                className="min-w-[280px] md:min-w-0 group relative snap-center"
                             >
                                 <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl bg-white border border-slate-100">
                                     <img
@@ -328,8 +328,8 @@ export default function AboutUs() {
                                     </div>
                                 </div>
                                 <div className="mt-8 text-center group-hover:text-primary transition-colors">
-                                    <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors">{teacher.name}</h4>
-                                    <p className="text-xs text-slate-500 font-bold uppercase tracking-tighter mt-1">{teacher.exp}</p>
+                                    <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors leading-tight">{teacher.name}</h4>
+                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter mt-2 border-t border-slate-100 pt-2 inline-block px-4">{teacher.exp}</p>
                                 </div>
                             </motion.div>
                         ))}
@@ -519,25 +519,57 @@ function DifferencesHub() {
                 })}
             </div>
 
-            {/* Mobile Stack Layout (Always simplified for mobile) */}
-            <div className="lg:hidden w-full grid grid-cols-1 gap-6">
-                {NEW_DIFFERENCES.map((item) => (
-                    <motion.div
-                        key={item.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="bg-white border border-slate-100 p-8 rounded-[2.5rem] flex items-start gap-6 shadow-sm shadow-slate-200/50"
-                    >
-                        <div className="w-14 h-14 shrink-0 rounded-2xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20">
-                            {item.icon}
-                        </div>
-                        <div>
-                            <h4 className="text-lg font-heading font-bold text-accent mb-2">{item.fullTitle}</h4>
-                            <p className="text-slate-500 font-body text-sm leading-relaxed whitespace-pre-line">{item.desc}</p>
-                        </div>
-                    </motion.div>
-                ))}
+            {/* Mobile Optimized Layout (Interactive Tabs) */}
+            <div className="lg:hidden w-full flex flex-col gap-8">
+                {/* Icon Tabs */}
+                <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar -mx-6 px-6">
+                    {NEW_DIFFERENCES.map((item) => (
+                        <button
+                            key={item.id}
+                            onClick={() => setHovered(item.id)}
+                            className={`w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center transition-all border-2 ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-primary text-white shadow-lg" : "bg-white border-slate-100 text-accent shadow-sm"}`}
+                        >
+                            {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-7 h-7" })}
+                        </button>
+                    ))}
+                </div>
+
+                {/* Content Area */}
+                <div className="bg-white border-2 border-slate-100 p-8 rounded-[2rem] shadow-xl relative min-h-[300px]">
+                    <AnimatePresence mode="wait">
+                        {(() => {
+                            const activeItem = NEW_DIFFERENCES.find(d => d.id === (hovered || 1));
+                            return (
+                                <motion.div
+                                    key={activeItem?.id}
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    className="flex flex-col"
+                                >
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                            {activeItem?.icon}
+                                        </div>
+                                        <h4 className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tighter">
+                                            {activeItem?.title}
+                                        </h4>
+                                    </div>
+                                    <h5 className="text-sm font-bold text-primary mb-3 uppercase tracking-widest">{activeItem?.fullTitle}</h5>
+                                    <p className="text-slate-600 font-body text-sm leading-relaxed whitespace-pre-line">
+                                        {activeItem?.desc}
+                                    </p>
+                                </motion.div>
+                            );
+                        })()}
+                    </AnimatePresence>
+                    {/* Architectural accent */}
+                    <div className="absolute top-0 right-0 w-4 h-4 bg-primary rounded-bl-2xl"></div>
+                </div>
+
+                <p className="text-[10px] text-center text-slate-400 font-black uppercase tracking-[0.3em]">
+                    Click icons to explore differences
+                </p>
             </div>
         </div>
     );

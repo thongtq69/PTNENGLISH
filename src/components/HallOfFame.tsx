@@ -66,7 +66,7 @@ export default function HallOfFame() {
                     </motion.p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible pb-12 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
                     {ACHIEVEMENTS.map((item, idx) => (
                         <motion.div
                             key={idx}
@@ -75,33 +75,40 @@ export default function HallOfFame() {
                             viewport={{ once: true }}
                             transition={{ delay: idx * 0.1, type: "spring", stiffness: 100 }}
                             whileHover={{ y: -10 }}
-                            className="group relative"
+                            className="min-w-[300px] md:min-w-0 group relative snap-center"
                         >
-                            <div className="relative aspect-square rounded-2xl overflow-hidden border-2 border-white/10 group-hover:border-primary transition-all duration-500 shadow-2xl">
+                            <div className="relative aspect-square rounded-[2rem] overflow-hidden border-2 border-white/5 group-hover:border-primary transition-all duration-500 shadow-2xl">
                                 <img
                                     src={item.url}
                                     alt={item.title}
                                     className="w-full h-full object-contain bg-slate-800 transition-transform duration-700 group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent opacity-60 group-hover:opacity-100 transition-opacity"></div>
 
-                                <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                                <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-2 group-hover:translate-y-0 transition-transform">
                                     <div className="flex items-center gap-2 mb-2">
                                         <Award size={16} className="text-primary" />
                                         <span className="text-primary font-black uppercase tracking-widest text-[10px]">{item.title}</span>
                                     </div>
                                     <p className="text-white font-heading font-black text-2xl mb-1">Score: {item.score}</p>
-                                    <p className="text-slate-300 text-xs font-medium">{item.student}</p>
+                                    <p className="text-slate-300 text-xs font-bold uppercase tracking-wider">{item.student}</p>
                                 </div>
                             </div>
 
                             {/* Decorative badge */}
-                            <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white shadow-xl rotate-12 group-hover:rotate-0 transition-transform duration-500 border-4 border-slate-900 flex-col">
+                            <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white shadow-xl rotate-12 group-hover:rotate-0 transition-transform duration-500 border-4 border-slate-900 flex-col z-20">
                                 <span className="text-[10px] font-black leading-none uppercase">PTN</span>
                                 <Star size={12} fill="white" />
                                 <span className="text-[8px] font-bold leading-none uppercase">PRO</span>
                             </div>
                         </motion.div>
+                    ))}
+                </div>
+
+                {/* Mobile scroll indicator */}
+                <div className="flex justify-center gap-2 mt-4 md:hidden">
+                    {ACHIEVEMENTS.map((_, i) => (
+                        <div key={i} className="w-2 h-2 rounded-full bg-primary/20 last:bg-primary/60"></div>
                     ))}
                 </div>
             </div>
