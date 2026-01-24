@@ -5,7 +5,8 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import Testimonials from "@/components/Testimonials";
 import { motion } from "framer-motion";
-import { BookOpen, ExternalLink, ChevronRight } from "lucide-react";
+import { BookOpen, ExternalLink, ChevronRight, ArrowRight } from "lucide-react";
+import Link from "next/link";
 import PromoPopup from "@/components/PromoPopup";
 import HallOfFame from "@/components/HallOfFame";
 
@@ -214,6 +215,98 @@ export default function Home() {
 
       {/* Testimonials */}
       <Testimonials />
+
+      {/* Latest News & Insights - Editorial Bento Grid */}
+      <section className="py-24 bg-white overflow-hidden">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div className="max-w-2xl">
+              <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.4em] mb-4">Insights</h2>
+              <h3 className="text-4xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
+                Tin tức & <span className="text-primary">Học thuật</span>
+              </h3>
+            </div>
+            <Link href="/blog" className="group flex items-center gap-3 text-accent font-black uppercase tracking-widest text-xs border-b-2 border-primary pb-2 hover:text-primary transition-colors">
+              Xem tất cả bài viết
+              <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="flex md:grid md:grid-cols-12 md:grid-rows-2 gap-6 overflow-x-auto md:overflow-visible pb-10 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+            {/* Featured Article - Large Left Column */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="min-w-[85vw] md:min-w-0 md:col-span-7 md:row-span-2 group cursor-pointer"
+            >
+              <div className="relative aspect-[16/10] md:aspect-auto md:h-full bg-slate-100 overflow-hidden border-4 border-accent">
+                <img
+                  src="/news/workshop.png"
+                  alt="IELTS Strategy Workshop"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[0.3] group-hover:grayscale-0"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
+                  <div className="inline-block px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest mb-6">
+                    Sự kiện học thuật
+                  </div>
+                  <h4 className="text-3xl md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-4 group-hover:text-primary transition-colors">
+                    Chiến lược bứt phá Writing Task 2 <br className="hidden md:block" /> cùng chuyên gia MA.TESOL
+                  </h4>
+                  <p className="text-slate-300 text-sm md:text-base font-body max-w-xl line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
+                    Khám phá hệ thống triển khai ý tưởng và cấu trúc câu academic chuẩn chỉnh giúp học viên chinh phục band 7.5+ Writing một cách bền vững.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Side Article 1 - Top Right */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              viewport={{ once: true }}
+              className="min-w-[75vw] md:min-w-0 md:col-span-5 group cursor-pointer"
+            >
+              <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
+                <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
+                  <img src="/news/achievement.png" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all" alt="Student Achievements" />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <div className="text-primary text-[9px] font-black uppercase tracking-widest mb-2">Thành tích</div>
+                  <h4 className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
+                    Vinh danh các chiến binh IELTS tháng 1 vừa qua
+                  </h4>
+                  <p className="text-xs text-slate-400 font-bold font-mono">24.01.2026</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Side Article 2 - Bottom Right */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+              className="min-w-[75vw] md:min-w-0 md:col-span-5 group cursor-pointer"
+            >
+              <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
+                <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
+                  <img src="/news/tips.png" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all" alt="Study Tips" />
+                </div>
+                <div className="flex flex-col justify-center">
+                  <div className="text-primary text-[9px] font-black uppercase tracking-widest mb-2">Mẹo học tập</div>
+                  <h4 className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
+                    5 Thói quen hàng ngày để nâng cao phản xạ Speaking
+                  </h4>
+                  <p className="text-xs text-slate-400 font-bold font-mono">22.01.2026</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Partners */}
       <section className="py-12 bg-white border-y border-slate-100">

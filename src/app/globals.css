@@ -24,6 +24,7 @@
   --font-body: var(--font-body);
   --font-serif: var(--font-serif);
   --font-inter: var(--font-inter);
+  --font-newsreader: var(--font-newsreader);
 }
 
 body {
@@ -53,4 +54,14 @@ h6 {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #C7002B;
   border-radius: 10px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

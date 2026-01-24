@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Crimson_Text, Lora } from "next/font/google";
+import { Inter, Playfair_Display, Crimson_Text, Lora, Newsreader } from "next/font/google";
 import "./globals.css";
+
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 const playfair = Playfair_Display({
   variable: "--font-heading",
@@ -37,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={`${playfair.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} font-body antialiased`}>
+      <body className={`${playfair.variable} ${newsreader.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} font-body antialiased`}>
         {children}
       </body>
     </html>
