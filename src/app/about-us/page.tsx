@@ -503,7 +503,7 @@ function DifferencesHub() {
                         >
                             <div className="relative flex flex-col items-center group w-44">
                                 {/* The Icon Button - Glassmorphism Style */}
-                                <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 backdrop-blur-md ${hovered === item.id ? "bg-primary border-2 border-primary shadow-[0_0_40px_8px_rgba(199,0,43,0.4)] text-white" : "bg-white/90 border-2 border-primary/20 text-accent shadow-[0_8px_32px_-4px_rgba(30,10,60,0.15)] group-hover:border-primary/50 group-hover:shadow-[0_12px_40px_-4px_rgba(199,0,43,0.2)]"}`}>
+                                <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 backdrop-blur-md ${hovered === item.id ? "bg-primary border-2 border-primary shadow-[0_0_40px_8px_rgba(199,0,43,0.4)] text-white" : "bg-accent border-2 border-white/10 text-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.3)] group-hover:border-primary/50 group-hover:shadow-[0_12px_40px_-4px_rgba(199,0,43,0.2)]"}`}>
                                     {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-9 h-9" })}
                                 </div>
 
@@ -528,7 +528,7 @@ function DifferencesHub() {
                         <button
                             key={item.id}
                             onClick={() => setHovered(item.id)}
-                            className={`w-18 h-18 shrink-0 rounded-2xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_30px_6px_rgba(199,0,43,0.35)]" : "bg-white/90 border-2 border-primary/20 text-accent shadow-[0_6px_24px_-4px_rgba(30,10,60,0.12)]"}`}
+                            className={`w-18 h-18 shrink-0 rounded-2xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_30px_6px_rgba(199,0,43,0.35)]" : "bg-accent border-2 border-white/10 text-white shadow-[0_8px_32px_-4px_rgba(0,0,0,0.25)]"}`}
                             style={{ width: '72px', height: '72px' }}
                         >
                             {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-8 h-8" })}
