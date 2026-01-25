@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
+import ImageUpload from './shared/ImageUpload';
 
 const TABS = [
     { id: 'hero', name: 'Hero Header', icon: <Layout size={18} /> },
@@ -215,9 +216,6 @@ export default function StudentCornerEditor() {
                                             }} className="p-2 bg-red-500 text-white rounded-lg shadow-lg"><Trash2 size={14} /></button>
                                         </div>
 
-                                        <div className="aspect-video bg-slate-800 rounded-2xl overflow-hidden border border-white/10">
-                                            {item.src ? <img src={item.src} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><ImageIcon size={40} /></div>}
-                                        </div>
 
                                         <div className="space-y-3">
                                             <div className="flex gap-2">
@@ -240,11 +238,16 @@ export default function StudentCornerEditor() {
                                                     <option value="tiny">TINY (Gallery)</option>
                                                 </select>
                                             </div>
-                                            <input placeholder="Image/Cover URL" value={item.src} onChange={e => {
-                                                const list = [...data.playground.items];
-                                                list[idx].src = e.target.value;
-                                                setData({ ...data, playground: { ...data.playground, items: list } });
-                                            }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-[10px] text-slate-500" />
+                                            <ImageUpload
+                                                label="Upload Media"
+                                                value={item.src}
+                                                onChange={(url) => {
+                                                    const list = [...data.playground.items];
+                                                    list[idx].src = url;
+                                                    setData({ ...data, playground: { ...data.playground, items: list } });
+                                                }}
+                                                folder="student-corner"
+                                            />
                                             {item.type === 'video' && (
                                                 <input placeholder="Video Link (FB/YT)" value={item.link} onChange={e => {
                                                     const list = [...data.playground.items];

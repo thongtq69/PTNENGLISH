@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Heart, User, Quote, Save, CheckCircle2, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ImageUpload from './shared/ImageUpload';
 
 export default function TestimonialManager() {
     const [data, setData] = useState<any[]>([]);
@@ -80,13 +81,6 @@ export default function TestimonialManager() {
                             <Trash2 size={16} />
                         </button>
                         <div className="flex gap-6 mb-8">
-                            <div className="w-20 h-20 rounded-2xl bg-slate-800 shrink-0 overflow-hidden border border-white/10">
-                                {item.image ? (
-                                    <img src={item.image} className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="w-full h-full flex items-center justify-center text-slate-700 font-black">{item.name?.charAt(0)}</div>
-                                )}
-                            </div>
                             <div className="flex-1 space-y-4">
                                 <div className="space-y-2">
                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Full Name</label>
@@ -102,9 +96,13 @@ export default function TestimonialManager() {
                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2"><Quote size={12} /> Testimonial Content</label>
                             <textarea rows={4} value={item.content} onChange={e => updateItem(idx, 'content', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-slate-400 text-sm leading-relaxed" />
                         </div>
-                        <div className="mt-6 flex items-center gap-3">
-                            <ImageIcon size={14} className="text-slate-600" />
-                            <input value={item.image} placeholder="Cloudinary Image URL" onChange={e => updateItem(idx, 'image', e.target.value)} className="flex-1 bg-transparent border-none outline-none text-[10px] text-slate-500 focus:text-white transition-colors" />
+                        <div className="mt-8 pt-8 border-t border-white/5">
+                            <ImageUpload
+                                label="Profile Image"
+                                value={item.image}
+                                onChange={(url) => updateItem(idx, 'image', url)}
+                                folder="testimonials"
+                            />
                         </div>
                     </motion.div>
                 ))}

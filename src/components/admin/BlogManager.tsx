@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
+import ImageUpload from './shared/ImageUpload';
 import Link from "next/link";
 
 const TABS = [
@@ -442,12 +443,12 @@ export default function BlogManager() {
                                             className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white font-bold"
                                         />
                                     </div>
-                                    <div className="space-y-4">
-                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Featured Image URL</label>
-                                        <input
+                                    <div className="md:col-span-2">
+                                        <ImageUpload
+                                            label="Featured Image"
                                             value={editingPost.image}
-                                            onChange={e => setEditingPost({ ...editingPost, image: e.target.value })}
-                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-slate-500"
+                                            onChange={(url) => setEditingPost({ ...editingPost, image: url })}
+                                            folder="blog"
                                         />
                                     </div>
                                 </div>

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
+import ImageUpload from './shared/ImageUpload';
 
 const ICON_OPTIONS = [
     { name: 'BookOpen', icon: <BookOpen size={16} /> },
@@ -170,15 +171,12 @@ export default function AboutEditor() {
                                 Brand Story Image
                             </h2>
                             <div className="space-y-6">
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Story Image URL (Cloudinary preferred)</label>
-                                    <input
-                                        value={data.story.image || ''}
-                                        onChange={e => setData({ ...data, story: { ...data.story, image: e.target.value } })}
-                                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold outline-none"
-                                        placeholder="https://cloudinary.com/..."
-                                    />
-                                </div>
+                                <ImageUpload
+                                    label="Story Image"
+                                    value={data.story.image || ''}
+                                    onChange={(url) => setData({ ...data, story: { ...data.story, image: url } })}
+                                    folder="about/story"
+                                />
                                 <div className="p-6 bg-amber-500/10 border border-amber-500/20 rounded-2xl">
                                     <p className="text-amber-500 text-xs font-bold leading-relaxed">
                                         Lưu ý: Phần văn bản của "Câu Chuyện Hình Thành" hiện đã được cố định (hardcode) theo yêu cầu thiết kế. Tại đây bạn chỉ có thể thay đổi hình ảnh hiển thị bên cạnh câu chuyện.
@@ -225,11 +223,16 @@ export default function AboutEditor() {
                                                     list[idx].certs = e.target.value;
                                                     setData({ ...data, teachers: list });
                                                 }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-primary font-bold text-[10px]" />
-                                                <input placeholder="Đường dẫn ảnh (Cloudinary)" value={teacher.image} onChange={e => {
-                                                    const list = [...data.teachers];
-                                                    list[idx].image = e.target.value;
-                                                    setData({ ...data, teachers: list });
-                                                }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-slate-500 text-[10px]" />
+                                                <ImageUpload
+                                                    label="Teacher Photo"
+                                                    value={teacher.image}
+                                                    onChange={(url) => {
+                                                        const list = [...data.teachers];
+                                                        list[idx].image = url;
+                                                        setData({ ...data, teachers: list });
+                                                    }}
+                                                    folder="teachers"
+                                                />
                                             </div>
                                             <div className="space-y-3">
                                                 <input placeholder="Kinh nghiệm (VD: 20+ năm...)" value={teacher.exp} onChange={e => {

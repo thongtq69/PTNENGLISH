@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, ArrowRight, Target, Settings2, CheckCircle2, ChevronDown, ChevronUp, Layout } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
+import ImageUpload from './shared/ImageUpload';
 
 export default function CourseManager() {
     const [courses, setCourses] = useState<any[]>([]);
@@ -168,6 +169,14 @@ export default function CourseManager() {
                                                         <option value="GE">General English (GE)</option>
                                                         <option value="PTE">PTE Academic</option>
                                                     </select>
+                                                </div>
+                                                <div className="md:col-span-3">
+                                                    <ImageUpload
+                                                        label="Course Thumbnail / Header"
+                                                        value={course.image}
+                                                        onChange={(url) => updateCourse(idx, 'image', url)}
+                                                        folder="courses"
+                                                    />
                                                 </div>
                                             </div>
 

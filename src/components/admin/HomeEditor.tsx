@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Video, Type, Link as LinkIcon, AlertCircle, CheckCircle2, Plus, Trash2, Image as ImageIcon, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
+import ImageUpload from './shared/ImageUpload';
 
 export default function HomeEditor() {
     const [loading, setLoading] = useState(true);
@@ -266,16 +267,7 @@ export default function HomeEditor() {
                                 <Trash2 size={16} />
                             </button>
 
-                            <div className="flex gap-4">
-                                <div className="w-20 h-24 rounded-xl bg-slate-800 shrink-0 overflow-hidden border border-white/10">
-                                    {prog.image ? (
-                                        <img src={prog.image} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-600">
-                                            <ImageIcon size={24} />
-                                        </div>
-                                    )}
-                                </div>
+                            <div className="flex gap-4 items-start">
                                 <div className="flex-1 space-y-4">
                                     <input
                                         value={prog.name}
@@ -286,15 +278,15 @@ export default function HomeEditor() {
                                         }}
                                         className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1"
                                     />
-                                    <input
-                                        placeholder="Image URL"
+                                    <ImageUpload
+                                        label="Program Card"
                                         value={prog.image}
-                                        onChange={(e) => {
+                                        onChange={(url) => {
                                             const newList = [...settings.programs];
-                                            newList[idx].image = e.target.value;
+                                            newList[idx].image = url;
                                             setSettings({ ...settings, programs: newList });
                                         }}
-                                        className="w-full bg-slate-950/50 border border-white/5 rounded-lg px-3 py-1.5 text-[10px] text-slate-400 outline-none"
+                                        folder="home/programs"
                                     />
                                     <select
                                         value={prog.color}
@@ -353,13 +345,6 @@ export default function HomeEditor() {
                             >
                                 <Trash2 size={12} />
                             </button>
-                            <div className="w-full h-1/2 flex items-center justify-center mb-4 px-2">
-                                {p.logo ? (
-                                    <img src={p.logo} className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all" />
-                                ) : (
-                                    <ImageIcon className="text-slate-600" />
-                                )}
-                            </div>
                             <input
                                 value={p.name}
                                 onChange={(e) => {
@@ -369,15 +354,16 @@ export default function HomeEditor() {
                                 }}
                                 className="w-full bg-transparent border-none outline-none text-[10px] font-black uppercase text-center text-slate-500 group-hover:text-white transition-colors"
                             />
-                            <input
-                                placeholder="Logo URL"
+                            <ImageUpload
+                                label="Partner Logo"
+                                compact
                                 value={p.logo}
-                                onChange={(e) => {
+                                onChange={(url) => {
                                     const newList = [...settings.partners];
-                                    newList[idx].logo = e.target.value;
+                                    newList[idx].logo = url;
                                     setSettings({ ...settings, partners: newList });
                                 }}
-                                className="absolute bottom-2 left-2 right-2 bg-slate-950 opacity-0 group-hover:opacity-100 focus:opacity-100 rounded px-2 py-1 text-[8px] text-slate-500 outline-none"
+                                folder="home/partners"
                             />
                         </div>
                     ))}

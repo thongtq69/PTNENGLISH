@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Trophy, User, Save, CheckCircle2, Image as ImageIcon, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ImageUpload from './shared/ImageUpload';
 
 export default function AchievementManager() {
     const [data, setData] = useState<any[]>([]);
@@ -79,18 +80,6 @@ export default function AchievementManager() {
                         >
                             <Trash2 size={16} />
                         </button>
-                        <div className="w-full aspect-[3/4] rounded-2xl bg-slate-800 mb-6 overflow-hidden border border-white/5 relative">
-                            {item.url ? (
-                                <img src={item.url} className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-slate-700">
-                                    <ImageIcon size={48} />
-                                </div>
-                            )}
-                            <div className="absolute top-4 left-4 w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-white shadow-lg">
-                                <Star size={20} fill="white" />
-                            </div>
-                        </div>
 
                         <div className="space-y-4">
                             <div>
@@ -108,8 +97,12 @@ export default function AchievementManager() {
                                 </div>
                             </div>
                             <div>
-                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Certificate Image URL</label>
-                                <input value={item.url} onChange={e => updateItem(idx, 'url', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-slate-600 text-[10px] truncate" />
+                                <ImageUpload
+                                    label="Certificate Image"
+                                    value={item.url}
+                                    onChange={(url) => updateItem(idx, 'url', url)}
+                                    folder="achievements"
+                                />
                             </div>
                         </div>
                     </motion.div>
