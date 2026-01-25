@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import IssueManager from '@/components/admin/IssueManager';
 
 export default function AdminIssuesPage() {

@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 "use client";
 
 import { useEffect, useState } from "react";
@@ -17,11 +18,12 @@ import {
     Layout
 } from "lucide-react";
 
-type TabType = "info" | "schedule";
+type TabType = "info" | "schedule" | "banner";
 
 export default function CoursesManagementPage() {
     const [courses, setCourses] = useState<any[]>([]);
     const [schedules, setSchedules] = useState<any[]>([]);
+    const [banner, setBanner] = useState<any>({ title: '', subtitle: '', description: '' });
     const [activeTab, setActiveTab] = useState<TabType>("info");
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -30,10 +32,21 @@ export default function CoursesManagementPage() {
     useEffect(() => {
         Promise.all([
             fetch("/api/courses").then(res => res.json()),
-            fetch("/api/schedules").then(res => res.json())
-        ]).then(([cData, sData]) => {
+            fetch("/api/schedules").then(res => res.json()),
+            fetch("/api/pages/courses").then(res => res.json())
+        ]).then(([cData, sData, pData]) => {
             setCourses(cData);
             setSchedules(sData);
+            if (pData && pData.sections) {
+                const b = pData.sections.find((s: any) => s.type === 'courses-hero')?.content;
+                if (b) setBanner(b);
+            } else {
+                setBanner({
+                    title: "Lộ Trình <span class='text-primary font-bold'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
+                    subtitle: "The Academic Navigation Roadmap",
+                    description: "Khám phá các khóa học được thiết kế chuẩn Châu Âu, giúp bạn nắm bắt cơ hội học tập toàn cầu."
+                });
+            }
             setLoading(false);
         });
     }, []);
@@ -51,6 +64,15 @@ export default function CoursesManagementPage() {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(schedules)
+                }),
+                fetch("/api/pages", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        slug: 'courses',
+                        title: 'Courses Page',
+                        sections: [{ id: 'courses-hero', type: 'courses-hero', content: banner, order: 1, isVisible: true }]
+                    })
                 })
             ]);
 
@@ -107,6 +129,12 @@ export default function CoursesManagementPage() {
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold transition-all ${activeTab === "schedule" ? "bg-slate-700 text-white shadow-lg" : "text-slate-500 hover:text-slate-300"}`}
                 >
                     <Calendar size={18} /> Lịch khai giảng (Popup)
+                </button>
+                <button
+                    onClick={() => setActiveTab("banner")}
+                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold transition-all ${activeTab === "banner" ? "bg-slate-700 text-white shadow-lg" : "text-slate-500 hover:text-slate-300"}`}
+                >
+                    <Layout size={18} /> Banner & Hero
                 </button>
             </div>
 
@@ -328,6 +356,50 @@ export default function CoursesManagementPage() {
                                 <Plus size={20} />
                                 <span className="font-bold uppercase tracking-widest text-[10px]">Thêm lịch khai giảng</span>
                             </button>
+                        </motion.div>
+                    )}
+
+                    {activeTab === "banner" && (
+                        <motion.div
+                            key="banner"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="space-y-6"
+                        >
+                            <div className="bg-[#1E293B]/30 border border-slate-800 rounded-3xl p-8 space-y-6">
+                                <h3 className="text-xl font-bold flex items-center gap-3">
+                                    <Layout className="text-primary" /> Hero Banner Settings
+                                </h3>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest block">Main Title (HTML)</label>
+                                        <textarea
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-6 py-4 text-white font-bold outline-none focus:border-primary/50 min-h-[100px]"
+                                            value={banner.title}
+                                            onChange={e => setBanner({ ...banner, title: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest block">Subtitle Tag</label>
+                                        <input
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:border-primary/50"
+                                            value={banner.subtitle}
+                                            onChange={e => setBanner({ ...banner, subtitle: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="md:col-span-2 space-y-4">
+                                        <label className="text-[10px] font-black uppercase text-slate-500 tracking-widest block">Banner Description</label>
+                                        <textarea
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-2xl px-6 py-4 text-slate-400 font-body outline-none focus:border-primary/50"
+                                            rows={4}
+                                            value={banner.description}
+                                            onChange={e => setBanner({ ...banner, description: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>

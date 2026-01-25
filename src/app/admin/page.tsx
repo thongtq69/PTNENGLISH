@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import dbConnect from '@/lib/mongodb';
 import Course from '@/models/Course';
 import Post from '@/models/Post';
