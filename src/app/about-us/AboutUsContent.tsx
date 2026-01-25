@@ -292,51 +292,98 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             </section>
 
 
-            {/* Teachers Section - Compacted */}
-            <section id="teachers" className="py-20 bg-slate-50">
+            {/* Teachers Section - Hierarchical Layout */}
+            <section id="teachers" className="py-24 bg-slate-50">
                 <div className="container mx-auto px-6">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
-                        <div className="max-w-2xl">
-                            <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-widest mb-3">Experts</h2>
-                            <h3 className="text-3xl md:text-4xl font-heading font-extrabold text-accent leading-tight">
-                                Đội ngũ Giảng viên <br /> MA.TESOL hàng đầu
-                            </h3>
-                        </div>
-                        <p className="text-slate-500 max-w-sm font-serif not-italic border-l-4 border-primary/20 pl-6 py-1 text-right text-sm">
-                            "Chúng tôi truyền cảm hứng và định hướng tương lai cho từng học viên."
-                        </p>
+                    <div className="text-center max-w-3xl mx-auto mb-16">
+                        <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-[0.4em] mb-4">The Leadership</h2>
+                        <h3 className="text-3xl md:text-5xl font-heading font-extrabold text-accent leading-tight">
+                            Hội đồng Sáng lập & <br /> Ban Giám đốc Học thuật
+                        </h3>
                     </div>
 
-                    <div className="flex md:grid md:grid-cols-2 xl:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible pb-12 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
-                        {TEACHERS.map((teacher, idx) => (
+                    {/* PTN Founders (First 3) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-24">
+                        {(pageData?.sections?.find((s: any) => s.type === 'about-teachers')?.content?.items || TEACHERS).slice(0, 3).map((teacher: any, idx: number) => (
                             <motion.div
                                 key={idx}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="min-w-[280px] md:min-w-0 group relative snap-center"
+                                transition={{ delay: idx * 0.1 }}
+                                className="group"
                             >
-                                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-xl bg-white border border-slate-100">
+                                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100">
                                     <img
                                         src={teacher.image}
                                         alt={teacher.name}
                                         className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-110"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-accent to-transparent opacity-0 group-hover:opacity-95 transition-opacity duration-300" />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent opacity-0 group-hover:opacity-95 transition-all duration-500" />
 
-                                    <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                                        <p className="text-primary text-[10px] font-bold uppercase tracking-widest mb-2">Qualifications</p>
-                                        <p className="text-white text-xs leading-relaxed opacity-80 mb-4">{teacher.certs}</p>
-                                        <p className="text-white text-xs leading-relaxed font-light">{teacher.desc}</p>
+                                    <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                                        <div className="w-12 h-1 bg-primary mb-6" />
+                                        <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-3">Qualifications</p>
+                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium">{teacher.certs}</p>
+                                        <p className="text-white/70 text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4">{teacher.desc}</p>
+                                    </div>
+                                    <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
+                                        Founder / Board Member
                                     </div>
                                 </div>
                                 <div className="mt-8 text-center group-hover:text-primary transition-colors">
-                                    <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors leading-tight">{teacher.name}</h4>
-                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-tighter mt-2 border-t border-slate-100 pt-2 inline-block px-4">{teacher.exp}</p>
+                                    <h4 className="font-heading font-bold text-2xl text-accent group-hover:text-primary transition-colors duration-300">{teacher.name}</h4>
+                                    <div className="flex items-center justify-center gap-4 mt-3 opacity-60">
+                                        <span className="h-px w-8 bg-slate-400" />
+                                        <p className="text-[11px] text-accent font-black uppercase tracking-widest">{teacher.exp}</p>
+                                        <span className="h-px w-8 bg-slate-400" />
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
                     </div>
+
+                    {/* Academic Faculty (Others) */}
+                    {(pageData?.sections?.find((s: any) => s.type === 'about-teachers')?.content?.items || TEACHERS).length > 3 && (
+                        <div>
+                            <div className="flex items-center gap-8 mb-16">
+                                <div className="h-px flex-1 bg-slate-200" />
+                                <h3 className="text-2xl font-heading font-black text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap">
+                                    Đội ngũ Giảng viên Chuyên gia
+                                </h3>
+                                <div className="h-px flex-1 bg-slate-200" />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                                {(pageData?.sections?.find((s: any) => s.type === 'about-teachers')?.content?.items || TEACHERS).slice(3).map((teacher: any, idx: number) => (
+                                    <motion.div
+                                        key={idx}
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        whileInView={{ opacity: 1, scale: 1 }}
+                                        viewport={{ once: true }}
+                                        className="group"
+                                    >
+                                        <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 grayscale hover:grayscale-0 transition-all duration-500">
+                                            <img
+                                                src={teacher.image}
+                                                alt={teacher.name}
+                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                            />
+                                            <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-accent to-transparent">
+                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                    {teacher.certs}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="mt-6 text-center">
+                                            <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors">{teacher.name}</h4>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1 opacity-70 group-hover:opacity-100 transition-opacity">{teacher.exp}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </section>
 
@@ -371,7 +418,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             </section>
 
             <Footer />
-        </main>
+        </main >
     );
 }
 

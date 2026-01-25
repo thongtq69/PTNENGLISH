@@ -202,9 +202,16 @@ export default function AboutEditor() {
                             </div>
                             <div className="grid grid-cols-1 gap-4">
                                 {data.teachers.map((teacher: any, idx: number) => (
-                                    <div key={idx} className="bg-slate-900 border border-white/5 p-6 rounded-[2rem] flex flex-col lg:flex-row gap-6 group hover:border-primary/30 transition-all">
-                                        <div className="w-24 h-24 bg-slate-800 rounded-2xl shrink-0 overflow-hidden border border-white/5">
-                                            {teacher.image ? <img src={teacher.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><Plus /></div>}
+                                    <div key={idx} className={`bg-slate-900 border ${idx < 3 ? 'border-primary/30 shadow-lg shadow-primary/5' : 'border-white/5'} p-6 rounded-[2rem] flex flex-col lg:flex-row gap-6 group hover:border-primary/50 transition-all`}>
+                                        <div className="relative">
+                                            <div className="w-24 h-24 bg-slate-800 rounded-2xl shrink-0 overflow-hidden border border-white/5">
+                                                {teacher.image ? <img src={teacher.image} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-600"><Plus /></div>}
+                                            </div>
+                                            {idx < 3 && (
+                                                <div className="absolute -top-2 -right-2 bg-primary text-white text-[8px] font-black uppercase tracking-tighter px-2 py-1 rounded-md shadow-lg">
+                                                    PTN Founder
+                                                </div>
+                                            )}
                                         </div>
                                         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div className="space-y-3">
