@@ -60,9 +60,9 @@ export default function PromoPopup() {
                                     <div className="inline-block px-3 py-1 bg-primary text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 rounded-none">
                                         Admission 2025
                                     </div>
-                                    <h4 className="text-3xl md:text-6xl font-heading font-black leading-none mb-4 md:mb-6 uppercase tracking-tighter">
+                                    <h4 className="text-2xl md:text-6xl font-heading font-black leading-none mb-3 md:mb-6 uppercase tracking-tighter">
                                         CHIÊU SINH <br />
-                                        <span className="text-white bg-primary px-2 py-0.5 md:px-3 md:py-1">THÁNG 11 & 12</span>
+                                        <span className="text-white bg-primary px-1.5 py-0.5 md:px-3 md:py-1">THÁNG 11 & 12</span>
                                     </h4>
                                     <p className="text-[11px] md:text-sm font-body text-slate-300 max-w-[240px] md:max-w-xs leading-relaxed border-l-2 border-primary pl-4 hidden sm:block">
                                         Đồng hành cùng đội ngũ chuyên gia <span className="text-white font-bold">MA.TESOL</span> hàng đầu.
@@ -74,17 +74,17 @@ export default function PromoPopup() {
                         </div>
 
                         {/* Content Section - Swiss Modern Structure */}
-                        <div className="md:w-7/12 p-10 md:p-16 overflow-y-auto bg-white flex flex-col relative">
+                        <div className="md:w-7/12 p-6 md:p-16 overflow-y-auto bg-white flex flex-col relative">
                             <button
                                 onClick={closePopup}
-                                className="absolute top-0 right-0 w-16 h-16 bg-accent text-white flex items-center justify-center hover:bg-primary transition-all group z-20"
+                                className="absolute top-0 right-0 w-12 h-12 md:w-16 md:h-16 bg-accent text-white flex items-center justify-center hover:bg-primary transition-all group z-20"
                             >
-                                <X size={32} className="group-hover:rotate-180 transition-transform duration-500" />
+                                <X size={24} className="group-hover:rotate-180 transition-transform duration-500 md:w-8 md:h-8" />
                             </button>
 
-                            <div className="mb-12 border-b-4 border-slate-100 pb-10">
-                                <h3 className="text-5xl font-heading font-black text-accent mb-4 uppercase tracking-tighter leading-none">Lịch Khai Giảng</h3>
-                                <p className="text-slate-500 text-sm leading-relaxed font-body max-w-md">
+                            <div className="mb-6 md:mb-12 border-b-2 md:border-b-4 border-slate-100 pb-6 md:pb-10">
+                                <h3 className="text-3xl md:text-5xl font-heading font-black text-accent mb-3 md:mb-4 uppercase tracking-tighter leading-none">Lịch Khai Giảng</h3>
+                                <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-body max-w-md">
                                     Hệ thống đào tạo học thuật chuyên sâu. <br />
                                     <span className="font-bold text-primary italic">"Quality over speed, mastery over tricks."</span>
                                 </p>
@@ -92,14 +92,14 @@ export default function PromoPopup() {
 
                             <div className="space-y-4 flex-grow">
                                 {schedules.map((item, idx) => (
-                                    <div key={idx} className="flex gap-4 md:gap-8 p-5 md:p-8 border-2 border-slate-50 hover:border-accent hover:bg-slate-50 transition-all cursor-pointer group rounded-none relative">
+                                    <div key={idx} className="flex gap-4 md:gap-8 p-4 md:p-8 border-2 border-slate-50 hover:border-accent hover:bg-slate-50 transition-all cursor-pointer group rounded-none relative">
                                         <div className="shrink-0 w-10 h-10 md:w-14 md:h-14 bg-slate-100 flex items-center justify-center text-accent transition-all group-hover:bg-primary group-hover:text-white rounded-none">
                                             {getIcon(idx)}
                                         </div>
                                         <div>
-                                            <h5 className="font-heading font-black text-accent text-sm md:text-lg uppercase tracking-tight mb-1">{item.title}</h5>
-                                            <p className="text-[9px] md:text-[11px] text-primary font-black uppercase mb-1 tracking-[0.2em]">{item.detail}</p>
-                                            <p className="text-[10px] md:text-xs text-slate-400 font-bold font-mono">{item.schedule}</p>
+                                            <h5 className="font-heading font-black text-accent text-xs md:text-lg uppercase tracking-tight mb-1">{item.title}</h5>
+                                            <p className="text-[8px] md:text-[11px] text-primary font-black uppercase mb-0.5 md:mb-1 tracking-[0.2em]">{item.detail}</p>
+                                            <p className="text-[9px] md:text-xs text-slate-400 font-bold font-mono">{item.schedule}</p>
                                         </div>
                                         {/* Corner accent for active item feel */}
                                         <div className="absolute top-0 right-0 w-2 h-2 bg-primary opacity-0 group-hover:opacity-100"></div>
@@ -107,11 +107,11 @@ export default function PromoPopup() {
                                 ))}
                             </div>
 
-                            <div className="mt-14 flex flex-col gap-6">
+                            <div className="mt-8 md:mt-14 flex flex-col gap-4 md:gap-6">
                                 <Link
                                     href="/contact"
                                     onClick={closePopup}
-                                    className="w-full bg-accent hover:bg-primary text-white py-6 font-black uppercase tracking-[0.4em] text-xs text-center shadow-2xl transition-all active:scale-95 rounded-none"
+                                    className="w-full bg-accent hover:bg-primary text-white py-4 md:py-6 font-black uppercase tracking-[0.4em] text-[10px] md:text-xs text-center shadow-2xl transition-all active:scale-95 rounded-none"
                                 >
                                     Đăng ký tư vấn ngay
                                 </Link>

@@ -98,7 +98,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           </motion.div>
 
 
-          <div className="flex md:grid md:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 overflow-x-auto md:overflow-visible pb-8 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="flex md:grid md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-8 overflow-x-auto md:overflow-visible pb-6 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {programs.map((prog: any, idx: number) => (
               <motion.div
                 key={idx}
@@ -106,15 +106,15 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="min-w-[280px] md:min-w-0 group cursor-pointer snap-center"
+                className="min-w-[180px] md:min-w-0 group cursor-pointer snap-center"
               >
-                <div className="relative aspect-[4/5] md:aspect-square rounded-2xl overflow-hidden mb-6 shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                <div className="relative aspect-[4/5] md:aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-3 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                   <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                   {prog.name === "PTE Academic" && (
-                    <div className="absolute top-4 right-4 bg-primary text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest z-20">New</div>
+                    <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-primary text-white text-[8px] md:text-[10px] font-bold px-2 py-0.5 md:px-3 md:py-1 rounded-full uppercase tracking-widest z-20">New</div>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 p-8 pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
-                    <p className="text-white font-heading font-black text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
+                  <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 pt-8 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
+                    <p className="text-white font-heading font-black text-sm md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
                   </div>
                 </div>
               </motion.div>
@@ -168,15 +168,15 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   rel="noopener noreferrer"
                   whileHover={{ y: -5, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex-1 lg:min-w-[280px] group relative bg-primary px-8 py-5 rounded-2xl flex items-center gap-4 text-white shadow-xl shadow-primary/20 transition-all overflow-hidden"
+                  className="flex-1 lg:min-w-[280px] group relative bg-primary px-6 py-4 md:px-8 md:py-5 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-white shadow-xl shadow-primary/20 transition-all overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <BookOpen size={24} className="group-hover:rotate-12 transition-transform" />
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                    <BookOpen size={20} className="md:w-6 md:h-6 group-hover:rotate-12 transition-transform" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
-                    <p className="font-heading font-bold text-[17px] leading-tight uppercase">Vào cổng học tập</p>
+                    <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
+                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">Vào cổng học tập</p>
                   </div>
                 </motion.a>
 
@@ -184,14 +184,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   href="/test"
                   whileHover={{ y: -5, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex-1 lg:min-w-[280px] group relative bg-white/5 border border-white/10 px-8 py-5 rounded-2xl flex items-center gap-4 text-white backdrop-blur-md hover:bg-white/10 transition-all"
+                  className="flex-1 lg:min-w-[280px] group relative bg-white/5 border border-white/10 px-6 py-4 md:px-8 md:py-5 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-white backdrop-blur-md hover:bg-white/10 transition-all"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <ExternalLink size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                    <ExternalLink size={20} className="md:w-6 md:h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
-                    <p className="font-heading font-bold text-[17px] leading-tight uppercase">Thi thử IELTS</p>
+                    <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
+                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">Thi thử IELTS</p>
                   </div>
                 </motion.a>
               </div>
@@ -315,17 +315,17 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Partners */}
-      <section className="py-12 bg-white border-y border-slate-100">
+      <section className="py-8 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-[10px] tracking-[0.3em] mb-8">Đối tác chiến lược & Khảo thí</p>
-          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-10 md:gap-16 pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <p className="text-slate-400 font-bold uppercase text-[9px] md:text-[10px] tracking-[0.3em] mb-6 md:mb-8">Đối tác chiến lược & Khảo thí</p>
+          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-6 md:gap-16 pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {partners.map((p: any, idx: number) => (
               <motion.div
                 key={idx}
                 whileHover={{ scale: 1.05 }}
                 className="flex-shrink-0 flex flex-col items-center group"
               >
-                <img src={p.logo} alt={p.name} className="h-10 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                <img src={p.logo} alt={p.name} className="h-8 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
               </motion.div>
             ))}
           </div>
