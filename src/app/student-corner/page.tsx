@@ -1,15 +1,13 @@
 import StudentCornerContent from "./StudentCornerContent";
-
-async function getPageData() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/pages/student-corner`, {
-        next: { revalidate: 60 }
-    });
-    if (!res.ok) return null;
-    return res.json();
-}
+import dbConnect from "@/lib/mongodb";
+import Page from "@/models/Page";
 
 export default async function StudentCornerPage() {
-    const pageData = await getPageData();
+    await dbConnect();
+    const pageData = await Page.findOne({ slug: 'student-corner' }).lean();
 
-    return <StudentCornerContent pageData={pageData} />;
+    // Normalize for client component
+    const data = pageData ? JSON.parse(JSON.stringify(pageData)) : null;
+
+    return <StudentCornerContent pageData={data} />;
 }

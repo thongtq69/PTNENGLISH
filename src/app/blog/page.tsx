@@ -1,15 +1,13 @@
 import BlogContent from "./BlogContent";
-
-async function getPageData() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/pages/blog`, {
-        next: { revalidate: 60 }
-    });
-    if (!res.ok) return null;
-    return res.json();
-}
+import dbConnect from "@/lib/mongodb";
+import Page from "@/models/Page";
 
 export default async function BlogPage() {
-    const pageData = await getPageData();
+    await dbConnect();
+    const pageData = await Page.findOne({ slug: 'blog' }).lean();
 
-    return <BlogContent pageData={pageData} />;
+    // Normalize for client component (handling potential Buffer/Object types from MongoDB)
+    const data = pageData ? JSON.parse(JSON.stringify(pageData)) : null;
+
+    return <BlogContent pageData={data} />;
 }
