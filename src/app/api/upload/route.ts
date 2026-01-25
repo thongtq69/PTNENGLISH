@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { uploadImage } from '@/lib/cloudinary';
+import { uploadFile } from '@/lib/cloudinary';
 
 export async function POST(request: Request) {
     try {
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         const buffer = Buffer.from(bytes);
         const fileBase64 = `data:${file.type};base64,${buffer.toString('base64')}`;
 
-        const url = await uploadImage(fileBase64, `ptn_english/${folder}`);
+        const url = await uploadFile(fileBase64, `ptn_english/${folder}`);
 
         if (!url) {
             return NextResponse.json({ error: 'Failed to upload to Cloudinary' }, { status: 500 });

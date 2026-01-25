@@ -8,10 +8,11 @@ cloudinary.config({
 
 export default cloudinary;
 
-export const uploadImage = async (file: string, folder: string = 'ptn_english') => {
+export const uploadFile = async (file: string, folder: string = 'ptn_english') => {
     try {
         const response = await cloudinary.uploader.upload(file, {
             folder,
+            resource_type: 'auto',
         });
         return response.secure_url;
     } catch (error) {
