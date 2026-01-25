@@ -20,7 +20,21 @@ export default function CourseManager() {
             setCourses(cData);
             if (pData && pData.sections) {
                 const b = pData.sections.find((s: any) => s.type === 'courses-hero')?.content;
-                if (b) setBanner(b);
+                if (b) {
+                    setBanner(b);
+                } else {
+                    setBanner({
+                        title: "Lộ Trình <span class='text-primary font-bold'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
+                        subtitle: "The Academic Navigation Roadmap",
+                        description: "Khám phá các khóa học được thiết kế chuẩn Châu Âu, giúp bạn nắm bắt cơ hội học tập toàn cầu."
+                    });
+                }
+            } else {
+                setBanner({
+                    title: "Lộ Trình <span class='text-primary font-bold'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
+                    subtitle: "The Academic Navigation Roadmap",
+                    description: "Khám phá các khóa học được thiết kế chuẩn Châu Âu, giúp bạn nắm bắt cơ hội học tập toàn cầu."
+                });
             }
             setLoading(false);
         });
