@@ -166,10 +166,10 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
         <main className="min-h-screen bg-white">
             <Header />
 
-            {/* Hero Section - Matched to Image */}
-            <section className="pt-32 md:pt-48 pb-16 md:pb-24 bg-white relative overflow-hidden">
-                {/* Slanted Decorative Background */}
-                <div className="absolute top-0 right-0 w-[40%] h-full bg-primary/[0.03] -skew-x-12 translate-x-1/4 pointer-events-none" />
+            {/* Hero Section - Matched to Image 100% */}
+            <section className="pt-32 md:pt-44 pb-16 md:pb-20 bg-white relative overflow-hidden">
+                {/* Slanted Decorative Background - Enhanced Match */}
+                <div className="absolute top-0 right-0 w-[45%] h-full bg-[#c7002b]/[0.015] -skew-x-12 translate-x-1/4 pointer-events-none" />
 
                 <div className="container mx-auto px-6 relative z-10">
                     <motion.div
@@ -177,17 +177,17 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         animate={{ opacity: 1, y: 0 }}
                         className="max-w-4xl"
                     >
-                        <h1 className="text-primary font-heading font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-4 md:mb-6">
+                        <h1 className="text-[#c7002b] font-heading font-black text-[10px] md:text-sm uppercase tracking-[0.4em] mb-4 md:mb-8">
                             Về Chúng Tôi
                         </h1>
-                        <h2 className="text-4xl md:text-7xl font-heading font-medium text-accent mb-8 leading-tight">
+                        <h2 className="text-4xl md:text-[68px] font-heading font-normal text-[#1e0a3c] mb-10 leading-tight md:leading-[1.15] tracking-tight">
                             Kiến tạo hành trình <br className="hidden md:block" />
-                            tri thức cùng <span className="text-primary font-bold">PTN</span> English
+                            tri thức cùng <span className="text-[#c7002b] font-bold">PTN</span> <span className="font-semibold text-[#1e0a3c]">English</span>
                         </h2>
 
-                        <div className="flex gap-6 max-w-2xl">
-                            <div className="w-1.5 shrink-0 bg-primary h-auto" />
-                            <p className="text-base md:text-xl text-slate-500 font-serif leading-relaxed italic py-1">
+                        <div className="flex gap-8 max-w-2xl items-stretch">
+                            <div className="w-1 md:w-1.5 shrink-0 bg-[#c7002b] h-auto" />
+                            <p className="text-sm md:text-xl text-slate-500 font-newsreader leading-relaxed italic py-0.5">
                                 "Đồng hành – Tận tâm – Bền vững: Để mỗi người học đều có một hành trình tiếng Anh của riêng mình."
                             </p>
                         </div>
@@ -195,42 +195,42 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                 </div>
             </section>
 
-            {/* Story Section - Matched to Image 2 */}
-            <section className="py-16 md:py-24 bg-white">
+            {/* Story Section - Matched to Image 2 100% */}
+            <section className="py-16 md:py-28 bg-white">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             className="flex flex-col h-full justify-center"
                         >
-                            <h3 className="text-2xl md:text-4xl font-heading font-black text-accent mb-10 md:mb-12 flex items-center gap-4">
-                                <span className="w-12 md:w-16 h-1.5 bg-primary" />
+                            <h3 className="text-2xl md:text-4xl font-heading font-black text-[#1e0a3c] mb-10 md:mb-14 flex items-center gap-4">
+                                <span className="w-12 md:w-16 h-1.5 bg-[#c7002b]" />
                                 Câu Chuyện Hình Thành
                             </h3>
 
-                            <div className="space-y-8 text-slate-700 font-body leading-relaxed">
-                                <div className="text-lg md:text-xl space-y-4">
-                                    <p>
-                                        <strong className="text-primary">PTN English</strong> bắt đầu từ những lớp học tâm huyết của ba người thầy: <strong className="text-accent">Phong – Trâm – Nhân.</strong>
+                            <div className="space-y-10 text-slate-700 font-body leading-relaxed">
+                                <div className="text-lg md:text-xl space-y-6">
+                                    <p className="leading-snug">
+                                        <span className="text-[#c7002b] font-bold">PTN</span> <span className="text-[#1e0a3c] font-semibold">English</span> bắt đầu từ những lớp học tâm huyết của ba người thầy: <strong className="text-[#1e0a3c] font-bold">Phong – Trâm – Nhân.</strong>
                                     </p>
-                                    <p className="text-slate-600">
+                                    <p className="text-slate-600 text-base md:text-lg">
                                         Chúng tôi hiểu người học thực sự cần nền tảng vững chắc, sự dẫn dắt tận tâm và một lộ trình có ý nghĩa lâu dài thay vì những mẹo làm bài ngắn hạn.
                                     </p>
                                 </div>
 
-                                {/* Highlight Box */}
-                                <div className="bg-slate-50 border-l-4 border-primary p-6 md:p-8 rounded-r-[2rem] space-y-3">
-                                    <p className="text-accent font-medium text-sm md:text-base">
-                                        PTN là viết tắt của ba người sáng lập.
+                                {/* Highlight Box - Refined Design */}
+                                <div className="bg-[#c7002b]/[0.03] border-l-4 border-[#c7002b] p-8 md:p-10 rounded-r-[2rem] space-y-4">
+                                    <p className="text-[#1e0a3c] font-medium text-base">
+                                        <span className="text-[#c7002b] font-bold">PTN</span> là viết tắt của ba người sáng lập.
                                     </p>
-                                    <p className="text-accent font-medium text-sm md:text-base">
-                                        PTN là tinh thần <strong className="text-accent">Partner To Navigate</strong> – đồng hành để định hướng.
+                                    <p className="text-[#1e0a3c] font-medium text-base">
+                                        <span className="text-[#c7002b] font-bold">PTN</span> là tinh thần <strong className="text-[#1e0a3c] font-black uppercase tracking-tight">Partner To Navigate</strong> – đồng hành để định hướng.
                                     </p>
                                 </div>
 
-                                <p className="text-base md:text-lg text-slate-500 italic font-medium pt-2">
+                                <p className="text-base md:text-lg text-slate-500 italic font-newsreader font-medium pt-4">
                                     "Thành công là sự tự tin khi học viên tự mình bước tiếp trên con đường học tập và cuộc sống."
                                 </p>
                             </div>
@@ -242,17 +242,17 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             viewport={{ once: true }}
                             className="relative"
                         >
-                            <div className="aspect-[4/3] rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl relative">
+                            <div className="aspect-[4/3] rounded-[2.5rem] md:rounded-[4rem] overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] relative">
                                 <img
                                     src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/592696975_798019503192696_5381097215126223627_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=y7qZy0WgaVAQ7kNvwHVmX2S&_nc_oc=Adn0UnxILVl60OrEolmTkLzH8Mz93_7A2My7jQn7Ug6yVBkJwSxXoGxc8tNZvOUb5sA&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=HOFT5BaX3DDhVoFuNh3deQ&oh=00_AfrLYWdG1RSv7hkuK8s7RAlVQe-oJ3NdxoD9iS0RLdltPA&oe=69793819"
                                     alt="Founder Story"
                                     className="w-full h-full object-cover"
                                 />
-                                {/* Experience Badge Overlay */}
-                                <div className="absolute bottom-6 left-6 md:bottom-10 md:left-10">
-                                    <div className="bg-white px-6 py-4 md:px-8 md:py-6 rounded-2xl md:rounded-3xl shadow-2xl border border-slate-100 flex flex-col items-start translate-y-4 md:translate-y-8">
-                                        <span className="text-3xl md:text-4xl font-black text-primary leading-none">25+</span>
-                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest text-accent mt-2">Năm Kinh Nghiệm</span>
+                                {/* Experience Badge Overlay - 100% Match */}
+                                <div className="absolute bottom-6 left-6 md:bottom-12 md:left-12">
+                                    <div className="bg-white px-8 py-6 md:px-10 md:py-8 rounded-3xl md:rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25)] border border-slate-50 flex flex-col items-start translate-y-6 md:translate-y-12">
+                                        <span className="text-4xl md:text-5xl font-black text-[#c7002b] leading-none mb-2">25+</span>
+                                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.2em] text-[#1e0a3c]">Năm Kinh Nghiệm</span>
                                     </div>
                                 </div>
                             </div>
