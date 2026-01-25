@@ -5,15 +5,18 @@ const MockTestSchema = new Schema({
     listening: {
         pdf: String,
         audio: [{ section: Number, url: String }],
-        questionsCount: { type: Number, default: 40 }
+        questionsCount: { type: Number, default: 40 },
+        content: String // Added for interactive content
     },
     reading: {
         pdf: String,
-        questionsCount: { type: Number, default: 40 }
+        questionsCount: { type: Number, default: 40 },
+        content: String // Added for interactive content
     },
     writing: {
         pdf: String,
-        questionsCount: { type: Number, default: 2 }
+        questionsCount: { type: Number, default: 2 },
+        content: String // Added for interactive content
     }
 }, { timestamps: true });
 

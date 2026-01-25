@@ -113,37 +113,84 @@ export default function MockTestManager() {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 gap-8">
                                 {/* Listening */}
                                 <div className="p-8 bg-white/[0.02] border border-white/5 rounded-[2rem] space-y-6">
                                     <h4 className="flex items-center gap-3 text-sm font-black text-white uppercase tracking-widest">
-                                        <Headphones size={18} className="text-primary" /> Listening
+                                        <Headphones size={18} className="text-primary" /> Listening Section
                                     </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Question PDF (Backup)</label>
+                                            <input value={tests[activeTab].listening.pdf || ''} onChange={e => updateSection(activeTab, 'listening', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" placeholder="PDF URL..." />
+                                        </div>
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Questions Count</label>
+                                            <input type="number" value={tests[activeTab].listening.questionsCount || 40} onChange={e => updateSection(activeTab, 'listening', 'questionsCount', parseInt(e.target.value))} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" />
+                                        </div>
+                                    </div>
                                     <div className="space-y-4">
-                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Question PDF</label>
-                                        <input value={tests[activeTab].listening.pdf} onChange={e => updateSection(activeTab, 'listening', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-[10px] text-slate-400" />
+                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60 flex justify-between">
+                                            Interactive Content (Use [Q1], [Q2] as placeholders)
+                                            <span className="text-primary lowercase font-normal italic">Tip: [Q1] will become an input field</span>
+                                        </label>
+                                        <textarea
+                                            value={tests[activeTab].listening.content || ''}
+                                            onChange={e => updateSection(activeTab, 'listening', 'content', e.target.value)}
+                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-xs text-slate-300 font-mono h-64 focus:ring-2 focus:ring-primary/50 outline-none"
+                                            placeholder="Paste listening transcript or questions here. Use [Q1] for input fields..."
+                                        />
                                     </div>
                                 </div>
 
                                 {/* Reading */}
                                 <div className="p-8 bg-white/[0.02] border border-white/5 rounded-[2rem] space-y-6">
                                     <h4 className="flex items-center gap-3 text-sm font-black text-white uppercase tracking-widest">
-                                        <BookOpen size={18} className="text-primary" /> Reading
+                                        <BookOpen size={18} className="text-primary" /> Reading Section
                                     </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Question PDF (Backup)</label>
+                                            <input value={tests[activeTab].reading.pdf || ''} onChange={e => updateSection(activeTab, 'reading', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" placeholder="PDF URL..." />
+                                        </div>
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Questions Count</label>
+                                            <input type="number" value={tests[activeTab].reading.questionsCount || 40} onChange={e => updateSection(activeTab, 'reading', 'questionsCount', parseInt(e.target.value))} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" />
+                                        </div>
+                                    </div>
                                     <div className="space-y-4">
-                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Question PDF</label>
-                                        <input value={tests[activeTab].reading.pdf} onChange={e => updateSection(activeTab, 'reading', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-[10px] text-slate-400" />
+                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60 flex justify-between">
+                                            Interactive Content (Use [Q1], [Q2] as placeholders)
+                                            <span className="text-primary lowercase font-normal italic">Tip: [Q1] will become an input field</span>
+                                        </label>
+                                        <textarea
+                                            value={tests[activeTab].reading.content || ''}
+                                            onChange={e => updateSection(activeTab, 'reading', 'content', e.target.value)}
+                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-xs text-slate-300 font-mono h-96 focus:ring-2 focus:ring-primary/50 outline-none"
+                                            placeholder="Paste reading passage and questions here. Use [Q1] for input fields..."
+                                        />
                                     </div>
                                 </div>
 
                                 {/* Writing */}
                                 <div className="p-8 bg-white/[0.02] border border-white/5 rounded-[2rem] space-y-6">
                                     <h4 className="flex items-center gap-3 text-sm font-black text-white uppercase tracking-widest">
-                                        <PenTool size={18} className="text-primary" /> Writing
+                                        <PenTool size={18} className="text-primary" /> Writing Section
                                     </h4>
                                     <div className="space-y-4">
-                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Question PDF</label>
-                                        <input value={tests[activeTab].writing.pdf} onChange={e => updateSection(activeTab, 'writing', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-[10px] text-slate-400" />
+                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Question PDF (Backup)</label>
+                                        <input value={tests[activeTab].writing.pdf || ''} onChange={e => updateSection(activeTab, 'writing', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" placeholder="PDF URL..." />
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60 flex justify-between">
+                                            Writing Prompts/Content
+                                        </label>
+                                        <textarea
+                                            value={tests[activeTab].writing.content || ''}
+                                            onChange={e => updateSection(activeTab, 'writing', 'content', e.target.value)}
+                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-xs text-slate-300 font-mono h-64 focus:ring-2 focus:ring-primary/50 outline-none"
+                                            placeholder="Describe writing tasks here..."
+                                        />
                                     </div>
                                 </div>
                             </div>

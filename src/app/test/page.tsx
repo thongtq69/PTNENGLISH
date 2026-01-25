@@ -3,17 +3,25 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
-    BookOpen, Headphones, PenTool, CheckCircle, Clock,
-    AlertCircle, ChevronRight, ChevronLeft, Send, Play,
-    Pause, FileText, Settings, Maximize2, Minimize2
+    BookOpen, Headphones, PenTool, Clock,
+    AlertCircle, ChevronRight, Send, Play,
+    Pause, FileText, Maximize2, Minimize2
 } from "lucide-react";
 import Link from "next/link";
 
+interface Test {
+    id: string;
+    name: string;
+    listening: { pdf: string; audio: { section: number; url: string }[]; content?: string; questionsCount?: number };
+    reading: { pdf: string; content?: string; questionsCount?: number };
+    writing: { pdf: string; content?: string; questionsCount?: number };
+}
+
 export default function TestPage() {
-    const [academicTests, setAcademicTests] = useState<any[]>([]);
-    const [selectedTest, setSelectedTest] = useState<any | null>(null);
+    const [academicTests, setAcademicTests] = useState<Test[]>([]);
+    const [selectedTest, setSelectedTest] = useState<Test | null>(null);
     const [step, setStep] = useState(0); // 0: Selection, 1: Intro, 2: Testing, 3: Success
     const [loading, setLoading] = useState(true);
     const [currentSkill, setCurrentSkill] = useState<"listening" | "reading" | "writing">("listening");
@@ -36,7 +44,7 @@ export default function TestPage() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(3600); // 60 minutes default
-    const [isFullScreen, setIsFullScreen] = useState(false);
+    const [isFullScreen] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -87,8 +95,40 @@ export default function TestPage() {
         setStep(3);
     };
 
+    const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
+        if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
+
+        // Split by [QX] tags
+        const parts = content.split(/(\[Q\d+\])/g);
+
+        return (
+            <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed whitespace-pre-wrap">
+                {parts.map((part, i) => {
+                    const match = part.match(/\[Q(\d+)\]/);
+                    if (match) {
+                        const qIdx = parseInt(match[1]);
+                        return (
+                            <span key={i} className="inline-block mx-1 group relative">
+                                <input
+                                    type="text"
+                                    className="w-32 bg-primary/5 border-b-2 border-primary/20 focus:border-primary focus:bg-primary/10 transition-all outline-none px-2 py-1 text-sm font-bold text-primary rounded-t-md"
+                                    value={answers[skill][qIdx] || ""}
+                                    onChange={(e) => handleAnswerChange(skill, qIdx, e.target.value)}
+                                    placeholder={`${qIdx}`}
+                                />
+                                <span className="absolute -top-4 left-0 text-[8px] font-black text-primary/40 uppercase tracking-widest">{qIdx}</span>
+                            </span>
+                        );
+                    }
+                    return <span key={i}>{part}</span>;
+                })}
+            </div>
+        );
+    };
+
     const renderAnswerSheet = () => {
         const count = selectedTest?.[currentSkill]?.questionsCount || 40;
+        const content = selectedTest?.[currentSkill]?.content;
 
         if (currentSkill === "writing") {
             return (
@@ -97,21 +137,31 @@ export default function TestPage() {
                         <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
                             <PenTool size={18} /> Writing Task Response
                         </h4>
-                        <p className="text-xs text-slate-500">Hãy nhập bài làm của bạn vào ô dưới đây. Định dạng đoạn văn rõ ràng.</p>
+                        <p className="text-xs text-slate-500">Hãy nhập bài làm của bạn vào các ô dưới đây.</p>
                     </div>
-                    {[1, 2].map(idx => (
-                        <div key={idx} className="space-y-4">
-                            <label className="text-sm font-black text-accent uppercase tracking-widest">Task 0{idx}</label>
-                            <textarea
-                                className="w-full h-80 p-8 rounded-[2rem] bg-slate-50 border border-slate-200 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-body text-slate-700 resize-none shadow-inner"
-                                placeholder={`Type your text for Writing Task ${idx}...`}
-                                value={answers.writing[idx] || ""}
-                                onChange={(e) => handleAnswerChange("writing", idx, e.target.value)}
-                            />
-                        </div>
-                    ))}
+                    {content ? parseContentWithInputs(content, "writing") : (
+                        [1, 2].map(idx => (
+                            <div key={idx} className="space-y-4">
+                                <label className="text-sm font-black text-accent uppercase tracking-widest">Task 0{idx}</label>
+                                <textarea
+                                    className="w-full h-80 p-8 rounded-[2rem] bg-slate-50 border border-slate-200 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-body text-slate-700 resize-none shadow-inner"
+                                    placeholder={`Type your text for Writing Task ${idx}...`}
+                                    value={answers.writing[idx] || ""}
+                                    onChange={(e) => handleAnswerChange("writing", idx, e.target.value)}
+                                />
+                            </div>
+                        ))
+                    )}
                 </div>
             );
+        }
+
+        if (content) {
+            return (
+                <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 min-h-screen">
+                    {parseContentWithInputs(content, currentSkill)}
+                </div>
+            )
         }
 
         return (
@@ -310,16 +360,16 @@ export default function TestPage() {
                 </div>
             </div>
 
-            {/* Split Screen Area */}
-            <div className="flex-1 flex overflow-hidden">
-                {/* Left Side: PDF Viewer */}
-                <div className={`flex-1 flex flex-col transition-all duration-500 ${isSidebarOpen ? "w-3/5" : "w-full"}`}>
-                    <div className="bg-white h-12 border-b border-slate-200 px-6 flex items-center justify-between">
+            {/* Main Test Area */}
+            <div className="flex-1 flex overflow-hidden bg-slate-100">
+                {/* Left Side: Reference (PDF or Passage) */}
+                <div className={`flex-1 flex flex-col transition-all duration-500 ${isSidebarOpen ? (selectedTest?.[currentSkill]?.content ? "w-1/2" : "w-3/5") : "w-full"}`}>
+                    <div className="bg-white h-12 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10">
                         <div className="flex items-center gap-3">
                             {currentSkill === "listening" && <Headphones size={16} className="text-primary" />}
                             {currentSkill === "reading" && <BookOpen size={16} className="text-primary" />}
                             {currentSkill === "writing" && <PenTool size={16} className="text-primary" />}
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Exam Sheet (PDF)</span>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Reference Materials</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors">
@@ -327,17 +377,24 @@ export default function TestPage() {
                             </button>
                         </div>
                     </div>
-                    <div className="flex-1 bg-slate-800">
-                        <iframe
-                            src={`${selectedTest?.[currentSkill]?.pdf}#toolbar=0&navpanes=0&scrollbar=1`}
-                            className="w-full h-full border-none"
-                            title="Exam PDF"
-                        />
+                    <div className="flex-1 bg-slate-800 overflow-hidden relative">
+                        {selectedTest?.[currentSkill]?.pdf ? (
+                            <iframe
+                                src={`${selectedTest?.[currentSkill]?.pdf}#toolbar=0&navpanes=0&scrollbar=1`}
+                                className="w-full h-full border-none"
+                                title="Exam PDF"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
+                                <FileText size={48} className="mb-4 opacity-20" />
+                                <p className="text-sm font-medium">Sử dụng nội dung tương tác bên phải để làm bài.</p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Right Side: Answer Input Sheet */}
-                <div className={`bg-white transition-all duration-500 border-l border-slate-200 flex flex-col ${isSidebarOpen ? "w-2/5" : "w-0 overflow-hidden"}`}>
+                {/* Right Side: Interactive Test/Answer Sheet */}
+                <div className={`bg-slate-50 transition-all duration-500 border-l border-slate-200 flex flex-col ${isSidebarOpen ? (selectedTest?.[currentSkill]?.content ? "w-1/2" : "w-2/5") : "w-0 overflow-hidden"}`}>
                     {/* Control Panel (Audio for Listening) */}
                     {currentSkill === "listening" && (
                         <div className="bg-slate-50 p-6 border-b border-slate-200">
@@ -393,8 +450,8 @@ export default function TestPage() {
                     <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
                         {renderAnswerSheet()}
 
-                        <div className="mt-16 p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 text-center">
-                            <h5 className="font-heading font-bold text-accent mb-4">You've reached the end</h5>
+                        <div className="mt-16 p-8 bg-white rounded-[2.5rem] border border-slate-200 text-center shadow-sm">
+                            <h5 className="font-heading font-bold text-accent mb-4">Bạn đã hoàn thành phần thi này?</h5>
                             <button
                                 onClick={handleSubmit}
                                 className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-widest text-[10px] hover:underline"
@@ -402,6 +459,22 @@ export default function TestPage() {
                                 Finish and Send Results <ChevronRight size={14} />
                             </button>
                         </div>
+                    </div>
+
+                    {/* Question Navigator Footer */}
+                    <div className="h-16 bg-white border-t border-slate-200 px-6 flex items-center gap-2 overflow-x-auto no-scrollbar">
+                        {Array.from({ length: selectedTest?.[currentSkill]?.questionsCount || 40 }).map((_, i) => {
+                            const qIdx = i + 1;
+                            const isAnswered = !!answers[currentSkill][qIdx];
+                            return (
+                                <button
+                                    key={qIdx}
+                                    className={`w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-[10px] font-black transition-all ${isAnswered ? "bg-primary text-white shadow-md shadow-primary/20 scale-110" : "bg-slate-100 text-slate-400 hover:bg-slate-200"}`}
+                                >
+                                    {qIdx}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
