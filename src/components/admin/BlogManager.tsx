@@ -9,6 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
 import FileUpload from './shared/FileUpload';
+import RichEditor from './shared/RichEditor';
 import Link from "next/link";
 
 const TABS = [
@@ -464,12 +465,11 @@ export default function BlogManager() {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Full Content (HTML Supported)</label>
-                                    <textarea
-                                        rows={12}
+                                    <RichEditor
+                                        label="Full Content (Supports Copy-Paste from Word)"
                                         value={editingPost.content}
-                                        onChange={e => setEditingPost({ ...editingPost, content: e.target.value })}
-                                        className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-slate-300 font-body leading-relaxed"
+                                        onChange={val => setEditingPost({ ...editingPost, content: val })}
+                                        placeholder="Paste your content from Word or start writing here..."
                                     />
                                 </div>
 
