@@ -4,6 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, FileText, Headphones, BookOpen, PenTool, Link as LinkIcon, Save, Eye } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import RichTitleEditor from './shared/RichTitleEditor';
+import FileUpload from './shared/FileUpload';
+
 export default function MockTestManager() {
     const [tests, setTests] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -74,7 +77,7 @@ export default function MockTestManager() {
                     ))}
                     <button
                         onClick={() => {
-                            const newTest = { name: 'New Practice Test', category: 'IELTS', listening: { pdf: '', audio: [] }, reading: { pdf: '' }, writing: { pdf: '' } };
+                            const newTest = { name: 'New Practice Test', category: 'IELTS', listening: { pdf: '', audio: [], content: '' }, reading: { pdf: '', content: '' }, writing: { pdf: '', content: '' } };
                             setTests([...tests, newTest]);
                             setActiveTab(tests.length);
                         }}
@@ -121,13 +124,32 @@ export default function MockTestManager() {
                                     </h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-4">
-                                            <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Question PDF (Backup)</label>
-                                            <input value={tests[activeTab].listening.pdf || ''} onChange={e => updateSection(activeTab, 'listening', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" placeholder="PDF URL..." />
+                                            <FileUpload
+                                                mode="pdf"
+                                                label="Question PDF"
+                                                value={tests[activeTab].listening.pdf || ''}
+                                                onChange={url => updateSection(activeTab, 'listening', 'pdf', url)}
+                                                folder="tests/listening"
+                                            />
                                         </div>
                                         <div className="space-y-4">
                                             <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Questions Count</label>
                                             <input type="number" value={tests[activeTab].listening.questionsCount || 40} onChange={e => updateSection(activeTab, 'listening', 'questionsCount', parseInt(e.target.value))} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" />
                                         </div>
+                                    </div>
+                                    {/* Audio Upload */}
+                                    <div className="space-y-4 border-t border-white/5 pt-6">
+                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Full Test Audio</label>
+                                        <FileUpload
+                                            mode="audio"
+                                            value={tests[activeTab].listening.audio?.[0]?.url || ''}
+                                            onChange={url => {
+                                                const list = [...tests];
+                                                list[activeTab].listening.audio = [{ section: 1, url }];
+                                                setTests(list);
+                                            }}
+                                            folder="tests/audio"
+                                        />
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60 flex justify-between">
@@ -150,8 +172,13 @@ export default function MockTestManager() {
                                     </h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div className="space-y-4">
-                                            <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Question PDF (Backup)</label>
-                                            <input value={tests[activeTab].reading.pdf || ''} onChange={e => updateSection(activeTab, 'reading', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" placeholder="PDF URL..." />
+                                            <FileUpload
+                                                mode="pdf"
+                                                label="Question PDF"
+                                                value={tests[activeTab].reading.pdf || ''}
+                                                onChange={url => updateSection(activeTab, 'reading', 'pdf', url)}
+                                                folder="tests/reading"
+                                            />
                                         </div>
                                         <div className="space-y-4">
                                             <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Questions Count</label>
@@ -178,8 +205,13 @@ export default function MockTestManager() {
                                         <PenTool size={18} className="text-primary" /> Writing Section
                                     </h4>
                                     <div className="space-y-4">
-                                        <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60">Question PDF (Backup)</label>
-                                        <input value={tests[activeTab].writing.pdf || ''} onChange={e => updateSection(activeTab, 'writing', 'pdf', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-xs text-slate-400" placeholder="PDF URL..." />
+                                        <FileUpload
+                                            mode="pdf"
+                                            label="Question PDF"
+                                            value={tests[activeTab].writing.pdf || ''}
+                                            onChange={url => updateSection(activeTab, 'writing', 'pdf', url)}
+                                            folder="tests/writing"
+                                        />
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-white/60 flex justify-between">

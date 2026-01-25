@@ -1,32 +1,53 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, Loader2, Image as ImageIcon, FileText, Video, Headphones } from 'lucide-react';
 
-interface ImageUploadProps {
+interface FileUploadProps {
     value: string;
     onChange: (url: string) => void;
     label?: string;
     folder?: string;
     compact?: boolean;
+    accept?: string;
+    mode?: 'image' | 'pdf' | 'video' | 'audio' | 'all';
 }
 
-export default function ImageUpload({ value, onChange, label, folder = 'uploads', compact = false }: ImageUploadProps) {
+export default function FileUpload({
+    value,
+    onChange,
+    label,
+    folder = 'uploads',
+    compact = false,
+    accept = "image/*",
+    mode = 'image'
+}: FileUploadProps) {
     const [uploading, setUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const getIcon = () => {
+        if (mode === 'pdf') return <FileText size={compact ? 20 : 32} />;
+        if (mode === 'video') return <Video size={compact ? 20 : 32} />;
+        if (mode === 'audio') return <Headphones size={compact ? 20 : 32} />;
+        return <ImageIcon size={compact ? 20 : 32} />;
+    };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         // Basic validation
-        if (!file.type.startsWith('image/')) {
+        if (mode === 'image' && !file.type.startsWith('image/')) {
             alert('Vui lòng chọn tệp hình ảnh.');
             return;
         }
+        if (mode === 'pdf' && file.type !== 'application/pdf') {
+            alert('Vui lòng chọn tệp PDF.');
+            return;
+        }
 
-        if (file.size > 5 * 1024 * 1024) { // 5MB limit
-            alert('Kích thước ảnh không được vượt quá 5MB.');
+        if (file.size > 20 * 1024 * 1024) { // 20MB limit for general files
+            alert('Kích thước tệp không được vượt quá 20MB.');
             return;
         }
 
@@ -45,7 +66,7 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
             if (data.url) {
                 onChange(data.url);
             } else {
-                alert(data.error || 'Lỗi khi tải ảnh lên.');
+                alert(data.error || 'Lỗi khi tải tệp lên.');
             }
         } catch (error) {
             console.error('Upload error:', error);
@@ -56,6 +77,21 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
         }
     };
 
+    const renderPreview = () => {
+        if (!value) return getIcon();
+
+        if (mode === 'image' || value.match(/\.(jpeg|jpg|gif|png|webp)/i)) {
+            return <img src={value} alt="Preview" className="w-full h-full object-cover" />;
+        }
+
+        return (
+            <div className="flex flex-col items-center justify-center gap-1 p-2">
+                {getIcon()}
+                {!compact && <span className="text-[8px] font-black uppercase text-primary truncate max-w-full px-2">Uploaded</span>}
+            </div>
+        );
+    };
+
     if (compact) {
         return (
             <div className="w-full flex flex-col items-center gap-2">
@@ -64,11 +100,7 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
                         onClick={() => !uploading && fileInputRef.current?.click()}
                         className={`w-16 h-16 rounded-xl bg-slate-950 border border-white/10 overflow-hidden flex items-center justify-center text-slate-700 shadow-inner group-hover:border-primary/30 transition-all cursor-pointer ${uploading ? 'animate-pulse' : ''}`}
                     >
-                        {value ? (
-                            <img src={value} alt="Preview" className="w-full h-full object-cover" />
-                        ) : (
-                            uploading ? <Loader2 size={24} className="animate-spin text-primary" /> : <Upload size={24} />
-                        )}
+                        {uploading ? <Loader2 size={24} className="animate-spin text-primary" /> : renderPreview()}
                     </div>
                     {value && !uploading && (
                         <button
@@ -85,7 +117,7 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     className="hidden"
-                    accept="image/*"
+                    accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : accept}
                 />
                 <input
                     type="text"
@@ -106,11 +138,7 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
                 {/* Preview Area */}
                 <div className="relative group">
                     <div className="w-24 h-24 rounded-2xl bg-slate-950 border border-white/10 overflow-hidden flex items-center justify-center text-slate-700 shadow-inner group-hover:border-primary/30 transition-all">
-                        {value ? (
-                            <img src={value} alt="Preview" className="w-full h-full object-cover" />
-                        ) : (
-                            <ImageIcon size={32} />
-                        )}
+                        {renderPreview()}
                     </div>
                     {value && (
                         <button
@@ -133,14 +161,14 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
                             className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2.5 rounded-xl text-[10px] font-bold transition-all disabled:opacity-50"
                         >
                             {uploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-                            {uploading ? 'Đang tải lên...' : 'Tải từ thiết bị'}
+                            {uploading ? 'Đang tải lên...' : `Tải ${mode === 'pdf' ? 'PDF' : mode === 'video' ? 'Video' : 'từ thiết bị'}`}
                         </button>
                         <input
                             type="file"
                             ref={fileInputRef}
                             onChange={handleFileChange}
                             className="hidden"
-                            accept="image/*"
+                            accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : accept}
                         />
                     </div>
 
@@ -149,7 +177,7 @@ export default function ImageUpload({ value, onChange, label, folder = 'uploads'
                             type="text"
                             value={value}
                             onChange={(e) => onChange(e.target.value)}
-                            placeholder="Hoặc dán URL ảnh tại đây..."
+                            placeholder={`Hoặc dán URL ${mode} tại đây...`}
                             className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2.5 text-slate-400 text-[10px] outline-none focus:border-primary/50 transition-all"
                         />
                     </div>

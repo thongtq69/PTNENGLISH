@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Heart, User, Quote, Save, CheckCircle2, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ImageUpload from './shared/ImageUpload';
+import FileUpload from './shared/FileUpload';
 
 export default function TestimonialManager() {
     const [data, setData] = useState<any[]>([]);
@@ -97,7 +97,7 @@ export default function TestimonialManager() {
                             <textarea rows={4} value={item.content} onChange={e => updateItem(idx, 'content', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-slate-400 text-sm leading-relaxed" />
                         </div>
                         <div className="mt-8 pt-8 border-t border-white/5">
-                            <ImageUpload
+                            <FileUpload
                                 label="Profile Image"
                                 value={item.image}
                                 onChange={(url) => updateItem(idx, 'image', url)}

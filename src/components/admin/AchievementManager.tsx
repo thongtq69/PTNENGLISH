@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Trophy, User, Save, CheckCircle2, Image as ImageIcon, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ImageUpload from './shared/ImageUpload';
+import FileUpload from './shared/FileUpload';
 
 export default function AchievementManager() {
     const [data, setData] = useState<any[]>([]);
@@ -97,7 +97,7 @@ export default function AchievementManager() {
                                 </div>
                             </div>
                             <div>
-                                <ImageUpload
+                                <FileUpload
                                     label="Certificate Image"
                                     value={item.url}
                                     onChange={(url) => updateItem(idx, 'url', url)}

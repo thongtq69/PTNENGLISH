@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
-import ImageUpload from './shared/ImageUpload';
+import FileUpload from './shared/FileUpload';
 import Link from "next/link";
 
 const TABS = [
@@ -444,7 +444,7 @@ export default function BlogManager() {
                                         />
                                     </div>
                                     <div className="md:col-span-2">
-                                        <ImageUpload
+                                        <FileUpload
                                             label="Featured Image"
                                             value={editingPost.image}
                                             onChange={(url) => setEditingPost({ ...editingPost, image: url })}

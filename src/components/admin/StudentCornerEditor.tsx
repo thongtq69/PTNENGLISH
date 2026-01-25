@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
-import ImageUpload from './shared/ImageUpload';
+import FileUpload from './shared/FileUpload';
 
 const TABS = [
     { id: 'hero', name: 'Hero Header', icon: <Layout size={18} /> },
@@ -238,7 +238,7 @@ export default function StudentCornerEditor() {
                                                     <option value="tiny">TINY (Gallery)</option>
                                                 </select>
                                             </div>
-                                            <ImageUpload
+                                            <FileUpload
                                                 label="Upload Media"
                                                 value={item.src}
                                                 onChange={(url) => {

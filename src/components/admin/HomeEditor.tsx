@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Video, Type, Link as LinkIcon, AlertCircle, CheckCircle2, Plus, Trash2, Image as ImageIcon, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
-import ImageUpload from './shared/ImageUpload';
+import FileUpload from './shared/FileUpload';
 
 export default function HomeEditor() {
     const [loading, setLoading] = useState(true);
@@ -106,7 +106,7 @@ export default function HomeEditor() {
             )}
 
             {/* Hero Section */}
-            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
                     <div className="p-3 rounded-2xl bg-primary text-white shadow-lg">
                         <Video size={24} />
@@ -118,13 +118,14 @@ export default function HomeEditor() {
                 </div>
 
                 <div className="p-10 space-y-10">
-                    {/* Video URL */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                        <div className="lg:col-span-1">
-                            <label className="text-sm font-black text-white uppercase tracking-widest block mb-4">Background Video</label>
+                    {/* Video URL & Upload */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        <div className="space-y-4">
+                            <label className="text-sm font-black text-white uppercase tracking-widest block mb-4">Background Preview</label>
                             <div className="aspect-video rounded-3xl bg-black overflow-hidden border border-white/10 relative group">
                                 {settings.hero.videoUrl && (
                                     <video
+                                        key={settings.hero.videoUrl}
                                         src={settings.hero.videoUrl}
                                         className="w-full h-full object-cover opacity-50 transition-opacity group-hover:opacity-80"
                                         autoPlay muted loop
@@ -135,20 +136,20 @@ export default function HomeEditor() {
                                 </div>
                             </div>
                         </div>
-                        <div className="lg:col-span-2 space-y-6">
-                            <div>
-                                <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 block">Cloudinary Video URL</label>
-                                <input
-                                    type="text"
-                                    value={settings.hero.videoUrl}
-                                    onChange={(e) => updateHero('videoUrl', e.target.value)}
-                                    className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all font-medium"
-                                />
+                        <div className="space-y-6">
+                            <FileUpload
+                                mode="video"
+                                label="Hero Video Background"
+                                value={settings.hero.videoUrl}
+                                onChange={(url) => updateHero('videoUrl', url)}
+                                folder="home/hero"
+                            />
+                            <div className="p-6 bg-primary/5 border border-primary/10 rounded-2xl flex items-start gap-4">
+                                <AlertCircle size={18} className="text-primary shrink-0 mt-0.5" />
+                                <p className="text-xs text-slate-500 leading-relaxed italic">
+                                    Dùng Cloudinary Video để đảm bảo tốc độ tải trang tối ưu. Video nên có thời lượng ngắn (15-30s) và tắt tiếng.
+                                </p>
                             </div>
-                            <p className="text-xs text-slate-500 italic flex items-center gap-2">
-                                <AlertCircle size={12} />
-                                Input the direct .mp4 link from Cloudinary or your public/assets folder.
-                            </p>
                         </div>
                     </div>
 
@@ -171,7 +172,7 @@ export default function HomeEditor() {
                                 rows={2}
                                 value={settings.hero.subtitle}
                                 onChange={(e) => updateHero('subtitle', e.target.value)}
-                                className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed"
+                                className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed h-[130px]"
                             />
                         </div>
                     </div>
@@ -228,7 +229,7 @@ export default function HomeEditor() {
             </section>
 
             {/* Programs List */}
-            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="p-3 rounded-2xl bg-amber-500 text-white shadow-lg shadow-amber-500/20">
@@ -262,7 +263,7 @@ export default function HomeEditor() {
                                     const filtered = settings.programs.filter((_: any, i: number) => i !== idx);
                                     setSettings({ ...settings, programs: filtered });
                                 }}
-                                className="absolute top-4 right-4 p-2 rounded-lg bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white"
+                                className="absolute top-4 right-4 p-2 rounded-lg bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white z-10"
                             >
                                 <Trash2 size={16} />
                             </button>
@@ -276,10 +277,11 @@ export default function HomeEditor() {
                                             newList[idx].name = e.target.value;
                                             setSettings({ ...settings, programs: newList });
                                         }}
-                                        className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1"
+                                        className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1 placeholder:text-slate-600"
+                                        placeholder="Program Name"
                                     />
-                                    <ImageUpload
-                                        label="Program Card"
+                                    <FileUpload
+                                        label="Program Card Image"
                                         value={prog.image}
                                         onChange={(url) => {
                                             const newList = [...settings.programs];
@@ -311,7 +313,7 @@ export default function HomeEditor() {
             </section>
 
             {/* Partners List */}
-            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="p-3 rounded-2xl bg-emerald-500 text-white shadow-lg">
@@ -341,7 +343,7 @@ export default function HomeEditor() {
                                     const filtered = settings.partners.filter((_: any, i: number) => i !== idx);
                                     setSettings({ ...settings, partners: filtered });
                                 }}
-                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white"
+                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-red-500/10 text-red-400 opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white z-10"
                             >
                                 <Trash2 size={12} />
                             </button>
@@ -352,10 +354,11 @@ export default function HomeEditor() {
                                     newList[idx].name = e.target.value;
                                     setSettings({ ...settings, partners: newList });
                                 }}
-                                className="w-full bg-transparent border-none outline-none text-[10px] font-black uppercase text-center text-slate-500 group-hover:text-white transition-colors"
+                                className="w-full bg-transparent border-none outline-none text-[10px] font-black uppercase text-center text-slate-500 group-hover:text-white transition-colors mb-2"
+                                placeholder="Partner Name"
                             />
-                            <ImageUpload
-                                label="Partner Logo"
+                            <FileUpload
+                                label="Logo"
                                 compact
                                 value={p.logo}
                                 onChange={(url) => {
@@ -371,7 +374,7 @@ export default function HomeEditor() {
             </section>
 
             {/* Philosophy Section */}
-            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
                     <div className="p-3 rounded-2xl bg-indigo-500 text-white shadow-lg">
                         <Type size={24} />

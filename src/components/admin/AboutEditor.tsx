@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
-import ImageUpload from './shared/ImageUpload';
+import FileUpload from './shared/FileUpload';
 
 const ICON_OPTIONS = [
     { name: 'BookOpen', icon: <BookOpen size={16} /> },
@@ -171,7 +171,7 @@ export default function AboutEditor() {
                                 Brand Story Image
                             </h2>
                             <div className="space-y-6">
-                                <ImageUpload
+                                <FileUpload
                                     label="Story Image"
                                     value={data.story.image || ''}
                                     onChange={(url) => setData({ ...data, story: { ...data.story, image: url } })}
@@ -223,7 +223,7 @@ export default function AboutEditor() {
                                                     list[idx].certs = e.target.value;
                                                     setData({ ...data, teachers: list });
                                                 }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-primary font-bold text-[10px]" />
-                                                <ImageUpload
+                                                <FileUpload
                                                     label="Teacher Photo"
                                                     value={teacher.image}
                                                     onChange={(url) => {
