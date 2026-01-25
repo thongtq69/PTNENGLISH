@@ -26,12 +26,12 @@ export default function Testimonials() {
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -mr-48 -mt-48"></div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-12">
+                <div className="text-center mb-6 md:mb-12">
                     <motion.h2
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-primary font-heading font-bold text-sm uppercase tracking-[0.4em] mb-4"
+                        className="text-primary font-heading font-bold text-[10px] md:text-sm uppercase tracking-[0.4em] mb-2 md:mb-4"
                     >
                         Success Stories
                     </motion.h2>
@@ -40,7 +40,7 @@ export default function Testimonials() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         viewport={{ once: true }}
-                        className="text-2xl md:text-5xl font-heading font-semibold text-accent"
+                        className="text-xl md:text-5xl font-heading font-semibold text-accent"
                     >
                         Cảm nghĩ của phụ huynh & học viên
                     </motion.h3>

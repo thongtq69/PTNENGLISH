@@ -28,8 +28,8 @@ export default function Footer() {
     if (!settings) return null;
 
     return (
-        <footer className="bg-slate-900 text-white pt-12 pb-6">
-            <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
+        <footer className="bg-slate-900 text-white pt-8 md:pt-12 pb-4 md:pb-6">
+            <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-10">
                 <div>
                     <div className="mb-4">
                         <div className="flex flex-col w-fit">

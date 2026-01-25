@@ -22,16 +22,16 @@ export default function HallOfFame() {
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center max-w-3xl mx-auto mb-16">
+                <div className="text-center max-w-3xl mx-auto mb-8 md:mb-16">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="flex justify-center items-center gap-3 mb-6"
+                        className="flex justify-center items-center gap-2 md:gap-3 mb-4 md:mb-6"
                     >
-                        <Trophy className="text-primary" size={24} />
-                        <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.4em]">Achievements</h2>
-                        <Star className="text-primary" size={24} />
+                        <Trophy className="text-primary" size={16} />
+                        <h2 className="text-primary font-heading font-black text-[10px] md:text-sm uppercase tracking-[0.4em]">Achievements</h2>
+                        <Star className="text-primary" size={16} />
                     </motion.div>
 
                     <motion.h3
@@ -39,7 +39,7 @@ export default function HallOfFame() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-2xl md:text-5xl font-heading font-black text-white mb-6 uppercase tracking-tight"
+                        className="text-xl md:text-5xl font-heading font-black text-white mb-4 md:mb-6 uppercase tracking-tight"
                     >
                         Gương mặt mới <span className="text-primary">đạt thành tích</span> ấn tượng
                     </motion.h3>
@@ -49,7 +49,7 @@ export default function HallOfFame() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="text-slate-400 text-base md:text-lg font-body"
+                        className="text-slate-400 text-sm md:text-lg font-body"
                     >
                         Chúc mừng các chiến binh <strong className="text-white">PTN English</strong> đã xuất sắc chinh phục mục tiêu IELTS với điểm số ấn tượng.
                     </motion.p>

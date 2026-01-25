@@ -58,41 +58,41 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <Hero />
 
       {/* Philosophy Section - Compact & Dark */}
-      <section className="py-8 md:py-12 bg-slate-900 border-y border-white/5">
+      <section className="py-4 md:py-12 bg-slate-900 border-y border-white/5">
         <div className="container mx-auto px-6 text-center max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-base md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-4 md:pl-6 py-1">
+            <p className="text-sm md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-4 md:pl-6 py-0.5">
               {philosophy}
             </p>
-            <div className="mt-4 flex justify-center items-center gap-3">
-              <div className="h-px w-6 md:w-8 bg-primary/30"></div>
-              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[8px] md:text-[9px]">PTN Philosophy</span>
-              <div className="h-px w-6 md:w-8 bg-primary/30"></div>
+            <div className="mt-2 md:mt-4 flex justify-center items-center gap-3">
+              <div className="h-px w-4 md:w-8 bg-primary/30"></div>
+              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[7px] md:text-[9px]">PTN Philosophy</span>
+              <div className="h-px w-4 md:w-8 bg-primary/30"></div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Introduction Section */}
-      <section className="py-12 md:py-16 bg-white">
+      <section className="py-8 md:py-16 bg-white">
         <div className="container mx-auto px-6 text-center max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-primary font-heading text-sm md:text-lg font-bold uppercase tracking-[0.3em] mb-3">
+            <h2 className="text-primary font-heading text-[10px] md:text-lg font-bold uppercase tracking-[0.3em] mb-2">
               Hệ Thống Đào Tạo Academic Master
             </h2>
-            <h3 className="text-2xl md:text-4xl font-heading font-semibold mb-6 text-accent leading-tight">
+            <h3 className="text-xl md:text-4xl font-heading font-semibold mb-4 text-accent leading-tight">
               TTNN PHÚ TÀI NĂNG <br />
-              <span className="text-lg md:text-4xl">(PTelc - PT English Language Centre)</span>
+              <span className="text-base md:text-4xl">(PTelc - PT English Language Centre)</span>
             </h3>
-            <p className="text-base md:text-lg text-slate-600 font-body leading-relaxed mb-10 mx-auto max-w-4xl">
+            <p className="text-sm md:text-lg text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl">
               Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
             </p>
           </motion.div>
@@ -129,15 +129,15 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <PromoPopup />
 
       {/* Compact Study & Mock Test Section */}
-      <section className="py-8 md:py-12 bg-accent relative overflow-hidden">
+      <section className="py-6 md:py-12 bg-accent relative overflow-hidden">
         {/* Subtle Background Glows */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute top-1/2 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-primary rounded-full blur-[100px] md:blur-[150px]"></div>
-          <div className="absolute top-1/2 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-600 rounded-full blur-[100px] md:blur-[150px]"></div>
+          <div className="absolute top-1/2 left-1/4 w-32 h-32 md:w-96 md:h-96 bg-primary rounded-full blur-[80px] md:blur-[150px]"></div>
+          <div className="absolute top-1/2 right-1/4 w-32 h-32 md:w-96 md:h-96 bg-blue-600 rounded-full blur-[80px] md:blur-[150px]"></div>
         </div>
 
         <div className="container mx-auto px-6 relative z-10">
-          <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 shadow-2xl">
+          <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl md:rounded-[3rem] p-4 md:p-10 shadow-2xl">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
 
               {/* Left Side: Consolidated Info */}
@@ -202,17 +202,17 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Faculty Highlight */}
-      <section className="py-12 md:py-20 bg-slate-900 relative overflow-hidden text-center">
+      <section className="py-8 md:py-20 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <h2 className="text-primary font-heading font-bold text-sm md:text-lg uppercase tracking-widest mb-4">Expert Faculty</h2>
-          <h3 className="text-white text-2xl md:text-5xl font-heading font-semibold mb-6 leading-tight">
+          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-2 md:mb-4">Expert Faculty</h2>
+          <h3 className="text-lg md:text-5xl font-heading font-semibold mb-4 md:mb-6 leading-tight text-white">
             Đội Ngũ Sáng Lập <br />& Giảng Viên MA.TESOL
           </h3>
-          <p className="text-slate-200 text-sm md:text-lg mb-8 leading-relaxed font-body">
+          <p className="text-slate-200 text-xs md:text-lg mb-6 md:mb-8 leading-relaxed font-body">
             "Từng giảng dạy tại Trung tâm Giáo dục Úc (ACET – IDP), giàu kinh nghiệm, nhiệt huyết, với phương pháp giảng dạy hiệu quả và tài liệu biên soạn tỉ mỉ."
           </p>
-          <button className="bg-primary hover:bg-red-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-sm md:text-base transition-all transform hover:scale-105">
+          <button className="bg-primary hover:bg-red-700 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105">
             Gặp gỡ đội ngũ chuyên gia
           </button>
         </div>
@@ -223,18 +223,18 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <Testimonials />
 
       {/* Latest News & Insights - Editorial Bento Grid */}
-      <section className="py-24 bg-white overflow-hidden">
+      <section className="py-10 md:py-24 bg-white overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 gap-4 md:gap-8">
             <div className="max-w-2xl">
-              <h2 className="text-primary font-heading font-black text-xs md:text-sm uppercase tracking-[0.4em] mb-4">Insights</h2>
-              <h3 className="text-3xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
+              <h2 className="text-primary font-heading font-black text-[10px] md:text-sm uppercase tracking-[0.4em] mb-2 md:mb-4">Insights</h2>
+              <h3 className="text-2xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
                 Tin tức & <span className="text-primary">Học thuật</span>
               </h3>
             </div>
-            <Link href="/blog" className="group flex items-center gap-3 text-accent font-black uppercase tracking-widest text-xs border-b-2 border-primary pb-2 hover:text-primary transition-colors">
+            <Link href="/blog" className="group flex items-center gap-2 text-accent font-black uppercase tracking-widest text-[9px] md:text-xs border-b-2 border-primary pb-1 md:pb-2 hover:text-primary transition-colors">
               Xem tất cả bài viết
-              <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform" />
+              <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform md:w-4 md:h-4" />
             </Link>
           </div>
 
@@ -315,10 +315,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Partners */}
-      <section className="py-8 md:py-12 bg-white border-y border-slate-100">
+      <section className="py-6 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-[9px] md:text-[10px] tracking-[0.3em] mb-6 md:mb-8">Đối tác chiến lược & Khảo thí</p>
-          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-6 md:gap-16 pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <p className="text-slate-400 font-bold uppercase text-[8px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8">Đối tác chiến lược & Khảo thí</p>
+          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-6 md:gap-16 pb-2 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {partners.map((p: any, idx: number) => (
               <motion.div
                 key={idx}
