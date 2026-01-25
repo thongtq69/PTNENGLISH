@@ -84,7 +84,7 @@ export default function Header() {
                             <span className="text-primary uppercase">PTN</span>
                             <span className={`uppercase transition-colors ${isTransparent ? "text-white" : "text-[#1e293b]"} group-hover:text-primary`}> English</span>
                         </span>
-                        <div className={`flex justify-between w-full mt-1 transition-colors ${isTransparent ? "text-white/70" : "text-[#095e7c]"}`}>
+                        <div className={`flex justify-between w-full mt-0.5 transition-colors ${isTransparent ? "text-white/70" : "text-[#095e7c]"}`}>
                             {"PARTNER TO NAVIGATE".split("").map((char, index) => (
                                 <span key={index} className="text-[9px] font-bold uppercase leading-none tracking-[0.05em]">
                                     {char === " " ? "\u00A0" : char}
