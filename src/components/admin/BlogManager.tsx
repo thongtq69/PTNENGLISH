@@ -9,7 +9,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
 import FileUpload from './shared/FileUpload';
-import RichEditor from './shared/RichEditor';
+import AdvancedEditor from './shared/AdvancedEditor';
 import Link from "next/link";
 
 const TABS = [
@@ -465,10 +465,10 @@ export default function BlogManager() {
                                 </div>
 
                                 <div className="space-y-4">
-                                    <RichEditor
+                                    <AdvancedEditor
                                         label="Full Content (Supports Copy-Paste from Word)"
                                         value={editingPost.content}
-                                        onChange={val => setEditingPost({ ...editingPost, content: val })}
+                                        onChange={(val: string) => setEditingPost({ ...editingPost, content: val })}
                                         placeholder="Paste your content from Word or start writing here..."
                                     />
                                 </div>
