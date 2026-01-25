@@ -1,4 +1,14 @@
 {
+    "hero": {
+        "title": "Kiến tạo hành trình",
+        "subtitle": "tri thức bền vững",
+        "highlight": "Đồng hành – Tận tâm – Bền vững"
+    },
+    "story": {
+        "title": "Câu Chuyện Hình Thành",
+        "quote": "Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...",
+        "text": "PTN English - Trung Tâm Ngoại Ngữ Phú Tài Năng (PTelc) ra đời từ niềm tin sâu sắc của các nhà sáng lập vào giáo dục học thuật bền vững, không theo đuổi những mẹo làm bài tắt và tạm bợ.\n\nVới hơn 25 năm kinh nghiệm giảng dạy Academic English và IELTS tại các môi trường uy tín như Trung tâm Giáo dục Úc (ACET - IDP), Đại học Bách Khoa TP.HCM và các trường đại học quốc tế, chúng tôi hiểu rõ rằng:\n\n• Thành công thực sự không đến từ việc học vẹt hoặc áp dụng khuôn mẫu\n• Người học cần được trang bị nền tảng ngôn ngữ học thuật vững chắc\n• Quá trình phát triển năng lực đòi hỏi sự đồng hành tận tâm và kiên nhẫn\n\nTừ triết lý đó, PTN English được thành lập như một không gian học tập đặc biệt - nơi mọi quyết định về chương trình, phương pháp và lộ trình học đều xuất phát từ trải nghiệm giảng dạy thực tế và nhu cầu thật sự của người học, không phải từ mô hình kinh doanh.\n\nChúng tôi tự hào là một trung tâm được dẫn dắt bởi giáo viên (teacher-led), nơi chất lượng học thuật và sự tiến bộ bền vững của học viên luôn là ưu tiên hàng đầu."
+    },
     "teachers": [
         {
             "name": "Thầy Đặng Trần Phong (MA.TESOL)",

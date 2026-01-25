@@ -1,0 +1,27 @@
+[
+    {
+        "name": "Academic English for Teens",
+        "image": "https://www.ptelc.edu.vn/wp-content/uploads/2025/06/EfT-Mimi-4-340x480.jpg",
+        "color": "bg-primary"
+    },
+    {
+        "name": "General English",
+        "image": "https://www.ptelc.edu.vn/wp-content/uploads/2022/10/h%C3%ACnh-6-340x480.png",
+        "color": "bg-accent"
+    },
+    {
+        "name": "PTE Academic",
+        "image": "/pte-academic.png",
+        "color": "bg-blue-600"
+    },
+    {
+        "name": "IELTS Preparation",
+        "image": "https://www.ptelc.edu.vn/wp-content/uploads/2022/10/h%C3%ACnh-7-340x480.png",
+        "color": "bg-secondary"
+    },
+    {
+        "name": "Academic Events",
+        "image": "https://www.ptelc.edu.vn/wp-content/uploads/2025/06/debate1-340x480.jpg",
+        "color": "bg-slate-900"
+    }
+]

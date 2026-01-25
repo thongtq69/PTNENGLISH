@@ -1,16 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getMockTests, saveMockTests } from '@/lib/data';
+import dbConnect from '@/lib/mongodb';
+import MockTest from '@/models/MockTest';
 
 export async function GET() {
-    return NextResponse.json(getMockTests());
+    await dbConnect();
+    const tests = await MockTest.find({}).sort({ createdAt: 1 });
+    return NextResponse.json(tests);
 }
 
 export async function POST(request: Request) {
     try {
-        const data = await request.json();
-        saveMockTests(data);
+        await dbConnect();
+        const tests = await request.json();
+
+        await MockTest.deleteMany({});
+        await MockTest.insertMany(tests);
+
         return NextResponse.json({ success: true });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

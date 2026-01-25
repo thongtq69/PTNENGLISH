@@ -1,16 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getCourses, saveCourses } from '@/lib/data';
+import dbConnect from '@/lib/mongodb';
+import Course from '@/models/Course';
 
 export async function GET() {
-    return NextResponse.json(getCourses());
+    await dbConnect();
+    const courses = await Course.find({}).sort({ createdAt: 1 });
+    return NextResponse.json(courses);
 }
 
 export async function POST(request: Request) {
     try {
-        const data = await request.json();
-        saveCourses(data);
+        await dbConnect();
+        const courses = await request.json();
+
+        await Course.deleteMany({});
+        await Course.insertMany(courses);
+
         return NextResponse.json({ success: true });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

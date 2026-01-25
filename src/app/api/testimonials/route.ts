@@ -1,16 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getTestimonials, saveTestimonials } from '@/lib/data';
+import dbConnect from '@/lib/mongodb';
+import Testimonial from '@/models/Testimonial';
 
 export async function GET() {
-    return NextResponse.json(getTestimonials());
+    await dbConnect();
+    const testimonials = await Testimonial.find({}).sort({ createdAt: -1 });
+    return NextResponse.json(testimonials);
 }
 
 export async function POST(request: Request) {
     try {
+        await dbConnect();
         const data = await request.json();
-        saveTestimonials(data);
+
+        await Testimonial.deleteMany({});
+        await Testimonial.insertMany(data);
+
         return NextResponse.json({ success: true });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }

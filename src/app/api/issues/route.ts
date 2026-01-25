@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server';
-import { getIssues, saveIssue, Issue } from '@/lib/data';
+import dbConnect from '@/lib/mongodb';
+import Issue from '@/models/Issue';
 
 export async function GET() {
-    const issues = getIssues();
+    await dbConnect();
+    const issues = await Issue.find({}).sort({ createdAt: -1 });
     return NextResponse.json(issues);
 }
 
 export async function POST(request: Request) {
-    const body = await request.json();
-    const newIssue: Issue = {
-        id: Date.now().toString(),
-        ...body,
-        status: 'New',
-        createdAt: new Date().toISOString(),
-    };
-    saveIssue(newIssue);
-    return NextResponse.json(newIssue, { status: 201 });
+    try {
+        await dbConnect();
+        const body = await request.json();
+        const newIssue = await Issue.create({
+            ...body,
+            status: 'New'
+        });
+        return NextResponse.json(newIssue, { status: 201 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
 }

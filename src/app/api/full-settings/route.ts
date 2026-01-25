@@ -1,16 +1,20 @@
 import { NextResponse } from 'next/server';
-import { getFullGlobalSettings, saveFullGlobalSettings } from '@/lib/data';
+import dbConnect from '@/lib/mongodb';
+import SiteSettings from '@/models/SiteSettings';
 
 export async function GET() {
-    return NextResponse.json(getFullGlobalSettings());
+    await dbConnect();
+    const settings = await SiteSettings.findOne({});
+    return NextResponse.json(settings);
 }
 
 export async function POST(request: Request) {
     try {
+        await dbConnect();
         const data = await request.json();
-        saveFullGlobalSettings(data);
+        await SiteSettings.findOneAndUpdate({}, data, { upsert: true });
         return NextResponse.json({ success: true });
-    } catch (error) {
-        return NextResponse.json({ error: 'Failed to save data' }, { status: 500 });
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
     }
 }
