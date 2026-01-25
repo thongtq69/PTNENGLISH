@@ -4,12 +4,12 @@ import Issue from '@/models/Issue';
 
 export async function PATCH(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         await dbConnect();
         const { status } = await request.json();
-        const { id } = params;
+        const { id } = await params;
 
         const updatedIssue = await Issue.findByIdAndUpdate(id, { status }, { new: true });
 

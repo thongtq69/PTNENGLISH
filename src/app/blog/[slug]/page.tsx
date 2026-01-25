@@ -6,9 +6,10 @@ import { notFound } from "next/navigation";
 import { Calendar, User, Clock, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     await dbConnect();
-    const post = await Post.findOne({ slug: params.slug });
+    const { slug } = await params;
+    const post = await Post.findOne({ slug });
 
     if (!post) {
         notFound();

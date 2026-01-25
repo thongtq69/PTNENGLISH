@@ -4,11 +4,12 @@ import Page from '@/models/Page';
 
 export async function GET(
     request: Request,
-    { params }: { params: { slug: string } }
+    { params }: { params: Promise<{ slug: string }> }
 ) {
     await dbConnect();
     try {
-        const page = await Page.findOne({ slug: params.slug });
+        const { slug } = await params;
+        const page = await Page.findOne({ slug });
         if (!page) {
             return NextResponse.json({ error: 'Page not found' }, { status: 404 });
         }
