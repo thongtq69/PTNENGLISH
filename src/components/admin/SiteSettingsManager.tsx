@@ -45,7 +45,7 @@ export default function SiteSettingsManager() {
     const updateNested = (category: string, field: string, value: string) => {
         setSettings({
             ...settings,
-            [category]: { ...settings[category], [field]: value }
+            [category]: { ...(settings[category] || {}), [field]: value }
         });
     };
 

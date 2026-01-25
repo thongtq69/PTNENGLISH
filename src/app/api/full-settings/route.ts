@@ -13,6 +13,7 @@ export async function POST(request: Request) {
     try {
         await dbConnect();
         const data = await request.json();
+        // Remove MongoDB internal fields before saving
         const { _id, __v, createdAt, updatedAt, ...cleanData } = data;
 
         await SiteSettings.findOneAndUpdate({}, cleanData, {

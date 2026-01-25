@@ -51,7 +51,7 @@ export default function HomeEditor() {
     const updateHero = (field: string, value: any) => {
         setSettings({
             ...settings,
-            hero: { ...settings.hero, [field]: value }
+            hero: { ...(settings.hero || {}), [field]: value }
         });
     };
 
@@ -59,8 +59,8 @@ export default function HomeEditor() {
         setSettings({
             ...settings,
             hero: {
-                ...settings.hero,
-                [type]: { ...settings.hero[type], [field]: value }
+                ...(settings.hero || {}),
+                [type]: { ...(settings.hero?.[type] || {}), [field]: value }
             }
         });
     };
