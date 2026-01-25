@@ -150,11 +150,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">PTELC Academic System</span>
                 </div>
 
-                <h3 className="text-xl md:text-4xl font-heading font-semibold mb-4 leading-tight text-white">
+                <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white line-clamp-2">
                   Hệ Thống <span className="text-primary font-bold">Học Thuật</span> & Thi Thử
                 </h3>
 
-                <p className="text-slate-400 text-xs md:text-base font-body leading-relaxed">
+                <p className="text-slate-400 text-[10px] md:text-base font-body leading-relaxed max-w-[280px] md:max-w-none">
                   Bứt phá giới hạn với kho tài liệu độc quyền và hệ thống thi thử IELTS chuẩn quốc tế. Mọi công cụ bạn cần đều tập trung tại đây.
                 </p>
               </div>
@@ -223,12 +223,12 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <Testimonials />
 
       {/* Latest News & Insights - Editorial Bento Grid */}
-      <section className="py-10 md:py-24 bg-white overflow-hidden">
+      <section className="py-4 md:py-24 bg-white overflow-hidden">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 gap-4 md:gap-8">
             <div className="max-w-2xl">
-              <h2 className="text-primary font-heading font-black text-[10px] md:text-sm uppercase tracking-[0.4em] mb-2 md:mb-4">Insights</h2>
-              <h3 className="text-2xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
+              <h2 className="text-primary font-heading font-black text-[8px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4">Insights</h2>
+              <h3 className="text-xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
                 Tin tức & <span className="text-primary">Học thuật</span>
               </h3>
             </div>
@@ -238,7 +238,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             </Link>
           </div>
 
-          <div className="flex md:grid md:grid-cols-12 md:grid-rows-2 gap-6 overflow-x-auto md:overflow-visible pb-10 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="flex md:grid md:grid-cols-12 md:grid-rows-2 gap-3 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {/* Featured Article - Large Left Column */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -246,21 +246,21 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               viewport={{ once: true }}
               className="min-w-[85vw] md:min-w-0 md:col-span-7 md:row-span-2 group cursor-pointer"
             >
-              <div className="relative aspect-[16/10] md:aspect-auto md:h-full bg-slate-100 overflow-hidden border-4 border-accent">
+              <div className="relative aspect-[16/10] md:aspect-auto md:h-full bg-slate-100 overflow-hidden border-2 md:border-4 border-accent">
                 <img
                   src="/news/workshop.png"
                   alt="IELTS Strategy Workshop"
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[0.3] group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-6 md:p-12 w-full">
-                  <div className="inline-block px-3 py-1 bg-primary text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-4 md:mb-6">
+                <div className="absolute bottom-0 left-0 p-4 md:p-12 w-full">
+                  <div className="inline-block px-2 py-0.5 bg-primary text-white text-[7px] md:text-[10px] font-black uppercase tracking-widest mb-2 md:mb-6">
                     Sự kiện học thuật
                   </div>
-                  <h4 className="text-2xl md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-4 group-hover:text-primary transition-colors">
+                  <h4 className="text-lg md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-2 group-hover:text-primary transition-colors">
                     Chiến lược bứt phá Writing Task 2 <br className="hidden md:block" /> cùng chuyên gia MA.TESOL
                   </h4>
-                  <p className="text-slate-300 text-sm md:text-base font-body max-w-xl line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">
+                  <p className="text-slate-300 text-[9px] md:text-base font-body max-w-xl line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 pb-2">
                     Khám phá hệ thống triển khai ý tưởng và cấu trúc câu academic chuẩn chỉnh giúp học viên chinh phục band 7.5+ Writing một cách bền vững.
                   </p>
                 </div>
@@ -315,10 +315,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Partners */}
-      <section className="py-6 md:py-12 bg-white border-y border-slate-100">
+      <section className="py-2 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-[8px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8">Đối tác chiến lược & Khảo thí</p>
-          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-6 md:gap-16 pb-2 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-2 md:mb-8">Đối tác chiến lược & Khảo thí</p>
+          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-4 md:gap-16 pb-1 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {partners.map((p: any, idx: number) => (
               <motion.div
                 key={idx}

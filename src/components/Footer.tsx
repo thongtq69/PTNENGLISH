@@ -22,52 +22,62 @@ export default function Footer() {
     useEffect(() => {
         fetch("/api/full-settings")
             .then(res => res.json())
-            .then(data => setSettings(data));
+            .then(data => setSettings(data))
+            .catch(() => { });
     }, []);
 
-    if (!settings) return null;
+    const footerData = settings?.footer || {
+        aboutText: "Hệ thống đào tạo tiếng Anh Học thuật chuyên sâu dành cho thiếu niên và người lớn.",
+        copyright: "© 2026 Partner To Navigate. All rights reserved."
+    };
+    const contactData = settings?.contact || {
+        phone: "0902 508 290",
+        email: "info@ptelc.edu.vn",
+        address: "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
+        mapsUrl: ""
+    };
 
     return (
-        <footer className="bg-slate-900 text-white pt-8 md:pt-12 pb-4 md:pb-6">
-            <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-10">
+        <footer className="bg-slate-900 text-white pt-6 md:pt-12 pb-3 md:pb-6">
+            <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-10">
                 <div>
-                    <div className="mb-4">
+                    <div className="mb-3 md:mb-4">
                         <div className="flex flex-col w-fit">
-                            <span className="text-xl font-heading font-extrabold tracking-tight uppercase">
+                            <span className="text-lg md:text-xl font-heading font-extrabold tracking-tight uppercase">
                                 <span className="text-primary">PTN</span>
                                 <span className="text-white"> ENGLISH</span>
                             </span>
                             <div className="flex justify-between w-full mt-0.5 text-[#095e7c]">
                                 {"PARTNER TO NAVIGATE".split("").map((char, index) => (
-                                    <span key={index} className="text-[7px] md:text-[8px] font-bold uppercase leading-none tracking-[0.05em] md:tracking-[0.1em]">
+                                    <span key={index} className="text-[6px] md:text-[8px] font-bold uppercase leading-none tracking-[0.05em] md:tracking-[0.1em]">
                                         {char === " " ? "\u00A0" : char}
                                     </span>
                                 ))}
                             </div>
                         </div>
                     </div>
-                    <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                        {settings.footer.aboutText}
+                    <p className="text-slate-400 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed opacity-80">
+                        {footerData.aboutText}
                     </p>
                     <div className="flex space-x-3">
-                        <a href={settings.contact.facebook} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
-                            <Facebook size={14} />
+                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <Facebook size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={settings.contact.instagram} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
-                            <Instagram size={14} />
+                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <Instagram size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={settings.contact.youtube} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
-                            <Youtube size={14} />
+                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <Youtube size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
                     </div>
                 </div>
 
-                <div>
-                    <h4 className="text-sm font-black mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Quick Links</h4>
-                    <ul className="grid grid-cols-2 lg:grid-cols-1 gap-2">
+                <div className="hidden sm:block">
+                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Quick Links</h4>
+                    <ul className="grid grid-cols-2 lg:grid-cols-1 gap-1 md:gap-2">
                         {["Về chúng tôi", "Khóa học", "Giáo viên", "Blog", "Thi thử", "Liên hệ"].map((link) => (
                             <li key={link}>
-                                <a href={link === "Thi thử" ? "/test" : link === "Khóa học" ? "/courses" : "/"} className="text-slate-400 text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
+                                <a href="/" className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
                                     {link}
                                 </a>
                             </li>
@@ -76,11 +86,11 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-sm font-black mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Khóa Học</h4>
-                    <ul className="grid grid-cols-2 md:grid-cols-1 gap-2">
-                        {["Academic English (EfT)", "Luyện thi IELTS", "General English (GE)", "Workshop Kỹ năng"].map((course) => (
+                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Khóa Học</h4>
+                    <ul className="grid grid-cols-1 gap-1 md:gap-2">
+                        {["Academic English (EfT)", "Luyện thi IELTS", "General English (GE)"].map((course) => (
                             <li key={course}>
-                                <a href="/courses" className="text-slate-400 text-[13px] hover:text-primary transition-colors">
+                                <a href="/courses" className="text-slate-400 text-[11px] md:text-[13px] hover:text-primary transition-colors">
                                     {course}
                                 </a>
                             </li>
@@ -89,26 +99,22 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-sm font-black mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Liên Hệ</h4>
-                    <div className="space-y-2.5 text-slate-400 text-sm">
+                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Liên Hệ</h4>
+                    <div className="space-y-2 text-slate-400 text-[11px] md:text-sm">
                         <p className="flex items-start">
-                            <MapPin className="mr-2 text-primary shrink-0" size={16} />
-                            {settings.contact.address}
+                            <MapPin className="mr-2 text-primary shrink-0" size={14} />
+                            {contactData.address}
                         </p>
                         <p className="flex items-center">
-                            <Phone className="mr-2 text-primary shrink-0" size={16} />
-                            {settings.contact.phone}
-                        </p>
-                        <p className="flex items-center">
-                            <Mail className="mr-2 text-primary shrink-0" size={16} />
-                            {settings.contact.email}
+                            <Phone className="mr-2 text-primary shrink-0" size={14} />
+                            {contactData.phone}
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* Google Maps Section - More Compact */}
-            <div className="container mx-auto px-6 mb-8">
+            {/* Google Maps Section - Hidden on mobile if map is not crucial */}
+            <div className="container mx-auto px-6 mb-4 md:mb-8 hidden md:block">
                 <div className="w-full h-48 rounded-[2rem] overflow-hidden border border-slate-800 shadow-xl opacity-80 hover:opacity-100 transition-opacity">
                     <iframe
                         width="100%"
@@ -117,14 +123,14 @@ export default function Footer() {
                         loading="lazy"
                         allowFullScreen
                         referrerPolicy="no-referrer-when-downgrade"
-                        src={settings.contact.mapsUrl}
+                        src={contactData.mapsUrl}
                     ></iframe>
                 </div>
             </div>
 
-            <div className="container mx-auto px-6 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
-                <p>{settings.footer.copyright}</p>
-                <div className="flex gap-6 uppercase tracking-widest font-bold">
+            <div className="container mx-auto px-6 pt-4 md:pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 text-slate-500 text-[9px] md:text-xs">
+                <p>{footerData.copyright}</p>
+                <div className="flex gap-4 md:gap-6 uppercase tracking-widest font-bold">
                     <a href="#" className="hover:text-primary">Terms</a>
                     <a href="#" className="hover:text-primary">Privacy</a>
                 </div>
