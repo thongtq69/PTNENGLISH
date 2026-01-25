@@ -48,7 +48,7 @@ export default function AboutEditor() {
             .then(d => {
                 const normalized = {
                     hero: d.hero || { title: '', subtitle: '', highlight: '' },
-                    story: d.story || { title: '', quote: '', text: '' },
+                    story: d.story || { title: '', quote: '', text: '', image: '' },
                     teachers: d.teachers || [],
                     philosophy: d.philosophy || [],
                     values: d.values || [],
@@ -167,34 +167,23 @@ export default function AboutEditor() {
                         <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
                             <h2 className="text-xl font-black text-white flex items-center gap-3">
                                 <span className="w-8 h-1 bg-primary rounded-full"></span>
-                                Brand Story
+                                Brand Story Image
                             </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div className="space-y-6">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Section Title</label>
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Story Image URL (Cloudinary preferred)</label>
                                     <input
-                                        value={data.story.title}
-                                        onChange={e => setData({ ...data, story: { ...data.story, title: e.target.value } })}
+                                        value={data.story.image || ''}
+                                        onChange={e => setData({ ...data, story: { ...data.story, image: e.target.value } })}
                                         className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold outline-none"
+                                        placeholder="https://cloudinary.com/..."
                                     />
                                 </div>
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Strategic Quote</label>
-                                    <input
-                                        value={data.story.quote}
-                                        onChange={e => setData({ ...data, story: { ...data.story, quote: e.target.value } })}
-                                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 italic outline-none"
-                                    />
+                                <div className="p-6 bg-amber-500/10 border border-amber-500/20 rounded-2xl">
+                                    <p className="text-amber-500 text-xs font-bold leading-relaxed">
+                                        Lưu ý: Phần văn bản của "Câu Chuyện Hình Thành" hiện đã được cố định (hardcode) theo yêu cầu thiết kế. Tại đây bạn chỉ có thể thay đổi hình ảnh hiển thị bên cạnh câu chuyện.
+                                    </p>
                                 </div>
-                            </div>
-                            <div className="space-y-4">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Main Text (HTML Supported)</label>
-                                <textarea
-                                    rows={10}
-                                    value={data.story.text || data.story.mainText}
-                                    onChange={e => setData({ ...data, story: { ...data.story, text: e.target.value } })}
-                                    className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-400 font-body text-sm leading-relaxed outline-none"
-                                />
                             </div>
                         </div>
                     )}
