@@ -2,6 +2,8 @@ import StudentCornerContent from "./StudentCornerContent";
 import dbConnect from "@/lib/mongodb";
 import Page from "@/models/Page";
 
+export const dynamic = 'force-dynamic';
+
 export default async function StudentCornerPage() {
     await dbConnect();
     const pageData = await Page.findOne({ slug: 'student-corner' }).lean();

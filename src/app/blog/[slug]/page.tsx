@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import { Calendar, User, Clock, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     await dbConnect();
     const { slug } = await params;
