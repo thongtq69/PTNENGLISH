@@ -35,6 +35,7 @@ const MENU_ITEMS = [
             { name: 'Home Page', icon: <ImageIcon size={20} />, href: '/admin/home' },
             { name: 'About Us', icon: <Users size={20} />, href: '/admin/about-us' },
             { name: 'Courses', icon: <BookOpen size={20} />, href: '/admin/courses' },
+            { name: 'Student Corner', icon: <GraduationCap size={20} />, href: '/admin/student-corner' },
             { name: 'Mock Tests', icon: <GraduationCap size={20} />, href: '/admin/mock-tests' },
             { name: 'Schedules', icon: <Calendar size={20} />, href: '/admin/schedules' },
             { name: 'Blog Posts', icon: <FileText size={20} />, href: '/admin/blog' },

@@ -16,6 +16,7 @@ export async function GET() {
         if (s.type === 'about-philosophy') data.philosophy = s.content.items;
         if (s.type === 'about-values') data.values = s.content.items;
         if (s.type === 'about-differences') data.differences = s.content.items;
+        if (s.type === 'about-policies') data.policies = s.content.items;
     });
     return NextResponse.json(data);
 }
@@ -32,7 +33,8 @@ export async function POST(request: Request) {
             { id: 'about-teachers', type: 'about-teachers', content: { items: data.teachers }, order: 3, isVisible: true },
             { id: 'about-philosophy', type: 'about-philosophy', content: { items: data.philosophy }, order: 4, isVisible: true },
             { id: 'about-values', type: 'about-values', content: { items: data.values }, order: 5, isVisible: true },
-            { id: 'about-differences', type: 'about-differences', content: { items: data.differences }, order: 6, isVisible: true }
+            { id: 'about-differences', type: 'about-differences', content: { items: data.differences }, order: 6, isVisible: true },
+            { id: 'about-policies', type: 'about-policies', content: { items: data.policies }, order: 7, isVisible: true }
         ];
 
         await Page.findOneAndUpdate(

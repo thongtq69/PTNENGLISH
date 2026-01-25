@@ -160,6 +160,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
     const philosophyData = sections.find((s: any) => s.type === 'about-philosophy')?.content?.items || PHILOSOPHY;
     const valuesData = sections.find((s: any) => s.type === 'about-values')?.content?.items || VALUES;
     const differencesData = sections.find((s: any) => s.type === 'about-differences')?.content?.items || NEW_DIFFERENCES;
+    const policiesData = sections.find((s: any) => s.type === 'about-policies')?.content?.items || POLICIES;
 
     return (
         <main className="min-h-screen bg-white">
@@ -177,9 +178,11 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         <h1 className="text-primary font-heading font-bold text-sm uppercase tracking-[0.4em] mb-4">
                             Về Chúng Tôi
                         </h1>
-                        <h2 className="text-4xl md:text-6xl font-heading font-medium text-accent mb-6 leading-tight">
-                            {hero.title || "Kiến tạo hành trình tri thức"} <br /> {hero.subtitle !== "PTN English" && hero.subtitle}
-                        </h2>
+                        <h2
+                            className="text-4xl md:text-6xl font-heading font-medium text-accent mb-6 leading-tight"
+                            dangerouslySetInnerHTML={{ __html: hero.title || "Kiến tạo hành trình tri thức" }}
+                        />
+                        {hero.subtitle !== "PTN English" && <p className="text-2xl text-accent mb-4">{hero.subtitle}</p>}
                         <p className="text-lg md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-4 border-primary pl-6 py-1">
                             "{hero.highlight || hero.subtitle || "Đồng hành – Tận tâm – Bền vững"}"
                         </p>
@@ -199,7 +202,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         >
                             <h3 className="text-3xl font-heading font-black text-accent mb-8 flex items-center gap-4">
                                 <span className="w-12 h-1.5 bg-primary" />
-                                {story.title || "Câu Chuyện Hình Thành"}
+                                <span dangerouslySetInnerHTML={{ __html: story.title || "Câu Chuyện Hình Thành" }} />
                             </h3>
                             <div className="space-y-6 text-lg text-slate-700 font-body leading-relaxed">
                                 <div className="text-xl leading-snug whitespace-pre-line" dangerouslySetInnerHTML={{ __html: story.mainText || story.text }} />
@@ -365,7 +368,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     Quyền lợi học viên được đảm bảo qua các chính sách minh bạch và tiêu chuẩn học thuật cao nhất.
                                 </p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {POLICIES.map((p, idx) => (
+                                    {policiesData.map((p: any, idx: number) => (
                                         <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 hover:border-primary/30 cursor-pointer transition-all shadow-sm">
                                             {renderIcon(p.icon, "w-5 h-5 text-primary")}
                                             <span className="text-[13px] font-bold text-slate-700">{p.title}</span>
