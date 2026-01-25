@@ -1,0 +1,132 @@
+{
+    "teachers": [
+        {
+            "name": "Thầy Đặng Trần Phong (MA.TESOL)",
+            "image": "https://ptelc.edu.vn/wp-content/uploads/2022/07/gv-1-1-203x203.png",
+            "certs": "Thủ khoa Sư phạm Anh & MA.TESOL (Australia)",
+            "exp": "25+ năm kinh nghiệm giảng dạy tại ACET-IDP, ĐH Bách Khoa.",
+            "desc": "Nguyên HS chuyên Lê Hồng Phong, truyền cảm hứng học thuật sâu sắc."
+        },
+        {
+            "name": "Cô Nguyễn Lê Quỳnh Trâm (MA.TESOL)",
+            "image": "https://ptelc.edu.vn/wp-content/uploads/2022/07/gv2-1-1-203x203.png",
+            "certs": "Cử nhân Sư phạm Anh & MA.TESOL (Australia)",
+            "exp": "20+ năm kinh nghiệm tại ACET-IDP, ĐH Bách Khoa, Học viện Hàng không.",
+            "desc": "Kinh nghiệm quốc tế đa dạng, từng hỗ trợ SV quốc tế tại ĐH Adelaide."
+        },
+        {
+            "name": "Thầy Nguyễn Trí Nhân (MA.TESOL)",
+            "image": "http://ptelc.edu.vn/wp-content/uploads/2024/10/Thầy-Nhân-website-1-164x203.jpg",
+            "certs": "MA.TESOL (Uni of Sydney), Học bổng ADS - AUSAID",
+            "exp": "25+ năm kinh nghiệm, nguyên Trưởng phòng HTQT ĐH Hồng Bàng.",
+            "desc": "Từng giảng dạy tại UTS College & ĐH Deakin (Melbourne)."
+        },
+        {
+            "name": "Cô Đoàn Như Thục Quyên (MA.TESOL)",
+            "image": "http://ptelc.edu.vn/wp-content/uploads/2025/06/Ms.-Quyên-1-199x203.jpg",
+            "certs": "MA.TESOL (University of Canberra)",
+            "exp": "15+ năm kinh nghiệm, Cố vấn Học vụ tại ACET-IDP.",
+            "desc": "Chuyên gia đào tạo Anh ngữ cho bác sĩ BV 175 và lực lượng gìn giữ hòa bình."
+        }
+    ],
+    "philosophy": [
+        {
+            "title": "Học thuật",
+            "desc": "Dạy học có chiều sâu, chú trọng nền tảng vững thay vì các mẹo làm bài ngắn hạn.",
+            "icon": "BookOpen"
+        },
+        {
+            "title": "Nhân văn",
+            "desc": "Tôn trọng nhịp tiến bộ riêng, lắng nghe và thấu hiểu nhu cầu của từng học viên.",
+            "icon": "Users"
+        },
+        {
+            "title": "Đồng hành",
+            "desc": "Partner To Navigate - không chỉ là giáo viên, chúng tôi là người dẫn đường tận tâm.",
+            "icon": "Compass"
+        }
+    ],
+    "values": [
+        {
+            "title": "Tận tâm",
+            "desc": "Luôn đặt sự tiến bộ của học viên làm ưu tiên hàng đầu."
+        },
+        {
+            "title": "Chuyên nghiệp",
+            "desc": "Đội ngũ MA.TESOL với phương pháp sư phạm chuẩn quốc tế."
+        },
+        {
+            "title": "Minh bạch",
+            "desc": "Quy trình đào tạo và đánh giá rõ ràng, trung thực."
+        },
+        {
+            "title": "Đổi mới",
+            "desc": "Cập nhật tài liệu và phương pháp dạy học theo xu hướng mới nhất."
+        }
+    ],
+    "differences": [
+        {
+            "id": 1,
+            "title": "Teacher‑led",
+            "fullTitle": "Trung tâm được dẫn dắt bởi giáo viên",
+            "desc": "PTN English được xây dựng và vận hành bởi đội ngũ giáo viên, không phải bởi mô hình kinh doanh. Mọi quyết định về chương trình, phương pháp và lộ trình học tập đều xuất phát từ trải nghiệm giảng dạy thực tế trong lớp học và nhu cầu thật của người học.\nChúng tôi tin rằng chất lượng giáo dục bền vững chỉ có thể được dẫn dắt bởi những người trực tiếp đứng lớp, hiểu người học và chịu trách nhiệm cho sự tiến bộ của họ.",
+            "icon": "UserCheck"
+        },
+        {
+            "id": 2,
+            "title": "Academic Focus",
+            "fullTitle": "Nền tảng học thuật đi trước kỹ thuật làm bài",
+            "desc": "PTN English không tiếp cận tiếng Anh như một tập hợp mẹo thi. Chúng tôi đặt trọng tâm vào:\n• Nền tảng ngôn ngữ\n• Tư duy học thuật\n• Khả năng lập luận và diễn đạt rõ ràng\nKỹ thuật làm bài IELTS hay PTE được xây dựng trên nền tảng đó, giúp học viên sử dụng tiếng Anh hiệu quả trong học tập và cuộc sống.",
+            "icon": "GraduationCap"
+        },
+        {
+            "id": 3,
+            "title": "Local Insight",
+            "fullTitle": "Am hiểu sâu người học Việt Nam",
+            "desc": "Đội ngũ giảng viên PTN English trưởng thành từ các môi trường học thuật quốc tế như ACET và các trường đại học Úc. Chúng tôi hiểu rõ:\n• Vì sao học viên gặp khó khăn khi viết và nói\n• Lỗi nằm ở tư duy và cấu trúc diễn đạt\n• Cách hướng dẫn để học viên tiến bộ bền vững, không phụ thuộc vào khuôn mẫu.",
+            "icon": "Heart"
+        },
+        {
+            "id": 4,
+            "title": "Personal Feedback",
+            "fullTitle": "Phản hồi cá nhân hóa từng người học",
+            "desc": "Một trong những khác biệt lớn nhất tại PTN English là feedback chi tiết và có định hướng. Bài viết và phần nói được nhận xét cụ thể, không chung chung. Học viên được chỉ ra vì sao sai, cần cải thiện điều gì, và làm thế nào để tốt hơn. Sự tiến bộ được theo dõi qua từng giai đoạn.",
+            "icon": "MessageSquare"
+        },
+        {
+            "id": 5,
+            "title": "Small Classes",
+            "fullTitle": "Lớp học quy mô nhỏ & lộ trình rõ ràng",
+            "desc": "PTN English duy trì quy mô lớp học phù hợp để đảm bảo giáo viên có thể theo sát từng học viên, tạo không gian trao đổi và được lắng nghe. Mỗi học viên đều có lộ trình học tập rõ ràng, được điều chỉnh linh hoạt thay vì học theo một khuôn cố định cho tất cả.",
+            "icon": "Users"
+        },
+        {
+            "id": 6,
+            "title": "Blended Learning",
+            "fullTitle": "Học tập liên tục trong & ngoài lớp",
+            "desc": "Việc học tại PTN English không dừng lại khi buổi học kết thúc:\n• Trên lớp: Hướng dẫn, thảo luận và phản hồi trực tiếp\n• Ngoài lớp: Luyện tập qua hệ thống LMS, Google Classroom và Cambridge One\nCách học này giúp duy trì nhịp học đều đặn và phát triển năng lực tự học.",
+            "icon": "Laptop"
+        },
+        {
+            "id": 7,
+            "title": "Global Connect",
+            "fullTitle": "Kết nối học thuật quốc tế luôn cập nhật",
+            "desc": "Chúng tôi duy trì kết nối chặt chẽ với cộng đồng giáo dục quốc tế qua:\n• Sử dụng 100% giáo trình gốc của Cambridge University Press\n• Hợp tác theo chuẩn của các tổ chức khảo thí IELTS và PTE\n• Đội ngũ giảng viên tham gia tích cực các hoạt động học thuật quốc tế.",
+            "icon": "Globe"
+        },
+        {
+            "id": 8,
+            "title": "Partner To Navigate",
+            "fullTitle": "Đồng hành để định hướng tương lai",
+            "desc": "PTN English lựa chọn vai trò đối tác đồng hành, hỗ trợ người học hiểu mình đang ở đâu, xác định hướng đi phù hợp và tự tin bước tiếp trên con đường học tập lâu dài. Thành công không chỉ là điểm số, mà là năng lực và sự tự tin sau khi rời lớp học.",
+            "icon": "Compass"
+        },
+        {
+            "id": 9,
+            "title": "Academic Advising",
+            "fullTitle": "Tư vấn học thuật cá nhân hóa 1:1",
+            "desc": "Mỗi học viên có buổi tư vấn riêng với giáo viên để:\n• Giải đáp thắc mắc chuyên sâu về Writing/Speaking\n• Xây dựng chiến lược và định hướng học thuật\n• Rà soát tiến độ và điều chỉnh lộ trình cá nhân hóa\nGiúp học viên hiểu rõ vị thế bản thân và cách thức tối ưu để tiến bộ.",
+            "icon": "ClipboardCheck"
+        }
+    ]
+}

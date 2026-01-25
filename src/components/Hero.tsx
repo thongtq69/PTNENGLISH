@@ -1,15 +1,31 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
 export default function Hero() {
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        fetch("/api/site-settings")
+            .then(res => res.json())
+            .then(data => setSettings(data.hero));
+    }, []);
+
+    if (!settings) return <div className="h-screen bg-slate-900" />;
+
     return (
         <section className="relative h-screen w-full overflow-hidden flex items-center justify-center">
             {/* Video Background */}
             <video
+                key={settings.videoUrl}
                 autoPlay
                 loop
                 muted
                 playsInline
                 className="absolute top-0 left-0 w-full h-full object-cover scale-105"
             >
-                <source src="/1b643daa-5b00-4a7f-bce5-2ba575688d1e.mp4" type="video/mp4" />
+                <source src={settings.videoUrl} type="video/mp4" />
             </video>
 
             {/* Overlay */}
@@ -17,20 +33,20 @@ export default function Hero() {
 
             {/* Content */}
             <div className="container mx-auto px-6 relative z-10 text-center">
-                <div className="max-w-4xl mx-auto pt-24">
-                    <h1 className="text-white text-4xl md:text-6xl font-heading font-normal tracking-tight leading-[1.05] mb-8 animate-fade-in-up max-w-2xl mx-auto">
-                        Kiến tạo hành trình <br className="hidden md:block" /> tri thức
+                <div className="max-w-4xl mx-auto pt-24 text-center">
+                    <h1 className="text-white text-4xl md:text-6xl font-heading font-normal tracking-tight leading-[1.05] mb-8 animate-fade-in-up max-w-2xl mx-auto whitespace-pre-line text-center">
+                        {settings.title}
                     </h1>
                     <p className="text-white text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body">
-                        Partner to navigate your learning journey
+                        {settings.subtitle}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6 animate-fade-in-up delay-200">
-                        <button className="bg-primary hover:bg-red-700 text-white px-10 py-5 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl shadow-red-500/30">
-                            Đăng ký học thử ngay
-                        </button>
-                        <button className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-10 py-5 rounded-full font-bold text-lg transition-all">
-                            Tìm hiểu phương pháp
-                        </button>
+                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-red-700 text-white px-10 py-5 rounded-full font-bold text-lg transition-all transform hover:scale-105 shadow-xl shadow-red-500/30 flex items-center justify-center">
+                            {settings.primaryCTA.text}
+                        </Link>
+                        <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-10 py-5 rounded-full font-bold text-lg transition-all flex items-center justify-center">
+                            {settings.secondaryCTA.text}
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -1,74 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Target, ArrowRight } from "lucide-react";
 
-const COURSES = [
-    {
-        id: 1,
-        name: "Academic English for Teens (EfT) - Starter",
-        level: "Lớp 6 - Lớp 9 (A2)",
-        goal: "EfT",
-        duration: "Bám sát Cambridge",
-        price: "Liên hệ",
-        description: "Xây dựng nền tảng học thuật vững chắc, vượt xa giao tiếp thông thường với kỹ năng ghi chú, phân tích và trình bày lý luận.",
-        path: ["Ngôn ngữ học thuật", "Tư duy phản biện", "Kỹ năng nghiên cứu"],
-        tag: "Foundation",
-    },
-    {
-        id: 2,
-        name: "Academic English for Teens (EfT) - Standard",
-        level: "Lớp 6 - Lớp 9 (B1)",
-        goal: "EfT",
-        duration: "Chuẩn Cambridge",
-        price: "Liên hệ",
-        description: "Phát triển năng lực đọc hiểu chuyên sâu và viết luận học thuật, chuẩn bị cho các kỳ thi quốc tế.",
-        path: ["Phân tích văn bản", "Viết luận logic", "Thuyết trình học thuật"],
-        tag: "Developing",
-    },
-    {
-        id: 3,
-        name: "IELTS Preparation - Standard",
-        level: "Target 4.5",
-        goal: "IELTS",
-        duration: "Theo lộ trình",
-        price: "Liên hệ",
-        description: "Làm quen với cấu trúc bài thi IELTS và xây dựng vốn từ vựng, ngữ pháp cốt lõi cho 4 kỹ năng.",
-        path: ["Cấu trúc IELTS", "Từ vựng trọng tâm", "Phản xạ 4 kỹ năng"],
-        tag: "Starter",
-    },
-    {
-        id: 4,
-        name: "IELTS Preparation - Elite",
-        level: "Target 7.5+",
-        goal: "IELTS",
-        duration: "Chuyên sâu",
-        price: "Liên hệ",
-        description: "Chương trình chuyên biệt dành cho mục tiêu band điểm cao nhất, tập trung vào chiến thuật phòng thi và ngôn ngữ học thuật cao cấp.",
-        path: ["Nâng cao từ vựng bản ngữ", "Chiến thuật 8.5+", "Mô phỏng thi thực tế"],
-        tag: "Elite",
-    },
-    {
-        id: 5,
-        name: "General English (GE)",
-        level: "A1 - B2",
-        goal: "GE",
-        duration: "Linh hoạt",
-        price: "Liên hệ",
-        description: "Tiếng Anh tổng quát dành cho sinh viên và người đi làm, tập trung vào tính ứng dụng cao trong môi trường thực tế.",
-        path: ["Phản xạ giao tiếp", "Ngữ pháp ứng dụng", "Vân hóa bản ngữ"],
-        tag: "Flexible",
-    }
-];
-
 export default function CoursesPage() {
+    const [courses, setCourses] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState("All");
     const [search, setSearch] = useState("");
 
-    const filteredCourses = COURSES.filter(course => {
+    useEffect(() => {
+        fetch("/api/courses")
+            .then(res => res.json())
+            .then(data => {
+                setCourses(data);
+                setLoading(false);
+            });
+    }, []);
+
+    const filteredCourses = courses.filter(course => {
         const matchesFilter = filter === "All" || course.goal === filter;
         const matchesSearch = course.name.toLowerCase().includes(search.toLowerCase());
         return matchesFilter && matchesSearch;
@@ -182,7 +135,7 @@ export default function CoursesPage() {
                                             <div className="flex items-center justify-between relative mt-8">
                                                 <div className="absolute top-1/2 left-0 w-full h-0.5 bg-slate-50 -translate-y-1/2"></div>
                                                 <div className="absolute top-1/2 left-0 h-0.5 bg-primary -translate-y-1/2 transition-all duration-1000 w-1/3 group-hover:w-full"></div>
-                                                {course.path.map((step, idx) => (
+                                                {course.path.map((step: string, idx: number) => (
                                                     <div key={idx} className="relative z-10 group/step">
                                                         <div className="w-5 h-5 rounded-full bg-white border-2 border-slate-100 group-hover:border-primary group-hover:bg-primary transition-all duration-500 flex items-center justify-center">
                                                             <div className="w-1.5 h-1.5 rounded-full bg-slate-200 group-hover:bg-white transition-colors"></div>

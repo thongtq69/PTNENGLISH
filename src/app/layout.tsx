@@ -31,10 +31,22 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "PTN English | Partner To Navigate",
-  description: "Trung tâm Tiếng Anh uy tín mang đến lộ trình cá nhân hóa và đội ngũ chuyên gia hàng đầu. Đồng hành cùng bạn trên con đường kiến tạo tương lai.",
-};
+import fs from "fs";
+import path from "path";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const filePath = path.join(process.cwd(), "data/global-settings.json");
+  let settings = { site: { title: "PTN English", description: "Default description" } };
+
+  if (fs.existsSync(filePath)) {
+    settings = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  }
+
+  return {
+    title: settings.site.title,
+    description: settings.site.description,
+  };
+}
 
 export default function RootLayout({
   children,

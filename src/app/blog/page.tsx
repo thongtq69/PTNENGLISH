@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,45 +8,23 @@ import { Search, BookOpen, Clock, Calendar, User, ChevronRight } from "lucide-re
 
 const CATEGORIES = ["Tất cả", "IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập"];
 
-const POSTS = [
-    {
-        id: 1,
-        title: "5 Bí Quyết Chinh Phục IELTS Writing Task 2 Từ Chuyên Gia MA.TESOL",
-        excerpt: "Học cách xây dựng luận điểm logic và sử dụng từ vựng học thuật chuẩn Châu Âu để nâng band điểm Writing nhanh chóng.",
-        category: "IELTS Expert",
-        author: "Thầy Đặng Trần Phong",
-        date: "20 Jan 2026",
-        readTime: "8 phút",
-        image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-        id: 2,
-        title: "Active Learning: Tại Sao Học Sinh Teens Cần Phương Pháp Này?",
-        excerpt: "Khám phá cách phương pháp học chủ động giúp học viên tại PTELC phát triển tư duy phản biện vượt trội.",
-        category: "Học thuật (Teens)",
-        author: "Cô Nguyễn Lê Quỳnh Trâm",
-        date: "18 Jan 2026",
-        readTime: "6 phút",
-        image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800",
-    },
-    {
-        id: 3,
-        title: "Lộ Trình Du Học Châu Âu: Chuẩn Bị Tiếng Anh Thế Nào Cho Đúng?",
-        excerpt: "Những điều cần biết về chứng chỉ học thuật và kỹ năng mềm khi định hướng du học tại Phần Lan, Đức, Hà Lan.",
-        category: "Lộ trình du học",
-        author: "Thầy Nguyễn Trí Nhân",
-        date: "15 Jan 2026",
-        readTime: "10 phút",
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800",
-    }
-];
-
 export default function BlogPage() {
+    const [posts, setPosts] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("Tất cả");
 
+    useEffect(() => {
+        fetch("/api/posts")
+            .then(res => res.json())
+            .then(data => {
+                setPosts(data);
+                setLoading(false);
+            });
+    }, []);
+
     const filteredPosts = activeTab === "Tất cả"
-        ? POSTS
-        : POSTS.filter(post => post.category === activeTab);
+        ? posts
+        : posts.filter(post => post.category === activeTab);
 
     return (
         <main className="min-h-screen bg-background text-center">

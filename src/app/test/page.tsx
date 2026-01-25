@@ -9,18 +9,28 @@ import {
     AlertCircle, ChevronRight, ChevronLeft, Send, Play,
     Pause, FileText, Settings, Maximize2, Minimize2
 } from "lucide-react";
-import { ACADEMIC_TESTS } from "./constants";
 import Link from "next/link";
 
 export default function TestPage() {
-    const [selectedTest, setSelectedTest] = useState<typeof ACADEMIC_TESTS[0] | null>(null);
+    const [academicTests, setAcademicTests] = useState<any[]>([]);
+    const [selectedTest, setSelectedTest] = useState<any | null>(null);
     const [step, setStep] = useState(0); // 0: Selection, 1: Intro, 2: Testing, 3: Success
+    const [loading, setLoading] = useState(true);
     const [currentSkill, setCurrentSkill] = useState<"listening" | "reading" | "writing">("listening");
     const [answers, setAnswers] = useState<Record<string, Record<number, string>>>({
         listening: {},
         reading: {},
         writing: {}
     });
+
+    useEffect(() => {
+        fetch("/api/mock-tests")
+            .then(res => res.json())
+            .then(data => {
+                setAcademicTests(data);
+                setLoading(false);
+            });
+    }, []);
 
     // UI States
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -157,6 +167,7 @@ export default function TestPage() {
     }
 
     if (step === 0) {
+        if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400">Loading tests...</div>;
         return (
             <main className="min-h-screen bg-slate-50">
                 <Header />
@@ -169,7 +180,7 @@ export default function TestPage() {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {ACADEMIC_TESTS.map((test, idx) => (
+                        {academicTests.map((test, idx) => (
                             <motion.div
                                 key={test.id}
                                 whileHover={{ y: -10 }}
@@ -335,7 +346,7 @@ export default function TestPage() {
                                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tracks: {selectedTest?.listening.audio.length} Sections</span>
                             </div>
                             <div className="flex flex-wrap gap-2 mb-6">
-                                {selectedTest?.listening.audio.map((track, i) => (
+                                {selectedTest?.listening.audio.map((track: any, i: number) => (
                                     <button
                                         key={i}
                                         onClick={() => {

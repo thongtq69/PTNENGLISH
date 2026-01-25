@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Clock } from "lucide-react";
 
 // TikTok icon custom SVG
@@ -14,6 +17,16 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export default function Footer() {
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        fetch("/api/full-settings")
+            .then(res => res.json())
+            .then(data => setSettings(data));
+    }, []);
+
+    if (!settings) return null;
+
     return (
         <footer className="bg-slate-900 text-white pt-12 pb-6">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-10">
@@ -34,14 +47,18 @@ export default function Footer() {
                         </div>
                     </div>
                     <p className="text-slate-400 text-sm mb-6 leading-relaxed">
-                        Kiến tạo tương lai rực rỡ thông qua việc làm chủ ngôn ngữ toàn cầu. Cam kết mang đến chất lượng giáo dục tốt nhất.
+                        {settings.footer.aboutText}
                     </p>
                     <div className="flex space-x-3">
-                        {[Facebook, Instagram, Youtube].map((Icon, idx) => (
-                            <a key={idx} href="#" className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
-                                <Icon size={14} />
-                            </a>
-                        ))}
+                        <a href={settings.contact.facebook} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <Facebook size={14} />
+                        </a>
+                        <a href={settings.contact.instagram} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <Instagram size={14} />
+                        </a>
+                        <a href={settings.contact.youtube} className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <Youtube size={14} />
+                        </a>
                     </div>
                 </div>
 
@@ -50,7 +67,7 @@ export default function Footer() {
                     <ul className="grid grid-cols-2 lg:grid-cols-1 gap-2">
                         {["Về chúng tôi", "Khóa học", "Giáo viên", "Blog", "Thi thử", "Liên hệ"].map((link) => (
                             <li key={link}>
-                                <a href={link === "Thi thử" ? "/test" : "/"} className="text-slate-400 text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
+                                <a href={link === "Thi thử" ? "/test" : link === "Khóa học" ? "/courses" : "/"} className="text-slate-400 text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
                                     {link}
                                 </a>
                             </li>
@@ -76,15 +93,15 @@ export default function Footer() {
                     <div className="space-y-2.5 text-slate-400 text-sm">
                         <p className="flex items-start">
                             <MapPin className="mr-2 text-primary shrink-0" size={16} />
-                            146Bis – Nguyễn Văn Thủ – Q.1 – HCM
+                            {settings.contact.address}
                         </p>
                         <p className="flex items-center">
                             <Phone className="mr-2 text-primary shrink-0" size={16} />
-                            0902 508 290
+                            {settings.contact.phone}
                         </p>
                         <p className="flex items-center">
                             <Mail className="mr-2 text-primary shrink-0" size={16} />
-                            info@ptelc.edu.vn
+                            {settings.contact.email}
                         </p>
                     </div>
                 </div>
@@ -100,13 +117,13 @@ export default function Footer() {
                         loading="lazy"
                         allowFullScreen
                         referrerPolicy="no-referrer-when-downgrade"
-                        src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyAbJ0UNubscMtOe1BhPSbTwLly-xVQPgvQ&q=146Bis+Nguyễn+Văn+Thủ+Tân+Định+Quận+1+Thành+phố+Hồ+Chí+Minh`}
+                        src={settings.contact.mapsUrl}
                     ></iframe>
                 </div>
             </div>
 
             <div className="container mx-auto px-6 pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
-                <p>© {new Date().getFullYear()} <span className="text-primary font-bold">PTN</span> English. All rights reserved.</p>
+                <p>{settings.footer.copyright}</p>
                 <div className="flex gap-6 uppercase tracking-widest font-bold">
                     <a href="#" className="hover:text-primary">Terms</a>
                     <a href="#" className="hover:text-primary">Privacy</a>

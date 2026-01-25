@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, MessageSquare, AlertCircle, Settings, LogOut, ChevronLeft } from "lucide-react";
+import { LayoutDashboard, MessageSquare, AlertCircle, Settings, LogOut, ChevronLeft, Image as ImageIcon, FileEdit, GraduationCap, Globe, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ManagementLayout({
@@ -36,6 +36,41 @@ export default function ManagementLayout({
                     >
                         <MessageSquare size={20} />
                         <span className="font-medium">Issues & Messages</span>
+                    </Link>
+                    <Link
+                        href="/management/content"
+                        className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-400 hover:text-white"
+                    >
+                        <FileEdit size={20} />
+                        <span className="font-medium">Site Content</span>
+                    </Link>
+                    <Link
+                        href="/management/banners"
+                        className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-400 hover:text-white"
+                    >
+                        <ImageIcon size={20} />
+                        <span className="font-medium">Banners & Media</span>
+                    </Link>
+                    <Link
+                        href="/management/mock-tests"
+                        className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-400 hover:text-white"
+                    >
+                        <GraduationCap size={20} />
+                        <span className="font-medium">Mock Tests</span>
+                    </Link>
+                    <Link
+                        href="/management/courses"
+                        className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-400 hover:text-white"
+                    >
+                        <BookOpen size={20} />
+                        <span className="font-medium">Courses & Schedule</span>
+                    </Link>
+                    <Link
+                        href="/management/blog"
+                        className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all text-slate-400 hover:text-white"
+                    >
+                        <Globe size={20} />
+                        <span className="font-medium">Blog Posts</span>
                     </Link>
                     <Link
                         href="/management/system"

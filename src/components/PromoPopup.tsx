@@ -8,14 +8,27 @@ import Link from "next/link";
 export default function PromoPopup() {
     const [isOpen, setIsOpen] = useState(false);
 
+    const [schedules, setSchedules] = useState<any[]>([]);
+
     useEffect(() => {
         // Show on every page load as requested ("như quảng cáo khi vừa vào trang")
         const timer = setTimeout(() => setIsOpen(true), 1200);
+
+        fetch("/api/schedules")
+            .then(res => res.json())
+            .then(data => setSchedules(data));
+
         return () => clearTimeout(timer);
     }, []);
 
     const closePopup = () => {
         setIsOpen(false);
+    };
+
+    const getIcon = (idx: number) => {
+        if (idx === 0) return <Calendar size={18} />;
+        if (idx === 1) return <MessageSquare size={18} />;
+        return <Clock size={18} />;
     };
 
     return (
@@ -78,14 +91,10 @@ export default function PromoPopup() {
                             </div>
 
                             <div className="space-y-4 flex-grow">
-                                {[
-                                    { title: "LUYỆN THI IELTS", detail: "Standard (4.5) - ELITE (7.5)", schedule: "Thứ 2 - 4 - 6 | 18:30 - 20:30", icon: <Calendar size={20} /> },
-                                    { title: "ENGLISH FOR TEENS", detail: "Starter – Booster (A2 - C1)", schedule: "Thứ 7 - CN | Sáng & Chiều", icon: <MessageSquare size={20} /> },
-                                    { title: "GENERAL ENGLISH", detail: "Sơ cấp – Trung cấp (A1 - B2)", schedule: "Thứ 3 - 5 - 7 | 19:00 - 21:00", icon: <Clock size={20} /> },
-                                ].map((item, idx) => (
+                                {schedules.map((item, idx) => (
                                     <div key={idx} className="flex gap-4 md:gap-8 p-5 md:p-8 border-2 border-slate-50 hover:border-accent hover:bg-slate-50 transition-all cursor-pointer group rounded-none relative">
                                         <div className="shrink-0 w-10 h-10 md:w-14 md:h-14 bg-slate-100 flex items-center justify-center text-accent transition-all group-hover:bg-primary group-hover:text-white rounded-none">
-                                            {React.cloneElement(item.icon as React.ReactElement<any>, { size: 18 })}
+                                            {getIcon(idx)}
                                         </div>
                                         <div>
                                             <h5 className="font-heading font-black text-accent text-sm md:text-lg uppercase tracking-tight mb-1">{item.title}</h5>

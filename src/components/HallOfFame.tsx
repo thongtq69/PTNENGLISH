@@ -1,30 +1,19 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Trophy, Star, Award } from "lucide-react";
 
-const ACHIEVEMENTS = [
-    {
-        url: "https://scontent.fsgn2-8.fna.fbcdn.net/v/t39.30808-6/580986768_783291137998866_9106454110011808722_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=127cfc&_nc_ohc=3K5M3x7bMOkQ7kNvwHxf8Ud&_nc_oc=AdkPrE7E4Mrtv3aTTqjU6U3U9ikrwTV8kOCrnJEYpOA9nm0hnlHzp88a-xMpcxQ-ctQ&_nc_zt=23&_nc_ht=scontent.fsgn2-8.fna&_nc_gid=Q5fyXLe_ExTTPvluxXMtCg&oh=00_AfrUFjAhXgdvoua-kKeuP4jdZSVCTnhwdzANsAmCiVE1SQ&oe=6978FFA0",
-        title: "IELTS High Achiever",
-        student: "Lê Thành Hưng",
-        score: "8.0"
-    },
-    {
-        url: "https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/579201297_783291197998860_5690025541620241344_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_ohc=QmvvGP1mVtEQ7kNvwELPlc3&_nc_oc=AdkY9gItS3dYV-s4tOMCcSpXb9_kRh6fZYjtipa6yGUscenQjkoM6POk4VejKJGYTFI&_nc_zt=23&_nc_ht=scontent.fsgn2-9.fna&_nc_gid=fm2k50SIPw7nCKPvLpFlAw&oh=00_Afox3Eo06yyksRYi5-YS6-x4bTJfthiWq51YgjHq1m4b6g&oe=6979106A",
-        title: "IELTS High Achiever",
-        student: "Lê Hà Minh Khuê",
-        score: "7.5"
-    },
-    {
-        url: "https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/592745042_799037516424228_6253108457529192276_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_ohc=50PiYgARapMQ7kNvwF5W4Zh&_nc_oc=Adn3haz01pikr41I3A5gvDNMWRJdJfI5pM1xCz3NJkpAVVEC8GkPDaQMJC-AStA_lhc&_nc_zt=23&_nc_ht=scontent.fsgn2-9.fna&_nc_gid=L3w50YFCSOKrC8QxSvXGEQ&oh=00_AfogeyOlNFlraNyuCcUr60DWmqkJVqMgGTA6knmPzRAThA&oe=6979254C",
-        title: "IELTS High Achiever",
-        student: "Trần Thị Phương Anh",
-        score: "6.5"
-    }
-];
-
 export default function HallOfFame() {
+    const [achievements, setAchievements] = useState<any[]>([]);
+
+    useEffect(() => {
+        fetch("/api/achievements")
+            .then(res => res.json())
+            .then(data => setAchievements(data));
+    }, []);
+
+    if (achievements.length === 0) return null;
     return (
         <section className="py-20 bg-slate-900 overflow-hidden relative">
             {/* Background elements */}
@@ -67,7 +56,7 @@ export default function HallOfFame() {
                 </div>
 
                 <div className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible pb-12 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
-                    {ACHIEVEMENTS.map((item, idx) => (
+                    {achievements.map((item: any, idx: number) => (
                         <motion.div
                             key={idx}
                             initial={{ opacity: 0, scale: 0.9, y: 30 }}
@@ -107,7 +96,7 @@ export default function HallOfFame() {
 
                 {/* Mobile scroll indicator */}
                 <div className="flex justify-center gap-2 mt-4 md:hidden">
-                    {ACHIEVEMENTS.map((_, i) => (
+                    {achievements.map((_: any, i: number) => (
                         <div key={i} className="w-2 h-2 rounded-full bg-primary/20 last:bg-primary/60"></div>
                     ))}
                 </div>
