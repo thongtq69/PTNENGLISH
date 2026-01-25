@@ -14,7 +14,18 @@ import {
     ChevronDown,
     X
 } from "lucide-react";
-import { Issue } from "@/lib/data";
+interface Issue {
+    id: string;
+    _id?: string;
+    name: string;
+    email: string;
+    phone?: string;
+    type: string;
+    status: 'New' | 'In Progress' | 'Resolved';
+    createdAt: string;
+    course?: string;
+    description?: string;
+}
 
 export default function IssuesListPage() {
     const [issues, setIssues] = useState<Issue[]>([]);
@@ -27,7 +38,8 @@ export default function IssuesListPage() {
         fetch("/api/issues")
             .then(res => res.json())
             .then(data => {
-                setIssues(data);
+                const mapped = data.map((i: any) => ({ ...i, id: i._id }));
+                setIssues(mapped);
                 setLoading(false);
             });
     };
@@ -136,8 +148,8 @@ export default function IssuesListPage() {
                                 </td>
                                 <td className="px-8 py-6">
                                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${issue.status === 'New' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
-                                            issue.status === 'In Progress' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
-                                                'bg-green-500/10 text-green-500 border border-green-500/20'
+                                        issue.status === 'In Progress' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
+                                            'bg-green-500/10 text-green-500 border border-green-500/20'
                                         }`}>
                                         {issue.status}
                                     </span>
@@ -231,8 +243,8 @@ export default function IssuesListPage() {
                                                 key={status}
                                                 onClick={() => updateStatus(selectedIssue.id, status)}
                                                 className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${selectedIssue.status === status
-                                                        ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20'
-                                                        : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'
+                                                    ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20'
+                                                    : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'
                                                     }`}
                                             >
                                                 {status}

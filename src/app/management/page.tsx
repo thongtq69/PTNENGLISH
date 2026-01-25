@@ -10,7 +10,14 @@ import {
     TrendingUp,
     Clock
 } from "lucide-react";
-import { Issue } from "@/lib/data";
+interface Issue {
+    _id: string;
+    name: string;
+    email: string;
+    type: string;
+    status: 'New' | 'In Progress' | 'Resolved';
+    createdAt: string;
+}
 
 export default function ManagementPage() {
     const [issues, setIssues] = useState<Issue[]>([]);
@@ -75,7 +82,7 @@ export default function ManagementPage() {
                             >
                                 <div className="flex items-center gap-4">
                                     <div className={`w-2 h-10 rounded-full ${issue.status === 'New' ? 'bg-red-500' :
-                                            issue.status === 'In Progress' ? 'bg-orange-500' : 'bg-green-500'
+                                        issue.status === 'In Progress' ? 'bg-orange-500' : 'bg-green-500'
                                         }`} />
                                     <div>
                                         <h4 className="font-bold">{issue.name}</h4>
@@ -84,8 +91,8 @@ export default function ManagementPage() {
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${issue.status === 'New' ? 'bg-red-500/10 text-red-500 border border-red-500/20' :
-                                            issue.status === 'In Progress' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
-                                                'bg-green-500/10 text-green-500 border border-green-500/20'
+                                        issue.status === 'In Progress' ? 'bg-orange-500/10 text-orange-500 border border-orange-500/20' :
+                                            'bg-green-500/10 text-green-500 border border-green-500/20'
                                         }`}>
                                         {issue.status}
                                     </span>
