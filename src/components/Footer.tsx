@@ -37,7 +37,7 @@ export default function Footer() {
                                 <span className="text-primary">PTN</span>
                                 <span className="text-white"> ENGLISH</span>
                             </span>
-                            <div className="flex justify-between w-full mt-1 border-t border-slate-700 pt-1 text-[#095e7c]">
+                            <div className="flex justify-between w-full mt-1 text-[#095e7c]">
                                 {"PARTNER TO NAVIGATE".split("").map((char, index) => (
                                     <span key={index} className="text-[8px] font-bold uppercase leading-none tracking-[0.05em]">
                                         {char === " " ? "\u00A0" : char}
