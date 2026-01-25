@@ -21,7 +21,7 @@ export default function Testimonials() {
     const prev = () => setIndex((i) => (i - 1 + testimonials.length) % testimonials.length);
 
     return (
-        <section className="py-20 bg-slate-50 relative overflow-hidden">
+        <section className="py-12 md:py-20 bg-slate-50 relative overflow-hidden">
             {/* Decorative background element */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -mr-48 -mt-48"></div>
 
@@ -40,7 +40,7 @@ export default function Testimonials() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-heading font-semibold text-accent"
+                        className="text-2xl md:text-5xl font-heading font-semibold text-accent"
                     >
                         Cảm nghĩ của phụ huynh & học viên
                     </motion.h3>
@@ -54,7 +54,7 @@ export default function Testimonials() {
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.98 }}
                             transition={{ duration: 0.3 }}
-                            className="bg-white rounded-[2rem] p-8 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col md:flex-row items-center gap-10 md:gap-16 cursor-pointer hover:shadow-2xl transition-all duration-500"
+                            className="bg-white rounded-[1.5rem] md:rounded-[2rem] p-6 md:p-12 shadow-xl shadow-slate-200/50 border border-slate-100 flex flex-col md:flex-row items-center gap-6 md:gap-16 cursor-pointer hover:shadow-2xl transition-all duration-500"
                             onClick={() => setSelectedTestimonial(testimonials[index])}
                         >
                             <div className="shrink-0 relative">
@@ -79,7 +79,7 @@ export default function Testimonials() {
                                 </div>
 
                                 <div className="relative">
-                                    <p className="text-slate-600 font-serif text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2">
+                                    <p className="text-slate-600 font-serif text-base md:text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2">
                                         "{testimonials[index].text}"
                                     </p>
                                     <button className="mt-4 text-primary font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all mx-auto md:mx-0">

@@ -15,7 +15,7 @@ export default function HallOfFame() {
 
     if (achievements.length === 0) return null;
     return (
-        <section className="py-20 bg-slate-900 overflow-hidden relative">
+        <section className="py-12 md:py-20 bg-slate-900 overflow-hidden relative">
             {/* Background elements */}
             <div className="absolute top-0 center-0 w-full h-full opacity-10 pointer-events-none">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary rounded-full blur-[150px]"></div>
@@ -39,7 +39,7 @@ export default function HallOfFame() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-heading font-black text-white mb-6 uppercase tracking-tight"
+                        className="text-2xl md:text-5xl font-heading font-black text-white mb-6 uppercase tracking-tight"
                     >
                         Gương mặt mới <span className="text-primary">đạt thành tích</span> ấn tượng
                     </motion.h3>
@@ -49,7 +49,7 @@ export default function HallOfFame() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="text-slate-400 text-lg font-body"
+                        className="text-slate-400 text-base md:text-lg font-body"
                     >
                         Chúc mừng các chiến binh <strong className="text-white">PTN English</strong> đã xuất sắc chinh phục mục tiêu IELTS với điểm số ấn tượng.
                     </motion.p>

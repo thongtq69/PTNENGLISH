@@ -58,41 +58,41 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <Hero />
 
       {/* Philosophy Section - Compact & Dark */}
-      <section className="py-12 bg-slate-900 border-y border-white/5">
+      <section className="py-8 md:py-12 bg-slate-900 border-y border-white/5">
         <div className="container mx-auto px-6 text-center max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-lg md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-6 py-1">
+            <p className="text-base md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-4 md:pl-6 py-1">
               {philosophy}
             </p>
             <div className="mt-4 flex justify-center items-center gap-3">
-              <div className="h-px w-8 bg-primary/30"></div>
-              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[9px]">PTN Philosophy</span>
-              <div className="h-px w-8 bg-primary/30"></div>
+              <div className="h-px w-6 md:w-8 bg-primary/30"></div>
+              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[8px] md:text-[9px]">PTN Philosophy</span>
+              <div className="h-px w-6 md:w-8 bg-primary/30"></div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Introduction Section */}
-      <section className="py-16 bg-white">
+      <section className="py-12 md:py-16 bg-white">
         <div className="container mx-auto px-6 text-center max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-primary font-heading text-lg font-bold uppercase tracking-[0.3em] mb-3">
+            <h2 className="text-primary font-heading text-sm md:text-lg font-bold uppercase tracking-[0.3em] mb-3">
               Hệ Thống Đào Tạo Academic Master
             </h2>
-            <h3 className="text-3xl md:text-4xl font-heading font-semibold mb-6 text-accent leading-tight">
+            <h3 className="text-2xl md:text-4xl font-heading font-semibold mb-6 text-accent leading-tight">
               TTNN PHÚ TÀI NĂNG <br />
-              (PTelc - PT English Language Centre)
+              <span className="text-lg md:text-4xl">(PTelc - PT English Language Centre)</span>
             </h3>
-            <p className="text-lg text-slate-600 font-body leading-relaxed mb-10 mx-auto max-w-4xl">
+            <p className="text-base md:text-lg text-slate-600 font-body leading-relaxed mb-10 mx-auto max-w-4xl">
               Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
             </p>
           </motion.div>
@@ -129,15 +129,15 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <PromoPopup />
 
       {/* Compact Study & Mock Test Section */}
-      <section className="py-12 bg-accent relative overflow-hidden">
+      <section className="py-8 md:py-12 bg-accent relative overflow-hidden">
         {/* Subtle Background Glows */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-          <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-primary rounded-full blur-[150px]"></div>
-          <div className="absolute top-1/2 right-1/4 w-96 h-96 bg-blue-600 rounded-full blur-[150px]"></div>
+          <div className="absolute top-1/2 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-primary rounded-full blur-[100px] md:blur-[150px]"></div>
+          <div className="absolute top-1/2 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-blue-600 rounded-full blur-[100px] md:blur-[150px]"></div>
         </div>
 
         <div className="container mx-auto px-6 relative z-10">
-          <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[3rem] p-8 md:p-10 shadow-2xl">
+          <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 shadow-2xl">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
 
               {/* Left Side: Consolidated Info */}
@@ -150,11 +150,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">PTELC Academic System</span>
                 </div>
 
-                <h3 className="text-2xl md:text-4xl font-heading font-semibold mb-4 leading-tight text-white">
+                <h3 className="text-xl md:text-4xl font-heading font-semibold mb-4 leading-tight text-white">
                   Hệ Thống <span className="text-primary font-bold">Học Thuật</span> & Thi Thử
                 </h3>
 
-                <p className="text-slate-400 text-sm md:text-base font-body leading-relaxed">
+                <p className="text-slate-400 text-xs md:text-base font-body leading-relaxed">
                   Bứt phá giới hạn với kho tài liệu độc quyền và hệ thống thi thử IELTS chuẩn quốc tế. Mọi công cụ bạn cần đều tập trung tại đây.
                 </p>
               </div>
@@ -202,17 +202,17 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Faculty Highlight */}
-      <section className="py-20 bg-slate-900 relative overflow-hidden text-center">
+      <section className="py-12 md:py-20 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <h2 className="text-primary font-heading font-bold text-lg uppercase tracking-widest mb-4">Expert Faculty</h2>
-          <h3 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-6 leading-tight">
+          <h2 className="text-primary font-heading font-bold text-sm md:text-lg uppercase tracking-widest mb-4">Expert Faculty</h2>
+          <h3 className="text-white text-2xl md:text-5xl font-heading font-semibold mb-6 leading-tight">
             Đội Ngũ Sáng Lập <br />& Giảng Viên MA.TESOL
           </h3>
-          <p className="text-slate-200 text-base md:text-lg mb-8 leading-relaxed font-body">
+          <p className="text-slate-200 text-sm md:text-lg mb-8 leading-relaxed font-body">
             "Từng giảng dạy tại Trung tâm Giáo dục Úc (ACET – IDP), giàu kinh nghiệm, nhiệt huyết, với phương pháp giảng dạy hiệu quả và tài liệu biên soạn tỉ mỉ."
           </p>
-          <button className="bg-primary hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold transition-all transform hover:scale-105">
+          <button className="bg-primary hover:bg-red-700 text-white px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-sm md:text-base transition-all transform hover:scale-105">
             Gặp gỡ đội ngũ chuyên gia
           </button>
         </div>
@@ -227,8 +227,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
             <div className="max-w-2xl">
-              <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.4em] mb-4">Insights</h2>
-              <h3 className="text-4xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
+              <h2 className="text-primary font-heading font-black text-xs md:text-sm uppercase tracking-[0.4em] mb-4">Insights</h2>
+              <h3 className="text-3xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
                 Tin tức & <span className="text-primary">Học thuật</span>
               </h3>
             </div>
@@ -253,11 +253,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[0.3] group-hover:grayscale-0"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-8 md:p-12 w-full">
-                  <div className="inline-block px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest mb-6">
+                <div className="absolute bottom-0 left-0 p-6 md:p-12 w-full">
+                  <div className="inline-block px-3 py-1 bg-primary text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest mb-4 md:mb-6">
                     Sự kiện học thuật
                   </div>
-                  <h4 className="text-3xl md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-4 group-hover:text-primary transition-colors">
+                  <h4 className="text-2xl md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-4 group-hover:text-primary transition-colors">
                     Chiến lược bứt phá Writing Task 2 <br className="hidden md:block" /> cùng chuyên gia MA.TESOL
                   </h4>
                   <p className="text-slate-300 text-sm md:text-base font-body max-w-xl line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0">

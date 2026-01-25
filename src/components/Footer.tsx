@@ -39,7 +39,7 @@ export default function Footer() {
                             </span>
                             <div className="flex justify-between w-full mt-0.5 text-[#095e7c]">
                                 {"PARTNER TO NAVIGATE".split("").map((char, index) => (
-                                    <span key={index} className="text-[8px] font-bold uppercase leading-none tracking-[0.05em]">
+                                    <span key={index} className="text-[7px] md:text-[8px] font-bold uppercase leading-none tracking-[0.05em] md:tracking-[0.1em]">
                                         {char === " " ? "\u00A0" : char}
                                     </span>
                                 ))}
