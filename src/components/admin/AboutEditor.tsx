@@ -8,6 +8,7 @@ import {
     Lock, UserCheck, Layout, Book, Star, Save, Info
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import RichTitleEditor from './shared/RichTitleEditor';
 
 const ICON_OPTIONS = [
     { name: 'BookOpen', icon: <BookOpen size={16} /> },
@@ -135,11 +136,10 @@ export default function AboutEditor() {
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Headline (Main Title)</label>
-                                    <input
+                                    <RichTitleEditor
+                                        label="Headline (Main Title)"
                                         value={data.hero.title}
-                                        onChange={e => setData({ ...data, hero: { ...data.hero, title: e.target.value } })}
-                                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold focus:border-primary/50 outline-none"
+                                        onChange={val => setData({ ...data, hero: { ...data.hero, title: val } })}
                                     />
                                 </div>
                                 <div className="space-y-4">

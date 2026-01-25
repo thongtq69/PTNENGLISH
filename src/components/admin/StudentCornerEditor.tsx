@@ -6,6 +6,7 @@ import {
     Video, MessageCircle, Phone, Save, ArrowRight, ClipboardList
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import RichTitleEditor from './shared/RichTitleEditor';
 
 const TABS = [
     { id: 'hero', name: 'Hero Header', icon: <Layout size={18} /> },
@@ -154,11 +155,10 @@ export default function StudentCornerEditor() {
                         <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Main Title (HTML)</label>
-                                    <input
+                                    <RichTitleEditor
+                                        label="Main Title"
                                         value={data.hero.title}
-                                        onChange={e => setData({ ...data, hero: { ...data.hero, title: e.target.value } })}
-                                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold outline-none focus:border-primary/50"
+                                        onChange={val => setData({ ...data, hero: { ...data.hero, title: val } })}
                                     />
                                 </div>
                                 <div className="space-y-4">
@@ -196,11 +196,10 @@ export default function StudentCornerEditor() {
                                         />
                                     </div>
                                     <div className="space-y-4">
-                                        <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Main Title (HTML)</label>
-                                        <input
+                                        <RichTitleEditor
+                                            label="Main Title"
                                             value={data.playground.title}
-                                            onChange={e => setData({ ...data, playground: { ...data.playground, title: e.target.value } })}
-                                            className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold"
+                                            onChange={val => setData({ ...data, playground: { ...data.playground, title: val } })}
                                         />
                                     </div>
                                 </div>
@@ -258,11 +257,15 @@ export default function StudentCornerEditor() {
                                                 list[idx].label = e.target.value;
                                                 setData({ ...data, playground: { ...data.playground, items: list } });
                                             }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-xs text-white" />
-                                            <input placeholder="Main Title" value={item.title} onChange={e => {
-                                                const list = [...data.playground.items];
-                                                list[idx].title = e.target.value;
-                                                setData({ ...data, playground: { ...data.playground, items: list } });
-                                            }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-xs text-slate-400" />
+                                            <RichTitleEditor
+                                                compact
+                                                value={item.title}
+                                                onChange={val => {
+                                                    const list = [...data.playground.items];
+                                                    list[idx].title = val;
+                                                    setData({ ...data, playground: { ...data.playground, items: list } });
+                                                }}
+                                            />
                                         </div>
                                     </div>
                                 ))}
@@ -287,8 +290,11 @@ export default function StudentCornerEditor() {
                                     <h2 className="text-xl font-black text-white">LMS Portal Portal Config</h2>
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Card Title (HTML)</label>
-                                    <input value={data.lms.title} onChange={e => setData({ ...data, lms: { ...data.lms, title: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold" />
+                                    <RichTitleEditor
+                                        label="Card Title"
+                                        value={data.lms.title}
+                                        onChange={val => setData({ ...data, lms: { ...data.lms, title: val } })}
+                                    />
 
                                     <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Description</label>
                                     <textarea value={data.lms.description} onChange={e => setData({ ...data, lms: { ...data.lms, description: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-slate-400 text-sm" rows={3} />
@@ -328,8 +334,11 @@ export default function StudentCornerEditor() {
                                     <h2 className="text-xl font-black text-white">Mock Test Config</h2>
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Card Title (HTML)</label>
-                                    <input value={data.mocktest.title} onChange={e => setData({ ...data, mocktest: { ...data.mocktest, title: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold" />
+                                    <RichTitleEditor
+                                        label="Card Title"
+                                        value={data.mocktest.title}
+                                        onChange={val => setData({ ...data, mocktest: { ...data.mocktest, title: val } })}
+                                    />
 
                                     <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Description</label>
                                     <textarea value={data.mocktest.description} onChange={e => setData({ ...data, mocktest: { ...data.mocktest, description: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-slate-300 text-sm opacity-80" rows={3} />
@@ -369,8 +378,11 @@ export default function StudentCornerEditor() {
                         <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Section Heading (HTML)</label>
-                                    <input value={data.support.title} onChange={e => setData({ ...data, support: { ...data.support, title: e.target.value } })} className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold" />
+                                    <RichTitleEditor
+                                        label="Section Heading"
+                                        value={data.support.title}
+                                        onChange={val => setData({ ...data, support: { ...data.support, title: val } })}
+                                    />
                                 </div>
                                 <div className="space-y-4">
                                     <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Sub Info Text</label>

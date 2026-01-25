@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Save, Video, Type, Link as LinkIcon, AlertCircle, CheckCircle2, Plus, Trash2, Image as ImageIcon, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
+import RichTitleEditor from './shared/RichTitleEditor';
 
 export default function HomeEditor() {
     const [loading, setLoading] = useState(true);
@@ -155,14 +156,10 @@ export default function HomeEditor() {
                     {/* Titles */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div className="space-y-4">
-                            <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
-                                <Type size={14} className="text-primary" /> Main Title
-                            </label>
-                            <textarea
-                                rows={2}
+                            <RichTitleEditor
                                 value={settings.hero.title}
-                                onChange={(e) => updateHero('title', e.target.value)}
-                                className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white outline-none focus:ring-2 focus:ring-primary font-heading font-black text-xl leading-snug"
+                                onChange={(val) => updateHero('title', val)}
+                                label="Main Headline"
                             />
                         </div>
                         <div className="space-y-4">

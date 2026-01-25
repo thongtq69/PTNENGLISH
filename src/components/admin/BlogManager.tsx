@@ -7,6 +7,7 @@ import {
     List, Save, Clock, BookOpen
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import RichTitleEditor from './shared/RichTitleEditor';
 import Link from "next/link";
 
 const TABS = [
@@ -281,11 +282,10 @@ export default function BlogManager() {
                         <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Main Headline (HTML)</label>
-                                    <input
+                                    <RichTitleEditor
+                                        label="Main Headline"
                                         value={pageData.hero.title}
-                                        onChange={e => setPageData({ ...pageData, hero: { ...pageData.hero, title: e.target.value } })}
-                                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-white font-bold outline-none"
+                                        onChange={val => setPageData({ ...pageData, hero: { ...pageData.hero, title: val } })}
                                     />
                                 </div>
                                 <div className="space-y-4">

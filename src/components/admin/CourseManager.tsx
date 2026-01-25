@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, ArrowRight, Target, Settings2, CheckCircle2, ChevronDown, ChevronUp, Layout } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import RichTitleEditor from './shared/RichTitleEditor';
 
 export default function CourseManager() {
     const [courses, setCourses] = useState<any[]>([]);
@@ -240,11 +241,10 @@ export default function CourseManager() {
                 <div className="bg-slate-900 border border-white/5 p-12 rounded-[3rem] space-y-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Page Main Title (HTML)</label>
-                            <textarea
+                            <RichTitleEditor
+                                label="Page Main Title"
                                 value={banner.title}
-                                onChange={e => setBanner({ ...banner, title: e.target.value })}
-                                className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white font-bold min-h-[120px]"
+                                onChange={val => setBanner({ ...banner, title: val })}
                             />
                         </div>
                         <div className="space-y-4">
