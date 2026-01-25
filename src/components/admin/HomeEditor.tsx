@@ -13,7 +13,7 @@ export default function HomeEditor() {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        fetch('/api/site-settings')
+        fetch('/api/site-settings', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 setSettings(data);

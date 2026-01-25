@@ -3,14 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function Hero() {
-    const [settings, setSettings] = useState<any>(null);
+export default function Hero({ initialData }: { initialData?: any }) {
+    const [settings, setSettings] = useState<any>(initialData || null);
 
     useEffect(() => {
-        fetch("/api/site-settings")
-            .then(res => res.json())
-            .then(data => setSettings(data.hero));
-    }, []);
+        if (!initialData) {
+            fetch("/api/site-settings", { cache: 'no-store' })
+                .then(res => res.json())
+                .then(data => setSettings(data.hero));
+        }
+    }, [initialData]);
 
     if (!settings) return <div className="h-screen bg-slate-900" />;
 

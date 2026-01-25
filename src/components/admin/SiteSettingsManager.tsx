@@ -11,7 +11,7 @@ export default function SiteSettingsManager() {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        fetch('/api/full-settings')
+        fetch('/api/full-settings', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 setSettings(data);

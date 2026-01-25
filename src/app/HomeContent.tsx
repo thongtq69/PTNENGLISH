@@ -10,52 +10,17 @@ import Link from "next/link";
 import PromoPopup from "@/components/PromoPopup";
 import HallOfFame from "@/components/HallOfFame";
 
-const PROGRAMS = [
-  {
-    name: "Academic English for Teens",
-    image: "https://www.ptelc.edu.vn/wp-content/uploads/2025/06/EfT-Mimi-4-340x480.jpg",
-    color: "bg-primary",
-  },
-  {
-    name: "General English",
-    image: "https://www.ptelc.edu.vn/wp-content/uploads/2022/10/h%C3%ACnh-6-340x480.png",
-    color: "bg-accent",
-  },
-  {
-    name: "PTE Academic",
-    image: "/pte-academic.png",
-    color: "bg-blue-600",
-  },
-  {
-    name: "IELTS Preparation",
-    image: "https://www.ptelc.edu.vn/wp-content/uploads/2022/10/h%C3%ACnh-7-340x480.png",
-    color: "bg-secondary",
-  },
-  {
-    name: "Academic Events",
-    image: "https://www.ptelc.edu.vn/wp-content/uploads/2025/06/debate1-340x480.jpg",
-    color: "bg-slate-900",
-  }
-];
-
-const PARTNERS = [
-  { name: "AIM Academy", logo: "http://ptelc.edu.vn/wp-content/uploads/2024/05/LOGO-AIM-211x203.png" },
-  { name: "IDP IELTS", logo: "http://ptelc.edu.vn/wp-content/uploads/2025/05/Logo-IELTS-IDP-CMYK-_Official-test-centre-Kh%C3%B4ng-n%E1%BB%81n-360x185.png" },
-  { name: "IAU", logo: "http://ptelc.edu.vn/wp-content/uploads/2024/05/LOGO-IAU-360x152.png" },
-  { name: "SIEC", logo: "http://ptelc.edu.vn/wp-content/uploads/2024/05/LOGO-SIEC-360x167.png" }
-];
-
 export default function HomeContent({ pageData, siteSettings }: { pageData: any; siteSettings: any }) {
   // Use data from DB if available, otherwise fallback to hardcoded (for safety)
   const homeHero = pageData?.sections?.find((s: any) => s.type === 'hero')?.content || siteSettings?.hero;
-  const programs = pageData?.sections?.find((s: any) => s.type === 'programs')?.content?.items || siteSettings?.programs || PROGRAMS;
-  const partners = pageData?.sections?.find((s: any) => s.type === 'partners')?.content?.items || siteSettings?.partners || PARTNERS;
-  const philosophy = siteSettings?.philosophy || "“Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...”";
+  const programs = siteSettings?.programs || [];
+  const partners = siteSettings?.partners || [];
+  const philosophy = siteSettings?.philosophy || siteSettings?.homeContent?.philosophyText || "“Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...”";
 
   return (
     <main className="min-h-screen bg-background">
       <Header />
-      <Hero />
+      <Hero initialData={homeHero} />
 
       {/* Philosophy Section - Compact & Dark */}
       <section className="py-4 md:py-12 bg-slate-900 border-y border-white/5">
