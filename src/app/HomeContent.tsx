@@ -50,7 +50,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
   const homeHero = pageData?.sections?.find((s: any) => s.type === 'hero')?.content || siteSettings?.hero;
   const programs = pageData?.sections?.find((s: any) => s.type === 'programs')?.content?.items || siteSettings?.programs || PROGRAMS;
   const partners = pageData?.sections?.find((s: any) => s.type === 'partners')?.content?.items || siteSettings?.partners || PARTNERS;
-  const philosophy = pageData?.sections?.find((s: any) => s.type === 'philosophy')?.content?.text || siteSettings?.homeContent?.philosophyText || "“Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...”";
+  const philosophy = siteSettings?.philosophy || "“Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...”";
 
   return (
     <main className="min-h-screen bg-background">
@@ -65,7 +65,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <p className="text-sm md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-4 md:pl-6 py-0.5">
+            <p className="text-[12px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-4 md:pl-6 py-0.5">
               {philosophy}
             </p>
             <div className="mt-2 md:mt-4 flex justify-center items-center gap-3">

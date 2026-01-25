@@ -12,7 +12,8 @@ const SiteSettingsSchema = new Schema({
         enabled: { type: Boolean, default: true },
         text: String,
         link: String
-    }
+    },
+    philosophy: String
 }, { timestamps: true });
 
 export default mongoose.models.SiteSettings || mongoose.model('SiteSettings', SiteSettingsSchema);

@@ -15,7 +15,7 @@ export default function Hero() {
     if (!settings) return <div className="h-screen bg-slate-900" />;
 
     return (
-        <section className="relative w-full aspect-video md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-slate-950">
+        <section className="relative w-full aspect-video min-h-[280px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-slate-950">
             {/* Video Background */}
             <video
                 key={settings.videoUrl}
@@ -32,9 +32,9 @@ export default function Hero() {
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
 
             {/* Content */}
-            <div className="container mx-auto px-6 relative z-10 text-center">
-                <div className="max-w-4xl mx-auto pt-10 md:pt-24 text-center">
-                    <h1 className="text-white text-xl md:text-6xl font-heading font-normal tracking-tight leading-tight md:leading-[1.05] mb-3 md:mb-8 animate-fade-in-up max-w-2xl mx-auto whitespace-pre-line text-center">
+            <div className="container mx-auto px-4 relative z-10 text-center">
+                <div className="max-w-4xl mx-auto pt-20 md:pt-24 text-center">
+                    <h1 className="text-white text-sm md:text-6xl font-heading font-normal tracking-tight leading-tight md:leading-[1.05] mb-2 md:mb-8 animate-fade-in-up max-w-2xl mx-auto whitespace-pre-line text-center">
                         {settings.title}
                     </h1>
                     <p className="text-white text-[10px] md:text-xl mb-4 md:mb-12 max-w-xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body">

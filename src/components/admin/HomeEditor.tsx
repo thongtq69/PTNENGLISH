@@ -383,6 +383,29 @@ export default function HomeEditor() {
                     ))}
                 </div>
             </section>
+
+            {/* Philosophy Section */}
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
+                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
+                    <div className="p-3 rounded-2xl bg-indigo-500 text-white shadow-lg">
+                        <Type size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black text-white">PTN Philosophy</h2>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Educational focus and mission text</p>
+                    </div>
+                </div>
+                <div className="p-10">
+                    <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 block">Philosophy Text (Vietnamse)</label>
+                    <textarea
+                        rows={4}
+                        value={settings.philosophy || ''}
+                        onChange={(e) => setSettings({ ...settings, philosophy: e.target.value })}
+                        placeholder="Xuất phát từ niềm tin của các nhà sáng lập..."
+                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed"
+                    />
+                </div>
+            </section>
         </div>
     );
 }
