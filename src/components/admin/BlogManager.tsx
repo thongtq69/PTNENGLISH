@@ -31,8 +31,8 @@ export default function BlogManager() {
 
     useEffect(() => {
         Promise.all([
-            fetch('/api/posts').then(res => res.json()),
-            fetch('/api/pages/blog').then(res => res.json())
+            fetch('/api/posts', { cache: 'no-store' }).then(res => res.json()),
+            fetch('/api/pages/blog', { cache: 'no-store' }).then(res => res.json())
         ]).then(([postsData, pageData]) => {
             setPosts(postsData);
 
@@ -85,6 +85,8 @@ export default function BlogManager() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(newList)
         });
+        const updatedPosts = await fetch('/api/posts', { cache: 'no-store' }).then(res => res.json());
+        setPosts(updatedPosts);
     };
 
     const handleSavePost = async (e: React.FormEvent) => {
@@ -107,7 +109,9 @@ export default function BlogManager() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newList)
             });
-            setPosts(newList);
+            // Re-fetch to get real DB IDs for new posts
+            const updatedPosts = await fetch('/api/posts', { cache: 'no-store' }).then(res => res.json());
+            setPosts(updatedPosts);
             setIsEditorOpen(false);
             setEditingPost(null);
         } catch (err) {
@@ -413,6 +417,30 @@ export default function BlogManager() {
                                                 <option key={cat} value={cat}>{cat}</option>
                                             ))}
                                         </select>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Author</label>
+                                        <input
+                                            value={editingPost.author}
+                                            onChange={e => setEditingPost({ ...editingPost, author: e.target.value })}
+                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white font-bold"
+                                        />
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Publication Date</label>
+                                        <input
+                                            value={editingPost.date}
+                                            onChange={e => setEditingPost({ ...editingPost, date: e.target.value })}
+                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white font-bold"
+                                        />
+                                    </div>
+                                    <div className="space-y-4">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Read Time (e.g. 5 phút)</label>
+                                        <input
+                                            value={editingPost.readTime}
+                                            onChange={e => setEditingPost({ ...editingPost, readTime: e.target.value })}
+                                            className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white font-bold"
+                                        />
                                     </div>
                                     <div className="space-y-4">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Featured Image URL</label>

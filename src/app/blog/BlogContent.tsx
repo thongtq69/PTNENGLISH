@@ -29,7 +29,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
     };
 
     useEffect(() => {
-        fetch("/api/posts")
+        fetch("/api/posts", { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 setPosts(data);
