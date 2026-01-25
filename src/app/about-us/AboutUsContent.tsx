@@ -190,46 +190,69 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                 </div>
             </section>
 
-            {/* Story Section - Compacted */}
-            <section className="py-20">
+            {/* Story Section - Restored from 36abef4 Design */}
+            <section className="py-20 lg:py-32">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             className="flex flex-col h-full justify-center"
                         >
-                            <h3 className="text-3xl font-heading font-black text-accent mb-8 flex items-center gap-4">
+                            <h3 className="text-3xl font-heading font-black text-accent mb-12 flex items-center gap-4">
                                 <span className="w-12 h-1.5 bg-primary" />
                                 <span dangerouslySetInnerHTML={{ __html: story.title || "Câu Chuyện Hình Thành" }} />
                             </h3>
-                            <div className="space-y-6 text-lg text-slate-700 font-body leading-relaxed">
-                                <div className="text-xl leading-snug whitespace-pre-line" dangerouslySetInnerHTML={{ __html: story.mainText || story.text }} />
-                                {story.quote && (
-                                    <p className="text-accent font-medium italic">
-                                        "{story.quote}"
-                                    </p>
-                                )}
+
+                            <div className="space-y-8 text-slate-700 font-body leading-relaxed">
+                                <p className="text-xl md:text-2xl leading-snug font-serif italic text-accent border-l-4 border-primary pl-6">
+                                    "PTN English bắt đầu không phải từ một kế hoạch kinh doanh, mà từ những lớp học rất thật và tâm huyết của ba người thầy: <span className="text-primary font-bold">Phong – Trâm – Nhân</span>."
+                                </p>
+
+                                <p className="text-base md:text-lg">
+                                    Sau nhiều năm giảng dạy tại các môi trường đào tạo quốc tế, chúng tôi nhận ra rằng việc học tiếng Anh của nhiều học viên đang bị cuốn theo những lời hứa ngắn hạn: học thật nhanh, mẹo thật nhiều, điểm số thật cao. Nhưng phía sau các mục tiêu ấy, điều người học thực sự cần lại là nền tảng vững chắc, sự dẫn dắt tận tâm và một lộ trình có ý nghĩa lâu dài.
+                                </p>
+
+                                <div className="bg-primary/5 p-8 border-l-[6px] border-primary rounded-r-3xl text-sm md:text-base shadow-sm space-y-4">
+                                    <p><strong>PTN</strong> là viết tắt của ba người sáng lập – <strong>Phong, Trâm, Nhân</strong> – những giáo viên gắn bó với lớp học và hành trình trưởng thành của học viên.</p>
+                                    <p><strong>PTN</strong> là tinh thần <strong>Partner To Navigate</strong> – đồng hành để định hướng, thay vì thúc ép hay dẫn dắt một chiều.</p>
+                                </div>
+
+                                <p className="text-base md:text-lg">
+                                    Chúng tôi tin rằng học tiếng Anh không chỉ để vượt qua kỳ thi, mà còn để mở ra cách tư duy mới, khả năng diễn đạt bản thân và cơ hội bước vào thế giới rộng lớn hơn. Vì thế, mỗi chương trình tại PTN English được xây dựng trên ba giá trị cốt lõi: <strong>dạy học có chiều sâu học thuật</strong>, <strong>theo sát từng cá nhân</strong>, và <strong>tôn trọng nhịp tiến bộ riêng</strong> của mỗi người học.
+                                </p>
+
+                                <p className="text-accent font-medium italic text-lg border-t border-slate-100 pt-6">
+                                    "Thành công với chúng tôi không chỉ là điểm IELTS mà học viên đạt được, mà là sự tự tin khi học viên tự mình bước tiếp trên con đường học tập và cuộc sống."
+                                </p>
                             </div>
                         </motion.div>
+
                         <motion.div
                             initial={{ opacity: 0, x: 50 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
                             className="relative"
                         >
-                            <div className="aspect-[4/3] rounded-[2rem] overflow-hidden shadow-xl">
+                            <div className="relative z-10 aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
                                 <img
                                     src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/592696975_798019503192696_5381097215126223627_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=y7qZy0WgaVAQ7kNvwHVmX2S&_nc_oc=Adn0UnxILVl60OrEolmTkLzH8Mz93_7A2My7jQn7Ug6yVBkJwSxXoGxc8tNZvOUb5sA&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=HOFT5BaX3DDhVoFuNh3deQ&oh=00_AfrLYWdG1RSv7hkuK8s7RAlVQe-oJ3NdxoD9iS0RLdltPA&oe=69793819"
                                     alt="Founder Story"
                                     className="w-full h-full object-cover"
                                 />
+                                <div className="absolute inset-0 bg-gradient-to-t from-accent/20 to-transparent"></div>
                             </div>
-                            <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-[1.5rem] shadow-lg border border-slate-100 hidden md:block">
-                                <p className="text-3xl font-heading font-black text-primary mb-0.5">25+</p>
-                                <p className="uppercase tracking-widest text-[10px] font-bold text-accent">Năm Kinh Nghiệm</p>
+
+                            {/* Experience badge from 36abef4 */}
+                            <div className="absolute -bottom-8 -left-8 z-20 bg-white p-8 rounded-[2rem] shadow-xl border border-slate-100 hidden md:block group hover:scale-105 transition-transform duration-500">
+                                <div className="w-12 h-1 bg-primary mb-4" />
+                                <p className="text-4xl font-heading font-black text-primary mb-1">25+</p>
+                                <p className="uppercase tracking-[0.2em] text-[10px] font-black text-accent opacity-60">Năm Kinh Nghiệm</p>
                             </div>
+
+                            {/* Decorative element */}
+                            <div className="absolute -top-10 -right-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl -z-10"></div>
                         </motion.div>
                     </div>
                 </div>
