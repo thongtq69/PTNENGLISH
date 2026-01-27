@@ -43,10 +43,8 @@ export default function AdModal() {
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
-        if (!pathname || pathname.startsWith('/admin')) {
-            setIsOpen(false);
-            return;
-        }
+        // Global session check - if any ad was closed, don't show anything
+        if (sessionStorage.getItem('ptn_global_ad_dismissed')) return;
 
         const fetchAd = async () => {
             try {
@@ -55,17 +53,15 @@ export default function AdModal() {
 
                 if (data && data.isActive) {
                     const sessionKey = `ptn_ad_shown_${data._id}`;
-                    if (data.showOnce && sessionStorage.getItem(sessionKey)) {
-                        return;
-                    }
+                    // Extra security check for the specific ad ID
+                    if (sessionStorage.getItem(sessionKey)) return;
 
                     setAd(data);
                     // Show after 2 seconds
                     setTimeout(() => {
+                        // Final check before opening - double safety
+                        if (sessionStorage.getItem('ptn_global_ad_dismissed')) return;
                         setIsOpen(true);
-                        if (data.showOnce) {
-                            sessionStorage.setItem(sessionKey, 'true');
-                        }
                     }, 2000);
                 }
             } catch (e) {
@@ -73,10 +69,11 @@ export default function AdModal() {
             }
         };
         fetchAd();
-    }, [pathname]);
+    }, []); // Only run ONCE on initial site load
 
     const closeAd = () => {
         setIsOpen(false);
+        sessionStorage.setItem('ptn_global_ad_dismissed', 'true');
         if (ad?._id) {
             sessionStorage.setItem(`ptn_ad_shown_${ad._id}`, 'true');
         }
@@ -152,12 +149,12 @@ export default function AdModal() {
                         </div>
 
                         {/* Right Side: Content & Features */}
-                        <div className="flex-1 bg-white p-8 md:p-16 flex flex-col overflow-y-auto custom-scrollbar">
+                        <div className="flex-1 bg-white p-8 md:p-16 flex flex-col overflow-y-auto custom-scrollbar h-full">
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.5 }}
-                                className="mb-12"
+                                className="mb-12 shrink-0"
                             >
                                 <h3 className="text-4xl md:text-5xl font-heading font-black text-slate-900 leading-tight mb-4 tracking-tighter">
                                     {ad.rightTitle}
@@ -171,7 +168,7 @@ export default function AdModal() {
                                 </p>
                             </motion.div>
 
-                            <div className="flex-1 space-y-4">
+                            <div className="space-y-4 mb-12">
                                 {ad.items.map((item, i) => {
                                     const Icon = ICON_MAP[item.icon] || Check;
                                     return (
@@ -204,7 +201,7 @@ export default function AdModal() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 1 }}
-                                className="mt-12 text-center"
+                                className="mt-auto py-12 text-center"
                             >
                                 <button
                                     onClick={closeAd}
