@@ -4,6 +4,7 @@ import Course from '@/models/Course';
 import Post from '@/models/Post';
 import Issue from '@/models/Issue';
 import Testimonial from '@/models/Testimonial';
+import Advertisement from '@/models/Advertisement';
 import {
     Users,
     BookOpen,
@@ -11,25 +12,27 @@ import {
     FileText,
     ArrowUpRight,
     Plus,
-    Eye
+    Eye,
+    Megaphone
 } from 'lucide-react';
 import Link from 'next/link';
 
 export default async function AdminDashboard() {
     await dbConnect();
 
-    const [coursesCount, postsCount, issuesCount, testimonialsCount] = await Promise.all([
+    const [coursesCount, postsCount, issuesCount, testimonialsCount, adsCount] = await Promise.all([
         Course.countDocuments(),
         Post.countDocuments(),
         Issue.countDocuments({ status: 'New' }),
         Testimonial.countDocuments(),
+        Advertisement.countDocuments({ isActive: true }),
     ]);
 
     const STATS = [
         { name: 'Active Courses', value: coursesCount, icon: <BookOpen />, color: 'from-blue-500 to-indigo-600', href: '/admin/courses' },
         { name: 'New Inquiries', value: issuesCount, icon: <MessageSquare />, color: 'from-emerald-500 to-teal-600', href: '/admin/issues', highlight: true },
         { name: 'Blog Articles', value: postsCount, icon: <FileText />, color: 'from-amber-500 to-orange-600', href: '/admin/blog' },
-        { name: 'Testimonials', value: testimonialsCount, icon: <Users />, color: 'from-rose-500 to-pink-600', href: '/admin/testimonials' },
+        { name: 'Active Campaigns', value: adsCount, icon: <Megaphone />, color: 'from-purple-500 to-pink-600', href: '/admin/ads' },
     ];
 
     return (

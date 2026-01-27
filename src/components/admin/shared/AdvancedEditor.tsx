@@ -17,7 +17,7 @@ import {
     Bold, Italic, Underline as UnderlineIcon, List, ListOrdered,
     Link as LinkIcon, Image as ImageIcon, Quote,
     Table as TableIcon, Undo, Redo,
-    Minus, Layers, Loader2
+    Minus, Layers, Loader2, HelpCircle
 } from 'lucide-react';
 
 interface AdvancedEditorProps {
@@ -238,6 +238,15 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
                     <div className="flex items-center gap-1 px-2 border-r border-white/5">
                         <MenuButton onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} title="Table"><TableIcon size={18} /></MenuButton>
                         <MenuButton onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Divider"><Minus size={18} /></MenuButton>
+                        <MenuButton
+                            onClick={() => {
+                                const qNum = window.prompt('Nhập số thứ tự câu hỏi (ví dụ: 1):');
+                                if (qNum) editor.chain().focus().insertContent(`[Q${qNum}]`).run();
+                            }}
+                            title="Insert Question Tag"
+                        >
+                            <HelpCircle size={18} className="text-primary" />
+                        </MenuButton>
                     </div>
 
                     <div className="flex items-center gap-1 pl-2 ml-auto">

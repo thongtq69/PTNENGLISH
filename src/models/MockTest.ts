@@ -1,22 +1,31 @@
 import mongoose, { Schema } from 'mongoose';
 
+const TestSectionSchema = new Schema({
+    title: String,
+    content: String,
+    answers: { type: Map, of: String },
+    questionsCount: Number,
+    // For Listening
+    audioUrl: String
+});
+
 const MockTestSchema = new Schema({
     name: String,
+    category: { type: String, default: 'IELTS' },
     listening: {
         pdf: String,
-        audio: [{ section: Number, url: String }],
-        questionsCount: { type: Number, default: 40 },
-        content: String // Added for interactive content
+        sections: [TestSectionSchema],
+        totalQuestions: { type: Number, default: 40 }
     },
     reading: {
         pdf: String,
-        questionsCount: { type: Number, default: 40 },
-        content: String // Added for interactive content
+        sections: [TestSectionSchema],
+        totalQuestions: { type: Number, default: 40 }
     },
     writing: {
         pdf: String,
-        questionsCount: { type: Number, default: 2 },
-        content: String // Added for interactive content
+        content: String, // Tasks description
+        tasksCount: { type: Number, default: 2 }
     }
 }, { timestamps: true });
 

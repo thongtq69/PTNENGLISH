@@ -19,7 +19,8 @@ import {
     Bell,
     CheckCircle2,
     Trophy,
-    Heart
+    Heart,
+    Megaphone
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -38,6 +39,7 @@ const MENU_ITEMS = [
             { name: 'Student Corner', icon: <GraduationCap size={20} />, href: '/admin/student-corner' },
             { name: 'Mock Tests', icon: <GraduationCap size={20} />, href: '/admin/mock-tests' },
             { name: 'Schedules', icon: <Calendar size={20} />, href: '/admin/schedules' },
+            { name: 'Campaign Ads', icon: <Megaphone size={20} />, href: '/admin/ads' },
             { name: 'Blog Posts', icon: <FileText size={20} />, href: '/admin/blog' },
             { name: 'Testimonials', icon: <Heart size={20} />, href: '/admin/testimonials' },
             { name: 'Hall of Fame', icon: <Trophy size={20} />, href: '/admin/achievements' },

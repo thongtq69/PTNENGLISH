@@ -7,7 +7,7 @@ import Testimonials from "@/components/Testimonials";
 import { motion } from "framer-motion";
 import { BookOpen, ExternalLink, ChevronRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import PromoPopup from "@/components/PromoPopup";
+
 import HallOfFame from "@/components/HallOfFame";
 
 export default function HomeContent({ pageData, siteSettings }: { pageData: any; siteSettings: any }) {
@@ -91,7 +91,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       {/* Hall Of Fame - Student Success - Moved higher as requested */}
       <HallOfFame />
 
-      <PromoPopup />
+
 
       {/* Compact Study & Mock Test Section */}
       <section className="py-6 md:py-12 bg-accent relative overflow-hidden">

@@ -3,20 +3,29 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
     BookOpen, Headphones, PenTool, Clock,
     AlertCircle, ChevronRight, Send, Play,
-    Pause, FileText, Maximize2, Minimize2
+    Pause, FileText, Maximize2, Minimize2,
+    CheckCircle2, ChevronLeft, Volume2, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 
+interface TestSection {
+    title: string;
+    content: string;
+    answers: Record<string, string>;
+    questionsCount: number;
+    audioUrl?: string;
+}
+
 interface Test {
-    id: string;
+    _id: string;
     name: string;
-    listening: { pdf: string; audio: { section: number; url: string }[]; content?: string; questionsCount?: number };
-    reading: { pdf: string; content?: string; questionsCount?: number };
-    writing: { pdf: string; content?: string; questionsCount?: number };
+    listening: { pdf: string; sections: TestSection[]; totalQuestions: number };
+    reading: { pdf: string; sections: TestSection[]; totalQuestions: number };
+    writing: { pdf: string; content: string; tasksCount: number };
 }
 
 export default function TestPage() {
@@ -25,6 +34,7 @@ export default function TestPage() {
     const [step, setStep] = useState(0); // 0: Selection, 1: Intro, 2: Testing, 3: Success
     const [loading, setLoading] = useState(true);
     const [currentSkill, setCurrentSkill] = useState<"listening" | "reading" | "writing">("listening");
+    const [activeSectionIdx, setActiveSectionIdx] = useState(0);
     const [answers, setAnswers] = useState<Record<string, Record<number, string>>>({
         listening: {},
         reading: {},
@@ -41,13 +51,23 @@ export default function TestPage() {
     }, []);
 
     // UI States
+    const [viewMode, setViewMode] = useState<"pdf" | "answers">("pdf");
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(3600); // 60 minutes default
-    const [isFullScreen] = useState(false);
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const scrollRefs = useRef<Record<number, HTMLElement | null>>({});
 
     // Timer Logic
     useEffect(() => {
@@ -83,35 +103,75 @@ export default function TestPage() {
         }));
     };
 
-    const toggleAudio = () => {
-        if (audioRef.current) {
-            if (isPlaying) audioRef.current.pause();
-            else audioRef.current.play();
-            setIsPlaying(!isPlaying);
+    const toggleAudio = (url?: string) => {
+        if (!audioRef.current || !url) return;
+
+        if (audioRef.current.src !== url) {
+            audioRef.current.src = url;
+            audioRef.current.play();
+            setIsPlaying(true);
+        } else {
+            if (isPlaying) {
+                audioRef.current.pause();
+                setIsPlaying(false);
+            } else {
+                audioRef.current.play();
+                setIsPlaying(true);
+            }
         }
     };
 
     const handleSubmit = () => {
-        setStep(3);
+        if (confirm("Bạn có chắc chắn muốn nộp bài?")) {
+            setStep(3);
+        }
+    };
+
+    const scrollToQuestion = (qIdx: number) => {
+        const el = scrollRefs.current[qIdx];
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+            // Find section that contains qIdx
+            if (currentSkill === 'writing') return;
+            const skillData = selectedTest?.[currentSkill];
+            if (!skillData || !('sections' in skillData)) return;
+
+            const secIdx = (skillData as { sections: TestSection[] }).sections.findIndex((s: TestSection, i: number) => {
+                const start = currentSkill === 'listening' ? (i * 10) + 1 : (i === 0 ? 1 : (i === 1 ? 14 : 27));
+                const end = currentSkill === 'listening' ? (i + 1) * 10 : (i === 0 ? 13 : (i === 1 ? 26 : 40));
+                return qIdx >= start && qIdx <= end;
+            });
+            if (secIdx !== -1) {
+                setActiveSectionIdx(secIdx);
+                // Delay scroll slightly to allow section to mount
+                setTimeout(() => {
+                    scrollRefs.current[qIdx]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
+        }
     };
 
     const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
         if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
 
-        // Split by [QX] tags
         const parts = content.split(/(\[Q\d+\])/g);
 
         return (
-            <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed whitespace-pre-wrap">
+            <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed whitespace-pre-wrap text-slate-700">
                 {parts.map((part, i) => {
                     const match = part.match(/\[Q(\d+)\]/);
                     if (match) {
                         const qIdx = parseInt(match[1]);
                         return (
-                            <span key={i} className="inline-block mx-1 group relative">
+                            <span
+                                key={i}
+                                ref={el => { scrollRefs.current[qIdx] = el; }}
+                                className="inline-block mx-1 group relative align-middle"
+                            >
                                 <input
                                     type="text"
-                                    className="w-32 bg-primary/5 border-b-2 border-primary/20 focus:border-primary focus:bg-primary/10 transition-all outline-none px-2 py-1 text-sm font-bold text-primary rounded-t-md"
+                                    className={`w-28 md:w-32 bg-primary/5 border-b-2 focus:bg-primary/10 transition-all outline-none px-2 py-1 text-sm font-bold text-primary rounded-t-md ${answers[skill][qIdx] ? 'border-primary' : 'border-primary/20'}`}
                                     value={answers[skill][qIdx] || ""}
                                     onChange={(e) => handleAnswerChange(skill, qIdx, e.target.value)}
                                     placeholder={`${qIdx}`}
@@ -120,66 +180,93 @@ export default function TestPage() {
                             </span>
                         );
                     }
-                    return <span key={i}>{part}</span>;
+                    return <span key={i} className="leading-[2.2]" dangerouslySetInnerHTML={{ __html: part }} />;
                 })}
             </div>
         );
     };
 
     const renderAnswerSheet = () => {
-        const count = selectedTest?.[currentSkill]?.questionsCount || 40;
-        const content = selectedTest?.[currentSkill]?.content;
+        if (!selectedTest) return null;
 
         if (currentSkill === "writing") {
             return (
-                <div className="space-y-8">
-                    <div className="p-6 bg-primary/5 border border-primary/10 rounded-2xl">
-                        <h4 className="font-bold text-primary mb-2 flex items-center gap-2">
-                            <PenTool size={18} /> Writing Task Response
-                        </h4>
-                        <p className="text-xs text-slate-500">Hãy nhập bài làm của bạn vào các ô dưới đây.</p>
-                    </div>
-                    {content ? parseContentWithInputs(content, "writing") : (
-                        [1, 2].map(idx => (
-                            <div key={idx} className="space-y-4">
-                                <label className="text-sm font-black text-accent uppercase tracking-widest">Task 0{idx}</label>
-                                <textarea
-                                    className="w-full h-80 p-8 rounded-[2rem] bg-slate-50 border border-slate-200 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-body text-slate-700 resize-none shadow-inner"
-                                    placeholder={`Type your text for Writing Task ${idx}...`}
-                                    value={answers.writing[idx] || ""}
-                                    onChange={(e) => handleAnswerChange("writing", idx, e.target.value)}
-                                />
-                            </div>
-                        ))
-                    )}
-                </div>
-            );
-        }
+                <div className="space-y-12">
+                    <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-200">
+                        <div className="flex items-center gap-4 mb-6">
+                            <PenTool className="text-primary" />
+                            <h3 className="font-heading font-black text-accent text-xl uppercase tracking-tight">Writing Response</h3>
+                        </div>
+                        <div className="prose prose-slate max-w-none mb-10 text-slate-700" dangerouslySetInnerHTML={{ __html: selectedTest.writing.content }} />
 
-        if (content) {
-            return (
-                <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 min-h-screen">
-                    {parseContentWithInputs(content, currentSkill)}
+                        <div className="space-y-8">
+                            {[1, 2].map(idx => (
+                                <div key={idx} className="space-y-4">
+                                    <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Task {idx} Response Area</label>
+                                    <textarea
+                                        className="w-full h-96 p-8 rounded-[2rem] bg-white border border-slate-200 focus:ring-8 focus:ring-primary/5 outline-none transition-all font-body text-slate-700 resize-none shadow-inner"
+                                        placeholder={`Enter your Writing Task ${idx} essay here...`}
+                                        value={answers.writing[idx] || ""}
+                                        onChange={(e) => handleAnswerChange("writing", idx, e.target.value)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             )
         }
 
+        const sections = selectedTest[currentSkill].sections || [];
+        const activeSection = sections[activeSectionIdx];
+
         return (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {Array.from({ length: count }).map((_, i) => (
-                    <div key={i} className="flex items-center gap-3 group">
-                        <span className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] font-black text-slate-400 group-focus-within:bg-primary group-focus-within:text-white transition-colors">
-                            {i + 1}
-                        </span>
-                        <input
-                            type="text"
-                            placeholder="Answer..."
-                            className="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-sm"
-                            value={answers[currentSkill][i + 1] || ""}
-                            onChange={(e) => handleAnswerChange(currentSkill, i + 1, e.target.value)}
-                        />
-                    </div>
-                ))}
+            <div className="space-y-8">
+                {/* Section Navigation Header */}
+                <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 sticky top-0 bg-slate-50 z-20 pt-2">
+                    {sections.map((sec, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => setActiveSectionIdx(idx)}
+                            className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-sm border ${activeSectionIdx === idx ? 'bg-primary border-primary text-white' : 'bg-white border-slate-100 text-slate-400 hover:bg-slate-50'}`}
+                        >
+                            {currentSkill === 'listening' ? `Section 0${idx + 1}` : `Passage 0${idx + 1}`}
+                        </button>
+                    ))}
+                </div>
+
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={`${currentSkill}-${activeSectionIdx}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="bg-white p-6 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 min-h-[60vh]"
+                    >
+                        {activeSection ? (
+                            <>
+                                <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4 border-b border-slate-50 pb-8">
+                                    <h4 className="text-xl md:text-2xl font-heading font-black text-accent">{activeSection.title}</h4>
+                                    {currentSkill === 'listening' && activeSection.audioUrl && (
+                                        <button
+                                            onClick={() => toggleAudio(activeSection.audioUrl)}
+                                            className={`p-4 rounded-2xl flex items-center gap-3 transition-all ${isPlaying ? 'bg-primary text-white scale-105 shadow-lg shadow-primary/30' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'}`}
+                                        >
+                                            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                                            <span className="text-[10px] font-black uppercase tracking-widest">Listen This Section</span>
+                                        </button>
+                                    )}
+                                </div>
+                                {parseContentWithInputs(activeSection.content, currentSkill)}
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-20 text-slate-300 gap-4">
+                                <AlertCircle size={48} className="opacity-10" />
+                                <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
+                            </div>
+                        )}
+                    </motion.div>
+                </AnimatePresence>
             </div>
         );
     };
@@ -201,7 +288,7 @@ export default function TestPage() {
                             Submission <span className="text-primary">Successful!</span>
                         </h2>
                         <p className="text-slate-500 text-lg mb-12 font-body max-w-2xl mx-auto">
-                            Bài làm của bạn đã được ghi nhận. Chuyên gia <span className="text-primary font-bold">PTN</span> sẽ chấm điểm and gửi kết quả chi tiết qua email trong vòng 24h.
+                            Bài làm của bạn đã được ghi nhận. Chuyên gia <span className="text-primary font-bold">PTN</span> sẽ chấm điểm và gửi kết quả chi tiết qua email trong vòng 24h.
                         </p>
                         <button
                             onClick={() => window.location.href = "/"}
@@ -217,39 +304,46 @@ export default function TestPage() {
     }
 
     if (step === 0) {
-        if (loading) return <div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400">Loading tests...</div>;
+        if (loading) return <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-500 gap-4">
+            <RefreshCw className="animate-spin text-primary" />
+            <p className="text-[10px] font-black uppercase tracking-[0.3em]">Connecting to Secure Academic Server...</p>
+        </div>;
         return (
             <main className="min-h-screen bg-slate-50">
                 <Header />
                 <div className="pt-40 pb-20 container mx-auto px-6">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h1 className="text-5xl md:text-6xl font-heading font-black text-accent mb-6 leading-tight">
-                            IELTS Academic <br /> <span className="text-primary">Mock Test Center</span>
-                        </h1>
-                        <p className="text-slate-500 text-lg font-body">Chọn một trong 4 bộ đề thi chuẩn quốc tế để bắt đầu kiểm tra năng lực.</p>
+                    <div className="text-center max-w-3xl mx-auto mb-20">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-5xl md:text-7xl font-heading font-black text-accent mb-6 leading-tight uppercase tracking-tighter"
+                        >
+                            IELTS Academic <br /> <span className="text-primary">Simulator</span>
+                        </motion.h1>
+                        <p className="text-slate-500 text-lg font-body">Trải nghiệm phòng thi thật với các bộ đề chuẩn quốc tế, cấu trúc IELTS 4 kỹ năng.</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {academicTests.map((test, idx) => (
                             <motion.div
-                                key={test.id}
+                                key={test._id}
                                 whileHover={{ y: -10 }}
-                                className="bg-white rounded-[2.5rem] p-8 shadow-xl border border-slate-100 flex flex-col items-center group relative overflow-hidden"
+                                className="bg-white rounded-[3rem] p-10 shadow-xl border border-slate-100 flex flex-col items-center group relative overflow-hidden"
                             >
-                                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/5 rounded-bl-full -translate-y-4 translate-x-4"></div>
-                                <div className="w-16 h-16 rounded-2xl bg-slate-900 flex items-center justify-center text-white mb-8 group-hover:bg-primary transition-colors">
-                                    <FileText size={32} />
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[4rem] -translate-y-8 translate-x-8"></div>
+                                <div className="w-20 h-20 rounded-3xl bg-slate-900 flex items-center justify-center text-white mb-10 group-hover:bg-primary transition-all duration-500 rotate-3 group-hover:rotate-0 shadow-xl border border-white/5">
+                                    <FileText size={36} />
                                 </div>
-                                <h3 className="text-xl font-heading font-bold text-accent mb-4">Set 0{idx + 1}</h3>
-                                <div className="space-y-3 mb-8 w-full">
-                                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
-                                        <span>Listening</span> <span className="text-accent underline">40 Qs</span>
+                                <h3 className="text-2xl font-heading font-black text-accent mb-4">Set 0{idx + 1}</h3>
+                                <div className="space-y-4 mb-10 w-full bg-slate-50 p-6 rounded-2xl border border-slate-100 italic">
+                                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <span>Listening</span> <span className="text-primary">4 Sections</span>
                                     </div>
-                                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
-                                        <span>Reading</span> <span className="text-accent underline">40 Qs</span>
+                                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <span>Reading</span> <span className="text-primary">3 Passages</span>
                                     </div>
-                                    <div className="flex justify-between text-xs font-bold uppercase tracking-widest text-slate-400">
-                                        <span>Writing</span> <span className="text-accent underline">2 Tasks</span>
+                                    <div className="flex justify-between text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        <span>Result</span> <span className="text-primary">24h Response</span>
                                     </div>
                                 </div>
                                 <button
@@ -257,9 +351,9 @@ export default function TestPage() {
                                         setSelectedTest(test);
                                         setStep(1);
                                     }}
-                                    className="w-full bg-slate-100 hover:bg-primary hover:text-white text-accent py-4 rounded-2xl font-black transition-all group-hover:shadow-lg active:scale-95"
+                                    className="w-full bg-accent text-white py-5 rounded-2xl font-black transition-all hover:bg-slate-900 shadow-xl active:scale-95 flex items-center justify-center gap-2 group-hover:shadow-primary/20"
                                 >
-                                    Select Test
+                                    Select Test <ChevronRight size={18} />
                                 </button>
                             </motion.div>
                         ))}
@@ -272,39 +366,53 @@ export default function TestPage() {
 
     if (step === 1) {
         return (
-            <main className="min-h-screen bg-slate-900 flex items-center justify-center p-6">
+            <main className="min-h-screen bg-slate-900 flex items-center justify-center p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-96 h-96 bg-primary/20 rounded-full blur-[150px] -translate-x-1/2 -translate-y-1/2"></div>
                 <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="bg-white rounded-[3rem] p-12 md:p-20 max-w-3xl w-full text-center shadow-2xl"
+                    initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    className="bg-white rounded-[4rem] p-12 md:p-24 max-w-4xl w-full text-center shadow-2xl relative z-10"
                 >
-                    <div className="flex justify-center gap-4 mb-8">
-                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><Headphones size={20} /></div>
-                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><BookOpen size={20} /></div>
-                        <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400"><PenTool size={20} /></div>
+                    <div className="flex justify-center gap-6 mb-12">
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100"><Headphones size={24} /></div>
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100"><BookOpen size={24} /></div>
+                        <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-slate-300 border border-slate-100"><PenTool size={24} /></div>
                     </div>
-                    <h2 className="text-accent font-heading font-black text-4xl mb-6">{selectedTest?.name}</h2>
-                    <p className="text-slate-500 mb-12 text-lg">Chào mừng bạn đến với phòng thi giả lập. <br /> Bài thi gồm 3 phần: Listening (30p), Reading (60p), Writing (60p). Tổng hợp điểm and phản hồi sẽ được xử lý bởi đội ngũ học thuật.</p>
+                    <h2 className="text-accent font-heading font-black text-5xl mb-8 leading-tight">{selectedTest?.name}</h2>
+                    <p className="text-slate-500 mb-14 text-xl font-body leading-relaxed max-w-2xl mx-auto">
+                        Chào mừng bạn đến với hệ thống thi thử của <strong className="text-accent font-black">PTN English</strong>.
+                        Bài thi được thiết kế để đo lường chính xác các kỹ năng IELTS Academic của bạn.
+                    </p>
 
-                    <div className="space-y-4 mb-12">
-                        <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl text-left border border-slate-100">
-                            <AlertCircle className="text-primary shrink-0" />
-                            <p className="text-sm text-slate-600">Đảm bảo kết nối internet ổn định and tai nghe hoạt động tốt.</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-14">
+                        <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl text-left border border-slate-100">
+                            <Clock className="text-primary shrink-0" size={20} />
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Time Limit</p>
+                                <p className="text-sm font-bold text-accent">150 Minutes Total</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-4 p-5 bg-slate-50 rounded-2xl text-left border border-slate-100">
+                            <AlertCircle className="text-primary shrink-0" size={20} />
+                            <div>
+                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Requirement</p>
+                                <p className="text-sm font-bold text-accent">Stable Connection & Audio</p>
+                            </div>
                         </div>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center">
                         <button
                             onClick={() => setStep(0)}
-                            className="px-10 py-5 rounded-full border-2 border-slate-100 font-bold text-slate-400 hover:bg-slate-50 transition-all"
+                            className="px-12 py-5 rounded-full border-2 border-slate-100 font-bold text-slate-400 hover:bg-slate-50 transition-all uppercase tracking-widest text-[10px]"
                         >
-                            Quay lại
+                            Back to Center
                         </button>
                         <button
                             onClick={() => setStep(2)}
-                            className="px-12 py-5 rounded-full bg-primary text-white font-black text-xl shadow-xl shadow-primary/20 hover:bg-red-700 transition-all flex items-center gap-3 active:scale-95"
+                            className="px-16 py-6 rounded-full bg-primary text-white font-black text-xl shadow-2xl shadow-primary/30 hover:bg-red-700 transition-all flex items-center gap-4 active:scale-95 group"
                         >
-                            Start Exam <ChevronRight size={20} />
+                            Start Simulation <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 </motion.div>
@@ -313,71 +421,65 @@ export default function TestPage() {
     }
 
     return (
-        <main className={`h-screen flex flex-col bg-slate-100 overflow-hidden ${isFullScreen ? 'pt-0' : ''}`}>
-            {/* Exam Top Navbar */}
-            <div className="bg-slate-900 h-20 shrink-0 px-8 flex items-center justify-between text-white border-b border-white/5 relative z-[100]">
-                <div className="flex items-center gap-8">
-                    <div className="flex flex-col group cursor-pointer" onClick={() => window.location.href = "/"}>
-                        <span className="text-xl font-heading font-extrabold tracking-tight">
+        <main className={`h-screen flex flex-col bg-slate-100 overflow-hidden relative`}>
+            {/* Pro Navbar */}
+            <div className="bg-slate-900 min-h-[5rem] md:h-24 shrink-0 px-4 md:px-10 flex items-center justify-between text-white border-b border-white/5 relative z-[100] shadow-2xl">
+                <div className="flex items-center gap-4 md:gap-10">
+                    <button className="cursor-pointer" onClick={() => window.location.href = "/"}>
+                        <span className="text-xl font-heading font-extrabold tracking-tighter">
                             <span className="text-primary uppercase">PTN</span>
-                            <span className="uppercase text-white"> English</span>
+                            <span className="uppercase text-white hidden sm:inline"> Simulator</span>
                         </span>
-                    </div>
-                    <div className="h-8 w-px bg-white/10 hidden md:block"></div>
-                    <div className="hidden md:flex items-center gap-2">
-                        <span className="text-xs font-black uppercase tracking-widest text-slate-500">Exam:</span>
-                        <span className="text-sm font-bold text-primary">{selectedTest?.name}</span>
+                    </button>
+                    <div className="h-10 w-px bg-white/10 hidden lg:block"></div>
+                    <div className="hidden lg:flex flex-col">
+                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500">IELTS Academic</span>
+                        <span className="text-xs font-bold text-white">{selectedTest?.name}</span>
                     </div>
                 </div>
 
-                {/* Skill Switcher */}
-                <div className="absolute left-1/2 -translate-x-1/2 bg-white/5 p-1.5 rounded-2xl flex gap-1 border border-white/10">
+                {/* Skill Selector - Responsive */}
+                <div className="absolute left-1/2 -translate-x-1/2 bg-white/5 p-1.5 rounded-2xl flex gap-1 border border-white/10 scale-90 md:scale-100">
                     {(["listening", "reading", "writing"] as const).map(skill => (
                         <button
                             key={skill}
                             onClick={() => {
                                 setCurrentSkill(skill);
                                 setIsPlaying(false);
+                                setActiveSectionIdx(0);
                             }}
-                            className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${currentSkill === skill ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white"}`}
+                            className={`px-4 md:px-8 py-2 md:py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${currentSkill === skill ? "bg-primary text-white shadow-xl" : "text-slate-400 hover:text-white"}`}
                         >
                             {skill}
                         </button>
                     ))}
                 </div>
 
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-3 bg-white/5 px-5 py-2.5 rounded-xl border border-white/10">
-                        <Clock size={18} className="text-primary" />
-                        <span className="font-mono text-xl font-bold">{formatTime(currentTime)}</span>
+                <div className="flex items-center gap-3 md:gap-8">
+                    <div className="hidden sm:flex items-center gap-3 bg-white/5 px-6 py-3 rounded-2xl border border-white/10">
+                        <Clock size={20} className="text-primary" />
+                        <span className="font-mono text-2xl font-black tabular-nums">{formatTime(currentTime)}</span>
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className="bg-primary hover:bg-red-700 text-white px-8 py-3 rounded-xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-primary/20"
+                        className="bg-primary hover:bg-red-700 text-white px-5 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all shadow-2xl shadow-primary/20"
                     >
-                        Finish Test
+                        Nộp Bài
                     </button>
                 </div>
             </div>
 
-            {/* Main Test Area */}
-            <div className="flex-1 flex overflow-hidden bg-slate-100">
-                {/* Left Side: Reference (PDF or Passage) */}
-                <div className={`flex-1 flex flex-col transition-all duration-500 ${isSidebarOpen ? (selectedTest?.[currentSkill]?.content ? "w-1/2" : "w-3/5") : "w-full"}`}>
-                    <div className="bg-white h-12 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10">
-                        <div className="flex items-center gap-3">
-                            {currentSkill === "listening" && <Headphones size={16} className="text-primary" />}
-                            {currentSkill === "reading" && <BookOpen size={16} className="text-primary" />}
-                            {currentSkill === "writing" && <PenTool size={16} className="text-primary" />}
-                            <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Reference Materials</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-100 rounded-lg text-slate-400 transition-colors">
-                                {isSidebarOpen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
-                            </button>
-                        </div>
+            {/* Main Content Split View or Single View on Mobile */}
+            <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
+                {/* PDF Block */}
+                <div className={`transition-all duration-700 flex flex-col h-full ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "w-1/2" : "w-0 overflow-hidden")}`}>
+                    <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10 shrink-0">
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
+                            <FileText size={12} /> Original PDF Exam
+                        </span>
+                        {!isMobile && <button onClick={() => setIsSidebarOpen(false)} className="text-slate-300 hover:text-accent"><Minimize2 size={14} /></button>}
                     </div>
-                    <div className="flex-1 bg-slate-800 overflow-hidden relative">
+                    <div className="flex-1 bg-slate-800 relative">
                         {selectedTest?.[currentSkill]?.pdf ? (
                             <iframe
                                 src={`${selectedTest?.[currentSkill]?.pdf}#toolbar=0&navpanes=0&scrollbar=1`}
@@ -386,108 +488,97 @@ export default function TestPage() {
                             />
                         ) : (
                             <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
-                                <FileText size={48} className="mb-4 opacity-20" />
-                                <p className="text-sm font-medium">Sử dụng nội dung tương tác bên phải để làm bài.</p>
+                                <FileText size={64} className="mb-6 opacity-10" />
+                                <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Right Side: Interactive Test/Answer Sheet */}
-                <div className={`bg-slate-50 transition-all duration-500 border-l border-slate-200 flex flex-col ${isSidebarOpen ? (selectedTest?.[currentSkill]?.content ? "w-1/2" : "w-2/5") : "w-0 overflow-hidden"}`}>
-                    {/* Control Panel (Audio for Listening) */}
-                    {currentSkill === "listening" && (
-                        <div className="bg-slate-50 p-6 border-b border-slate-200">
-                            <div className="flex items-center justify-between mb-4">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-primary">Audio Controller</span>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Tracks: {selectedTest?.listening.audio.length} Sections</span>
+                {/* Answer Block */}
+                <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "w-1/2 border-l border-slate-200")}`}>
+                    <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+                        <div className="flex items-center gap-4">
+                            {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
+                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
+                                <CheckCircle2 size={12} /> Active Response Area
+                            </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <div className="hidden md:flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="text-[9px] font-black text-emerald-600 uppercase">Live Saving</span>
                             </div>
-                            <div className="flex flex-wrap gap-2 mb-6">
-                                {selectedTest?.listening.audio.map((track: any, i: number) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => {
-                                            if (audioRef.current) {
-                                                audioRef.current.src = track.url;
-                                                audioRef.current.play();
-                                                setIsPlaying(true);
-                                            }
-                                        }}
-                                        className="px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-[10px] font-bold hover:border-primary hover:text-primary transition-all shadow-sm"
-                                    >
-                                        Section 0{track.section}
-                                    </button>
-                                ))}
-                            </div>
-                            <div className="flex items-center gap-6 bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                                <button
-                                    onClick={toggleAudio}
-                                    className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center hover:scale-110 shadow-lg shadow-primary/20 transition-all active:scale-95"
-                                >
-                                    {isPlaying ? <Pause size={24} /> : <Play size={24} className="ml-1" />}
-                                </button>
-                                <div className="flex-1">
-                                    <p className="text-xs font-bold text-accent mb-1 uppercase tracking-tighter">Now Playing</p>
-                                    <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                        <motion.div
-                                            animate={{ x: isPlaying ? ["-100%", "100%"] : "0%" }}
-                                            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                                            className="h-full w-1/3 bg-primary"
-                                        />
-                                    </div>
+                            {isMobile && (
+                                <div className="md:hidden flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full">
+                                    <Clock size={10} className="text-primary" />
+                                    <span className="text-[10px] font-black text-accent">{formatTime(currentTime)}</span>
                                 </div>
-                                <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" />
-                            </div>
+                            )}
                         </div>
-                    )}
-
-                    <div className="bg-white h-12 px-6 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Answer Sheet</span>
-                        <span className="text-[10px] font-black text-primary uppercase bg-primary/10 px-3 py-1 rounded-full">Automated Saving</span>
                     </div>
 
-                    {/* Scrollable Answer Sheet */}
-                    <div className="flex-1 overflow-y-auto p-10 custom-scrollbar">
+                    <div className="flex-1 overflow-y-auto p-4 md:p-12 custom-scrollbar pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed opacity-[0.98]">
                         {renderAnswerSheet()}
+                    </div>
 
-                        <div className="mt-16 p-8 bg-white rounded-[2.5rem] border border-slate-200 text-center shadow-sm">
-                            <h5 className="font-heading font-bold text-accent mb-4">Bạn đã hoàn thành phần thi này?</h5>
-                            <button
-                                onClick={handleSubmit}
-                                className="inline-flex items-center gap-2 text-primary font-black uppercase tracking-widest text-[10px] hover:underline"
-                            >
-                                Finish and Send Results <ChevronRight size={14} />
-                            </button>
+                    {/* Question Tracker & Mobile Switcher */}
+                    <div className="h-24 md:h-28 bg-white border-t border-slate-200 px-4 md:px-10 flex items-center gap-3 shrink-0 relative">
+                        <TypographyHint current={currentSkill} />
+                        <div className="h-10 w-px bg-slate-100 mx-2 md:mx-4"></div>
+                        <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2.5 py-4">
+                            {Array.from({ length: 40 }).map((_, i) => {
+                                const qIdx = i + 1;
+                                const isAnswered = !!answers[currentSkill][qIdx];
+                                return (
+                                    <button
+                                        key={qIdx}
+                                        onClick={() => scrollToQuestion(qIdx)}
+                                        className={`w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${isAnswered ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" : "bg-slate-50 text-slate-400 border border-slate-100 hover:border-slate-300"}`}
+                                    >
+                                        {qIdx}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
-
-                    {/* Question Navigator Footer */}
-                    <div className="h-16 bg-white border-t border-slate-200 px-6 flex items-center gap-2 overflow-x-auto no-scrollbar">
-                        {Array.from({ length: selectedTest?.[currentSkill]?.questionsCount || 40 }).map((_, i) => {
-                            const qIdx = i + 1;
-                            const isAnswered = !!answers[currentSkill][qIdx];
-                            return (
-                                <button
-                                    key={qIdx}
-                                    className={`w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-[10px] font-black transition-all ${isAnswered ? "bg-primary text-white shadow-md shadow-primary/20 scale-110" : "bg-slate-100 text-slate-400 hover:bg-slate-200"}`}
-                                >
-                                    {qIdx}
-                                </button>
-                            );
-                        })}
-                    </div>
                 </div>
             </div>
 
-            {/* Mobile Warning Overlay */}
-            <div className="lg:hidden fixed inset-0 z-[200] bg-slate-900 flex flex-col items-center justify-center text-center p-10">
-                <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-8">
-                    <Maximize2 size={40} className="text-primary" />
+            {/* Mobile View Toggle */}
+            {isMobile && (
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] flex bg-slate-900/90 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-2xl">
+                    <button
+                        onClick={() => setViewMode('pdf')}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'pdf' ? 'bg-primary text-white shadow-lg' : 'text-slate-400'}`}
+                    >
+                        <FileText size={16} /> PDF
+                    </button>
+                    <button
+                        onClick={() => setViewMode('answers')}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'answers' ? 'bg-primary text-white shadow-lg' : 'text-slate-400'}`}
+                    >
+                        <PenTool size={16} /> Answers
+                    </button>
                 </div>
-                <h2 className="text-white font-heading font-black text-2xl mb-4 uppercase">Large Screen Required</h2>
-                <p className="text-slate-400 font-body mb-8">Giao diện thi thử học thuật yêu cầu màn hình lớn (Máy tính/Tablet) để hiển thị PDF and Phiếu làm bài đồng thời.</p>
-                <Link href="/" className="text-primary font-bold hover:underline">Quay lại Trang chủ</Link>
-            </div>
+            )}
+
+            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" />
+
+            <style jsx global>{`
+                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
+                .no-scrollbar::-webkit-scrollbar { display: none; }
+                .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+            `}</style>
         </main>
     );
 }
+
+const TypographyHint = ({ current }: { current: string }) => (
+    <div className="flex flex-col shrink-0 min-w-[70px]">
+        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Testing</span>
+        <span className="text-xs font-black text-primary uppercase tracking-tighter leading-none">{current}</span>
+    </div>
+);
