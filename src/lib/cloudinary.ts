@@ -10,9 +10,17 @@ export default cloudinary;
 
 export const uploadFile = async (file: string, folder: string = 'ptn_english') => {
     try {
+        // Detect file type from base64 header
+        const isPdf = file.includes('application/pdf');
+        const isAudio = file.includes('audio/');
+        const isVideo = file.includes('video/');
+
+        // Use 'raw' for PDFs and other non-image files to get correct URL format
+        const resourceType = (isPdf || isAudio) ? 'raw' : (isVideo ? 'video' : 'auto');
+
         const response = await cloudinary.uploader.upload(file, {
             folder,
-            resource_type: 'auto',
+            resource_type: resourceType,
         });
         return response.secure_url;
     } catch (error) {

@@ -482,18 +482,26 @@ export default function TestPage() {
                         {!isMobile && <button onClick={() => setIsSidebarOpen(false)} className="text-slate-300 hover:text-accent"><Minimize2 size={14} /></button>}
                     </div>
                     <div className="flex-1 bg-slate-800 relative">
-                        {selectedTest?.[currentSkill]?.pdf ? (
-                            <iframe
-                                src={`https://docs.google.com/viewer?url=${encodeURIComponent(selectedTest?.[currentSkill]?.pdf)}&embedded=true`}
-                                className="w-full h-full border-none"
-                                title="Exam PDF"
-                            />
-                        ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
-                                <FileText size={64} className="mb-6 opacity-10" />
-                                <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
-                            </div>
-                        )}
+                        {(() => {
+                            // Fix Cloudinary PDF URLs: change image/upload to raw/upload
+                            let pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
+                            if (pdfUrl && pdfUrl.includes('cloudinary.com') && pdfUrl.endsWith('.pdf')) {
+                                pdfUrl = pdfUrl.replace('/image/upload/', '/raw/upload/');
+                            }
+
+                            return pdfUrl ? (
+                                <iframe
+                                    src={pdfUrl}
+                                    className="w-full h-full border-none"
+                                    title="Exam PDF"
+                                />
+                            ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
+                                    <FileText size={64} className="mb-6 opacity-10" />
+                                    <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
+                                </div>
+                            );
+                        })()}
                     </div>
                 </div>
 
