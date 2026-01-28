@@ -63,6 +63,7 @@ export default function TestPage() {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
+    const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
     const [currentTime, setCurrentTime] = useState(3600); // 60 minutes default
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -106,11 +107,14 @@ export default function TestPage() {
     const toggleAudio = (url?: string) => {
         if (!audioRef.current || !url) return;
 
-        if (audioRef.current.src !== url) {
+        // If switching to a different audio file
+        if (currentAudioUrl !== url) {
             audioRef.current.src = url;
             audioRef.current.play();
+            setCurrentAudioUrl(url);
             setIsPlaying(true);
         } else {
+            // Same audio - toggle play/pause
             if (isPlaying) {
                 audioRef.current.pause();
                 setIsPlaying(false);
