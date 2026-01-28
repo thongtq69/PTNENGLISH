@@ -12,7 +12,7 @@ import HallOfFame from "@/components/HallOfFame";
 
 export default function HomeContent({ pageData, siteSettings }: { pageData: any; siteSettings: any }) {
   // Use data from DB if available, otherwise fallback to hardcoded (for safety)
-  const homeHero = pageData?.sections?.find((s: any) => s.type === 'hero')?.content || siteSettings?.hero;
+  const homeHero = siteSettings?.hero || pageData?.sections?.find((s: any) => s.type === 'hero')?.content;
   const programs = siteSettings?.programs || [];
   const partners = siteSettings?.partners || [];
   const philosophy = siteSettings?.philosophy || siteSettings?.homeContent?.philosophyText || "“Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...”";
@@ -65,24 +65,25 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
           <div className="flex md:grid md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-8 overflow-x-auto md:overflow-visible pb-6 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
             {programs.map((prog: any, idx: number) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="min-w-[180px] md:min-w-0 group cursor-pointer snap-center"
-              >
-                <div className="relative aspect-[4/5] md:aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-3 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
-                  <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  {prog.name === "PTE Academic" && (
-                    <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-primary text-white text-[8px] md:text-[10px] font-bold px-2 py-0.5 md:px-3 md:py-1 rounded-full uppercase tracking-widest z-20">New</div>
-                  )}
-                  <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 pt-8 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
-                    <p className="text-white font-heading font-black text-sm md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
+              <Link key={idx} href={prog.link || "/courses"}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: idx * 0.1 }}
+                  viewport={{ once: true }}
+                  className="min-w-[180px] md:min-w-0 group cursor-pointer snap-center h-full"
+                >
+                  <div className="relative aspect-[4/5] md:aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-3 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                    <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    {prog.name === "PTE Academic" && (
+                      <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-primary text-white text-[8px] md:text-[10px] font-bold px-2 py-0.5 md:px-3 md:py-1 rounded-full uppercase tracking-widest z-20">New</div>
+                    )}
+                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 pt-8 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
+                      <p className="text-white font-heading font-black text-sm md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         </div>

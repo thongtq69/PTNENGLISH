@@ -75,10 +75,17 @@ export default function Footer() {
                 <div className="hidden sm:block">
                     <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Quick Links</h4>
                     <ul className="grid grid-cols-2 lg:grid-cols-1 gap-1 md:gap-2">
-                        {["Về chúng tôi", "Khóa học", "Giáo viên", "Blog", "Thi thử", "Liên hệ"].map((link) => (
-                            <li key={link}>
-                                <a href="/" className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
-                                    {link}
+                        {[
+                            { name: "Về chúng tôi", href: "/about-us" },
+                            { name: "Khóa học", href: "/courses" },
+                            { name: "Góc học viên", href: "/student-corner" },
+                            { name: "Blog", href: "/blog" },
+                            { name: "Thi thử", href: "/test" },
+                            { name: "Liên hệ", href: "/contact" }
+                        ].map((link) => (
+                            <li key={link.name}>
+                                <a href={link.href} className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
+                                    {link.name}
                                 </a>
                             </li>
                         ))}

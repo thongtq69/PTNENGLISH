@@ -268,8 +268,8 @@ export default function HomeEditor() {
                                 <Trash2 size={16} />
                             </button>
 
-                            <div className="flex gap-4 items-start">
-                                <div className="flex-1 space-y-4">
+                            <div className="flex gap-4 items-center">
+                                <div className="flex-1 space-y-2">
                                     <input
                                         value={prog.name}
                                         onChange={(e) => {
@@ -280,37 +280,47 @@ export default function HomeEditor() {
                                         className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1 placeholder:text-slate-600"
                                         placeholder="Program Name"
                                     />
-                                    <FileUpload
-                                        label="Program Card Image"
-                                        value={prog.image}
-                                        onChange={(url) => {
-                                            const newList = [...settings.programs];
-                                            newList[idx].image = url;
-                                            setSettings({ ...settings, programs: newList });
-                                        }}
-                                        folder="home/programs"
-                                    />
-                                    <select
-                                        value={prog.color}
+                                    <input
+                                        value={prog.link}
                                         onChange={(e) => {
                                             const newList = [...settings.programs];
-                                            newList[idx].color = e.target.value;
+                                            newList[idx].link = e.target.value;
                                             setSettings({ ...settings, programs: newList });
                                         }}
-                                        className="w-full bg-slate-950/50 border border-white/5 rounded-lg px-3 py-1.5 text-[10px] text-slate-400 outline-none"
-                                    >
-                                        <option value="bg-primary">PTN Red (Primary)</option>
-                                        <option value="bg-accent">PTN Dark (Accent)</option>
-                                        <option value="bg-secondary">Yellow (Secondary)</option>
-                                        <option value="bg-blue-600">Blue</option>
-                                        <option value="bg-slate-900">Black/Dark Slate</option>
-                                    </select>
+                                        className="w-full bg-transparent border-b border-white/10 outline-none text-slate-500 text-[10px] focus:border-primary transition-all py-1 placeholder:text-slate-700"
+                                        placeholder="Link (/courses/...)"
+                                    />
                                 </div>
                             </div>
+                            <FileUpload
+                                label="Program Card Image"
+                                value={prog.image}
+                                onChange={(url) => {
+                                    const newList = [...settings.programs];
+                                    newList[idx].image = url;
+                                    setSettings({ ...settings, programs: newList });
+                                }}
+                                folder="home/programs"
+                            />
+                            <select
+                                value={prog.color}
+                                onChange={(e) => {
+                                    const newList = [...settings.programs];
+                                    newList[idx].color = e.target.value;
+                                    setSettings({ ...settings, programs: newList });
+                                }}
+                                className="w-full bg-slate-950/50 border border-white/5 rounded-lg px-3 py-1.5 text-[10px] text-slate-400 outline-none"
+                            >
+                                <option value="bg-primary">PTN Red (Primary)</option>
+                                <option value="bg-accent">PTN Dark (Accent)</option>
+                                <option value="bg-secondary">Yellow (Secondary)</option>
+                                <option value="bg-blue-600">Blue</option>
+                                <option value="bg-slate-900">Black/Dark Slate</option>
+                            </select>
                         </motion.div>
                     ))}
                 </div>
-            </section>
+            </section >
 
             {/* Partners List */}
             <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
@@ -371,10 +381,10 @@ export default function HomeEditor() {
                         </div>
                     ))}
                 </div>
-            </section>
+            </section >
 
             {/* Philosophy Section */}
-            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+            < section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl" >
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
                     <div className="p-3 rounded-2xl bg-indigo-500 text-white shadow-lg">
                         <Type size={24} />
@@ -394,7 +404,7 @@ export default function HomeEditor() {
                         className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed"
                     />
                 </div>
-            </section>
-        </div>
+            </section >
+        </div >
     );
 }

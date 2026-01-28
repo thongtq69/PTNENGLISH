@@ -6,6 +6,13 @@ import Link from "next/link";
 export default function Hero({ initialData }: { initialData?: any }) {
     const [settings, setSettings] = useState<any>(initialData || null);
 
+    // Sync state with props if they change
+    useEffect(() => {
+        if (initialData) {
+            setSettings(initialData);
+        }
+    }, [initialData]);
+
     useEffect(() => {
         if (!initialData) {
             fetch("/api/site-settings", { cache: 'no-store' })
