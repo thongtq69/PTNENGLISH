@@ -11,6 +11,17 @@ import {
     CheckCircle2, ChevronLeft, Volume2, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
+const ModernPDFViewer = dynamic(() => import("@/components/ModernPDFViewer"), {
+    ssr: false,
+    loading: () => (
+        <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
+            <p className="text-xs font-bold uppercase tracking-widest">Loading PDF Engine...</p>
+        </div>
+    )
+});
+import { Highlighter, Eraser } from "lucide-react";
 
 interface TestSection {
     title: string;
@@ -40,6 +51,8 @@ export default function TestPage() {
         reading: {},
         writing: {}
     });
+    const [highlights, setHighlights] = useState<Record<string, string[]>>({}); // skill-sectionIdx -> array of highlighted text
+    const [isHighlighterActive, setIsHighlighterActive] = useState(false);
 
     useEffect(() => {
         fetch("/api/mock-tests")
@@ -159,12 +172,38 @@ export default function TestPage() {
     const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
         if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
 
-        // Ensure we don't break tables with whitespace-pre-wrap
-        // and improve typography
-        const parts = content.split(/(\[Q\d+\])/g);
+        // Apply highlights from state
+        let highlightedContent = content;
+        const highlightKey = `${skill}-${activeSectionIdx}`;
+        if (highlights[highlightKey]) {
+            highlights[highlightKey].forEach(text => {
+                // escape regex
+                const escapedText = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(`(${escapedText})`, 'gi');
+                highlightedContent = highlightedContent.replace(regex, '<mark class="highlight-yellow">$1</mark>');
+            });
+        }
+
+        const parts = highlightedContent.split(/(\[Q\d+\])/g);
 
         return (
-            <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700">
+            <div
+                className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? 'cursor-text' : ''}`}
+                onMouseUp={() => {
+                    if (!isHighlighterActive) return;
+                    const selection = window.getSelection();
+                    const selectedText = selection?.toString().trim();
+                    if (selectedText && selectedText.length > 2) {
+                        const key = `${skill}-${activeSectionIdx}`;
+                        setHighlights(prev => ({
+                            ...prev,
+                            [key]: Array.from(new Set([...(prev[key] || []), selectedText]))
+                        }));
+                        // Clear selection to avoid double highlighting
+                        selection?.removeAllRanges();
+                    }
+                }}
+            >
                 {parts.map((part, i) => {
                     const match = part.match(/\[Q(\d+)\]/);
                     if (match) {
@@ -478,14 +517,14 @@ export default function TestPage() {
             {/* Main Content Split View or Single View on Mobile */}
             <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
                 {/* PDF Block */}
-                <div className={`transition-all duration-700 flex flex-col h-full ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "w-1/2" : "w-0 overflow-hidden")}`}>
+                <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "w-1/2" : "w-0")}`}>
                     <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10 shrink-0">
                         <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
                             <FileText size={12} /> Original PDF Exam
                         </span>
                         {!isMobile && <button onClick={() => setIsSidebarOpen(false)} className="text-slate-300 hover:text-accent"><Minimize2 size={14} /></button>}
                     </div>
-                    <div className="flex-1 bg-slate-800 relative">
+                    <div className="flex-1 bg-slate-800 relative min-h-0 overflow-hidden">
                         {(() => {
                             const pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
 
@@ -498,15 +537,8 @@ export default function TestPage() {
                                 );
                             }
 
-                            // Use Google Docs Viewer (gview) for reliable cross-origin PDF viewing
-                            const viewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
-
                             return (
-                                <iframe
-                                    src={viewerUrl}
-                                    className="w-full h-full border-none"
-                                    title="Exam PDF"
-                                />
+                                <ModernPDFViewer url={pdfUrl} />
                             );
                         })()}
                     </div>
@@ -515,8 +547,28 @@ export default function TestPage() {
                 {/* Answer Block */}
                 <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "w-1/2 border-l border-slate-200")}`}>
                     <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-6">
                             {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
+
+                            {/* Highlighting Tools */}
+                            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
+                                <button
+                                    onClick={() => setIsHighlighterActive(!isHighlighterActive)}
+                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${isHighlighterActive ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-accent'}`}
+                                >
+                                    <Highlighter size={12} /> {isHighlighterActive ? 'Highlighter ON' : 'Highlighter OFF'}
+                                </button>
+                                {highlights[`${currentSkill}-${activeSectionIdx}`]?.length > 0 && (
+                                    <button
+                                        onClick={() => setHighlights(prev => ({ ...prev, [`${currentSkill}-${activeSectionIdx}`]: [] }))}
+                                        className="p-1.5 text-slate-400 hover:text-red-500 transition-all"
+                                        title="Clear all highlights in this section"
+                                    >
+                                        <Eraser size={14} />
+                                    </button>
+                                )}
+                            </div>
+
                             <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
                                 <CheckCircle2 size={12} /> Active Response Area
                             </span>
@@ -595,6 +647,16 @@ export default function TestPage() {
                 /* Custom highlight/selection color */
                 .prose ::selection { background-color: rgba(255, 59, 59, 0.25); color: inherit; }
                 .prose ::-moz-selection { background-color: rgba(255, 59, 59, 0.25); color: inherit; }
+
+                /* Persistent Highlight Styles */
+                mark.highlight-yellow {
+                    background-color: #fef08a; /* yellow-200 */
+                    color: #000;
+                    padding: 0 2px;
+                    border-radius: 4px;
+                    font-weight: 600;
+                    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+                }
                 
                 /* Test Content Table Styling */
                 .prose table { border-collapse: collapse; width: 100%; margin: 2rem 0; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }
