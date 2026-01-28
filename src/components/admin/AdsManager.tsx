@@ -291,6 +291,7 @@ export default function AdsManager() {
                                                             <option value="Check">Check</option>
                                                         </select>
                                                         <input placeholder="Text" value={item.text} onChange={e => { const nl = [...ads]; nl[activeIdx!].items[i].text = e.target.value; setAds(nl); }} className="flex-1 bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white" />
+                                                        <input placeholder="Link (/...)" value={item.link} onChange={e => { const nl = [...ads]; nl[activeIdx!].items[i].link = e.target.value; setAds(nl); }} className="w-24 bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-[10px] text-white" />
                                                         <button onClick={() => { const nl = [...ads]; nl[activeIdx!].items = nl[activeIdx!].items.filter((_, idx) => idx !== i); setAds(nl); }} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 size={14} /></button>
                                                     </div>
                                                 ))}

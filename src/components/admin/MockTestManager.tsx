@@ -98,7 +98,7 @@ export default function MockTestManager() {
             <div className="flex justify-between items-end">
                 <div>
                     <h1 className="text-3xl font-heading font-black text-white tracking-tight">Academic Mock Test Center</h1>
-                    <p className="text-slate-500 mt-2">Manage structured IELTS/Academic simulation environments.</p>
+                    <p className="text-slate-500 mt-2">Manage structured IELTS/Academic simulation environments. Use [Q1], [Q2]... tags in content.</p>
                 </div>
                 <div className="flex gap-4">
                     <button
@@ -257,6 +257,15 @@ export default function MockTestManager() {
                                             {test[activeSkill].sections[activeSectionIdx] ? (
                                                 <div className="space-y-8 animate-in fade-in duration-500">
                                                     <div className="space-y-4">
+                                                        <div className="bg-primary/10 border border-primary/20 p-4 rounded-2xl mb-6">
+                                                            <p className="text-[9px] font-black text-primary uppercase mb-1 flex items-center gap-2"><Info size={12} /> Hướng dẫn tạo đề:</p>
+                                                            <p className="text-[10px] text-slate-400 leading-relaxed font-body">
+                                                                1. Tải lên file PDF đề thi tương ứng.<br />
+                                                                2. Copy nội dung văn bản (đã scan) vào ô soạn thảo.<br />
+                                                                3. Chèn tag <strong>[Q1]</strong>, <strong>[Q2]</strong>... vào vị trí cần điền đáp án.<br />
+                                                                4. Nhập đáp án đúng vào bảng Answer Keys phía dưới.
+                                                            </p>
+                                                        </div>
                                                         <label className="text-[10px] font-black text-slate-500 uppercase">Section Title</label>
                                                         <input
                                                             value={test[activeSkill].sections[activeSectionIdx].title}

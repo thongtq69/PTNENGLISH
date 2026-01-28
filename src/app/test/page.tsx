@@ -155,10 +155,12 @@ export default function TestPage() {
     const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
         if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
 
+        // Ensure we don't break tables with whitespace-pre-wrap
+        // and improve typography
         const parts = content.split(/(\[Q\d+\])/g);
 
         return (
-            <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed whitespace-pre-wrap text-slate-700">
+            <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700">
                 {parts.map((part, i) => {
                     const match = part.match(/\[Q(\d+)\]/);
                     if (match) {
@@ -167,20 +169,20 @@ export default function TestPage() {
                             <span
                                 key={i}
                                 ref={el => { scrollRefs.current[qIdx] = el; }}
-                                className="inline-block mx-1 group relative align-middle"
+                                className="inline-block mx-2 group relative align-middle"
                             >
                                 <input
                                     type="text"
-                                    className={`w-28 md:w-32 bg-primary/5 border-b-2 focus:bg-primary/10 transition-all outline-none px-2 py-1 text-sm font-bold text-primary rounded-t-md ${answers[skill][qIdx] ? 'border-primary' : 'border-primary/20'}`}
+                                    className={`w-32 md:w-40 bg-slate-50 border-2 border-slate-200 focus:border-primary focus:bg-white transition-all outline-none px-3 py-1.5 text-sm font-black text-primary rounded-lg shadow-sm ${answers[skill][qIdx] ? 'border-primary bg-primary/[0.02]' : ''}`}
                                     value={answers[skill][qIdx] || ""}
                                     onChange={(e) => handleAnswerChange(skill, qIdx, e.target.value)}
-                                    placeholder={`${qIdx}`}
+                                    placeholder={""}
                                 />
-                                <span className="absolute -top-4 left-0 text-[8px] font-black text-primary/40 uppercase tracking-widest">{qIdx}</span>
+                                <span className={`absolute -top-5 left-1 text-[10px] font-black uppercase tracking-widest transition-colors ${answers[skill][qIdx] ? 'text-primary' : 'text-slate-400'}`}>Q{qIdx}</span>
                             </span>
                         );
                     }
-                    return <span key={i} className="leading-[2.2]" dangerouslySetInnerHTML={{ __html: part }} />;
+                    return <span key={i} dangerouslySetInnerHTML={{ __html: part }} />;
                 })}
             </div>
         );
@@ -571,6 +573,14 @@ export default function TestPage() {
                 .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                
+                /* Test Content Table Styling */
+                .prose table { border-collapse: collapse; width: 100%; margin: 2rem 0; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }
+                .prose th, .prose td { border: 1px solid #e2e8f0; padding: 1rem 1.5rem !important; vertical-align: top; }
+                .prose th { background-color: #f8fafc; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; color: #475569; }
+                .prose tr:nth-child(even) { background-color: #fbfcfe; }
+                .prose h3 { font-family: var(--font-heading); font-weight: 900; color: #0f172a; margin-top: 3rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: -0.02em; }
+                .prose p { margin-bottom: 1.5rem; line-height: 1.8; }
             `}</style>
         </main>
     );
