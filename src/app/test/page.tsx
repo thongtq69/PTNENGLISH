@@ -484,7 +484,7 @@ export default function TestPage() {
                     <div className="flex-1 bg-slate-800 relative">
                         {selectedTest?.[currentSkill]?.pdf ? (
                             <iframe
-                                src={`${selectedTest?.[currentSkill]?.pdf}#toolbar=0&navpanes=0&scrollbar=1`}
+                                src={`https://docs.google.com/viewer?url=${encodeURIComponent(selectedTest?.[currentSkill]?.pdf)}&embedded=true`}
                                 className="w-full h-full border-none"
                                 title="Exam PDF"
                             />
