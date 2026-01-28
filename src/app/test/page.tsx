@@ -483,23 +483,26 @@ export default function TestPage() {
                     </div>
                     <div className="flex-1 bg-slate-800 relative">
                         {(() => {
-                            // Fix Cloudinary PDF URLs: change image/upload to raw/upload
-                            let pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
-                            if (pdfUrl && pdfUrl.includes('cloudinary.com') && pdfUrl.endsWith('.pdf')) {
-                                pdfUrl = pdfUrl.replace('/image/upload/', '/raw/upload/');
+                            const pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
+
+                            if (!pdfUrl) {
+                                return (
+                                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
+                                        <FileText size={64} className="mb-6 opacity-10" />
+                                        <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
+                                    </div>
+                                );
                             }
 
-                            return pdfUrl ? (
+                            // Use Google Docs Viewer (gview) for reliable cross-origin PDF viewing
+                            const viewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(pdfUrl)}&embedded=true`;
+
+                            return (
                                 <iframe
-                                    src={pdfUrl}
+                                    src={viewerUrl}
                                     className="w-full h-full border-none"
                                     title="Exam PDF"
                                 />
-                            ) : (
-                                <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
-                                    <FileText size={64} className="mb-6 opacity-10" />
-                                    <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
-                                </div>
                             );
                         })()}
                     </div>
