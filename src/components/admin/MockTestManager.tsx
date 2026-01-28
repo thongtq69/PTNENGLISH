@@ -225,9 +225,9 @@ export default function MockTestManager() {
                                         <div className="flex-1 overflow-y-auto custom-scrollbar p-10 space-y-10">
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                                 <div className="space-y-4">
-                                                    <label className="text-[10px] font-black text-slate-500 uppercase">Section Backdrop (PDF)</label>
+                                                    <label className="text-[10px] font-black text-slate-500 uppercase">Section Backdrop (PDF/Image/Word)</label>
                                                     <FileUpload
-                                                        mode="pdf"
+                                                        mode="all"
                                                         value={test[activeSkill].pdf || ''}
                                                         onChange={url => {
                                                             const updated = { ...test };
@@ -260,7 +260,7 @@ export default function MockTestManager() {
                                                         <div className="bg-primary/10 border border-primary/20 p-4 rounded-2xl mb-6">
                                                             <p className="text-[9px] font-black text-primary uppercase mb-1 flex items-center gap-2"><Info size={12} /> Hướng dẫn tạo đề:</p>
                                                             <p className="text-[10px] text-slate-400 leading-relaxed font-body">
-                                                                1. Tải lên file PDF đề thi tương ứng.<br />
+                                                                1. Tải lên file PDF, Word hoặc Ảnh đề thi tương ứng.<br />
                                                                 2. Copy nội dung văn bản (đã scan) vào ô soạn thảo.<br />
                                                                 3. Chèn tag <strong>[Q1]</strong>, <strong>[Q2]</strong>... vào vị trí cần điền đáp án.<br />
                                                                 4. Nhập đáp án đúng vào bảng Answer Keys phía dưới.
@@ -369,9 +369,9 @@ export default function MockTestManager() {
                                     /* Writing Editor */
                                     <div className="flex-1 overflow-y-auto p-12 space-y-10">
                                         <div className="space-y-4">
-                                            <label className="text-[10px] font-black text-slate-500 uppercase">Writing Tasks PDF</label>
+                                            <label className="text-[10px] font-black text-slate-500 uppercase">Writing Tasks Backdrop (PDF/Image/Word)</label>
                                             <FileUpload
-                                                mode="pdf"
+                                                mode="all"
                                                 value={test.writing.pdf}
                                                 onChange={url => {
                                                     const updated = { ...test };

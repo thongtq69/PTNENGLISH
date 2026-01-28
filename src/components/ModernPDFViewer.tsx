@@ -78,61 +78,79 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
                 className="flex-1 overflow-y-auto bg-slate-900 scroll-smooth custom-scrollbar"
             >
                 <div className="flex flex-col items-center py-12 gap-8 min-h-full">
-                    <Document
-                        file={url.startsWith('http') ? url : `${window.location.origin}${url}`}
-                        onLoadSuccess={onDocumentLoadSuccess}
-                        onLoadError={onDocumentLoadError}
-                        loading={
-                            <div className="flex flex-col items-center justify-center p-20 text-slate-400 gap-4">
-                                <Loader2 className="animate-spin text-primary" size={40} />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Initializing Engine...</span>
-                            </div>
-                        }
-                        error={
-                            <div className="flex flex-col items-center justify-center p-12 text-slate-400 gap-4 bg-slate-950 rounded-[3rem] border border-white/5 max-w-md mx-auto my-20">
-                                <AlertTriangle className="text-primary" size={48} />
-                                <p className="text-sm font-bold uppercase tracking-widest text-center">Failed to load PDF.</p>
-                                {errorMsg && (
-                                    <p className="text-[10px] font-mono text-red-500/80 bg-red-950/20 p-4 rounded-2xl break-all text-center border border-red-900/30">
-                                        Error: {errorMsg}
-                                    </p>
-                                )}
-                                <p className="text-[9px] font-medium normal-case opacity-40 text-center select-all">Resource: {url}</p>
-                                <button onClick={() => window.location.reload()} className="mt-4 px-8 py-3 bg-primary text-white rounded-2xl text-[10px] font-black uppercase shadow-2xl shadow-primary/30 active:scale-95 transition-all">Retry Connection</button>
-                            </div>
-                        }
-                    >
-                        {/* Rendering all pages mapping */}
-                        {Array.from({ length: numPages || 0 }, (_, i) => (
-                            <div key={`page_${i + 1}`} className="relative group">
-                                <div className="absolute -left-12 top-4 text-[10px] font-black text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    P{i + 1}
+                    {url.match(/\.(jpeg|jpg|gif|png|webp)/i) ? (
+                        <div className="relative group max-w-full px-4">
+                            <img
+                                src={url}
+                                alt="Test Material"
+                                className="shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-sm border border-white/5 max-w-full h-auto"
+                                style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
+                            />
+                        </div>
+                    ) : url.match(/\.(doc|docx)/i) ? (
+                        <div className="w-full max-w-5xl h-[80vh] px-4">
+                            <iframe
+                                src={`https://docs.google.com/gview?url=${encodeURIComponent(url.startsWith('http') ? url : `${window.location.origin}${url}`)}&embedded=true`}
+                                className="w-full h-full rounded-2xl shadow-2xl border border-white/10"
+                                title="Word Document Viewer"
+                            />
+                        </div>
+                    ) : (
+                        <Document
+                            file={url.startsWith('http') ? url : `${window.location.origin}${url}`}
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            onLoadError={onDocumentLoadError}
+                            loading={
+                                <div className="flex flex-col items-center justify-center p-20 text-slate-400 gap-4">
+                                    <Loader2 className="animate-spin text-primary" size={40} />
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Initializing Engine...</span>
                                 </div>
-                                <Page
-                                    pageNumber={i + 1}
-                                    scale={scale}
-                                    loading={
-                                        <div
-                                            style={{ width: 600 * scale, height: 840 * scale }}
-                                            className="bg-slate-800 animate-pulse rounded-sm flex items-center justify-center"
-                                        >
-                                            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Loading P{i + 1}...</span>
-                                        </div>
-                                    }
-                                    renderAnnotationLayer={true}
-                                    renderTextLayer={true}
-                                    className="shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-sm overflow-hidden border border-white/5"
-                                />
-                            </div>
-                        ))}
-                    </Document>
+                            }
+                            error={
+                                <div className="flex flex-col items-center justify-center p-12 text-slate-400 gap-4 bg-slate-950 rounded-[3rem] border border-white/5 max-w-md mx-auto my-20">
+                                    <AlertTriangle className="text-primary" size={48} />
+                                    <p className="text-sm font-bold uppercase tracking-widest text-center">Failed to load PDF.</p>
+                                    {errorMsg && (
+                                        <p className="text-[10px] font-mono text-red-500/80 bg-red-950/20 p-4 rounded-2xl break-all text-center border border-red-900/30">
+                                            Error: {errorMsg}
+                                        </p>
+                                    )}
+                                    <p className="text-[9px] font-medium normal-case opacity-40 text-center select-all">Resource: {url}</p>
+                                    <button onClick={() => window.location.reload()} className="mt-4 px-8 py-3 bg-primary text-white rounded-2xl text-[10px] font-black uppercase shadow-2xl shadow-primary/30 active:scale-95 transition-all">Retry Connection</button>
+                                </div>
+                            }
+                        >
+                            {/* Rendering all pages mapping */}
+                            {Array.from({ length: numPages || 0 }, (_, i) => (
+                                <div key={`page_${i + 1}`} className="relative group">
+                                    <div className="absolute -left-12 top-4 text-[10px] font-black text-slate-700 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        P{i + 1}
+                                    </div>
+                                    <Page
+                                        pageNumber={i + 1}
+                                        scale={scale}
+                                        loading={
+                                            <div
+                                                style={{ width: 600 * scale, height: 840 * scale }}
+                                                className="bg-slate-800 animate-pulse rounded-sm flex items-center justify-center"
+                                            >
+                                                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Loading P{i + 1}...</span>
+                                            </div>
+                                        }
+                                        renderAnnotationLayer={true}
+                                        renderTextLayer={true}
+                                        className="shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-sm overflow-hidden border border-white/5"
+                                    />
+                                </div>
+                            ))}
+                        </Document>
+                    )}
                 </div>
             </div>
 
             <style jsx global>{`
                 .react-pdf__Page__textContent {
-                    opacity: 0.1;
-                    mix-blend-mode: multiply;
+                    z-index: 10;
                 }
                 .react-pdf__Page__textContent span {
                     color: transparent !important;
@@ -140,7 +158,7 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
                     -webkit-user-select: text !important;
                 }
                 .react-pdf__Page__textContent span::selection {
-                    background-color: rgba(255, 235, 59, 0.4); 
+                    background-color: rgba(255, 235, 59, 0.6); 
                 }
                 
                 ::selection {

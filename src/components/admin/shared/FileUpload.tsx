@@ -10,7 +10,7 @@ interface FileUploadProps {
     folder?: string;
     compact?: boolean;
     accept?: string;
-    mode?: 'image' | 'pdf' | 'video' | 'audio' | 'all';
+    mode?: 'image' | 'pdf' | 'video' | 'audio' | 'word' | 'all';
 }
 
 export default function FileUpload({
@@ -29,6 +29,7 @@ export default function FileUpload({
         if (mode === 'pdf') return <FileText size={compact ? 20 : 32} />;
         if (mode === 'video') return <Video size={compact ? 20 : 32} />;
         if (mode === 'audio') return <Headphones size={compact ? 20 : 32} />;
+        if (mode === 'word' || value.match(/\.(doc|docx)/i)) return <FileText size={compact ? 20 : 32} className="text-blue-500" />;
         return <ImageIcon size={compact ? 20 : 32} />;
     };
 
@@ -117,7 +118,7 @@ export default function FileUpload({
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     className="hidden"
-                    accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : accept}
+                    accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : mode === 'word' ? '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document' : (mode === 'all' ? 'image/*,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document' : accept)}
                 />
                 <input
                     type="text"
@@ -161,14 +162,14 @@ export default function FileUpload({
                             className="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2.5 rounded-xl text-[10px] font-bold transition-all disabled:opacity-50"
                         >
                             {uploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-                            {uploading ? 'Đang tải lên...' : `Tải ${mode === 'pdf' ? 'PDF' : mode === 'video' ? 'Video' : 'từ thiết bị'}`}
+                            {uploading ? 'Đang tải lên...' : `Tải ${mode === 'pdf' ? 'PDF' : mode === 'video' ? 'Video' : mode === 'all' ? 'Tệp (PDF/Word/Ảnh)' : 'từ thiết bị'}`}
                         </button>
                         <input
                             type="file"
                             ref={fileInputRef}
                             onChange={handleFileChange}
                             className="hidden"
-                            accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : accept}
+                            accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : mode === 'word' ? '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document' : (mode === 'all' ? 'image/*,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document' : accept)}
                         />
                     </div>
 

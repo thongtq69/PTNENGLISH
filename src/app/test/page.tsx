@@ -83,6 +83,28 @@ export default function TestPage() {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const scrollRefs = useRef<Record<number, HTMLElement | null>>({});
 
+    // Selection/Highlight Logic
+    useEffect(() => {
+        const handleGlobalMouseUp = () => {
+            if (!isHighlighterActive) return;
+            const selection = window.getSelection();
+            const selectedText = selection?.toString().trim();
+
+            if (selectedText && selectedText.length > 2) {
+                const key = `${currentSkill}-${activeSectionIdx}`;
+                setHighlights(prev => ({
+                    ...prev,
+                    [key]: Array.from(new Set([...(prev[key] || []), selectedText]))
+                }));
+                // We keep the selection so the user sees what they highlighted
+                // selection?.removeAllRanges(); 
+            }
+        };
+
+        document.addEventListener('mouseup', handleGlobalMouseUp);
+        return () => document.removeEventListener('mouseup', handleGlobalMouseUp);
+    }, [isHighlighterActive, currentSkill, activeSectionIdx]);
+
     // Timer Logic
     useEffect(() => {
         if (step === 2) {
@@ -189,20 +211,6 @@ export default function TestPage() {
         return (
             <div
                 className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? 'cursor-text' : ''}`}
-                onMouseUp={() => {
-                    if (!isHighlighterActive) return;
-                    const selection = window.getSelection();
-                    const selectedText = selection?.toString().trim();
-                    if (selectedText && selectedText.length > 2) {
-                        const key = `${skill}-${activeSectionIdx}`;
-                        setHighlights(prev => ({
-                            ...prev,
-                            [key]: Array.from(new Set([...(prev[key] || []), selectedText]))
-                        }));
-                        // Clear selection to avoid double highlighting
-                        selection?.removeAllRanges();
-                    }
-                }}
             >
                 {parts.map((part, i) => {
                     const match = part.match(/\[Q(\d+)\]/);
@@ -517,7 +525,7 @@ export default function TestPage() {
             {/* Main Content Split View or Single View on Mobile */}
             <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
                 {/* PDF Block */}
-                <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "w-1/2" : "w-0")}`}>
+                <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "flex-1 min-w-0" : "w-0")}`}>
                     <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10 shrink-0">
                         <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
                             <FileText size={12} /> Original PDF Exam
@@ -545,7 +553,7 @@ export default function TestPage() {
                 </div>
 
                 {/* Answer Block */}
-                <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "w-1/2 border-l border-slate-200")}`}>
+                <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "flex-1 min-w-0 border-l border-slate-200")}`}>
                     <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
                         <div className="flex items-center gap-6">
                             {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
