@@ -52,10 +52,10 @@ export default function AchievementManager() {
                 </div>
                 <div className="flex gap-4">
                     <button
-                        onClick={() => setData([{ student: 'Student Name', score: '8.0', title: 'IELTS High Achiever', url: '' }, ...data])}
+                        onClick={() => setData([{ title: 'IELTS High Achiever', url: '' }, ...data])}
                         className="flex items-center gap-2 px-6 py-4 rounded-xl font-bold bg-white/5 border border-white/10 text-white hover:bg-white/10 transition-all"
                     >
-                        <Plus size={20} /> Add Student
+                        <Plus size={20} /> Add Achievement
                     </button>
                     <button
                         onClick={handleSave}
@@ -83,18 +83,8 @@ export default function AchievementManager() {
 
                         <div className="space-y-4">
                             <div>
-                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Student Name</label>
-                                <input value={item.student} onChange={e => updateItem(idx, 'student', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-white font-bold" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="flex-1">
-                                    <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Band Score / Result</label>
-                                    <input value={item.score} onChange={e => updateItem(idx, 'score', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-primary font-black" />
-                                </div>
-                                <div className="flex-1">
-                                    <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Badge Title</label>
-                                    <input value={item.title} onChange={e => updateItem(idx, 'title', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-slate-400 text-[10px]" />
-                                </div>
+                                <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Badge Title (e.g. IELTS High Achiever)</label>
+                                <input value={item.title} onChange={e => updateItem(idx, 'title', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-primary font-black text-sm" />
                             </div>
                             <div>
                                 <FileUpload

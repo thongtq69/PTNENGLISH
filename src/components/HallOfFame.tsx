@@ -132,14 +132,10 @@ export default function HallOfFame() {
                                         </div>
 
                                         <div className="absolute inset-x-0 bottom-0 p-8 transform transition-transform duration-500 group-hover/card:-translate-y-2">
-                                            <div className="flex items-center gap-2 mb-3">
+                                            <div className="flex items-center gap-2">
                                                 <Award size={18} className="text-primary" />
                                                 <span className="text-primary font-black uppercase tracking-widest text-[10px]">{item.title}</span>
                                             </div>
-                                            <h4 className="text-white font-heading font-black text-2xl md:text-3xl mb-1 tracking-tight">
-                                                Band {item.score}
-                                            </h4>
-                                            <p className="text-slate-400 text-xs font-bold uppercase tracking-[0.2em]">{item.student}</p>
                                         </div>
 
                                         {/* Corner Accent */}
@@ -186,8 +182,8 @@ export default function HallOfFame() {
                                 setCurrentIndex(i);
                             }}
                             className={`h-1.5 rounded-full transition-all duration-500 ${i === currentIndex
-                                    ? "w-10 bg-primary shadow-lg shadow-primary/40"
-                                    : "w-2 bg-slate-800 hover:bg-slate-700"
+                                ? "w-10 bg-primary shadow-lg shadow-primary/40"
+                                : "w-2 bg-slate-800 hover:bg-slate-700"
                                 }`}
                         />
                     ))}
