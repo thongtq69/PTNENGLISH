@@ -319,20 +319,13 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         alt={teacher.name}
                                         className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-110"
                                     />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent opacity-0 group-hover:opacity-95 transition-all duration-500" />
 
-
-                                    <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 flex flex-col items-center text-center overflow-y-auto h-full bg-accent/95 backdrop-blur-md custom-scrollbar">
-                                        <div className="w-12 h-1 bg-primary mb-6 rounded-full" />
-                                        <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-4">Qualifications</p>
-                                        <p className="text-white text-[13px] leading-relaxed mb-8 font-medium whitespace-pre-line max-w-xs">{teacher.certs}</p>
-
-                                        <div className="w-full flex items-center gap-4 mb-6">
-                                            <div className="h-px flex-1 bg-white/10" />
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-                                            <div className="h-px flex-1 bg-white/10" />
-                                        </div>
-
-                                        <p className="text-white/60 text-xs leading-relaxed italic whitespace-pre-line max-w-[280px]">{teacher.desc}</p>
+                                    <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                                        <div className="w-12 h-1 bg-primary mb-6" />
+                                        <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-3">Qualifications</p>
+                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium">{teacher.certs}</p>
+                                        <p className="text-white/70 text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4">{teacher.desc}</p>
                                     </div>
                                     <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
                                         Founder / Board Member
@@ -370,14 +363,14 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         viewport={{ once: true }}
                                         className="group"
                                     >
-                                        <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 grayscale hover:grayscale-0 transition-all duration-500">
+                                        <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500">
                                             <img
                                                 src={teacher.image}
                                                 alt={teacher.name}
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
-                                            <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-accent to-transparent flex flex-col items-center text-center">
-                                                <p className="text-white text-[10px] font-bold leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-pre-line">
+                                            <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-accent/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-2">
                                                     {teacher.certs}
                                                 </p>
                                             </div>

@@ -190,10 +190,7 @@ export default function AboutEditor() {
                     {activeTab === 'teachers' && (
                         <div className="space-y-6">
                             <div className="flex justify-between items-center mb-4">
-                                <div className="px-2">
-                                    <h2 className="text-xl font-black text-white">Expert Faculty Pool ({data.teachers?.length})</h2>
-                                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1 italic">Mẹo: Dùng phím Enter để xuống dòng trong phần mô tả & bằng cấp.</p>
-                                </div>
+                                <h2 className="text-xl font-black text-white px-2">Expert Faculty Pool ({data.teachers?.length})</h2>
                                 <button
                                     onClick={() => setData({ ...data, teachers: [{ name: 'New Expert', certs: '', exp: '', desc: '', image: '' }, ...data.teachers] })}
                                     className="px-4 py-2 bg-primary/10 text-primary border border-primary/20 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all font-heading"
@@ -221,11 +218,11 @@ export default function AboutEditor() {
                                                     list[idx].name = e.target.value;
                                                     setData({ ...data, teachers: list });
                                                 }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-white font-bold text-sm" />
-                                                <textarea placeholder="Bằng cấp / Chức danh (MA.TESOL, Cử nhân...)" value={teacher.certs} rows={3} onChange={e => {
+                                                <input placeholder="Bằng cấp / Chức danh" value={teacher.certs} onChange={e => {
                                                     const list = [...data.teachers];
                                                     list[idx].certs = e.target.value;
                                                     setData({ ...data, teachers: list });
-                                                }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-primary font-bold text-[10px] leading-relaxed" />
+                                                }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-primary font-bold text-[10px]" />
                                                 <FileUpload
                                                     label="Teacher Photo"
                                                     value={teacher.image}
@@ -243,11 +240,11 @@ export default function AboutEditor() {
                                                     list[idx].exp = e.target.value;
                                                     setData({ ...data, teachers: list });
                                                 }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-slate-300 text-xs" />
-                                                <textarea placeholder="Mô tả chi tiết kỹ năng / thành tựu" value={teacher.desc} rows={4} onChange={e => {
+                                                <textarea placeholder="Mô tả chi tiết kỹ năng / thành tựu" value={teacher.desc} rows={2} onChange={e => {
                                                     const list = [...data.teachers];
                                                     list[idx].desc = e.target.value;
                                                     setData({ ...data, teachers: list });
-                                                }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-slate-500 text-[10px] leading-relaxed font-medium" />
+                                                }} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-slate-500 text-[10px] leading-relaxed" />
                                             </div>
                                         </div>
                                         <div className="flex flex-row lg:flex-col justify-end gap-2 shrink-0">
