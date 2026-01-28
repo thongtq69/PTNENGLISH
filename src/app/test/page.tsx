@@ -589,6 +589,13 @@ export default function TestPage() {
                 .no-scrollbar::-webkit-scrollbar { display: none; }
                 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
                 
+                /* Enable text selection */
+                .prose, .prose * { user-select: text !important; -webkit-user-select: text !important; }
+                
+                /* Custom highlight/selection color */
+                .prose ::selection { background-color: rgba(255, 59, 59, 0.25); color: inherit; }
+                .prose ::-moz-selection { background-color: rgba(255, 59, 59, 0.25); color: inherit; }
+                
                 /* Test Content Table Styling */
                 .prose table { border-collapse: collapse; width: 100%; margin: 2rem 0; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }
                 .prose th, .prose td { border: 1px solid #e2e8f0; padding: 1rem 1.5rem !important; vertical-align: top; }
