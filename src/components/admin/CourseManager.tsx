@@ -26,14 +26,14 @@ export default function CourseManager() {
                     setBanner(b);
                 } else {
                     setBanner({
-                        title: "Lộ Trình <span class='text-primary font-bold'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
+                        title: "Lộ Trình <br /> <span class='text-primary font-bold whitespace-nowrap'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
                         subtitle: "The Academic Navigation Roadmap",
                         description: "Khám phá các khóa học được thiết kế chuẩn Châu Âu, giúp bạn nắm bắt cơ hội học tập toàn cầu."
                     });
                 }
             } else {
                 setBanner({
-                    title: "Lộ Trình <span class='text-primary font-bold'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
+                    title: "Lộ Trình <br /> <span class='text-primary font-bold whitespace-nowrap'>Chuyên Biệt</span> <br /> Kiến Tạo Bản Lĩnh",
                     subtitle: "The Academic Navigation Roadmap",
                     description: "Khám phá các khóa học được thiết kế chuẩn Châu Âu, giúp bạn nắm bắt cơ hội học tập toàn cầu."
                 });
