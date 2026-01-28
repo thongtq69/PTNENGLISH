@@ -280,16 +280,19 @@ export default function HomeEditor() {
                                         className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1 placeholder:text-slate-600"
                                         placeholder="Program Name"
                                     />
-                                    <input
-                                        value={prog.link}
-                                        onChange={(e) => {
-                                            const newList = [...settings.programs];
-                                            newList[idx].link = e.target.value;
-                                            setSettings({ ...settings, programs: newList });
-                                        }}
-                                        className="w-full bg-transparent border-b border-white/10 outline-none text-slate-500 text-[10px] focus:border-primary transition-all py-1 placeholder:text-slate-700"
-                                        placeholder="Link (/courses/...)"
-                                    />
+                                    <div className="flex items-center gap-2 bg-slate-950 border border-white/10 rounded-lg px-3 py-1.5 focus-within:border-primary transition-all">
+                                        <LinkIcon size={12} className="text-slate-600" />
+                                        <input
+                                            value={prog.link}
+                                            onChange={(e) => {
+                                                const newList = [...settings.programs];
+                                                newList[idx].link = e.target.value;
+                                                setSettings({ ...settings, programs: newList });
+                                            }}
+                                            className="flex-1 bg-transparent border-none outline-none text-slate-400 text-[10px] placeholder:text-slate-700"
+                                            placeholder="Navigation Link (/courses/...)"
+                                        />
+                                    </div>
                                 </div>
                             </div>
                             <FileUpload
@@ -364,8 +367,18 @@ export default function HomeEditor() {
                                     newList[idx].name = e.target.value;
                                     setSettings({ ...settings, partners: newList });
                                 }}
-                                className="w-full bg-transparent border-none outline-none text-[10px] font-black uppercase text-center text-slate-500 group-hover:text-white transition-colors mb-2"
+                                className="w-full bg-transparent border-none outline-none text-[10px] font-black uppercase text-center text-slate-500 group-hover:text-white transition-colors mb-1"
                                 placeholder="Partner Name"
+                            />
+                            <input
+                                value={p.link}
+                                onChange={(e) => {
+                                    const newList = [...settings.partners];
+                                    newList[idx].link = e.target.value;
+                                    setSettings({ ...settings, partners: newList });
+                                }}
+                                className="w-full bg-transparent border-none outline-none text-[8px] text-center text-slate-600 focus:text-primary transition-colors mb-3"
+                                placeholder="Link (http...)"
                             />
                             <FileUpload
                                 label="Logo"

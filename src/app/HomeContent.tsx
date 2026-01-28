@@ -291,7 +291,13 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                 whileHover={{ scale: 1.05 }}
                 className="flex-shrink-0 flex flex-col items-center group"
               >
-                <img src={p.logo} alt={p.name} className="h-8 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                {p.link ? (
+                  <a href={p.link} target="_blank" rel="noopener noreferrer">
+                    <img src={p.logo} alt={p.name} className="h-8 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                  </a>
+                ) : (
+                  <img src={p.logo} alt={p.name} className="h-8 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                )}
               </motion.div>
             ))}
           </div>
