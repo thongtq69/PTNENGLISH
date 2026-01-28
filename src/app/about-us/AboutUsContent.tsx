@@ -138,6 +138,8 @@ const NEW_DIFFERENCES = [
 export default function AboutUsContent({ pageData }: { pageData: any }) {
     const sections = pageData?.sections || [];
     const storyData = sections.find((s: any) => s.type === 'about-story')?.content || {};
+    const teacherFromDB = sections.find((s: any) => s.type === 'about-teachers')?.content?.items;
+    const teachersToDisplay = (teacherFromDB && teacherFromDB.length > 0) ? teacherFromDB : TEACHERS;
 
     return (
         <main className="min-h-screen bg-white">
@@ -304,7 +306,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                     {/* PTN Founders (First 3) */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-24">
-                        {(pageData?.sections?.find((s: any) => s.type === 'about-teachers')?.content?.items || TEACHERS).slice(0, 3).map((teacher: any, idx: number) => (
+                        {teachersToDisplay.slice(0, 3).map((teacher: any, idx: number) => (
                             <motion.div
                                 key={idx}
                                 initial={{ opacity: 0, y: 30 }}
@@ -324,10 +326,10 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                                         <div className="w-12 h-1 bg-primary mb-6" />
                                         <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-3">Qualifications</p>
-                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium">{teacher.certs}</p>
-                                        <p className="text-white/70 text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4">{teacher.desc}</p>
+                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium whitespace-pre-line">{teacher.certs}</p>
+                                        <p className="text-white/70 text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line">{teacher.desc}</p>
                                     </div>
-                                    <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all">
+                                    <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/10 text-white text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all shadow-xl">
                                         Founder / Board Member
                                     </div>
                                 </div>
@@ -344,7 +346,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                     </div>
 
                     {/* Academic Faculty (Others) */}
-                    {(pageData?.sections?.find((s: any) => s.type === 'about-teachers')?.content?.items || TEACHERS).length > 3 && (
+                    {teachersToDisplay.length > 3 && (
                         <div>
                             <div className="flex items-center gap-8 mb-16">
                                 <div className="h-px flex-1 bg-slate-200" />
@@ -355,7 +357,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                                {(pageData?.sections?.find((s: any) => s.type === 'about-teachers')?.content?.items || TEACHERS).slice(3).map((teacher: any, idx: number) => (
+                                {teachersToDisplay.slice(3).map((teacher: any, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         initial={{ opacity: 0, scale: 0.9 }}
@@ -370,7 +372,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
                                             <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-accent/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-2">
+                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-3 whitespace-pre-line">
                                                     {teacher.certs}
                                                 </p>
                                             </div>
