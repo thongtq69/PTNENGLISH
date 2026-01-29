@@ -17,9 +17,9 @@ const PATHWAY_DATA = {
         id: "ie",
         name: "Luyện thi IELTS (IE)",
         subtitle: "IELTS Preparation",
-        color: "blue",
-        theme: "from-blue-600 to-indigo-700",
-        bgLight: "bg-blue-50/50",
+        color: "primary",
+        theme: "from-primary to-accent",
+        bgLight: "bg-primary/5",
         description: "Lộ trình luyện thi chuyên biệt từ nền tảng đến chuyên sâu, giúp học viên làm chủ kỹ thuật làm bài và đạt mục tiêu Band 7.0+.",
         levels: [
             {
@@ -109,9 +109,9 @@ const PATHWAY_DATA = {
         id: "eft",
         name: "Học thuật Thiếu niên (EfT)",
         subtitle: "Academic English for Teens",
-        color: "green",
-        theme: "from-emerald-600 to-teal-700",
-        bgLight: "bg-emerald-50/50",
+        color: "primary",
+        theme: "from-primary to-secondary",
+        bgLight: "bg-primary/5",
         description: "Thiết kế riêng cho học sinh 12-15 tuổi, kết hợp kiến thức học thuật, kỹ năng sống và tư duy phản biện qua TED Talks.",
         levels: [
             {
@@ -198,9 +198,9 @@ const PATHWAY_DATA = {
         id: "ge",
         name: "Tiếng Anh Giao tiếp (GE)",
         subtitle: "General English",
-        color: "purple",
-        theme: "from-purple-600 to-fuchsia-700",
-        bgLight: "bg-purple-50/50",
+        color: "primary",
+        theme: "from-accent to-primary",
+        bgLight: "bg-primary/5",
         description: "Chuẩn giao tiếp quốc tế, tập trung vào tính ứng dụng thực tiễn và phản xạ tự nhiên trong môi trường sống & làm việc.",
         levels: [
             {
@@ -472,7 +472,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                         >
                             {/* Short Summary */}
                             <div className="mb-16 text-center max-w-3xl mx-auto">
-                                <p className={`text-sm font-black uppercase tracking-[0.4em] mb-4 text-${currentPathway.color}-600`}>
+                                <p className={`text-sm font-black uppercase tracking-[0.4em] mb-4 text-primary`}>
                                     {currentPathway.subtitle}
                                 </p>
                                 <p className="text-slate-500 text-lg leading-relaxed">
@@ -608,29 +608,32 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Modal Header Grid */}
-                            <div className={`p-10 pb-20 ${activeTab === 'ie' ? 'bg-blue-600' : activeTab === 'eft' ? 'bg-emerald-600' : 'bg-purple-600'} relative text-white`}>
-                                <button
-                                    onClick={() => setSelectedLevel(null)}
-                                    className="absolute top-8 right-8 text-white/50 hover:text-white transition-colors"
-                                >
-                                    <X size={24} />
-                                </button>
+                            <div className={`p-10 pb-20 bg-slate-900 relative text-white border-b-4 border-primary`}>
+                                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
+                                <div className="relative z-10">
+                                    <button
+                                        onClick={() => setSelectedLevel(null)}
+                                        className="absolute top-0 right-0 text-white/50 hover:text-white transition-colors"
+                                    >
+                                        <X size={24} />
+                                    </button>
 
-                                <div className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 opacity-70">Course Details</div>
-                                <h3 className="text-4xl md:text-5xl font-heading font-black mb-6">{selectedLevel.name}</h3>
+                                    <div className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 opacity-70">Course Details</div>
+                                    <h3 className="text-4xl md:text-5xl font-heading font-black mb-6">{selectedLevel.name}</h3>
 
-                                <div className="flex gap-4">
-                                    <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold border border-white/20 flex flex-col">
-                                        <span className="opacity-60 text-[8px] uppercase">CEFR</span>
-                                        {selectedLevel.cefr}
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold border border-white/20 flex flex-col">
-                                        <span className="opacity-60 text-[8px] uppercase">EXIT TARGET</span>
-                                        {selectedLevel.exit}
+                                    <div className="flex gap-4">
+                                        <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold border border-white/20 flex flex-col">
+                                            <span className="opacity-60 text-[8px] uppercase">CEFR</span>
+                                            {selectedLevel.cefr}
+                                        </div>
+                                        <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold border border-white/20 flex flex-col">
+                                            <span className="opacity-60 text-[8px] uppercase">EXIT TARGET</span>
+                                            {selectedLevel.exit}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="absolute bottom-0 right-10 translate-y-1/2 w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center text-slate-900">
+                                <div className="absolute bottom-0 right-10 translate-y-1/2 w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center text-primary z-20">
                                     <Trophy size={40} />
                                 </div>
                             </div>
