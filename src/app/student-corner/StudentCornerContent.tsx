@@ -148,31 +148,8 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                 }} />
 
                 <div className="container mx-auto px-6 relative z-10">
-                    {/* Unified Section Header */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-center max-w-4xl mx-auto mb-10 md:mb-14"
-                    >
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest mb-6 border border-white/20">
-                            <GraduationCap size={14} className="text-primary" />
-                            {hero.subtitle}
-                        </div>
-                        <h1 className="text-white text-5xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
-                            Góc <span className="text-primary font-black">Học Viên</span>
-                        </h1>
-                        <p className="text-slate-300 text-lg md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
-                            {hero.description}
-                        </p>
-
-                        <div className="mt-8 flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.3em]">
-                            <Quote size={12} />
-                            {studentMessages.subtitle}
-                        </div>
-                    </motion.div>
-
-                    {/* Cork Board Area */}
-                    <div className="relative max-w-6xl mx-auto group/board">
+                    {/* Cork Board Area - Moved to Top */}
+                    <div className="relative max-w-6xl mx-auto group/board mb-20 md:mb-28">
                         {/* Navigation Buttons */}
                         {totalNotes > itemsPerPage && (
                             <>
@@ -278,6 +255,29 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             </div>
                         </div>
                     </div>
+
+                    {/* Unified Section Header - Moved below the board */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-center max-w-4xl mx-auto"
+                    >
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest mb-6 border border-white/20">
+                            <GraduationCap size={14} className="text-primary" />
+                            {hero.subtitle}
+                        </div>
+                        <h1 className="text-white text-5xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
+                            Góc <span className="text-primary font-black">Học Viên</span>
+                        </h1>
+                        <p className="text-slate-300 text-lg md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
+                            {hero.description}
+                        </p>
+
+                        <div className="mt-8 flex items-center justify-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.3em]">
+                            <Quote size={12} />
+                            {studentMessages.subtitle}
+                        </div>
+                    </motion.div>
                 </div>
 
                 {/* Lightbox Modal */}
