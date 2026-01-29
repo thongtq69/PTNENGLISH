@@ -29,7 +29,7 @@ export default function FileUpload({
         if (mode === 'pdf') return <FileText size={compact ? 20 : 32} />;
         if (mode === 'video') return <Video size={compact ? 20 : 32} />;
         if (mode === 'audio') return <Headphones size={compact ? 20 : 32} />;
-        if (mode === 'word' || value.match(/\.(doc|docx)/i)) return <FileText size={compact ? 20 : 32} className="text-blue-500" />;
+        if (mode === 'word' || (value && value.match(/\.(doc|docx)/i))) return <FileText size={compact ? 20 : 32} className="text-blue-500" />;
         return <ImageIcon size={compact ? 20 : 32} />;
     };
 
