@@ -5,8 +5,36 @@ import Post from "@/models/Post";
 import { notFound } from "next/navigation";
 import { Calendar, User, Clock, ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    await dbConnect();
+    const { slug } = await params;
+    const post = await Post.findOne({ slug });
+
+    if (!post) return { title: 'Post Not Found' };
+
+    return {
+        title: post.title,
+        description: post.excerpt || post.content?.substring(0, 160).replace(/<[^>]*>/g, ''),
+        openGraph: {
+            title: post.title,
+            description: post.excerpt,
+            images: [post.image],
+            type: 'article',
+            publishedTime: post.createdAt,
+            authors: [post.author],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: post.title,
+            description: post.excerpt,
+            images: [post.image],
+        }
+    };
+}
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
     await dbConnect();

@@ -36,15 +36,67 @@ import path from "path";
 
 export async function generateMetadata(): Promise<Metadata> {
   const filePath = path.join(process.cwd(), "data/global-settings.json");
-  let settings = { site: { title: "PTN English", description: "Default description" } };
+  let settings = {
+    site: {
+      title: "PTN English - Hệ thống đào tạo Tiếng Anh học thuật",
+      description: "PTN English chuyên đào tạo IELTS, PTE và Tiếng Anh giao tiếp với lộ trình cá nhân hóa, cam kết đầu ra."
+    }
+  };
 
   if (fs.existsSync(filePath)) {
-    settings = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    try {
+      settings = JSON.parse(fs.readFileSync(filePath, "utf8"));
+    } catch (e) {
+      console.error("Error parsing global settings", e);
+    }
   }
 
   return {
-    title: settings.site.title,
+    title: {
+      default: settings.site.title,
+      template: `%s | ${settings.site.title}`,
+    },
     description: settings.site.description,
+    keywords: ["IELTS", "PTE", "Tiếng Anh giao tiếp", "PTN English", "Học tiếng anh", "Luyện thi IELTS"],
+    authors: [{ name: "PTN English" }],
+    creator: "PTN English",
+    publisher: "PTN English",
+    formatDetection: {
+      email: false,
+      address: false,
+      telephone: false,
+    },
+    metadataBase: new URL("https://ptnenglish.edu.vn"),
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      title: settings.site.title,
+      description: settings.site.description,
+      url: "https://ptnenglish.edu.vn",
+      siteName: settings.site.title,
+      locale: "vi_VN",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: settings.site.title,
+      description: settings.site.description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    verification: {
+      google: "your-google-verification-code", // User can replace this later
+    }
   };
 }
 
