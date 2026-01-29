@@ -321,14 +321,14 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
     const currentPathway = PATHWAY_DATA[activeTab];
 
     return (
-        <main className="min-h-screen bg-slate-50">
+        <main className="min-h-screen bg-accent">
             <Header />
 
             {/* HERO SECTION */}
-            <section className="relative pt-48 pb-20 bg-slate-900 overflow-hidden">
+            <section className="relative pt-48 pb-20 overflow-hidden">
                 {/* Visual Background Elements */}
-                <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-1/2 blur-3xl opacity-30"></div>
-                <div className="absolute bottom-0 left-0 w-1/4 h-1/2 bg-blue-500/10 skew-x-12 -translate-x-1/2 blur-[120px] opacity-20"></div>
+                <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 -skew-x-12 translate-x-1/2 blur-[100px] opacity-20"></div>
+                <div className="absolute bottom-0 left-0 w-1/4 h-1/2 bg-blue-500/5 skew-x-12 -translate-x-1/2 blur-[120px] opacity-10"></div>
 
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="max-w-4xl">
@@ -353,7 +353,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-lg md:text-2xl font-body leading-relaxed max-w-2xl mb-12"
+                            className="text-slate-300 text-lg md:text-2xl font-body leading-relaxed max-w-2xl mb-12"
                         >
                             Sáu cấp độ từ Căn bản đến Thông thạo (A1 → C2) thiết kế tinh gọn, phù hợp với mục tiêu du học, định cư và học thuật chuyên sâu.
                         </motion.p>
@@ -364,7 +364,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             transition={{ delay: 0.3 }}
                             className="flex flex-wrap gap-4"
                         >
-                            <Link href="/contact" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
+                            <Link href="/contact" className="bg-primary hover:bg-white hover:text-accent text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
                                 Kiểm tra trình độ miễn phí
                             </Link>
                             <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
@@ -376,14 +376,14 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* SHARED INFO & TARGET AUDIENCE */}
-            <section className="py-24 bg-white border-b border-slate-100">
+            <section className="py-24 bg-accent/50 border-y border-white/5">
                 <div className="container mx-auto px-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                         {/* Target Audience */}
                         <div className="space-y-10">
                             <div>
-                                <h2 className="text-accent font-heading text-4xl font-black mb-6">Đối tượng phù hợp</h2>
-                                <p className="text-slate-500 text-lg max-w-lg mb-8">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp and học tập của bạn.</p>
+                                <h2 className="text-white font-heading text-4xl font-black mb-6">Đối tượng phù hợp</h2>
+                                <p className="text-slate-400 text-lg max-w-lg mb-8">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp and học tập của bạn.</p>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[
@@ -392,17 +392,17 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                     { text: "Học sinh cuối cấp", sub: "Xét tuyển ĐH & Tốt nghiệp" },
                                     { text: "Người cần giao tiếp", sub: "General Academic English" }
                                 ].map((item, i) => (
-                                    <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
+                                    <div key={i} className="p-6 bg-white/5 rounded-2xl border border-white/10 hover:border-primary/40 transition-all group">
                                         <CheckCircle2 size={24} className="text-primary mb-4 opacity-50 group-hover:opacity-100" />
-                                        <h4 className="font-heading font-black text-slate-800 mb-1">{item.text}</h4>
-                                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">{item.sub}</p>
+                                        <h4 className="font-heading font-black text-white mb-1">{item.text}</h4>
+                                        <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">{item.sub}</p>
                                     </div>
                                 ))}
                             </div>
                         </div>
 
                         {/* Common Specs Table-like cards */}
-                        <div className="bg-slate-900 rounded-[3rem] p-10 md:p-14 relative overflow-hidden shadow-2xl">
+                        <div className="bg-accent rounded-[3rem] p-10 md:p-14 relative overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] border border-white/5">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
 
                             <h3 className="text-white font-heading text-2xl font-bold mb-10 flex items-center gap-4">
@@ -425,8 +425,8 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
 
                             <div className="mt-12 pt-10 border-t border-white/5 space-y-4">
                                 {SCHEDULES.map((s, i) => (
-                                    <div key={i} className="flex justify-between items-center text-sm">
-                                        <span className="text-slate-400 font-bold">{s.label}</span>
+                                    <div key={i} className="flex flex-col sm:flex-row justify-between sm:items-center gap-2 text-sm">
+                                        <span className="text-slate-500 font-bold">{s.label}</span>
                                         <span className="text-white opacity-80">{s.time}</span>
                                         <span className="text-primary font-black text-[10px] uppercase tracking-widest">{s.duration}</span>
                                     </div>
@@ -438,12 +438,12 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* PATHWAY SECTION */}
-            <section id="pathway" className="py-32 relative overflow-hidden">
+            <section id="pathway" className="py-32 relative overflow-hidden bg-accent">
                 <div className="container mx-auto px-6">
                     {/* Tab Navigation */}
                     <div className="flex flex-col items-center mb-20">
-                        <h2 className="text-accent font-heading text-4xl md:text-5xl font-black mb-10 text-center">Lựa chọn lộ trình mục tiêu</h2>
-                        <div className="bg-white p-2 rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-wrap justify-center gap-2">
+                        <h2 className="text-white font-heading text-4xl md:text-5xl font-black mb-10 text-center">Lựa chọn lộ trình mục tiêu</h2>
+                        <div className="bg-white/5 p-2 rounded-[2.5rem] shadow-2xl border border-white/10 flex flex-wrap justify-center gap-2 backdrop-blur-md">
                             {(Object.values(PATHWAY_DATA)).map((tab) => (
                                 <button
                                     key={tab.id}
@@ -451,8 +451,8 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                     className={`
                                         px-8 md:px-12 py-4 rounded-full font-black text-sm uppercase tracking-widest transition-all
                                         ${activeTab === tab.id
-                                            ? `bg-slate-900 text-white shadow-xl`
-                                            : `text-slate-400 hover:bg-slate-50`}
+                                            ? `bg-primary text-white shadow-xl`
+                                            : `text-slate-400 hover:bg-white/5 hover:text-white`}
                                     `}
                                 >
                                     {tab.name}
@@ -475,7 +475,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 <p className={`text-sm font-black uppercase tracking-[0.4em] mb-4 text-primary`}>
                                     {currentPathway.subtitle}
                                 </p>
-                                <p className="text-slate-500 text-lg leading-relaxed">
+                                <p className="text-slate-300 text-lg leading-relaxed">
                                     {currentPathway.description}
                                 </p>
                             </div>
@@ -483,9 +483,9 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             {/* Horizontal Pathway Map */}
                             <div className="relative pb-24 overflow-x-auto no-scrollbar pt-10 px-10">
                                 {/* The Connection Line */}
-                                <div className={`absolute top-[164px] left-10 right-10 h-1 md:h-2 bg-slate-200 rounded-full`}>
+                                <div className={`absolute top-[164px] left-10 right-10 h-1 md:h-2 bg-white/5 rounded-full`}>
                                     <motion.div
-                                        className={`absolute top-0 left-0 h-full bg-slate-900 rounded-full`}
+                                        className={`absolute top-0 left-0 h-full bg-primary rounded-full shadow-[0_0_15px_rgba(199,0,43,0.5)]`}
                                         initial={{ width: 0 }}
                                         animate={{ width: "100%" }}
                                         transition={{ duration: 1.5 }}
@@ -503,17 +503,17 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                             onClick={() => setSelectedLevel(level)}
                                         >
                                             <div className="mb-10 text-center">
-                                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">CEFR {level.cefr}</div>
-                                                <div className="text-slate-800 font-heading font-black">{level.name}</div>
+                                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">CEFR {level.cefr}</div>
+                                                <div className="text-white font-heading font-black">{level.name}</div>
                                             </div>
 
                                             {/* Milestone Node */}
                                             <div className="relative mb-8">
                                                 <div className={`
-                                                    w-10 h-10 md:w-14 md:h-14 rounded-full bg-white border-4 md:border-8 border-slate-200 
-                                                    flex items-center justify-center transition-all group-hover:border-slate-900 group-hover:bg-slate-900 group-hover:scale-110
+                                                    w-10 h-10 md:w-14 md:h-14 rounded-full bg-slate-800 border-4 md:border-8 border-white/5
+                                                    flex items-center justify-center transition-all group-hover:border-primary group-hover:bg-primary group-hover:scale-110 shadow-lg
                                                 `}>
-                                                    <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-slate-400 group-hover:bg-white" />
+                                                    <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-white/20 group-hover:bg-white" />
                                                 </div>
                                                 <div className="absolute -top-2 -right-2 bg-primary text-white text-[8px] font-bold p-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
                                                     Level {i + 1}
@@ -521,14 +521,14 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                             </div>
 
                                             {/* Summary Card */}
-                                            <div className="bg-white p-5 rounded-2xl shadow-lg border border-slate-100 w-full hover:shadow-2xl hover:border-slate-900/10 transition-all text-center">
-                                                <div className="bg-slate-50 text-[10px] font-black text-slate-500 p-2 rounded-lg mb-4 uppercase tracking-wider">
+                                            <div className="bg-slate-800 p-5 rounded-2xl shadow-xl border border-white/5 w-full hover:shadow-2xl hover:border-primary/50 transition-all text-center backdrop-blur-sm">
+                                                <div className="bg-white/5 text-[10px] font-black text-slate-400 p-2 rounded-lg mb-4 uppercase tracking-wider">
                                                     {level.exit}
                                                 </div>
-                                                <p className="text-[11px] leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
+                                                <p className="text-[11px] leading-relaxed text-slate-400 font-medium">
                                                     {level.target}
                                                 </p>
-                                                <div className="mt-4 text-slate-900 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-[10px] font-black uppercase">
+                                                <div className="mt-4 text-primary opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-[10px] font-black uppercase tracking-tighter">
                                                     Chi tiết <ArrowRight size={12} />
                                                 </div>
                                             </div>
@@ -542,34 +542,34 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* PLACEMENT TEST - THE DIFFERENCE */}
-            <section className="py-24 bg-slate-50">
+            <section className="py-24 bg-accent/30">
                 <div className="container mx-auto px-6">
-                    <div className="bg-white rounded-[4rem] p-10 md:p-20 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
+                    <div className="bg-accent rounded-[4rem] p-10 md:p-20 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-white/5 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
                         <div className="flex-1 space-y-8">
                             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
                                 <Trophy size={16} /> The PTelc Standard
                             </div>
-                            <h2 className="text-4xl md:text-6xl font-heading font-black text-accent leading-tight">
+                            <h2 className="text-4xl md:text-6xl font-heading font-black text-white leading-tight">
                                 Kiểm tra trình độ <br /> chuẩn <span className="text-primary">IELTS Quốc Tế</span>
                             </h2>
-                            <p className="text-slate-500 text-lg leading-relaxed">
+                            <p className="text-slate-400 text-lg leading-relaxed">
                                 Đừng bắt đầu lộ trình dựa trên những bài Test nhanh 15 phút. Tại PTelc, chúng tôi cam kết chất lượng ngay từ khâu đầu vào bằng quy trình kiểm tra nghiêm ngặt.
                             </p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="space-y-4">
-                                    <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-black">1</div>
-                                    <h4 className="font-heading font-black text-slate-800">Kiểm tra thực tế 3.5h</h4>
-                                    <p className="text-sm text-slate-400">Trải nghiệm bài thi IELTS thật 4 kỹ năng trong môi trường áp lực tiêu chuẩn.</p>
+                                    <div className="w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center font-black border border-white/10">1</div>
+                                    <h4 className="font-heading font-black text-white">Kiểm tra thực tế 3.5h</h4>
+                                    <p className="text-sm text-slate-500">Trải nghiệm bài thi IELTS thật 4 kỹ năng trong môi trường áp lực tiêu chuẩn.</p>
                                 </div>
                                 <div className="space-y-4">
                                     <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-black">2</div>
-                                    <h4 className="font-heading font-black text-slate-800">Tư vấn trực tiếp</h4>
-                                    <p className="text-sm text-slate-400">Giáo viên chấm bài and phản hồi trực tiếp phương án, lộ trình cá nhân hóa.</p>
+                                    <h4 className="font-heading font-black text-white">Tư vấn trực tiếp</h4>
+                                    <p className="text-sm text-slate-500">Giáo viên chấm bài and phản hồi trực tiếp phương án, lộ trình cá nhân hóa.</p>
                                 </div>
                             </div>
 
-                            <button className="bg-slate-900 hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all shadow-xl">
+                            <button className="bg-primary hover:bg-white hover:text-accent text-white px-10 py-5 rounded-full font-bold transition-all shadow-xl shadow-primary/20">
                                 Đặt lịch kiểm tra đầu vào ngay
                             </button>
                         </div>
