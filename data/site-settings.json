@@ -1,0 +1,20 @@
+{
+    "hero": {
+        "videoUrl": "/1b643daa-5b00-4a7f-bce5-2ba575688d1e.mp4",
+        "title": "Kiến tạo hành trình \n tri thức",
+        "subtitle": "Partner to navigate your learning journey",
+        "primaryCTA": {
+            "text": "Đăng ký học thử ngay",
+            "link": "/contact"
+        },
+        "secondaryCTA": {
+            "text": "Tìm hiểu phương pháp",
+            "link": "/about-us"
+        }
+    },
+    "announcement": {
+        "enabled": true,
+        "text": "Enrollment for November & December 2025 is now open!",
+        "link": "/contact"
+    }
+}

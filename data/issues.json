@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "type": "Consultation",
+    "name": "Nguyễn Văn A",
+    "phone": "0901234567",
+    "email": "vana@example.com",
+    "course": "IELTS Preparation Expert",
+    "status": "New",
+    "createdAt": "2026-01-20T10:00:00Z"
+  },
+  {
+    "id": "2",
+    "type": "Bug Report",
+    "name": "Lê Thị B",
+    "phone": "0912345678",
+    "email": "lethib@example.com",
+    "description": "Không thể thanh toán học phí qua thẻ tín dụng.",
+    "status": "In Progress",
+    "createdAt": "2026-01-21T09:30:00Z"
+  }
+]
