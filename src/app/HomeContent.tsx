@@ -23,17 +23,19 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <Hero initialData={homeHero} />
 
       {/* Philosophy Section - Compact & Dark */}
-      <section className="py-4 md:py-12 bg-slate-900 border-y border-white/5">
+      <section className="py-2 md:py-12 bg-slate-900 border-y border-white/5">
         <div className="container mx-auto px-6 text-center max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            className="px-4 flex flex-col items-center"
           >
-            <p className="text-[12px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium border-l-2 border-primary/50 pl-4 md:pl-6 py-0.5">
+            <p className="text-[10px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5">
               {philosophy}
             </p>
-            <div className="mt-2 md:mt-4 flex justify-center items-center gap-3">
+            <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>
+            <div className="mt-3 md:mt-4 flex justify-center items-center gap-3">
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
               <span className="text-primary font-bold uppercase tracking-[0.2em] text-[7px] md:text-[9px]">PTN Philosophy</span>
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
@@ -50,36 +52,36 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-primary font-heading text-[10px] md:text-lg font-bold uppercase tracking-[0.3em] mb-2">
+            <h2 className="text-primary font-heading text-[8px] md:text-lg font-bold uppercase tracking-[0.3em] mb-1">
               Hệ Thống Đào Tạo Academic Master
             </h2>
-            <h3 className="text-xl md:text-4xl font-heading font-semibold mb-4 text-accent leading-tight">
+            <h3 className="text-base md:text-4xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
               TTNN PHÚ TÀI NĂNG <br />
-              <span className="text-base md:text-4xl">(PTelc - PT English Language Centre)</span>
+              <span className="text-xs md:text-4xl">(PTelc - PT English Language Centre)</span>
             </h3>
-            <p className="text-sm md:text-lg text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl">
+            <p className="text-[10px] md:text-lg text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
               Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
             </p>
           </motion.div>
 
 
-          <div className="flex md:grid md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-8 overflow-x-auto md:overflow-visible pb-6 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
             {programs.map((prog: any, idx: number) => (
-              <Link key={idx} href={prog.link || "/courses"}>
+              <Link key={idx} href={prog.link || "/courses"} className="w-[28%] md:w-auto">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.1 }}
                   viewport={{ once: true }}
-                  className="min-w-[180px] md:min-w-0 group cursor-pointer snap-center h-full"
+                  className="group cursor-pointer h-full"
                 >
-                  <div className="relative aspect-[4/5] md:aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-3 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                  <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                     <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     {prog.name === "PTE Academic" && (
-                      <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-primary text-white text-[8px] md:text-[10px] font-bold px-2 py-0.5 md:px-3 md:py-1 rounded-full uppercase tracking-widest z-20">New</div>
+                      <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[7px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 p-4 md:p-8 pt-8 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
-                      <p className="text-white font-heading font-black text-sm md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
+                    <div className="absolute inset-x-0 bottom-0 p-1.5 md:p-8 pt-3 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
+                      <p className="text-white font-heading font-black text-[8px] md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -171,11 +173,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-8 md:py-20 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-2 md:mb-4">Expert Faculty</h2>
-          <h3 className="text-lg md:text-5xl font-heading font-semibold mb-4 md:mb-6 leading-tight text-white">
+          <h2 className="text-primary font-heading font-bold text-[8px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">Expert Faculty</h2>
+          <h3 className="text-base md:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white">
             Đội Ngũ Sáng Lập <br />& Giảng Viên MA.TESOL
           </h3>
-          <p className="text-slate-200 text-xs md:text-lg mb-6 md:mb-8 leading-relaxed font-body">
+          <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body px-4">
             "Từng giảng dạy tại Trung tâm Giáo dục Úc (ACET – IDP), giàu kinh nghiệm, nhiệt huyết, với phương pháp giảng dạy hiệu quả và tài liệu biên soạn tỉ mỉ."
           </p>
           <button className="bg-primary hover:bg-red-700 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105">
@@ -204,15 +206,15 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             </Link>
           </div>
 
-          <div className="flex md:grid md:grid-cols-12 md:grid-rows-2 gap-3 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="grid grid-cols-1 md:grid-cols-12 md:grid-rows-2 gap-6">
             {/* Featured Article - Large Left Column */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="min-w-[85vw] md:min-w-0 md:col-span-7 md:row-span-2 group cursor-pointer"
+              className="md:col-span-7 md:row-span-2 group cursor-pointer"
             >
-              <div className="relative aspect-[16/10] md:aspect-auto md:h-full bg-slate-100 overflow-hidden border-2 md:border-4 border-accent">
+              <div className="relative aspect-[16/10] md:h-full bg-slate-100 overflow-hidden border-2 md:border-4 border-accent">
                 <img
                   src="/news/workshop.png"
                   alt="IELTS Strategy Workshop"
@@ -239,7 +241,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               viewport={{ once: true }}
-              className="min-w-[75vw] md:min-w-0 md:col-span-5 group cursor-pointer"
+              className="md:col-span-5 group cursor-pointer"
             >
               <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
                 <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
@@ -261,7 +263,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
-              className="min-w-[75vw] md:min-w-0 md:col-span-5 group cursor-pointer"
+              className="md:col-span-5 group cursor-pointer"
             >
               <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
                 <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
@@ -284,7 +286,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-2 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
           <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-2 md:mb-8">Đối tác chiến lược & Khảo thí</p>
-          <div className="flex overflow-x-auto md:flex-wrap justify-start md:justify-center items-center gap-4 md:gap-16 pb-1 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-16">
             {partners.map((p: any, idx: number) => (
               <motion.div
                 key={idx}

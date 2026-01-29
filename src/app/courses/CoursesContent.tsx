@@ -325,13 +325,13 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             <Header />
 
             {/* HERO SECTION */}
-            <section className="relative pt-48 pb-20 bg-accent overflow-hidden">
+            <section className="relative pt-24 pb-12 bg-accent overflow-hidden">
                 {/* Visual Background Elements */}
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/10 -skew-x-12 translate-x-1/2 blur-3xl opacity-30"></div>
                 <div className="absolute bottom-0 left-0 w-1/4 h-1/2 bg-blue-500/10 skew-x-12 -translate-x-1/2 blur-[120px] opacity-20"></div>
 
                 <div className="container mx-auto px-6 relative z-10">
-                    <div className="max-w-4xl">
+                    <div className="max-w-4xl mx-auto text-center">
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
@@ -344,7 +344,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-white text-5xl md:text-8xl font-heading font-semibold mb-10 leading-[1.1]"
+                            className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1]"
                         >
                             Khung Chương <br />
                             <span className="text-primary font-black">Trình Học</span>
@@ -353,7 +353,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-lg md:text-2xl font-body leading-relaxed max-w-2xl mb-12"
+                            className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-2xl mb-8 md:mb-12"
                         >
                             Sáu cấp độ từ Căn bản đến Thông thạo (A1 → C2) thiết kế tinh gọn, phù hợp với mục tiêu du học, định cư và học thuật chuyên sâu.
                         </motion.p>
@@ -362,7 +362,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="flex flex-wrap gap-4"
+                            className="flex flex-wrap justify-center gap-4"
                         >
                             <Link href="/contact" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
                                 Kiểm tra trình độ miễn phí
@@ -376,14 +376,14 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* SHARED INFO & TARGET AUDIENCE */}
-            <section className="py-24 bg-white border-b border-slate-100">
+            <section className="py-8 md:py-16 bg-white border-b border-slate-100">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-16 items-start">
                         {/* Target Audience */}
                         <div className="space-y-10">
                             <div>
-                                <h2 className="text-accent font-heading text-4xl font-black mb-6">Đối tượng phù hợp</h2>
-                                <p className="text-slate-500 text-lg max-w-lg mb-8">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp and học tập của bạn.</p>
+                                <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">Đối tượng phù hợp</h2>
+                                <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp and học tập của bạn.</p>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 {[
@@ -392,7 +392,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                     { text: "Học sinh cuối cấp", sub: "Xét tuyển ĐH & Tốt nghiệp" },
                                     { text: "Người cần giao tiếp", sub: "General Academic English" }
                                 ].map((item, i) => (
-                                    <div key={i} className="p-6 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
+                                    <div key={i} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
                                         <CheckCircle2 size={24} className="text-primary mb-4 opacity-50 group-hover:opacity-100" />
                                         <h4 className="font-heading font-black text-slate-800 mb-1">{item.text}</h4>
                                         <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">{item.sub}</p>
@@ -402,7 +402,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                         </div>
 
                         {/* Common Specs Table-like cards */}
-                        <div className="bg-accent rounded-[3rem] p-10 md:p-14 relative overflow-hidden shadow-2xl">
+                        <div className="bg-accent rounded-[3rem] p-8 md:p-10 relative overflow-hidden shadow-2xl">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
 
                             <h3 className="text-white font-heading text-2xl font-bold mb-10 flex items-center gap-4">
@@ -438,11 +438,11 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* PATHWAY SECTION */}
-            <section id="pathway" className="py-32 relative overflow-hidden">
+            <section id="pathway" className="py-12 relative overflow-hidden">
                 <div className="container mx-auto px-6">
                     {/* Tab Navigation */}
-                    <div className="flex flex-col items-center mb-20">
-                        <h2 className="text-accent font-heading text-4xl md:text-5xl font-black mb-10 text-center">Lựa chọn lộ trình mục tiêu</h2>
+                    <div className="flex flex-col items-center mb-12">
+                        <h2 className="text-accent font-heading text-3xl md:text-5xl font-black mb-8 text-center">Lựa chọn lộ trình mục tiêu</h2>
                         <div className="bg-white p-2 rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-wrap justify-center gap-2">
                             {(Object.values(PATHWAY_DATA)).map((tab) => (
                                 <button
@@ -480,42 +480,51 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 </p>
                             </div>
 
-                            {/* Horizontal Pathway Map */}
-                            <div className="relative pb-24 overflow-x-auto no-scrollbar pt-10 px-10">
-                                {/* The Connection Line */}
-                                <div className={`absolute top-[164px] left-10 right-10 h-1 md:h-2 bg-slate-200 rounded-full`}>
+                            {/* Pathway Map - Vertical on Mobile, Horizontal on Desktop */}
+                            <div className="relative pb-8 pt-10 px-4 md:px-10">
+                                {/* The Connection Line - Vertical on Mobile, Horizontal on Desktop */}
+                                <div className={`
+                                    absolute bg-slate-200 rounded-full
+                                    left-1/2 -translate-x-1/2 w-1 h-full md:w-full md:h-2 
+                                    md:top-[164px] md:left-10 md:right-10 md:translate-x-0
+                                    top-20 bottom-20
+                                `}>
                                     <motion.div
-                                        className={`absolute top-0 left-0 h-full bg-accent rounded-full`}
-                                        initial={{ width: 0 }}
-                                        animate={{ width: "100%" }}
+                                        className={`absolute bg-accent rounded-full w-full h-full md:w-full md:h-full`}
+                                        initial={{ scaleY: 0, scaleX: 0 }}
+                                        whileInView={{ scaleY: 1, scaleX: 1 }}
                                         transition={{ duration: 1.5 }}
+                                        style={{ originY: 0, originX: 0 }}
                                     />
                                 </div>
 
-                                <div className="flex justify-between items-start min-w-[1000px] gap-6 relative">
+                                <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 md:gap-6 relative">
                                     {currentPathway.levels.map((level, i) => (
                                         <motion.div
                                             key={level.id}
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
+                                            initial={{ opacity: 0, y: 30 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
                                             transition={{ delay: i * 0.1 }}
-                                            className="w-48 flex flex-col items-center group cursor-pointer"
+                                            className="w-full max-w-[280px] md:w-48 flex flex-col items-center group cursor-pointer"
                                             onClick={() => setSelectedLevel(level)}
                                         >
-                                            <div className="mb-10 text-center">
+                                            {/* Level Header - Above on Desktop, also visible on Mobile */}
+                                            <div className="mb-6 md:mb-10 text-center">
                                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">CEFR {level.cefr}</div>
                                                 <div className="text-slate-800 font-heading font-black">{level.name}</div>
                                             </div>
 
                                             {/* Milestone Node */}
-                                            <div className="relative mb-8">
+                                            <div className="relative mb-6 md:mb-8">
                                                 <div className={`
                                                     w-10 h-10 md:w-14 md:h-14 rounded-full bg-white border-4 md:border-8 border-slate-200 
                                                     flex items-center justify-center transition-all group-hover:border-accent group-hover:bg-accent group-hover:scale-110
+                                                    shadow-lg
                                                 `}>
                                                     <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-slate-400 group-hover:bg-white" />
                                                 </div>
-                                                <div className="absolute -top-2 -right-2 bg-primary text-white text-[8px] font-bold p-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <div className="absolute -top-2 -right-2 bg-primary text-white text-[8px] font-bold p-1 rounded shadow-lg opacity-0 md:opacity-0 group-hover:opacity-100 transition-opacity">
                                                     Level {i + 1}
                                                 </div>
                                             </div>
@@ -528,7 +537,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                                 <p className="text-[11px] leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
                                                     {level.target}
                                                 </p>
-                                                <div className="mt-4 text-accent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-[10px] font-black uppercase">
+                                                <div className="mt-4 text-accent opacity-0 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-[10px] font-black uppercase">
                                                     Chi tiết <ArrowRight size={12} />
                                                 </div>
                                             </div>
@@ -542,17 +551,17 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* PLACEMENT TEST - THE DIFFERENCE */}
-            <section className="py-24 bg-slate-50">
+            <section className="py-12 bg-slate-50">
                 <div className="container mx-auto px-6">
-                    <div className="bg-white rounded-[4rem] p-10 md:p-20 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
+                    <div className="bg-white rounded-[4rem] p-8 md:p-14 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
                         <div className="flex-1 space-y-8">
                             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
                                 <Trophy size={16} /> The PTelc Standard
                             </div>
-                            <h2 className="text-4xl md:text-6xl font-heading font-black text-accent leading-tight">
+                            <h2 className="text-xl md:text-6xl font-heading font-black text-accent leading-tight text-center lg:text-left">
                                 Kiểm tra trình độ <br /> chuẩn <span className="text-primary">IELTS Quốc Tế</span>
                             </h2>
-                            <p className="text-slate-500 text-lg leading-relaxed">
+                            <p className="text-slate-500 text-[10px] md:text-lg leading-relaxed text-center lg:text-left mx-auto lg:mx-0">
                                 Đừng bắt đầu lộ trình dựa trên những bài Test nhanh 15 phút. Tại PTelc, chúng tôi cam kết chất lượng ngay từ khâu đầu vào bằng quy trình kiểm tra nghiêm ngặt.
                             </p>
 
@@ -569,9 +578,11 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 </div>
                             </div>
 
-                            <button className="bg-accent hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all shadow-xl">
-                                Đặt lịch kiểm tra đầu vào ngay
-                            </button>
+                            <div className="flex justify-center lg:justify-start">
+                                <button className="w-full sm:w-auto bg-accent hover:bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold transition-all shadow-xl text-sm md:text-base">
+                                    Đặt lịch kiểm tra đầu vào ngay
+                                </button>
+                            </div>
                         </div>
 
                         <div className="w-full md:w-80 h-[500px] bg-accent rounded-[3rem] relative overflow-hidden shrink-0 shadow-2xl">
@@ -675,6 +686,25 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Bottom CTA */}
+            <section className="py-20 bg-accent overflow-hidden relative text-center">
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(199,0,43,0.1),transparent)]"></div>
+                <div className="container mx-auto px-6 relative z-10 max-w-4xl">
+                    <h2 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-8 leading-tight">Bản đồ học thuật của bạn đang chờ</h2>
+                    <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed font-body">
+                        "Navigation Partner" sẽ giúp bạn định vị chính xác trình độ và vẽ lại con đường ngắn nhất đến mục tiêu học thuật quốc tế.
+                    </p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-6">
+                        <Link href="/contact" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20">
+                            Yêu cầu tư vấn 1-1
+                        </Link>
+                        <button className="bg-white/5 hover:bg-white/10 text-white border border-white/20 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
+                            Xem lịch khai giảng mới nhất
+                        </button>
+                    </div>
+                </div>
+            </section>
 
             <Footer />
         </main>

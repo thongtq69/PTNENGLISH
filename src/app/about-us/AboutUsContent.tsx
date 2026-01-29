@@ -157,10 +157,10 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         <h1 className="text-primary font-heading font-bold text-sm uppercase tracking-[0.4em] mb-4">
                             Về Chúng Tôi
                         </h1>
-                        <h2 className="text-4xl md:text-6xl font-heading font-medium text-accent mb-6 leading-tight">
+                        <h2 className="text-2xl md:text-6xl font-heading font-medium text-accent mb-4 leading-tight">
                             Kiến tạo hành trình <br /> tri thức cùng <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>
                         </h2>
-                        <p className="text-lg md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-4 border-primary pl-6 py-1">
+                        <p className="text-sm md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-2 md:border-l-4 border-primary pl-4 md:pl-6 py-0.5">
                             "Đồng hành – Tận tâm – Bền vững: Để mỗi người học đều có một hành trình tiếng Anh của riêng mình."
                         </p>
                     </motion.div>
@@ -177,11 +177,12 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             viewport={{ once: true }}
                             className="flex flex-col h-full justify-center"
                         >
-                            <h3 className="text-3xl font-heading font-black text-accent mb-8 flex items-center gap-4">
-                                <span className="w-12 h-1.5 bg-primary" />
+                            <h3 className="text-lg md:text-3xl font-heading font-black text-accent mb-4 flex items-center justify-center lg:justify-start gap-4">
+                                <span className="w-6 h-0.5 bg-primary" />
                                 Câu Chuyện Hình Thành
+                                <span className="w-6 h-0.5 bg-primary lg:hidden" />
                             </h3>
-                            <div className="space-y-6 text-lg text-slate-700 font-body leading-relaxed">
+                            <div className="space-y-4 text-sm md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
                                 <p className="text-xl leading-snug">
                                     <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> bắt đầu từ những lớp học tâm huyết của ba người thầy: <br />
                                     <span className="font-black text-accent border-b-2 border-primary/20">Phong – Trâm – Nhân</span>.
@@ -229,7 +230,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="text-center max-w-3xl mx-auto mb-12">
                         <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.3em] mb-4">The PTN Difference</h2>
-                        <h3 className="text-3xl md:text-4xl font-heading font-extrabold mb-4 text-accent leading-tight">
+                        <h3 className="text-xl md:text-4xl font-heading font-extrabold mb-2 text-accent leading-tight">
                             Tại sao chọn <span className="text-primary">PTN</span> <span className="text-accent">English</span>?
                         </h3>
                         <p className="text-slate-600 font-body text-base">Hệ thống đào tạo học thuật chuyên sâu, đồng hành cùng sự phát triển của từng cá nhân.</p>
@@ -247,8 +248,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         {/* Left: Philosophy */}
                         <div className="lg:col-span-12 xl:col-span-5 flex flex-col justify-center">
                             <div className="mb-8 lg:mb-0">
-                                <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3">Philosophy</h2>
-                                <h3 className="text-3xl font-heading font-black text-accent mb-6 italic">Triết lý Giáo dục</h3>
+                                <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">Philosophy</h2>
+                                <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">Triết lý Giáo dục</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-4">
                                     {PHILOSOPHY.map((item, idx) => (
                                         <motion.div
@@ -273,18 +274,18 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                         {/* Right: Core Values */}
                         <div className="lg:col-span-12 xl:col-span-7 flex flex-col justify-center">
-                            <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3">Core Values</h2>
-                            <h3 className="text-3xl font-heading font-black text-accent mb-6 italic">Giá trị Cốt lõi</h3>
+                            <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">Core Values</h2>
+                            <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">Giá trị Cốt lõi</h3>
                             <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 gap-3">
                                 {VALUES.map((val, idx) => (
                                     <motion.div
                                         key={idx}
                                         whileHover={{ y: -3 }}
-                                        className="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all group"
+                                        className="p-4 md:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all group"
                                     >
                                         <div className="text-[10px] font-black text-primary/40 group-hover:text-primary transition-colors mb-1">0{idx + 1}</div>
-                                        <h4 className="text-accent font-heading font-black mb-1.5 text-base uppercase tracking-tight">{val.title}</h4>
-                                        <p className="text-slate-600 text-[12px] leading-snug font-medium line-clamp-2">{val.desc}</p>
+                                        <h4 className="text-accent font-heading font-black mb-1 text-sm md:text-base uppercase tracking-tight">{val.title}</h4>
+                                        <p className="text-slate-600 text-[11px] md:text-[12px] leading-snug font-medium">{val.desc}</p>
                                     </motion.div>
                                 ))}
                             </div>
@@ -299,13 +300,13 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-[0.4em] mb-4">The Leadership</h2>
-                        <h3 className="text-3xl md:text-5xl font-heading font-extrabold text-accent leading-tight">
+                        <h3 className="text-xl md:text-5xl font-heading font-extrabold text-accent leading-tight">
                             Hội đồng Sáng lập & <br /> Ban Giám đốc Học thuật
                         </h3>
                     </div>
 
-                    {/* PTN Founders (First 3) */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-24">
+                    {/* PTN Founders (First 3) - Centered Flex on Mobile */}
+                    <div className="flex flex-wrap justify-center gap-4 md:grid md:grid-cols-3 md:gap-10 mb-12 md:mb-24">
                         {teachersToDisplay.slice(0, 3).map((teacher: any, idx: number) => (
                             <motion.div
                                 key={idx}
@@ -313,7 +314,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="group"
+                                className="group w-[45%] md:w-auto"
                             >
                                 <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100">
                                     <img
@@ -333,12 +334,12 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         Founder / Board Member
                                     </div>
                                 </div>
-                                <div className="mt-8 text-center group-hover:text-primary transition-colors">
-                                    <h4 className="font-heading font-bold text-2xl text-accent group-hover:text-primary transition-colors duration-300">{teacher.name}</h4>
-                                    <div className="flex items-center justify-center gap-4 mt-3 opacity-60">
-                                        <span className="h-px w-8 bg-slate-400" />
-                                        <p className="text-[11px] text-accent font-black uppercase tracking-widest">{teacher.exp}</p>
-                                        <span className="h-px w-8 bg-slate-400" />
+                                <div className="mt-4 md:mt-8 text-center group-hover:text-primary transition-colors">
+                                    <h4 className="font-heading font-bold text-sm md:text-2xl text-accent group-hover:text-primary transition-colors duration-300 line-clamp-1">{teacher.name}</h4>
+                                    <div className="flex items-center justify-center gap-2 md:gap-4 mt-1 md:mt-3 opacity-60">
+                                        <span className="hidden md:block h-px w-8 bg-slate-400" />
+                                        <p className="text-[8px] md:text-[11px] text-accent font-black uppercase tracking-widest">{teacher.exp}</p>
+                                        <span className="hidden md:block h-px w-8 bg-slate-400" />
                                     </div>
                                 </div>
                             </motion.div>
@@ -350,20 +351,20 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         <div>
                             <div className="flex items-center gap-8 mb-16">
                                 <div className="h-px flex-1 bg-slate-200" />
-                                <h3 className="text-2xl font-heading font-black text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap">
+                                <h3 className="text-sm md:text-2xl font-heading font-black text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap">
                                     Đội ngũ Giảng viên Chuyên gia
                                 </h3>
                                 <div className="h-px flex-1 bg-slate-200" />
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-4 md:gap-8">
                                 {teachersToDisplay.slice(3).map((teacher: any, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: true }}
-                                        className="group"
+                                        className="group w-[46%] md:w-auto"
                                     >
                                         <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500">
                                             <img
@@ -399,11 +400,11 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 <p className="text-slate-600 font-body mb-8 leading-relaxed text-base">
                                     Quyền lợi học viên được đảm bảo qua các chính sách minh bạch và tiêu chuẩn học thuật cao nhất.
                                 </p>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div className="grid grid-cols-2 gap-2 md:gap-3">
                                     {POLICIES.map((p, idx) => (
-                                        <div key={idx} className="flex items-center gap-3 p-3 rounded-xl bg-white border border-slate-200 hover:border-primary/30 cursor-pointer transition-all shadow-sm">
-                                            {p.icon}
-                                            <span className="text-[13px] font-bold text-slate-700">{p.title}</span>
+                                        <div key={idx} className="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 hover:border-primary/30 cursor-pointer transition-all shadow-sm">
+                                            {React.cloneElement(p.icon as React.ReactElement<any>, { className: "w-4 h-4 text-primary" })}
+                                            <span className="text-[10px] font-bold text-slate-700 whitespace-nowrap">{p.title}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -572,24 +573,23 @@ function DifferencesHub() {
 
             </div>
 
-            {/* Mobile Optimized Layout (Interactive Tabs) */}
-            <div className="lg:hidden w-full flex flex-col gap-8">
-                {/* Icon Tabs */}
-                <div className="flex overflow-x-auto gap-5 pb-4 hide-scrollbar -mx-6 px-6">
+            {/* Mobile Optimized Layout (Interactive Grid) */}
+            <div className="lg:hidden w-full flex flex-col gap-6">
+                {/* Icon Grid (Fixed, compressed & centered) */}
+                <div className="flex flex-wrap justify-center gap-3">
                     {NEW_DIFFERENCES.map((item) => (
                         <button
                             key={item.id}
                             onClick={() => setHovered(item.id)}
-                            className={`w-18 h-18 shrink-0 rounded-2xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_30px_6px_rgba(199,0,43,0.35)]" : "bg-accent border-2 border-white/10 text-white shadow-[0_8px_32px_-4px_rgba(0,0,0,0.25)]"}`}
-                            style={{ width: '72px', height: '72px' }}
+                            className={`w-[22%] aspect-square rounded-xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_20px_4px_rgba(199,0,43,0.3)]" : "bg-accent border-2 border-white/10 text-white shadow-[0_8px_32px_-4px_rgba(0,0,0,0.25)]"}`}
                         >
-                            {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-8 h-8" })}
+                            {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-6 h-6" })}
                         </button>
                     ))}
                 </div>
 
                 {/* Content Area */}
-                <div className="bg-white border-2 border-slate-100 p-8 rounded-[2rem] shadow-xl relative min-h-[300px]">
+                <div className="bg-white border-2 border-slate-100 p-6 rounded-[2rem] shadow-xl relative min-h-[250px]">
                     <AnimatePresence mode="wait">
                         {(() => {
                             const activeItem = NEW_DIFFERENCES.find(d => d.id === (hovered || 1));
@@ -601,16 +601,16 @@ function DifferencesHub() {
                                     exit={{ opacity: 0, y: -10 }}
                                     className="flex flex-col"
                                 >
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                                            {activeItem?.icon}
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                                            {React.cloneElement(activeItem?.icon as React.ReactElement<any>, { className: "w-5 h-5" })}
                                         </div>
-                                        <h4 className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tighter">
+                                        <h4 className="text-lg font-heading font-black text-accent uppercase leading-tight tracking-tighter">
                                             {activeItem?.title}
                                         </h4>
                                     </div>
-                                    <h5 className="text-sm font-bold text-primary mb-3 uppercase tracking-widest">{activeItem?.fullTitle}</h5>
-                                    <p className="text-slate-600 font-body text-sm leading-relaxed whitespace-pre-line">
+                                    <h5 className="text-[11px] font-bold text-primary mb-2 uppercase tracking-widest leading-none">{activeItem?.fullTitle}</h5>
+                                    <p className="text-slate-600 font-body text-xs md:text-sm leading-[1.6] whitespace-pre-line">
                                         {activeItem?.desc}
                                     </p>
                                 </motion.div>

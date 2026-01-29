@@ -266,10 +266,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <GraduationCap size={14} className="text-primary" />
                             {hero.subtitle}
                         </div>
-                        <h1 className="text-white text-5xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
+                        <h1 className="text-white text-4xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
                             Góc <span className="text-primary font-black">Học Viên</span>
                         </h1>
-                        <p className="text-slate-300 text-lg md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
+                        <p className="text-slate-300 text-base md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
                             {hero.description}
                         </p>
 
@@ -372,13 +372,13 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         ))}
                     </div>
 
-                    {/* Secondary Grid for tiny photos */}
-                    <div className="flex overflow-x-auto md:grid md:grid-cols-4 gap-4 mt-4 pb-4 md:pb-0 hide-scrollbar -mx-6 px-6 md:mx-0 md:px-0">
+                    {/* Secondary Grid for tiny photos - Balanced & Centered on Mobile */}
+                    <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-4 md:gap-4 mt-4">
                         {playground.items.filter((i: any) => i.size === 'tiny').map((item: any, idx: number) => (
                             <motion.div
                                 key={item.id}
                                 whileHover={{ y: -5 }}
-                                className="w-40 md:w-auto flex-shrink-0 aspect-square rounded-2xl overflow-hidden shadow-lg group relative bg-accent"
+                                className="w-[46%] md:w-auto aspect-square rounded-2xl overflow-hidden shadow-lg group relative bg-accent"
                             >
                                 {item.type === 'video' ? (
                                     <a href={item.link} target="_blank" rel="noopener noreferrer" className="block w-full h-full relative">
@@ -407,29 +407,29 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
             {/* Main Tools Section */}
             <section className="py-24 bg-white">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 md:gap-12">
 
                         {/* Learning Materials Side */}
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="group relative bg-slate-50 rounded-[3rem] p-10 md:p-14 overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
+                            className="group relative bg-slate-50 rounded-2xl md:rounded-[3rem] p-4 md:p-14 overflow-hidden border border-slate-100 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500"
                         >
                             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full translate-x-10 -translate-y-10 group-hover:translate-x-5 group-hover:-translate-y-5 transition-transform duration-700"></div>
 
-                            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-10 transition-transform group-hover:scale-110 duration-500">
-                                <BookOpen size={32} className="text-primary" />
+                            <div className="w-8 h-8 md:w-16 md:h-16 rounded-lg md:rounded-2xl bg-primary/10 flex items-center justify-center mb-4 md:mb-10 transition-transform group-hover:scale-110 duration-500">
+                                <BookOpen size={16} className="text-primary md:w-8 md:h-8" />
                             </div>
 
-                            <h2 className="text-3xl font-heading font-bold text-accent mb-6" dangerouslySetInnerHTML={{ __html: lms.title }} />
+                            <h2 className="text-[10px] md:text-3xl font-heading font-black text-accent mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: lms.title }} />
 
                             <div className="space-y-6 mb-12">
-                                <p className="text-slate-600 font-body leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: lms.description }} />
-                                <ul className="space-y-4">
+                                <p className="text-slate-600 font-body leading-relaxed text-[8px] md:text-lg" dangerouslySetInnerHTML={{ __html: lms.description }} />
+                                <ul className="space-y-2 md:space-y-4">
                                     {lms.items.map((item: string, idx: number) => (
-                                        <li key={idx} className="flex items-center gap-3 text-slate-500 font-medium">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
+                                        <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-500 font-medium text-[7px] md:text-base">
+                                            <div className="w-1 h-1 rounded-full bg-primary/50"></div>
                                             {item}
                                         </li>
                                     ))}
@@ -440,11 +440,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 href={lms.buttonLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                whileHover={{ gap: "20px" }}
-                                className="inline-flex items-center gap-4 bg-primary text-white px-8 py-5 rounded-full font-bold text-lg shadow-xl shadow-primary/20 transition-all"
+                                className="inline-flex items-center gap-2 bg-primary text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg shadow-lg shadow-primary/20 transition-all"
                             >
                                 {lms.buttonText}
-                                <ArrowRight size={20} />
+                                <ArrowRight size={10} className="md:w-5 md:h-5" />
                             </motion.a>
                         </motion.div>
 
@@ -457,18 +456,18 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         >
                             <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-tr-full -translate-x-10 translate-y-10 group-hover:-translate-x-5 group-hover:translate-y-5 transition-transform duration-700"></div>
 
-                            <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center mb-10 border border-white/20 transition-transform group-hover:scale-110 duration-500">
-                                <ClipboardList size={32} className="text-white" />
+                            <div className="w-8 h-8 md:w-16 md:h-16 rounded-lg md:rounded-2xl bg-white/10 flex items-center justify-center mb-4 md:mb-10 border border-white/20 transition-transform group-hover:scale-110 duration-500">
+                                <ClipboardList size={16} className="text-white md:w-8 md:h-8" />
                             </div>
 
-                            <h2 className="text-3xl font-heading font-bold text-white mb-6" dangerouslySetInnerHTML={{ __html: mocktest.title }} />
+                            <h2 className="text-[10px] md:text-3xl font-heading font-black text-white mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: mocktest.title }} />
 
                             <div className="space-y-6 mb-12">
-                                <p className="text-slate-300 font-body leading-relaxed text-lg" dangerouslySetInnerHTML={{ __html: mocktest.description }} />
-                                <ul className="space-y-4">
+                                <p className="text-slate-300 font-body leading-relaxed text-[8px] md:text-lg" dangerouslySetInnerHTML={{ __html: mocktest.description }} />
+                                <ul className="space-y-2 md:space-y-4">
                                     {mocktest.items.map((item: string, idx: number) => (
-                                        <li key={idx} className="flex items-center gap-3 text-slate-400 font-medium">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-primary/50"></div>
+                                        <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-400 font-medium text-[7px] md:text-base">
+                                            <div className="w-1 h-1 rounded-full bg-primary/50"></div>
                                             {item}
                                         </li>
                                     ))}
@@ -477,10 +476,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
                             <Link
                                 href={mocktest.buttonLink}
-                                className="inline-flex items-center gap-4 bg-white text-accent hover:bg-primary hover:text-white px-8 py-5 rounded-full font-bold text-lg transition-all"
+                                className="inline-flex items-center gap-2 bg-white text-accent hover:bg-primary hover:text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg transition-all"
                             >
                                 {mocktest.buttonText}
-                                <ArrowRight size={20} />
+                                <ArrowRight size={10} className="md:w-5 md:h-5" />
                             </Link>
                         </motion.div>
 
@@ -500,36 +499,36 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
 
-                        <div className="relative z-10">
-                            <h3 className="text-3xl md:text-5xl font-heading font-black text-white mb-6" dangerouslySetInnerHTML={{ __html: support.title }} />
-                            <p className="text-slate-400 mb-12 max-w-2xl mx-auto text-lg">
+                        <div className="relative z-10 p-6 md:p-16">
+                            <h3 className="text-xl md:text-5xl font-heading font-black text-white mb-4" dangerouslySetInnerHTML={{ __html: support.title }} />
+                            <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-xs md:text-lg">
                                 {support.description}
                             </p>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
                                 <Link
                                     href={support.emailLink}
-                                    className="flex items-center justify-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-6 rounded-2xl transition-all group"
+                                    className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-4 rounded-xl transition-all group"
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                        <MessageCircle size={24} />
+                                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <MessageCircle size={18} />
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-bold text-lg">Trung tâm hỗ trợ</p>
-                                        <p className="text-xs text-slate-500">Gửi yêu cầu hỗ trợ trực tuyến</p>
+                                        <p className="font-bold text-sm">Trung tâm hỗ trợ</p>
+                                        <p className="text-[8px] text-slate-500 uppercase">Gửi yêu cầu</p>
                                     </div>
                                 </Link>
 
                                 <a
                                     href={`tel:${support.phone.replace(/\s/g, '')}`}
-                                    className="flex items-center justify-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-6 rounded-2xl transition-all group"
+                                    className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white p-4 rounded-xl transition-all group"
                                 >
-                                    <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                                        <Phone size={24} />
+                                    <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                                        <Phone size={18} />
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-bold text-lg">{support.phone}</p>
-                                        <p className="text-xs text-slate-500">Hotline hỗ trợ kỹ thuật</p>
+                                        <p className="font-bold text-sm">{support.phone}</p>
+                                        <p className="text-[8px] text-slate-500 uppercase">Hotline hỗ trợ</p>
                                     </div>
                                 </a>
                             </div>
