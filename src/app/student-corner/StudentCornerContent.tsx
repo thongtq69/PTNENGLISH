@@ -6,7 +6,9 @@ import { motion } from "framer-motion";
 import { BookOpen, ExternalLink, GraduationCap, ClipboardList, ArrowRight, Phone, MessageCircle, Quote } from "lucide-react";
 import HallOfFame from "@/components/HallOfFame";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 
 export default function StudentCornerContent({ pageData }: { pageData: any }) {
     // Extract sections with fallbacks
@@ -99,6 +101,37 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
         ]
     };
 
+    // Slider & Lightbox State
+    const [startIndex, setStartIndex] = useState(0);
+    const [selectedNote, setSelectedNote] = useState<any>(null);
+
+    const itemsPerPage = 4;
+    const totalNotes = studentMessages.notes?.length || 0;
+
+    const nextSlide = () => {
+        if (totalNotes <= itemsPerPage) return;
+        setStartIndex((prev) => (prev + 1) % totalNotes);
+    };
+
+    const prevSlide = () => {
+        if (totalNotes <= itemsPerPage) return;
+        setStartIndex((prev) => (prev - 1 + totalNotes) % totalNotes);
+    };
+
+    // Circular visible items: get 4 items starting from startIndex
+    const getVisibleNotes = () => {
+        if (totalNotes === 0) return [];
+        if (totalNotes <= itemsPerPage) return studentMessages.notes;
+
+        const items = [];
+        for (let i = 0; i < itemsPerPage; i++) {
+            items.push(studentMessages.notes[(startIndex + i) % totalNotes]);
+        }
+        return items;
+    };
+
+    const visibleNotes = getVisibleNotes();
+
     return (
         <main className="min-h-screen bg-white">
             <Header />
@@ -139,7 +172,25 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                     </motion.div>
 
                     {/* Cork Board Area */}
-                    <div className="relative max-w-6xl mx-auto">
+                    <div className="relative max-w-6xl mx-auto group/board">
+                        {/* Navigation Buttons */}
+                        {totalNotes > itemsPerPage && (
+                            <>
+                                <button
+                                    onClick={prevSlide}
+                                    className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-0 group-hover/board:opacity-100"
+                                >
+                                    <ChevronLeft size={24} />
+                                </button>
+                                <button
+                                    onClick={nextSlide}
+                                    className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-0 group-hover/board:opacity-100"
+                                >
+                                    <ChevronRight size={24} />
+                                </button>
+                            </>
+                        )}
+
                         {/* Cork Board Container */}
                         <div
                             className="relative rounded-[2rem] md:rounded-[3rem] p-6 md:p-10 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] overflow-visible border-[8px] md:border-[10px] border-[#3D2B1F]"
@@ -158,67 +209,114 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             {/* Inner Shadow for Depth */}
                             <div className="absolute inset-0 rounded-[2rem] md:rounded-[3rem] shadow-[inset_0_4px_30px_rgba(0,0,0,0.5)] pointer-events-none" />
 
-                            {/* Notes Grid */}
-                            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
-                                {studentMessages.notes.map((note: any, idx: number) => (
-                                    <motion.div
-                                        key={note.id}
-                                        initial={{ opacity: 0, y: 40, rotate: note.rotation }}
-                                        whileInView={{ opacity: 1, y: 0, rotate: note.rotation }}
-                                        whileHover={{
-                                            scale: 1.1,
-                                            rotate: 0,
-                                            zIndex: 20,
-                                            transition: { type: "spring", stiffness: 400, damping: 20 }
-                                        }}
-                                        viewport={{ once: true }}
-                                        transition={{ delay: idx * 0.15 }}
-                                        className="relative cursor-pointer group"
-                                    >
-                                        {/* Pushpin (3D Look) */}
-                                        <div
-                                            className="absolute -top-5 left-1/2 -translate-x-1/2 z-30 w-8 h-8 rounded-full shadow-[0_8px_15px_rgba(0,0,0,0.6)] group-hover:scale-125 transition-transform"
-                                            style={{
-                                                backgroundColor: note.pinColor,
-                                                background: `radial-gradient(circle at 30% 30%, ${note.pinColor}CC, ${note.pinColor})`,
-                                                boxShadow: `0 10px 20px rgba(0,0,0,0.4), inset -2px -2px 6px rgba(0,0,0,0.5), inset 2px 2px 6px rgba(255,255,255,0.4)`
+                            {/* Notes Grid - Use items-start for masonry-like feel */}
+                            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 items-start min-h-[400px]">
+                                <AnimatePresence mode="popLayout">
+                                    {visibleNotes.map((note: any, idx: number) => (
+                                        <motion.div
+                                            key={note.id}
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+                                            animate={{ opacity: 1, scale: 1, y: 0, rotate: note.rotation }}
+                                            exit={{ opacity: 0, scale: 0.8, y: -20 }}
+                                            whileHover={{
+                                                scale: 1.1,
+                                                rotate: 0,
+                                                zIndex: 20,
+                                                transition: { type: "spring", stiffness: 400, damping: 20 }
                                             }}
+                                            transition={{ duration: 0.4, ease: "easeOut" }}
+                                            className="relative cursor-pointer group"
+                                            onClick={() => setSelectedNote(note)}
                                         >
-                                            <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-white/60 blur-[1px]" />
-                                        </div>
-
-                                        {/* Polaroid Container */}
-                                        <div
-                                            className="relative bg-white p-3.5 pb-16 shadow-[15px_15px_35px_rgba(0,0,0,0.4)] border border-slate-200 transition-shadow group-hover:shadow-[20px_20px_50px_rgba(0,0,0,0.5)]"
-                                            style={{
-                                                boxShadow: idx % 2 === 0 ? "15px 20px 40px rgba(0,0,0,0.4)" : "-15px 20px 40px rgba(0,0,0,0.4)"
-                                            }}
-                                        >
-                                            {/* The Image (Up by Admin) */}
-                                            <div className="aspect-square w-full overflow-hidden bg-slate-100 relative border border-slate-100">
-                                                <img
-                                                    src={note.image}
-                                                    alt={`Student Message ${note.id}`}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                                />
-                                                {/* Image Gloss Overlay */}
-                                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            {/* Pushpin (3D Look) */}
+                                            <div
+                                                className="absolute -top-5 left-1/2 -translate-x-1/2 z-30 w-8 h-8 rounded-full shadow-[0_8px_15px_rgba(0,0,0,0.6)] group-hover:scale-125 transition-transform"
+                                                style={{
+                                                    backgroundColor: note.pinColor,
+                                                    background: `radial-gradient(circle at 30% 30%, ${note.pinColor}CC, ${note.pinColor})`,
+                                                    boxShadow: `0 10px 20px rgba(0,0,0,0.4), inset -2px -2px 6px rgba(0,0,0,0.5), inset 2px 2px 6px rgba(255,255,255,0.4)`
+                                                }}
+                                            >
+                                                <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-white/60 blur-[1px]" />
                                             </div>
 
-                                            {/* Polaroid Bottom Text Area (Empty or small stamp) */}
-                                            <div className="absolute bottom-4 left-0 right-0 text-center">
-                                                <div className="h-1.5 w-16 bg-slate-100 mx-auto rounded-full opacity-50" />
-                                            </div>
+                                            {/* Polaroid Container */}
+                                            <div
+                                                className="relative bg-white p-3.5 pb-16 shadow-[15px_15px_35px_rgba(0,0,0,0.4)] border border-slate-200 transition-shadow group-hover:shadow-[20px_20px_50px_rgba(0,0,0,0.5)]"
+                                                style={{
+                                                    boxShadow: idx % 2 === 0 ? "15px 20px 40px rgba(0,0,0,0.4)" : "-15px 20px 40px rgba(0,0,0,0.4)"
+                                                }}
+                                            >
+                                                {/* The Image (Up by Admin) - Removed aspect-square to show full image */}
+                                                <div className="w-full h-auto overflow-hidden bg-slate-100 relative border border-slate-100">
+                                                    <img
+                                                        src={note.image}
+                                                        alt={`Student Message ${note.id}`}
+                                                        className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+                                                    />
+                                                    {/* Image Gloss Overlay */}
+                                                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                                            {/* Paper Texture Overlay */}
-                                            <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper.png')]" />
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                                    {/* Click to Expand Indicator */}
+                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                                        <Maximize2 className="text-white" size={32} />
+                                                    </div>
+                                                </div>
+
+                                                {/* Polaroid Bottom Text Area (Empty or small stamp) */}
+                                                <div className="absolute bottom-4 left-0 right-0 text-center">
+                                                    <div className="h-1.5 w-16 bg-slate-100 mx-auto rounded-full opacity-50" />
+                                                </div>
+
+                                                {/* Paper Texture Overlay */}
+                                                <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/paper.png')]" />
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </AnimatePresence>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Lightbox Modal */}
+                <AnimatePresence>
+                    {selectedNote && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-md p-4 md:p-10"
+                        >
+                            <motion.button
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                onClick={() => setSelectedNote(null)}
+                                className="absolute top-6 right-6 md:top-10 md:right-10 text-white hover:text-primary transition-colors p-3 bg-white/10 rounded-full border border-white/20"
+                            >
+                                <X size={32} />
+                            </motion.button>
+
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                className="relative max-w-5xl w-full max-h-[85vh] bg-white p-3 md:p-4 rounded-lg shadow-2xl"
+                            >
+                                <img
+                                    src={selectedNote.image}
+                                    alt="Student Message Large View"
+                                    className="w-full h-full object-contain max-h-[80vh] rounded-sm"
+                                />
+                                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-400 font-bold tracking-widest text-[10px] uppercase">
+                                    PTN Student Message · Full View
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </section>
 
             {/* Student Playground - Bento Grid Layout */}
