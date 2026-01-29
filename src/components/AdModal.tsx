@@ -180,6 +180,7 @@ export default function AdModal() {
                                         >
                                             <Link
                                                 href={item.link}
+                                                onClick={closeAd}
                                                 className="group flex items-center justify-between p-6 bg-slate-50 hover:bg-primary rounded-none transition-all hover:scale-[1.02] border border-slate-100"
                                             >
                                                 <div className="flex items-center gap-6">
