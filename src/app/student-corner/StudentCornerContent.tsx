@@ -164,15 +164,15 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <>
                                 <button
                                     onClick={prevSlide}
-                                    className="absolute -left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30 p-2 md:p-3 rounded-full bg-slate-900/80 md:bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-100 md:opacity-0 md:group-hover/board:opacity-100"
+                                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-slate-900/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
                                 >
-                                    <ChevronLeft size={20} className="md:w-6 md:h-6" />
+                                    <ChevronLeft size={24} />
                                 </button>
                                 <button
                                     onClick={nextSlide}
-                                    className="absolute -right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30 p-2 md:p-3 rounded-full bg-slate-900/80 md:bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-100 md:opacity-0 md:group-hover/board:opacity-100"
+                                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-slate-900/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
                                 >
-                                    <ChevronRight size={20} className="md:w-6 md:h-6" />
+                                    <ChevronRight size={24} />
                                 </button>
                             </>
                         )}
