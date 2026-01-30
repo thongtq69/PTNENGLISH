@@ -480,73 +480,72 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 </p>
                             </div>
 
-                            {/* Pathway Map - Horizontal Scroll on Mobile, Flex on Desktop */}
-                            <div className="relative overflow-x-auto no-scrollbar -mx-6 px-6 pb-8 pt-4 md:pt-10">
-                                <div className="relative min-w-[800px] md:min-w-0 px-4 md:px-10">
-                                    {/* The Connection Line - Now visible on both mobile and desktop */}
-                                    <div className={`
-                                        absolute bg-slate-200 rounded-full
-                                        h-1 md:h-2 
-                                        top-[128px] md:top-[164px] left-10 right-10
-                                    `}>
+                            {/* Pathway Map - Vertical on Mobile, Horizontal on Desktop */}
+                            <div className="relative pb-8 pt-4 md:pt-10 px-4 md:px-10">
+                                {/* The Connection Line - Hidden on Mobile, Horizontal on Desktop */}
+                                <div className={`
+                                    absolute bg-slate-200 rounded-full
+                                    left-1/2 -translate-x-1/2 w-1 h-full md:w-full md:h-2 
+                                    md:top-[164px] md:left-10 md:right-10 md:translate-x-0
+                                    hidden md:block
+                                `}>
+                                    <motion.div
+                                        className={`absolute bg-accent rounded-full w-full h-full md:w-full md:h-full`}
+                                        initial={{ scaleY: 0, scaleX: 0 }}
+                                        whileInView={{ scaleY: 1, scaleX: 1 }}
+                                        transition={{ duration: 1.5 }}
+                                        style={{ originY: 0, originX: 0 }}
+                                    />
+                                </div>
+
+                                {/* Pathway Elements Container */}
+                                <div className="grid grid-cols-2 md:flex md:flex-row md:justify-between gap-4 md:gap-6 relative max-w-[340px] mx-auto md:max-w-none px-2 md:px-0">
+                                    {currentPathway.levels.map((level, i) => (
                                         <motion.div
-                                            className={`absolute bg-accent rounded-full w-full h-full md:w-full md:h-full`}
-                                            initial={{ scaleY: 0, scaleX: 0 }}
-                                            whileInView={{ scaleY: 1, scaleX: 1 }}
-                                            transition={{ duration: 1.5 }}
-                                            style={{ originY: 0, originX: 0 }}
-                                        />
-                                    </div>
+                                            key={level.id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            whileInView={{ opacity: 1, y: 0 }}
+                                            viewport={{ once: true }}
+                                            transition={{ delay: i * 0.05 }}
+                                            className="flex flex-col items-center group cursor-pointer"
+                                            onClick={() => setSelectedLevel(level)}
+                                        >
+                                            {/* Level Header */}
+                                            <div className="mb-3 md:mb-10 text-center">
+                                                <div className="text-[8px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
+                                                <div className="text-slate-800 font-heading font-black text-[10px] md:text-xl leading-tight">{level.name}</div>
+                                            </div>
 
-                                    {/* Pathway Elements Container */}
-                                    <div className="flex flex-row justify-between gap-4 md:gap-6 relative">
-                                        {currentPathway.levels.map((level, i) => (
-                                            <motion.div
-                                                key={level.id}
-                                                initial={{ opacity: 0, y: 20 }}
-                                                whileInView={{ opacity: 1, y: 0 }}
-                                                viewport={{ once: true }}
-                                                transition={{ delay: i * 0.05 }}
-                                                className="flex flex-col items-center group cursor-pointer w-[120px] md:w-auto"
-                                                onClick={() => setSelectedLevel(level)}
-                                            >
-                                                {/* Level Header */}
-                                                <div className="mb-8 md:mb-10 text-center h-[60px] md:h-auto flex flex-col justify-end">
-                                                    <div className="text-[8px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
-                                                    <div className="text-slate-800 font-heading font-black text-[10px] md:text-xl leading-tight">{level.name}</div>
+                                            {/* Milestone Node */}
+                                            <div className="relative mb-4 md:mb-8 z-10">
+                                                <div className={`
+                                                    w-7 h-7 md:w-16 md:h-16 rounded-full bg-white border-[3px] md:border-8 border-slate-200 
+                                                    flex items-center justify-center transition-all group-hover:border-accent group-hover:bg-accent group-hover:scale-110
+                                                    shadow-md md:shadow-lg
+                                                `}>
+                                                    <div className="w-1 md:w-4 h-1 md:h-4 rounded-full bg-slate-400 group-hover:bg-white" />
                                                 </div>
+                                                <div className="absolute -top-1 -right-1 bg-primary text-white text-[6px] md:text-[8px] font-bold px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    L{i + 1}
+                                                </div>
+                                            </div>
 
-                                                {/* Milestone Node */}
-                                                <div className="relative mb-6 md:mb-8 z-10">
-                                                    <div className={`
-                                                        w-8 h-8 md:w-16 md:h-16 rounded-full bg-white border-[3px] md:border-8 border-slate-200 
-                                                        flex items-center justify-center transition-all group-hover:border-accent group-hover:bg-accent group-hover:scale-110
-                                                        shadow-md md:shadow-lg
-                                                    `}>
-                                                        <div className="w-2 md:w-4 h-2 md:h-4 rounded-full bg-slate-400 group-hover:bg-white" />
+                                            {/* Summary Card */}
+                                            <div className="bg-white p-3 md:p-5 rounded-xl md:rounded-2xl shadow-md md:shadow-lg border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center h-full flex flex-col justify-between">
+                                                <div>
+                                                    <div className="bg-slate-50 text-[8px] md:text-xs font-black text-slate-500 p-1.5 md:p-2.5 rounded-lg mb-2 md:mb-4 uppercase tracking-wider">
+                                                        {level.exit}
                                                     </div>
-                                                    <div className="absolute -top-1 -right-1 bg-primary text-white text-[6px] md:text-[8px] font-bold px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        L{i + 1}
-                                                    </div>
+                                                    <p className="text-[11px] md:text-sm leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
+                                                        {level.target}
+                                                    </p>
                                                 </div>
-
-                                                {/* Summary Card */}
-                                                <div className="bg-white p-3 md:p-5 rounded-xl md:rounded-2xl shadow-md md:shadow-lg border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center h-full flex flex-col justify-between">
-                                                    <div>
-                                                        <div className="bg-slate-50 text-[8px] md:text-xs font-black text-slate-500 p-1.5 md:p-2.5 rounded-lg mb-2 md:mb-4 uppercase tracking-wider min-h-[32px] md:min-h-0 flex items-center justify-center">
-                                                            {level.exit}
-                                                        </div>
-                                                        <p className="hidden md:block text-[11px] md:text-sm leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
-                                                            {level.target}
-                                                        </p>
-                                                    </div>
-                                                    <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-xs font-black uppercase md:opacity-0 group-hover:opacity-100 transition-opacity pt-2">
-                                                        Chi tiết <ArrowRight size={10} className="md:w-4 md:h-4" />
-                                                    </div>
+                                                <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-xs font-black uppercase md:opacity-0 group-hover:opacity-100 transition-opacity pt-2">
+                                                    Chi tiết <ArrowRight size={10} className="md:w-4 md:h-4" />
                                                 </div>
-                                            </motion.div>
-                                        ))}
-                                    </div>
+                                            </div>
+                                        </motion.div>
+                                    ))}
                                 </div>
                             </div>
                         </motion.div>
