@@ -10,7 +10,26 @@ import Link from "next/link";
 
 import HallOfFame from "@/components/HallOfFame";
 
+import { useState, useEffect } from "react";
+
 export default function HomeContent({ pageData, siteSettings }: { pageData: any; siteSettings: any }) {
+  const [latestPosts, setLatestPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/posts", { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        // Sort by createdAt descending to get the most recent posts
+        const sorted = [...data].sort((a: any, b: any) => {
+          const dateA = new Date(a.createdAt || a.date).getTime();
+          const dateB = new Date(b.createdAt || b.date).getTime();
+          return dateB - dateA;
+        });
+        setLatestPosts(sorted.slice(0, 3));
+      })
+      .catch(err => console.error("Error fetching posts:", err));
+  }, []);
+
   // Use data from DB if available, otherwise fallback to hardcoded (for safety)
   const homeHero = siteSettings?.hero || pageData?.sections?.find((s: any) => s.type === 'hero')?.content;
   const programs = siteSettings?.programs || [];
@@ -207,77 +226,74 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 md:grid-rows-2 gap-6">
-            {/* Featured Article - Large Left Column */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="md:col-span-7 md:row-span-2 group cursor-pointer"
-            >
-              <div className="relative aspect-[16/10] md:h-full bg-slate-100 overflow-hidden border-2 md:border-4 border-accent">
-                <img
-                  src="/news/workshop.png"
-                  alt="IELTS Strategy Workshop"
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[0.3] group-hover:grayscale-0"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent"></div>
-                <div className="absolute bottom-0 left-0 p-4 md:p-12 w-full">
-                  <div className="inline-block px-2 py-0.5 bg-primary text-white text-[7px] md:text-[10px] font-black uppercase tracking-widest mb-2 md:mb-6">
-                    Sự kiện học thuật
+            {latestPosts.length > 0 ? (
+              <>
+                {/* Featured Article - Large Left Column */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="md:col-span-7 md:row-span-2 group cursor-pointer relative"
+                >
+                  <Link href={`/blog/${latestPosts[0].slug || latestPosts[0]._id}`} className="absolute inset-0 z-20" />
+                  <div className="relative aspect-[16/10] md:h-full bg-slate-100 overflow-hidden border-2 md:border-4 border-accent">
+                    <img
+                      src={latestPosts[0].image || "/news/workshop.png"}
+                      alt={latestPosts[0].title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[0.3] group-hover:grayscale-0"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 p-4 md:p-12 w-full">
+                      <div className="inline-block px-2 py-0.5 bg-primary text-white text-[7px] md:text-[10px] font-black uppercase tracking-widest mb-2 md:mb-6">
+                        {latestPosts[0].category}
+                      </div>
+                      <h4
+                        className="text-lg md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-2 group-hover:text-primary transition-colors"
+                        dangerouslySetInnerHTML={{ __html: latestPosts[0].title }}
+                      />
+                      <p className="text-slate-300 text-[9px] md:text-base font-body max-w-xl line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 pb-2">
+                        {latestPosts[0].excerpt}
+                      </p>
+                    </div>
                   </div>
-                  <h4 className="text-lg md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-2 group-hover:text-primary transition-colors">
-                    Chiến lược bứt phá Writing Task 2 <br className="hidden md:block" /> cùng chuyên gia MA.TESOL
-                  </h4>
-                  <p className="text-slate-300 text-[9px] md:text-base font-body max-w-xl line-clamp-2 md:line-clamp-none opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 pb-2">
-                    Khám phá hệ thống triển khai ý tưởng và cấu trúc câu academic chuẩn chỉnh giúp học viên chinh phục band 7.5+ Writing một cách bền vững.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
+                </motion.div>
 
-            {/* Side Article 1 - Top Right */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              viewport={{ once: true }}
-              className="md:col-span-5 group cursor-pointer"
-            >
-              <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
-                <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
-                  <img src="/news/achievement.png" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all" alt="Student Achievements" />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <div className="text-primary text-[9px] font-black uppercase tracking-widest mb-2">Thành tích</div>
-                  <h4 className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
-                    Vinh danh các chiến binh IELTS tháng 1 vừa qua
-                  </h4>
-                  <p className="text-xs text-slate-400 font-bold font-mono">24.01.2026</p>
-                </div>
+                {/* Side Articles */}
+                {latestPosts.slice(1, 3).map((post, idx) => (
+                  <motion.div
+                    key={post._id || idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: (idx + 1) * 0.1 }}
+                    viewport={{ once: true }}
+                    className="md:col-span-5 group cursor-pointer relative"
+                  >
+                    <Link href={`/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
+                    <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
+                      <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
+                        <img
+                          src={post.image || "/news/achievement.png"}
+                          className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all"
+                          alt={post.title}
+                        />
+                      </div>
+                      <div className="flex flex-col justify-center">
+                        <div className="text-primary text-[9px] font-black uppercase tracking-widest mb-2">{post.category}</div>
+                        <h4
+                          className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors line-clamp-2"
+                          dangerouslySetInnerHTML={{ __html: post.title }}
+                        />
+                        <p className="text-xs text-slate-400 font-bold font-mono">{post.date}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </>
+            ) : (
+              <div className="md:col-span-12 py-20 text-center text-slate-400 font-bold uppercase tracking-widest">
+                Đang tải bài viết mới nhất...
               </div>
-            </motion.div>
-
-            {/* Side Article 2 - Bottom Right */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-              className="md:col-span-5 group cursor-pointer"
-            >
-              <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
-                <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
-                  <img src="/news/tips.png" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all" alt="Study Tips" />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <div className="text-primary text-[9px] font-black uppercase tracking-widest mb-2">Mẹo học tập</div>
-                  <h4 className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors">
-                    5 Thói quen hàng ngày để nâng cao phản xạ Speaking
-                  </h4>
-                  <p className="text-xs text-slate-400 font-bold font-mono">22.01.2026</p>
-                </div>
-              </div>
-            </motion.div>
+            )}
           </div>
         </div>
       </section>

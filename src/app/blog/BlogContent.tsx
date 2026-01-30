@@ -107,8 +107,9 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
                                     transition={{ delay: idx * 0.1 }}
-                                    className="bg-white rounded-[3rem] overflow-hidden group border border-slate-50 shadow-sm hover:shadow-2xl transition-all flex flex-col text-center"
+                                    className="bg-white rounded-[3rem] overflow-hidden group border border-slate-50 shadow-sm hover:shadow-2xl transition-all flex flex-col text-center relative"
                                 >
+                                    <Link href={`/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
                                     <div className="h-72 overflow-hidden relative">
                                         {post.image ? (
                                             <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -149,9 +150,9 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                                     <p className="text-xs font-bold text-slate-700">{post.author}</p>
                                                 </div>
                                             </div>
-                                            <Link href={`/blog/${post.slug || post._id}`} className="p-3 rounded-2xl bg-slate-50 text-accent hover:bg-accent hover:text-white transition-all shadow-inner">
+                                            <div className="p-3 rounded-2xl bg-slate-50 text-accent group-hover:bg-accent group-hover:text-white transition-all shadow-inner">
                                                 <ChevronRight size={20} />
-                                            </Link>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.article>
