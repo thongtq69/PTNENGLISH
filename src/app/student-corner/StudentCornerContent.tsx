@@ -338,7 +338,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         <h3 className="text-4xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[800px]">
+                    <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 h-auto md:h-[800px]">
                         {/* Large items Mapping */}
                         {playground.items.filter((i: any) => i.size === 'large' || i.size === 'medium').map((item: any, idx: number) => (
                             <motion.div
@@ -347,7 +347,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className={`${item.size === 'large' ? 'md:col-span-2 md:row-span-2' : 'md:col-span-2'} relative group rounded-[2rem] overflow-hidden shadow-2xl h-[400px] md:h-auto`}
+                                className={`
+                                    ${item.size === 'large' ? 'col-span-2 md:row-span-2' : 'col-span-1 md:col-span-2'} 
+                                    relative group rounded-2xl md:rounded-[2rem] overflow-hidden shadow-xl md:shadow-2xl h-[180px] md:h-auto
+                                `}
                             >
                                 <img
                                     src={item.src}
@@ -355,9 +358,9 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                     alt={item.title || "Playground"}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                                <div className="absolute bottom-10 left-10 text-white pr-10">
-                                    {item.label && <span className="bg-primary px-4 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest mb-4 inline-block">{item.label}</span>}
-                                    {item.title && <h4 className="text-2xl md:text-3xl font-heading font-black leading-tight uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: item.title }} />}
+                                <div className="absolute bottom-4 left-4 md:bottom-10 md:left-10 text-white pr-4 md:pr-10">
+                                    {item.label && <span className="bg-primary px-2 py-1 md:px-4 md:py-1.5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 md:mb-4 inline-block">{item.label}</span>}
+                                    {item.title && <h4 className="text-sm md:text-3xl font-heading font-black leading-tight uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: item.title }} />}
                                 </div>
                             </motion.div>
                         ))}
@@ -370,7 +373,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: (idx + 2) * 0.1 }}
-                                className="relative group rounded-[2rem] overflow-hidden shadow-xl h-[200px] md:h-auto"
+                                className="relative group rounded-2xl md:rounded-[2rem] overflow-hidden shadow-lg h-[150px] md:h-auto"
                             >
                                 <img
                                     src={item.src}
