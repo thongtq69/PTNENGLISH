@@ -51,7 +51,19 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
             suffix = splitBySpan[1]?.trim() || '';
         }
 
-        setParts({ prefix, highlight, suffix, line2, hasBreak });
+        const newState = { prefix, highlight, suffix, line2, hasBreak };
+
+        // Only update if state actually changed to avoid infinite cycles and React warnings
+        setParts(prev => {
+            if (prev.prefix === newState.prefix &&
+                prev.highlight === newState.highlight &&
+                prev.suffix === newState.suffix &&
+                prev.line2 === newState.line2 &&
+                prev.hasBreak === newState.hasBreak) {
+                return prev;
+            }
+            return newState;
+        });
     }, [value]);
 
     const updateValue = (newParts: any) => {

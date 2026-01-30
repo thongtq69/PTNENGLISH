@@ -364,7 +364,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             transition={{ delay: 0.3 }}
                             className="flex flex-wrap justify-center gap-4"
                         >
-                            <Link href="/contact" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
+                            <Link href="/contact#registration-form" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
                                 Kiểm tra trình độ miễn phí
                             </Link>
                             <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
@@ -383,7 +383,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                         <div className="space-y-10">
                             <div>
                                 <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">Đối tượng phù hợp</h2>
-                                <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp and học tập của bạn.</p>
+                                <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp và học tập của bạn.</p>
                             </div>
                             <div className="grid grid-cols-2 gap-3 md:gap-4">
                                 {[
@@ -577,7 +577,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 <div className="space-y-3 md:space-y-4">
                                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary text-white flex items-center justify-center font-black text-xs md:text-base">2</div>
                                     <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">Tư vấn trực tiếp</h4>
-                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">Giáo viên chấm bài and phản hồi trực tiếp phương án lộ trình.</p>
+                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">Giáo viên chấm bài và phản hồi trực tiếp phương án lộ trình.</p>
                                 </div>
                             </div>
 
@@ -678,7 +678,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 </div>
 
                                 <div className="mt-8 md:mt-12 flex flex-col md:flex-row gap-2.5 md:gap-4">
-                                    <Link href="/contact" className="w-full md:flex-1 bg-accent text-white py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] text-center hover:bg-black transition-all">
+                                    <Link href="/contact#registration-form" className="w-full md:flex-1 bg-accent text-white py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] text-center hover:bg-black transition-all">
                                         Đăng ký ngay
                                     </Link>
                                     <button
@@ -703,7 +703,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                         "Navigation Partner" sẽ giúp bạn định vị chính xác trình độ và vẽ lại con đường ngắn nhất đến mục tiêu học thuật quốc tế.
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6">
-                        <Link href="/contact" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20">
+                        <Link href="/contact#registration-form" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20">
                             Yêu cầu tư vấn 1-1
                         </Link>
                         <button className="bg-white/5 hover:bg-white/10 text-white border border-white/20 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">

@@ -99,8 +99,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     {prog.name === "PTE Academic" && (
                       <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 p-1.5 md:p-8 pt-3 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
-                      <p className="text-white font-heading font-black text-[11px] md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
+                    <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 pt-6 md:pt-16 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent flex items-end">
+                      <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight">{prog.name}</p>
                     </div>
                   </div>
                 </motion.div>

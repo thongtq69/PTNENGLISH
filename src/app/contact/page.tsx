@@ -89,6 +89,7 @@ export default function ContactPage() {
 
                     {/* Centered Form */}
                     <motion.div
+                        id="registration-form"
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}

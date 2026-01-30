@@ -180,9 +180,9 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                     </p>
                     <div className="flex flex-col md:flex-row gap-6 justify-center">
                         <input type="email" placeholder="example@email.com" className="w-full md:w-96 px-10 py-5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-200 outline-none focus:ring-4 focus:ring-white/10 transition-all font-body" />
-                        <button className="bg-primary text-white hover:bg-red-700 px-12 py-5 rounded-full font-bold text-xl shadow-2xl transition-all transform hover:scale-105 whitespace-nowrap">
+                        <Link href="/contact#registration-form" className="bg-primary text-white hover:bg-red-700 px-12 py-5 rounded-full font-bold text-xl shadow-2xl transition-all transform hover:scale-105 whitespace-nowrap flex items-center justify-center">
                             {newsletter.buttonText}
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </section>

@@ -59,7 +59,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
     const mocktest = sections.find((s: any) => s.type === 'student-mocktest')?.content || {
         title: "Luyện Thi Thử <br /> <span className='text-primary font-bold'>Chuẩn Quốc Tế</span>",
-        description: "Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề and nhận phân tích chi tiết kỹ năng ngay lập tức.",
+        description: "Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề và nhận phân tích chi tiết kỹ năng ngay lập tức.",
         items: [
             "Mock Test IELTS 4 kỹ năng chuẩn IDP/BC",
             "Kho đề thi cập nhật mới nhất hàng quý",
@@ -72,9 +72,9 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
     const support = sections.find((s: any) => s.type === 'student-support')?.content || {
         title: "Bạn gặp khó khăn <br className='md:hidden' /> <span className='text-primary'>khi truy cập?</span>",
-        description: "Đội ngũ kỹ thuật and bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.",
+        description: "Đội ngũ kỹ thuật và bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.",
         phone: "0902 508 290",
-        emailLink: "/contact"
+        emailLink: "/contact#registration-form"
     };
 
     // Student Messages Section - Image Gallery Style

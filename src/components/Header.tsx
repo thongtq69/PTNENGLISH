@@ -25,7 +25,7 @@ const navigation = [
     { name: "Chương trình học", href: "/courses" },
     { name: "Góc học viên", href: "/student-corner" },
     { name: "Blog", href: "/blog" },
-    { name: "Liên hệ", href: "/contact" },
+    { name: "Cổng LMS", href: "https://lms.ptelc.edu.vn/" },
 ];
 
 export default function Header() {
@@ -98,13 +98,15 @@ export default function Header() {
                             <Link
                                 key={item.name}
                                 href={item.href}
+                                target={item.href.startsWith('http') ? "_blank" : undefined}
+                                rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
                                 className={`text-sm font-semibold uppercase tracking-wider transition-colors hover:text-primary ${isTransparent ? "text-white hover:text-white/70" : "text-accent"}`}
                             >
                                 {item.name}
                             </Link>
                         ))}
                         <Link
-                            href="/contact"
+                            href="/contact#registration-form"
                             className="bg-primary hover:bg-red-700 text-white px-6 py-2.5 rounded-none font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-red-500/20"
                         >
                             Đăng ký ngay
@@ -152,6 +154,8 @@ export default function Header() {
                                 >
                                     <Link
                                         href={item.href}
+                                        target={item.href.startsWith('http') ? "_blank" : undefined}
+                                        rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
                                         onClick={() => setIsMenuOpen(false)}
                                         className={`text-2xl font-heading font-black uppercase tracking-tighter ${pathname === item.href ? "text-primary text-4xl" : "text-accent opacity-60 hover:opacity-100 hover:text-primary"}`}
                                     >
@@ -163,7 +167,7 @@ export default function Header() {
 
                         <div className="mt-10 pt-10 border-t border-slate-100 flex flex-col gap-6">
                             <Link
-                                href="/contact"
+                                href="/contact#registration-form"
                                 onClick={() => setIsMenuOpen(false)}
                                 className="w-full bg-primary py-5 text-white font-black uppercase tracking-widest text-center shadow-xl shadow-red-500/20"
                             >
