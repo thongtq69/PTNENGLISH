@@ -52,14 +52,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-primary font-heading text-[8px] md:text-lg font-bold uppercase tracking-[0.3em] mb-1">
+            <h2 className="text-primary font-heading text-[10px] md:text-xl font-bold uppercase tracking-[0.3em] mb-1">
               Hệ Thống Đào Tạo Academic Master
             </h2>
-            <h3 className="text-base md:text-4xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
+            <h3 className="text-lg md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
               TTNN PHÚ TÀI NĂNG <br />
-              <span className="text-xs md:text-4xl">(PTelc - PT English Language Centre)</span>
+              <span className="text-sm md:text-3xl">(PTelc - PT English Language Centre)</span>
             </h3>
-            <p className="text-[10px] md:text-lg text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
+            <p className="text-xs md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
               Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
             </p>
           </motion.div>
