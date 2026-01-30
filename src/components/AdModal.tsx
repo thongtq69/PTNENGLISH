@@ -84,7 +84,7 @@ export default function AdModal() {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 md:p-10">
+                <div className="fixed inset-0 z-[999] flex items-end justify-center md:items-center p-0 md:p-10">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -94,21 +94,25 @@ export default function AdModal() {
                     />
 
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full max-w-5xl bg-white rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[500px] md:h-[650px] border border-white/10"
+                        initial={{ opacity: 0, y: 100 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 100 }}
+                        variants={{
+                            desktop: { scale: 1, y: 0 },
+                            mobile: { scale: 1, y: 0 }
+                        }}
+                        className="relative w-full max-w-5xl bg-white rounded-t-[2.5rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[50vh] max-h-[90vh] md:h-[650px] border-t border-x border-slate-200 md:border-white/10"
                     >
                         {/* Close Button */}
                         <button
                             onClick={closeAd}
-                            className="absolute top-0 right-0 z-50 bg-slate-900 text-white p-4 md:p-6 hover:bg-primary transition-colors active:scale-95 rounded-none"
+                            className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-slate-900/5 md:bg-slate-900 text-slate-900 md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
                         >
-                            <X size={24} />
+                            <X size={20} className="md:w-6 md:h-6" />
                         </button>
 
-                        {/* Left Side: Image & Branding */}
-                        <div className="md:w-[45%] relative overflow-hidden group shrink-0">
+                        {/* Left Side: Image & Branding (Hidden on mobile for better focus) */}
+                        <div className="hidden md:flex md:w-[45%] relative overflow-hidden group shrink-0">
                             {ad.leftImage ? (
                                 <img
                                     src={ad.leftImage}
@@ -149,26 +153,26 @@ export default function AdModal() {
                         </div>
 
                         {/* Right Side: Content & Features */}
-                        <div className="flex-1 bg-white p-8 md:p-16 flex flex-col overflow-y-auto custom-scrollbar h-full">
+                        <div className="flex-1 bg-white p-6 pt-12 md:p-16 flex flex-col overflow-y-auto custom-scrollbar h-full">
                             <motion.div
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.5 }}
                                 className="mb-12 shrink-0"
                             >
-                                <h3 className="text-4xl md:text-5xl font-heading font-black text-slate-900 leading-tight mb-4 tracking-tighter">
+                                <h3 className="text-2xl md:text-5xl font-heading font-black text-slate-900 leading-tight mb-2 md:mb-4 tracking-tighter">
                                     {ad.rightTitle}
                                 </h3>
-                                <p className="text-slate-400 text-sm font-bold uppercase tracking-widest leading-none mb-4">
+                                <p className="text-slate-400 text-[10px] md:text-sm font-bold uppercase tracking-widest leading-none mb-4">
                                     {ad.rightSubtitle}
                                 </p>
-                                <div className="w-20 h-1 bg-slate-100 rounded-none mb-6" />
-                                <p className="text-primary font-serif italic text-lg leading-none">
+                                <div className="w-12 md:w-20 h-1 bg-slate-100 rounded-none mb-4 md:mb-6" />
+                                <p className="text-primary font-serif italic text-base md:text-lg leading-none">
                                     {ad.rightSlogan}
                                 </p>
                             </motion.div>
 
-                            <div className="space-y-4 mb-12">
+                            <div className="space-y-3 md:space-y-4 mb-8 md:mb-12">
                                 {ad.items.map((item, i) => {
                                     const Icon = ICON_MAP[item.icon] || Check;
                                     return (
@@ -181,17 +185,17 @@ export default function AdModal() {
                                             <Link
                                                 href={item.link}
                                                 onClick={closeAd}
-                                                className="group flex items-center justify-between p-6 bg-slate-50 hover:bg-primary rounded-none transition-all hover:scale-[1.02] border border-slate-100"
+                                                className="group flex items-center justify-between p-4 md:p-6 bg-slate-50 hover:bg-primary rounded-xl md:rounded-none transition-all hover:scale-[1.02] border border-slate-100"
                                             >
-                                                <div className="flex items-center gap-6">
-                                                    <div className="w-12 h-12 rounded-none bg-white shadow-sm flex items-center justify-center text-primary group-hover:text-primary transition-colors">
-                                                        <Icon size={24} />
+                                                <div className="flex items-center gap-4 md:gap-6">
+                                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-none bg-white shadow-sm flex items-center justify-center text-primary group-hover:text-primary transition-colors">
+                                                        <Icon size={20} className="md:w-6 md:h-6" />
                                                     </div>
-                                                    <span className="font-heading font-black text-slate-700 group-hover:text-white uppercase tracking-tight text-lg">
+                                                    <span className="font-heading font-black text-slate-700 group-hover:text-white uppercase tracking-tight text-base md:text-lg">
                                                         {item.text}
                                                     </span>
                                                 </div>
-                                                <ChevronRight className="text-slate-300 group-hover:text-white transition-colors" />
+                                                <ChevronRight size={18} className="text-slate-300 group-hover:text-white transition-colors" />
                                             </Link>
                                         </motion.div>
                                     );
@@ -202,7 +206,7 @@ export default function AdModal() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 1 }}
-                                className="mt-auto py-12 text-center"
+                                className="mt-auto py-6 md:py-12 text-center"
                             >
                                 <button
                                     onClick={closeAd}

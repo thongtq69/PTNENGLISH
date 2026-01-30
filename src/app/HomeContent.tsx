@@ -52,14 +52,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-primary font-heading text-[10px] md:text-xl font-bold uppercase tracking-[0.3em] mb-1">
+            <h2 className="text-primary font-heading text-xs md:text-xl font-bold uppercase tracking-[0.3em] mb-1">
               Hệ Thống Đào Tạo Academic Master
             </h2>
-            <h3 className="text-lg md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
+            <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
               TTNN PHÚ TÀI NĂNG <br />
-              <span className="text-sm md:text-3xl">(PTelc - PT English Language Centre)</span>
+              <span className="text-base md:text-3xl">(PTelc - PT English Language Centre)</span>
             </h3>
-            <p className="text-xs md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
+            <p className="text-sm md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
               Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
             </p>
           </motion.div>
@@ -78,10 +78,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                     <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     {prog.name === "PTE Academic" && (
-                      <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[7px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
+                      <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 p-1.5 md:p-8 pt-3 md:pt-12 bg-gradient-to-t from-slate-900/90 via-slate-900/40 to-transparent">
-                      <p className="text-white font-heading font-black text-[8px] md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
+                      <p className="text-white font-heading font-black text-[11px] md:text-xl leading-tight uppercase tracking-tighter">{prog.name}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -173,7 +173,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-8 md:py-20 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <h2 className="text-primary font-heading font-bold text-[8px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">Expert Faculty</h2>
+          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">Expert Faculty</h2>
           <h3 className="text-base md:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white">
             Đội Ngũ Sáng Lập <br />& Giảng Viên MA.TESOL
           </h3>

@@ -54,7 +54,7 @@ export default function HallOfFame() {
     if (achievements.length === 0) return null;
 
     // Determine how many cards to show
-    const itemsToShow = isMobile ? 1 : 3;
+    const itemsToShow = isMobile ? 2 : 3;
     const activeAchievements = [];
     for (let i = 0; i < itemsToShow; i++) {
         activeAchievements.push(achievements[(currentIndex + i) % achievements.length]);
@@ -104,7 +104,7 @@ export default function HallOfFame() {
 
                 {/* Slider Container */}
                 <div className="relative group px-4 md:px-12">
-                    <div className="flex flex-col md:flex-row gap-8 items-center justify-center">
+                    <div className="flex flex-row gap-2 md:gap-8 items-center justify-center">
                         <AnimatePresence mode="popLayout" custom={direction}>
                             {activeAchievements.map((item: any, idx: number) => (
                                 <motion.div
@@ -118,9 +118,9 @@ export default function HallOfFame() {
                                         x: { type: "spring", stiffness: 300, damping: 30 },
                                         opacity: { duration: 0.2 }
                                     }}
-                                    className="w-full md:w-1/3 group/card relative"
+                                    className="basis-[48%] md:basis-auto md:w-1/3 group/card relative"
                                 >
-                                    <div className="bg-slate-900/50 backdrop-blur-xl rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-500 shadow-2xl relative">
+                                    <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-500 shadow-2xl relative">
                                         <div className="relative aspect-square">
                                             <img
                                                 src={item.url}
@@ -131,10 +131,10 @@ export default function HallOfFame() {
                                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80 group-hover/card:opacity-90 transition-opacity"></div>
                                         </div>
 
-                                        <div className="absolute inset-x-0 bottom-0 p-8 transform transition-transform duration-500 group-hover/card:-translate-y-2">
-                                            <div className="flex items-center gap-2">
-                                                <Award size={18} className="text-primary" />
-                                                <span className="text-primary font-black uppercase tracking-widest text-[10px]">{item.title}</span>
+                                        <div className="absolute inset-x-0 bottom-0 p-3 md:p-8 transform transition-transform duration-500 group-hover/card:-translate-y-2">
+                                            <div className="flex items-center gap-1 md:gap-2">
+                                                <Award size={12} className="text-primary md:w-[18px] md:h-[18px]" />
+                                                <span className="text-primary font-black uppercase tracking-widest text-[8px] md:text-[10px] line-clamp-1">{item.title}</span>
                                             </div>
                                         </div>
 
@@ -143,10 +143,10 @@ export default function HallOfFame() {
                                     </div>
 
                                     {/* Decorative badge */}
-                                    <div className="absolute -top-3 -right-3 w-14 h-14 bg-primary rounded-xl flex items-center justify-center text-white shadow-2xl rotate-12 group-hover/card:rotate-0 transition-all duration-500 border-2 border-slate-900 flex-col z-20">
-                                        <span className="text-[10px] font-black leading-none uppercase">STAR</span>
-                                        <Star size={12} fill="white" className="my-0.5" />
-                                        <span className="text-[8px] font-bold leading-none uppercase">PRO</span>
+                                    <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 w-8 h-8 md:w-14 md:h-14 bg-primary rounded-lg md:rounded-xl flex items-center justify-center text-white shadow-2xl rotate-12 group-hover/card:rotate-0 transition-all duration-500 border-2 border-slate-900 flex-col z-20">
+                                        <span className="text-[6px] md:text-[10px] font-black leading-none uppercase">STAR</span>
+                                        <Star size={8} fill="white" className="my-0.5 md:w-3 md:h-3" />
+                                        <span className="text-[5px] md:text-[8px] font-bold leading-none uppercase">PRO</span>
                                     </div>
                                 </motion.div>
                             ))}
@@ -157,14 +157,14 @@ export default function HallOfFame() {
                     <div className="flex md:block">
                         <button
                             onClick={prev}
-                            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-6 p-4 rounded-2xl bg-slate-900 border border-white/10 text-slate-400 hover:text-white hover:bg-primary hover:border-primary transition-all shadow-2xl z-30 group/btn"
+                            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 md:-translate-x-6 p-2 md:p-4 rounded-xl md:rounded-2xl bg-slate-900/90 border border-white/10 text-slate-400 hover:text-white hover:bg-primary hover:border-primary transition-all shadow-2xl z-30 group/btn"
                             aria-label="Previous"
                         >
                             <ChevronLeft size={28} className="group-hover/btn:-translate-x-1 transition-transform" />
                         </button>
                         <button
                             onClick={next}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 p-4 rounded-2xl bg-slate-900 border border-white/10 text-slate-400 hover:text-white hover:bg-primary hover:border-primary transition-all shadow-2xl z-30 group/btn"
+                            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 md:translate-x-6 p-2 md:p-4 rounded-xl md:rounded-2xl bg-slate-900/90 border border-white/10 text-slate-400 hover:text-white hover:bg-primary hover:border-primary transition-all shadow-2xl z-30 group/btn"
                             aria-label="Next"
                         >
                             <ChevronRight size={28} className="group-hover/btn:translate-x-1 transition-transform" />

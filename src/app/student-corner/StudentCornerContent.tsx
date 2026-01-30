@@ -11,6 +11,15 @@ import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 
 export default function StudentCornerContent({ pageData }: { pageData: any }) {
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     // Extract sections with fallbacks
     const sections = pageData?.sections || [];
 
@@ -105,7 +114,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
     const [startIndex, setStartIndex] = useState(0);
     const [selectedNote, setSelectedNote] = useState<any>(null);
 
-    const itemsPerPage = 4;
+    const itemsPerPage = isMobile ? 2 : 4;
     const totalNotes = studentMessages.notes?.length || 0;
 
     const nextSlide = () => {
@@ -155,15 +164,15 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <>
                                 <button
                                     onClick={prevSlide}
-                                    className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-0 group-hover/board:opacity-100"
+                                    className="absolute -left-2 md:-left-12 top-1/2 -translate-y-1/2 z-30 p-2 md:p-3 rounded-full bg-slate-900/80 md:bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-100 md:opacity-0 md:group-hover/board:opacity-100"
                                 >
-                                    <ChevronLeft size={24} />
+                                    <ChevronLeft size={20} className="md:w-6 md:h-6" />
                                 </button>
                                 <button
                                     onClick={nextSlide}
-                                    className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-0 group-hover/board:opacity-100"
+                                    className="absolute -right-2 md:-right-12 top-1/2 -translate-y-1/2 z-30 p-2 md:p-3 rounded-full bg-slate-900/80 md:bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-100 md:opacity-0 md:group-hover/board:opacity-100"
                                 >
-                                    <ChevronRight size={24} />
+                                    <ChevronRight size={20} className="md:w-6 md:h-6" />
                                 </button>
                             </>
                         )}
@@ -187,7 +196,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <div className="absolute inset-0 rounded-[2rem] md:rounded-[3rem] shadow-[inset_0_4px_30px_rgba(0,0,0,0.5)] pointer-events-none" />
 
                             {/* Notes Grid - Use items-start for masonry-like feel */}
-                            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 items-start min-h-[400px]">
+                            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10 items-start min-h-[250px] md:min-h-[400px]">
                                 <AnimatePresence mode="popLayout">
                                     {visibleNotes.map((note: any, idx: number) => (
                                         <motion.div
@@ -208,11 +217,11 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                         >
                                             {/* Pushpin (3D Look) */}
                                             <div
-                                                className="absolute -top-5 left-1/2 -translate-x-1/2 z-30 w-8 h-8 rounded-full shadow-[0_8px_15px_rgba(0,0,0,0.6)] group-hover:scale-125 transition-transform"
+                                                className="absolute -top-3 md:-top-5 left-1/2 -translate-x-1/2 z-30 w-5 h-5 md:w-8 md:h-8 rounded-full shadow-[0_5px_10px_rgba(0,0,0,0.6)] group-hover:scale-125 transition-transform"
                                                 style={{
                                                     backgroundColor: note.pinColor,
                                                     background: `radial-gradient(circle at 30% 30%, ${note.pinColor}CC, ${note.pinColor})`,
-                                                    boxShadow: `0 10px 20px rgba(0,0,0,0.4), inset -2px -2px 6px rgba(0,0,0,0.5), inset 2px 2px 6px rgba(255,255,255,0.4)`
+                                                    boxShadow: `0 5px 10px rgba(0,0,0,0.4), inset -1px -1px 4px rgba(0,0,0,0.5), inset 1px 1px 4px rgba(255,255,255,0.4)`
                                                 }}
                                             >
                                                 <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-white/60 blur-[1px]" />
@@ -220,9 +229,9 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
                                             {/* Polaroid Container */}
                                             <div
-                                                className="relative bg-white p-3.5 pb-16 shadow-[15px_15px_35px_rgba(0,0,0,0.4)] border border-slate-200 transition-shadow group-hover:shadow-[20px_20px_50px_rgba(0,0,0,0.5)]"
+                                                className="relative bg-white p-1.5 md:p-3.5 pb-8 md:pb-16 shadow-[10px_10px_25px_rgba(0,0,0,0.4)] md:shadow-[15px_15px_35px_rgba(0,0,0,0.4)] border border-slate-200 transition-shadow group-hover:shadow-[20px_20px_50px_rgba(0,0,0,0.5)]"
                                                 style={{
-                                                    boxShadow: idx % 2 === 0 ? "15px 20px 40px rgba(0,0,0,0.4)" : "-15px 20px 40px rgba(0,0,0,0.4)"
+                                                    boxShadow: idx % 2 === 0 ? "10px 15px 30px rgba(0,0,0,0.4)" : "-10px 15px 30px rgba(0,0,0,0.4)"
                                                 }}
                                             >
                                                 {/* The Image (Up by Admin) - Removed aspect-square to show full image */}

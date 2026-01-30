@@ -481,13 +481,13 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             </div>
 
                             {/* Pathway Map - Vertical on Mobile, Horizontal on Desktop */}
-                            <div className="relative pb-8 pt-10 px-4 md:px-10">
-                                {/* The Connection Line - Vertical on Mobile, Horizontal on Desktop */}
+                            <div className="relative pb-8 pt-4 md:pt-10 px-4 md:px-10">
+                                {/* The Connection Line - Hidden on Mobile, Horizontal on Desktop */}
                                 <div className={`
                                     absolute bg-slate-200 rounded-full
                                     left-1/2 -translate-x-1/2 w-1 h-full md:w-full md:h-2 
                                     md:top-[164px] md:left-10 md:right-10 md:translate-x-0
-                                    top-20 bottom-20
+                                    hidden md:block
                                 `}>
                                     <motion.div
                                         className={`absolute bg-accent rounded-full w-full h-full md:w-full md:h-full`}
@@ -498,47 +498,50 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                     />
                                 </div>
 
-                                <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 md:gap-6 relative">
+                                {/* Pathway Elements Container */}
+                                <div className="grid grid-cols-2 md:flex md:flex-row md:justify-between gap-4 md:gap-6 relative max-w-[340px] mx-auto md:max-w-none px-2 md:px-0">
                                     {currentPathway.levels.map((level, i) => (
                                         <motion.div
                                             key={level.id}
-                                            initial={{ opacity: 0, y: 30 }}
+                                            initial={{ opacity: 0, y: 20 }}
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
-                                            transition={{ delay: i * 0.1 }}
-                                            className="w-full max-w-[280px] md:w-48 flex flex-col items-center group cursor-pointer"
+                                            transition={{ delay: i * 0.05 }}
+                                            className="flex flex-col items-center group cursor-pointer"
                                             onClick={() => setSelectedLevel(level)}
                                         >
-                                            {/* Level Header - Above on Desktop, also visible on Mobile */}
-                                            <div className="mb-6 md:mb-10 text-center">
-                                                <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">CEFR {level.cefr}</div>
-                                                <div className="text-slate-800 font-heading font-black">{level.name}</div>
+                                            {/* Level Header */}
+                                            <div className="mb-3 md:mb-10 text-center">
+                                                <div className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
+                                                <div className="text-slate-800 font-heading font-black text-[10px] md:text-base leading-tight">{level.name}</div>
                                             </div>
 
                                             {/* Milestone Node */}
-                                            <div className="relative mb-6 md:mb-8">
+                                            <div className="relative mb-4 md:mb-8 z-10">
                                                 <div className={`
-                                                    w-10 h-10 md:w-14 md:h-14 rounded-full bg-white border-4 md:border-8 border-slate-200 
+                                                    w-7 h-7 md:w-14 md:h-14 rounded-full bg-white border-[3px] md:border-8 border-slate-200 
                                                     flex items-center justify-center transition-all group-hover:border-accent group-hover:bg-accent group-hover:scale-110
-                                                    shadow-lg
+                                                    shadow-md md:shadow-lg
                                                 `}>
-                                                    <div className="w-2 h-2 md:w-3 md:h-3 rounded-full bg-slate-400 group-hover:bg-white" />
+                                                    <div className="w-1 md:w-3 h-1 md:h-3 rounded-full bg-slate-400 group-hover:bg-white" />
                                                 </div>
-                                                <div className="absolute -top-2 -right-2 bg-primary text-white text-[8px] font-bold p-1 rounded shadow-lg opacity-0 md:opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    Level {i + 1}
+                                                <div className="absolute -top-1 -right-1 bg-primary text-white text-[6px] md:text-[8px] font-bold px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    L{i + 1}
                                                 </div>
                                             </div>
 
                                             {/* Summary Card */}
-                                            <div className="bg-white p-5 rounded-2xl shadow-lg border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center">
-                                                <div className="bg-slate-50 text-[10px] font-black text-slate-500 p-2 rounded-lg mb-4 uppercase tracking-wider">
-                                                    {level.exit}
+                                            <div className="bg-white p-3 md:p-5 rounded-xl md:rounded-2xl shadow-md md:shadow-lg border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center h-full flex flex-col justify-between">
+                                                <div>
+                                                    <div className="bg-slate-50 text-[8px] md:text-[10px] font-black text-slate-500 p-1.5 md:p-2 rounded-lg mb-2 md:mb-4 uppercase tracking-wider">
+                                                        {level.exit}
+                                                    </div>
+                                                    <p className="hidden md:block text-[11px] leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
+                                                        {level.target}
+                                                    </p>
                                                 </div>
-                                                <p className="text-[11px] leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
-                                                    {level.target}
-                                                </p>
-                                                <div className="mt-4 text-accent opacity-0 md:opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1 text-[10px] font-black uppercase">
-                                                    Chi tiết <ArrowRight size={12} />
+                                                <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-[10px] font-black uppercase md:opacity-0 group-hover:opacity-100 transition-opacity pt-2">
+                                                    Chi tiết <ArrowRight size={10} className="md:w-3 md:h-3" />
                                                 </div>
                                             </div>
                                         </motion.div>
@@ -612,71 +615,75 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                         onClick={() => setSelectedLevel(null)}
                     >
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="bg-white max-w-2xl w-full rounded-[3rem] shadow-2xl relative overflow-hidden"
+                            initial={{ opacity: 0, y: "100%" }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: "100%" }}
+                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            className="bg-white max-w-2xl w-full rounded-2xl md:rounded-[3rem] shadow-2xl relative overflow-hidden my-auto"
                             onClick={(e) => e.stopPropagation()}
                         >
                             {/* Modal Header Grid */}
-                            <div className={`p-10 pb-20 bg-accent relative text-white border-b-4 border-primary`}>
+                            <div className={`p-5 md:p-10 pb-8 md:pb-20 bg-accent relative text-white border-b-4 border-primary`}>
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent"></div>
-                                <div className="relative z-10">
+                                <div className="relative z-10 flex flex-col items-center text-center">
+                                    {/* Handle for Mobile */}
+                                    <div className="w-10 h-1 bg-white/20 rounded-full mx-auto mb-4 md:hidden"></div>
+
                                     <button
                                         onClick={() => setSelectedLevel(null)}
-                                        className="absolute top-0 right-0 text-white/50 hover:text-white transition-colors"
+                                        className="absolute top-0 right-0 p-2 text-white/50 hover:text-white transition-colors"
                                     >
-                                        <X size={24} />
+                                        <X size={18} className="md:w-6 md:h-6" />
                                     </button>
 
-                                    <div className="text-[10px] font-black uppercase tracking-[0.3em] mb-4 opacity-70">Course Details</div>
-                                    <h3 className="text-4xl md:text-5xl font-heading font-black mb-6">{selectedLevel.name}</h3>
+                                    <div className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-2 md:mb-4 opacity-70">Course Details</div>
+                                    <h3 className="text-2xl md:text-5xl font-heading font-black mb-3 md:mb-6 leading-tight">{selectedLevel.name}</h3>
 
-                                    <div className="flex gap-4">
-                                        <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold border border-white/20 flex flex-col">
-                                            <span className="opacity-60 text-[8px] uppercase">CEFR</span>
+                                    <div className="flex gap-2 md:gap-4 justify-center">
+                                        <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold border border-white/20 flex flex-col">
+                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">CEFR</span>
                                             {selectedLevel.cefr}
                                         </div>
-                                        <div className="bg-white/10 backdrop-blur-md px-4 py-2 rounded-xl text-xs font-bold border border-white/20 flex flex-col">
-                                            <span className="opacity-60 text-[8px] uppercase">EXIT TARGET</span>
+                                        <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold border border-white/20 flex flex-col">
+                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">EXIT</span>
                                             {selectedLevel.exit}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="absolute bottom-0 right-10 translate-y-1/2 w-24 h-24 bg-white rounded-full shadow-2xl flex items-center justify-center text-primary z-20">
-                                    <Trophy size={40} />
+                                <div className="absolute bottom-0 right-5 md:right-10 translate-y-1/2 w-14 h-14 md:w-24 md:h-24 bg-white rounded-full shadow-xl flex items-center justify-center text-primary z-20 transition-all">
+                                    <Trophy className="w-6 h-6 md:w-10 md:h-10" />
                                 </div>
                             </div>
 
                             {/* Modal Body */}
-                            <div className="p-10 pt-16">
-                                <div className="mb-10">
-                                    <h5 className="text-accent font-heading font-black text-xl mb-4">Mô tả khóa học</h5>
-                                    <p className="text-slate-500 leading-relaxed">{selectedLevel.fullDesc}</p>
+                            <div className="p-5 md:p-10 pt-10 md:pt-16 max-h-[65vh] overflow-y-auto">
+                                <div className="mb-6 md:mb-10">
+                                    <h5 className="text-accent font-heading font-black text-base md:text-xl mb-2 md:mb-4">Mô tả khóa học</h5>
+                                    <p className="text-slate-500 leading-relaxed text-xs md:text-base">{selectedLevel.fullDesc}</p>
                                 </div>
 
-                                <div>
-                                    <h5 className="text-accent font-heading font-black text-lg mb-4 flex items-center gap-2">
-                                        <Trophy size={18} className="text-primary" /> Lợi ích vượt trội
+                                <div className="mb-6">
+                                    <h5 className="text-accent font-heading font-black text-sm md:text-lg mb-2 md:mb-4 flex items-center gap-2">
+                                        <Trophy size={14} className="text-primary md:w-[18px] md:h-[18px]" /> Lợi ích
                                     </h5>
-                                    <div className="grid grid-cols-1 gap-3">
+                                    <div className="grid grid-cols-1 gap-2 md:gap-3">
                                         {selectedLevel.benefits.map((b: string, i: number) => (
-                                            <div key={i} className="flex gap-3 items-start p-3 bg-slate-50 rounded-xl">
-                                                <CheckCircle2 size={16} className="text-primary mt-0.5 shrink-0" />
-                                                <span className="text-sm text-slate-600 font-medium">{b}</span>
+                                            <div key={i} className="flex gap-2 md:gap-3 items-start p-2 md:p-3 bg-slate-50 rounded-lg md:rounded-xl">
+                                                <CheckCircle2 size={12} className="text-primary mt-0.5 shrink-0 md:w-4 md:h-4" />
+                                                <span className="text-[10px] md:text-sm text-slate-600 font-medium">{b}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="mt-12 flex gap-4">
-                                    <Link href="/contact" className="flex-1 bg-accent text-white py-5 rounded-2xl font-black uppercase tracking-widest text-[10px] text-center hover:bg-black transition-all">
+                                <div className="mt-8 md:mt-12 flex flex-col md:flex-row gap-2.5 md:gap-4">
+                                    <Link href="/contact" className="w-full md:flex-1 bg-accent text-white py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] text-center hover:bg-black transition-all">
                                         Đăng ký ngay
                                     </Link>
                                     <button
                                         onClick={() => setSelectedLevel(null)}
-                                        className="px-8 border border-slate-200 rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all text-[10px] uppercase tracking-widest"
+                                        className="w-full md:w-auto px-6 py-3.5 md:py-0 border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all text-[9px] uppercase tracking-widest"
                                     >
                                         Đóng
                                     </button>
