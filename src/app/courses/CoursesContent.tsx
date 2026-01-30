@@ -512,18 +512,18 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                         >
                                             {/* Level Header */}
                                             <div className="mb-3 md:mb-10 text-center">
-                                                <div className="text-[8px] md:text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
-                                                <div className="text-slate-800 font-heading font-black text-[10px] md:text-base leading-tight">{level.name}</div>
+                                                <div className="text-[8px] md:text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
+                                                <div className="text-slate-800 font-heading font-black text-[10px] md:text-xl leading-tight">{level.name}</div>
                                             </div>
 
                                             {/* Milestone Node */}
                                             <div className="relative mb-4 md:mb-8 z-10">
                                                 <div className={`
-                                                    w-7 h-7 md:w-14 md:h-14 rounded-full bg-white border-[3px] md:border-8 border-slate-200 
+                                                    w-7 h-7 md:w-16 md:h-16 rounded-full bg-white border-[3px] md:border-8 border-slate-200 
                                                     flex items-center justify-center transition-all group-hover:border-accent group-hover:bg-accent group-hover:scale-110
                                                     shadow-md md:shadow-lg
                                                 `}>
-                                                    <div className="w-1 md:w-3 h-1 md:h-3 rounded-full bg-slate-400 group-hover:bg-white" />
+                                                    <div className="w-1 md:w-4 h-1 md:h-4 rounded-full bg-slate-400 group-hover:bg-white" />
                                                 </div>
                                                 <div className="absolute -top-1 -right-1 bg-primary text-white text-[6px] md:text-[8px] font-bold px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
                                                     L{i + 1}
@@ -533,15 +533,15 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                             {/* Summary Card */}
                                             <div className="bg-white p-3 md:p-5 rounded-xl md:rounded-2xl shadow-md md:shadow-lg border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center h-full flex flex-col justify-between">
                                                 <div>
-                                                    <div className="bg-slate-50 text-[8px] md:text-[10px] font-black text-slate-500 p-1.5 md:p-2 rounded-lg mb-2 md:mb-4 uppercase tracking-wider">
+                                                    <div className="bg-slate-50 text-[8px] md:text-xs font-black text-slate-500 p-1.5 md:p-2.5 rounded-lg mb-2 md:mb-4 uppercase tracking-wider">
                                                         {level.exit}
                                                     </div>
-                                                    <p className="hidden md:block text-[11px] leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
+                                                    <p className="hidden md:block text-[11px] md:text-sm leading-relaxed text-slate-400 font-medium group-hover:text-slate-600 transition-colors">
                                                         {level.target}
                                                     </p>
                                                 </div>
-                                                <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-[10px] font-black uppercase md:opacity-0 group-hover:opacity-100 transition-opacity pt-2">
-                                                    Chi tiết <ArrowRight size={10} className="md:w-3 md:h-3" />
+                                                <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-xs font-black uppercase md:opacity-0 group-hover:opacity-100 transition-opacity pt-2">
+                                                    Chi tiết <ArrowRight size={10} className="md:w-4 md:h-4" />
                                                 </div>
                                             </div>
                                         </motion.div>
