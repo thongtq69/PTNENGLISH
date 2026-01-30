@@ -101,7 +101,7 @@ export default function AdModal() {
                             desktop: { scale: 1, y: 0 },
                             mobile: { scale: 1, y: 0 }
                         }}
-                        className="relative w-full max-w-5xl bg-white rounded-t-[2.5rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row min-h-[50vh] max-h-[90vh] md:h-[650px] border-t border-x border-slate-200 md:border-white/10"
+                        className="relative w-full max-w-5xl bg-white rounded-t-[2.5rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] md:h-[650px] border-t border-x border-slate-200 md:border-white/10"
                     >
                         {/* Close Button */}
                         <button
@@ -158,7 +158,7 @@ export default function AdModal() {
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.5 }}
-                                className="mb-12 shrink-0"
+                                className="mb-8 md:mb-12 shrink-0"
                             >
                                 <h3 className="text-2xl md:text-5xl font-heading font-black text-slate-900 leading-tight mb-2 md:mb-4 tracking-tighter">
                                     {ad.rightTitle}
@@ -172,7 +172,7 @@ export default function AdModal() {
                                 </p>
                             </motion.div>
 
-                            <div className="space-y-3 md:space-y-4 mb-8 md:mb-12">
+                            <div className="space-y-3 md:space-y-4 mb-6 md:mb-12">
                                 {ad.items.map((item, i) => {
                                     const Icon = ICON_MAP[item.icon] || Check;
                                     return (
@@ -206,7 +206,7 @@ export default function AdModal() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 1 }}
-                                className="mt-auto py-6 md:py-12 text-center"
+                                className="py-6 md:py-12 text-center"
                             >
                                 <button
                                     onClick={closeAd}
