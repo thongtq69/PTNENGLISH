@@ -97,7 +97,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
             {/* Blog Grid */}
             <section className="py-32">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-16">
                         <AnimatePresence mode="popLayout">
                             {filteredPosts.map((post, idx) => (
                                 <motion.article
@@ -124,7 +124,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                         </div>
                                     </div>
 
-                                    <div className="p-10 flex-grow flex flex-col">
+                                    <div className="p-6 md:p-10 flex-grow flex flex-col">
                                         <div className="flex items-center justify-center space-x-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">
                                             <span className="flex items-center"><Calendar size={12} className="mr-2 text-primary" /> {post.date}</span>
                                             <span className="text-slate-200">|</span>
@@ -132,7 +132,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                         </div>
 
                                         <h2
-                                            className="text-2xl font-heading font-bold text-accent mb-6 leading-snug group-hover:text-primary transition-colors line-clamp-2"
+                                            className="text-lg md:text-2xl font-heading font-bold text-accent mb-4 md:mb-6 leading-snug group-hover:text-primary transition-colors line-clamp-2"
                                             dangerouslySetInnerHTML={{ __html: post.title }}
                                         />
 

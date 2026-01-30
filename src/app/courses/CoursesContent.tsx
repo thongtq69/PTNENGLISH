@@ -385,17 +385,17 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">Đối tượng phù hợp</h2>
                                 <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">Chúng tôi cá nhân hóa lộ trình dựa trên từng nấc thang sự nghiệp and học tập của bạn.</p>
                             </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-2 gap-3 md:gap-4">
                                 {[
                                     { text: "Sinh viên & Người đi làm", sub: "Du học, Định cư, IELTS" },
                                     { text: "Học sinh 12-15 tuổi", sub: "Lộ trình EfT chuyên sâu" },
                                     { text: "Học sinh cuối cấp", sub: "Xét tuyển ĐH & Tốt nghiệp" },
                                     { text: "Người cần giao tiếp", sub: "General Academic English" }
                                 ].map((item, i) => (
-                                    <div key={i} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
-                                        <CheckCircle2 size={24} className="text-primary mb-4 opacity-50 group-hover:opacity-100" />
-                                        <h4 className="font-heading font-black text-slate-800 mb-1">{item.text}</h4>
-                                        <p className="text-xs text-slate-400 font-bold uppercase tracking-wider">{item.sub}</p>
+                                    <div key={i} className="p-3 md:p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
+                                        <CheckCircle2 size={18} className="text-primary mb-2 md:mb-4 opacity-50 group-hover:opacity-100 md:w-6 md:h-6" />
+                                        <h4 className="font-heading font-black text-slate-800 text-[10px] md:text-base mb-1">{item.text}</h4>
+                                        <p className="text-[8px] md:text-xs text-slate-400 font-bold uppercase tracking-wider">{item.sub}</p>
                                     </div>
                                 ))}
                             </div>
@@ -568,16 +568,16 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                 Đừng bắt đầu lộ trình dựa trên những bài Test nhanh 15 phút. Tại PTelc, chúng tôi cam kết chất lượng ngay từ khâu đầu vào bằng quy trình kiểm tra nghiêm ngặt.
                             </p>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div className="space-y-4">
-                                    <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center font-black">1</div>
-                                    <h4 className="font-heading font-black text-slate-800">Kiểm tra thực tế 3.5h</h4>
-                                    <p className="text-sm text-slate-400">Trải nghiệm bài thi IELTS thật 4 kỹ năng trong môi trường áp lực tiêu chuẩn.</p>
+                            <div className="grid grid-cols-2 gap-4 md:gap-6">
+                                <div className="space-y-3 md:space-y-4">
+                                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-accent text-white flex items-center justify-center font-black text-xs md:text-base">1</div>
+                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">Kiểm tra thực tế 3.5h</h4>
+                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">Trải nghiệm bài thi IELTS thật 4 kỹ năng trong môi trường áp lực.</p>
                                 </div>
-                                <div className="space-y-4">
-                                    <div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-black">2</div>
-                                    <h4 className="font-heading font-black text-slate-800">Tư vấn trực tiếp</h4>
-                                    <p className="text-sm text-slate-400">Giáo viên chấm bài and phản hồi trực tiếp phương án, lộ trình cá nhân hóa.</p>
+                                <div className="space-y-3 md:space-y-4">
+                                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary text-white flex items-center justify-center font-black text-xs md:text-base">2</div>
+                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">Tư vấn trực tiếp</h4>
+                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">Giáo viên chấm bài and phản hồi trực tiếp phương án lộ trình.</p>
                                 </div>
                             </div>
 

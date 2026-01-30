@@ -64,7 +64,7 @@ export default function ContactPage() {
             {/* Contact Details Grid */}
             <section className="py-24">
                 <div className="container mx-auto px-6 max-w-5xl">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center mb-24">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-12 text-center mb-12 md:mb-24">
                         {[
                             { icon: <Phone className="text-primary" />, title: "Hotline", content: "0902 508 290" },
                             { icon: <Mail className="text-accent" />, title: "Email", content: "info@ptelc.edu.vn" },
@@ -76,13 +76,13 @@ export default function ContactPage() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: idx * 0.1 }}
                                 viewport={{ once: true }}
-                                className="flex flex-col items-center group p-8 rounded-[2rem] bg-white border border-slate-50 shadow-sm hover:shadow-xl transition-all"
+                                className="flex flex-col items-center group p-5 md:p-8 rounded-[2rem] bg-white border border-slate-50 shadow-sm hover:shadow-xl transition-all"
                             >
-                                <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
                                     {item.icon}
                                 </div>
-                                <h4 className="font-heading font-bold text-slate-400 text-xs uppercase tracking-[0.2em] mb-3">{item.title}</h4>
-                                <p className="text-slate-900 font-heading font-bold text-lg leading-snug">{item.content}</p>
+                                <h4 className="font-heading font-bold text-slate-400 text-[10px] md:text-xs uppercase tracking-[0.2em] mb-2 md:mb-3">{item.title}</h4>
+                                <p className="text-slate-900 font-heading font-bold text-sm md:text-lg leading-snug">{item.content}</p>
                             </motion.div>
                         ))}
                     </div>

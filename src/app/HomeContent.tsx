@@ -298,23 +298,22 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         </div>
       </section>
 
-      {/* Partners */}
-      <section className="py-2 md:py-12 bg-white border-y border-slate-100">
+      <section className="py-8 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-2 md:mb-8">Đối tác chiến lược & Khảo thí</p>
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-16">
+          <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8">Đối tác chiến lược & Khảo thí</p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center items-center gap-4 md:gap-16">
             {partners.map((p: any, idx: number) => (
               <motion.div
                 key={idx}
                 whileHover={{ scale: 1.05 }}
-                className="flex-shrink-0 flex flex-col items-center group"
+                className="flex flex-col items-center group"
               >
                 {p.link ? (
-                  <a href={p.link} target="_blank" rel="noopener noreferrer">
-                    <img src={p.logo} alt={p.name} className="h-8 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                  <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
+                    <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
                   </a>
                 ) : (
-                  <img src={p.logo} alt={p.name} className="h-8 md:h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                  <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
                 )}
               </motion.div>
             ))}
