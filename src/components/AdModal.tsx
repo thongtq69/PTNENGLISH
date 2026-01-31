@@ -84,7 +84,7 @@ export default function AdModal() {
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[999] flex items-center justify-center p-4 md:p-10">
+                <div className="fixed inset-0 z-[999] flex items-end justify-center md:items-center p-0 md:p-10">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
