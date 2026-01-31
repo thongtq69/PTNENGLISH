@@ -107,6 +107,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import AdModal from "@/components/AdModal";
+import ChatBox from "@/components/ChatBox";
 
 export default function RootLayout({
   children,
@@ -118,6 +119,7 @@ export default function RootLayout({
       <body className={`${playfair.variable} ${newsreader.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} ${caveat.variable} font-body antialiased`}>
         {children}
         <AdModal />
+        <ChatBox />
       </body>
     </html>
   );

@@ -5,7 +5,7 @@
         "subtitle": "Partner to navigate your learning journey",
         "primaryCTA": {
             "text": "Đăng ký học thử ngay",
-            "link": "/contact"
+            "link": "/contact#registration-form"
         },
         "secondaryCTA": {
             "text": "Tìm hiểu phương pháp",
@@ -15,6 +15,6 @@
     "announcement": {
         "enabled": true,
         "text": "Enrollment for November & December 2025 is now open!",
-        "link": "/contact"
+        "link": "/contact#registration-form"
     }
 }

@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     }
 
     return (
-        <main className="min-h-screen bg-white">
+        <main className="min-h-screen bg-white overflow-x-hidden">
             <Header />
 
             {/* Post Header */}
@@ -90,10 +90,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </div>
 
             {/* Post Content */}
-            <article className="py-20">
-                <div className="container mx-auto px-6 max-w-3xl">
+            <article className="py-20 overflow-x-hidden">
+                <div className="container mx-auto px-6 max-w-3xl w-full">
                     <div
-                        className="prose prose-lg prose-slate max-w-none 
+                        className="prose prose-lg prose-slate max-w-none w-full break-words
                         prose-headings:font-heading prose-headings:font-black prose-headings:text-accent
                         prose-p:font-body prose-p:text-slate-600 prose-p:leading-relaxed
                         prose-li:font-body prose-li:text-slate-600

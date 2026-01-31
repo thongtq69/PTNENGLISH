@@ -11,6 +11,15 @@ import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 
 export default function StudentCornerContent({ pageData }: { pageData: any }) {
+    const [isMobile, setIsMobile] = React.useState(false);
+
+    React.useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
+
     // Extract sections with fallbacks
     const sections = pageData?.sections || [];
 
@@ -50,7 +59,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
     const mocktest = sections.find((s: any) => s.type === 'student-mocktest')?.content || {
         title: "Luyện Thi Thử <br /> <span className='text-primary font-bold'>Chuẩn Quốc Tế</span>",
-        description: "Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề and nhận phân tích chi tiết kỹ năng ngay lập tức.",
+        description: "Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề và nhận phân tích chi tiết kỹ năng ngay lập tức.",
         items: [
             "Mock Test IELTS 4 kỹ năng chuẩn IDP/BC",
             "Kho đề thi cập nhật mới nhất hàng quý",
@@ -63,9 +72,9 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
     const support = sections.find((s: any) => s.type === 'student-support')?.content || {
         title: "Bạn gặp khó khăn <br className='md:hidden' /> <span className='text-primary'>khi truy cập?</span>",
-        description: "Đội ngũ kỹ thuật and bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.",
+        description: "Đội ngũ kỹ thuật và bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.",
         phone: "0902 508 290",
-        emailLink: "/contact"
+        emailLink: "/contact#registration-form"
     };
 
     // Student Messages Section - Image Gallery Style
@@ -105,7 +114,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
     const [startIndex, setStartIndex] = useState(0);
     const [selectedNote, setSelectedNote] = useState<any>(null);
 
-    const itemsPerPage = 4;
+    const itemsPerPage = isMobile ? 2 : 4;
     const totalNotes = studentMessages.notes?.length || 0;
 
     const nextSlide = () => {
@@ -155,13 +164,13 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <>
                                 <button
                                     onClick={prevSlide}
-                                    className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-0 group-hover/board:opacity-100"
+                                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-slate-900/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
                                 >
                                     <ChevronLeft size={24} />
                                 </button>
                                 <button
                                     onClick={nextSlide}
-                                    className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-white/10 hover:bg-primary text-white transition-all backdrop-blur-md border border-white/20 shadow-xl opacity-0 group-hover/board:opacity-100"
+                                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-slate-900/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
                                 >
                                     <ChevronRight size={24} />
                                 </button>
@@ -187,7 +196,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <div className="absolute inset-0 rounded-[2rem] md:rounded-[3rem] shadow-[inset_0_4px_30px_rgba(0,0,0,0.5)] pointer-events-none" />
 
                             {/* Notes Grid - Use items-start for masonry-like feel */}
-                            <div className="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10 items-start min-h-[400px]">
+                            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10 items-start min-h-[250px] md:min-h-[400px]">
                                 <AnimatePresence mode="popLayout">
                                     {visibleNotes.map((note: any, idx: number) => (
                                         <motion.div
@@ -208,11 +217,11 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                         >
                                             {/* Pushpin (3D Look) */}
                                             <div
-                                                className="absolute -top-5 left-1/2 -translate-x-1/2 z-30 w-8 h-8 rounded-full shadow-[0_8px_15px_rgba(0,0,0,0.6)] group-hover:scale-125 transition-transform"
+                                                className="absolute -top-3 md:-top-5 left-1/2 -translate-x-1/2 z-30 w-5 h-5 md:w-8 md:h-8 rounded-full shadow-[0_5px_10px_rgba(0,0,0,0.6)] group-hover:scale-125 transition-transform"
                                                 style={{
                                                     backgroundColor: note.pinColor,
                                                     background: `radial-gradient(circle at 30% 30%, ${note.pinColor}CC, ${note.pinColor})`,
-                                                    boxShadow: `0 10px 20px rgba(0,0,0,0.4), inset -2px -2px 6px rgba(0,0,0,0.5), inset 2px 2px 6px rgba(255,255,255,0.4)`
+                                                    boxShadow: `0 5px 10px rgba(0,0,0,0.4), inset -1px -1px 4px rgba(0,0,0,0.5), inset 1px 1px 4px rgba(255,255,255,0.4)`
                                                 }}
                                             >
                                                 <div className="absolute top-2 left-2 w-2 h-2 rounded-full bg-white/60 blur-[1px]" />
@@ -220,9 +229,9 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
                                             {/* Polaroid Container */}
                                             <div
-                                                className="relative bg-white p-3.5 pb-16 shadow-[15px_15px_35px_rgba(0,0,0,0.4)] border border-slate-200 transition-shadow group-hover:shadow-[20px_20px_50px_rgba(0,0,0,0.5)]"
+                                                className="relative bg-white p-1.5 md:p-3.5 pb-8 md:pb-16 shadow-[10px_10px_25px_rgba(0,0,0,0.4)] md:shadow-[15px_15px_35px_rgba(0,0,0,0.4)] border border-slate-200 transition-shadow group-hover:shadow-[20px_20px_50px_rgba(0,0,0,0.5)]"
                                                 style={{
-                                                    boxShadow: idx % 2 === 0 ? "15px 20px 40px rgba(0,0,0,0.4)" : "-15px 20px 40px rgba(0,0,0,0.4)"
+                                                    boxShadow: idx % 2 === 0 ? "10px 15px 30px rgba(0,0,0,0.4)" : "-10px 15px 30px rgba(0,0,0,0.4)"
                                                 }}
                                             >
                                                 {/* The Image (Up by Admin) - Removed aspect-square to show full image */}
@@ -329,7 +338,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         <h3 className="text-4xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-4 h-auto md:h-[800px]">
+                    <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 h-auto md:h-[800px]">
                         {/* Large items Mapping */}
                         {playground.items.filter((i: any) => i.size === 'large' || i.size === 'medium').map((item: any, idx: number) => (
                             <motion.div
@@ -338,7 +347,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className={`${item.size === 'large' ? 'md:col-span-2 md:row-span-2' : 'md:col-span-2'} relative group rounded-[2rem] overflow-hidden shadow-2xl h-[400px] md:h-auto`}
+                                className={`
+                                    ${item.size === 'large' ? 'col-span-2 md:row-span-2' : 'col-span-1 md:col-span-2'} 
+                                    relative group rounded-2xl md:rounded-[2rem] overflow-hidden shadow-xl md:shadow-2xl h-[180px] md:h-auto
+                                `}
                             >
                                 <img
                                     src={item.src}
@@ -346,9 +358,9 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                     alt={item.title || "Playground"}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                                <div className="absolute bottom-10 left-10 text-white pr-10">
-                                    {item.label && <span className="bg-primary px-4 py-1.5 rounded-none text-[10px] font-black uppercase tracking-widest mb-4 inline-block">{item.label}</span>}
-                                    {item.title && <h4 className="text-2xl md:text-3xl font-heading font-black leading-tight uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: item.title }} />}
+                                <div className="absolute bottom-4 left-4 md:bottom-10 md:left-10 text-white pr-4 md:pr-10">
+                                    {item.label && <span className="bg-primary px-2 py-1 md:px-4 md:py-1.5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 md:mb-4 inline-block">{item.label}</span>}
+                                    {item.title && <h4 className="text-sm md:text-3xl font-heading font-black leading-tight uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: item.title }} />}
                                 </div>
                             </motion.div>
                         ))}
@@ -361,7 +373,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: (idx + 2) * 0.1 }}
-                                className="relative group rounded-[2rem] overflow-hidden shadow-xl h-[200px] md:h-auto"
+                                className="relative group rounded-2xl md:rounded-[2rem] overflow-hidden shadow-lg h-[150px] md:h-auto"
                             >
                                 <img
                                     src={item.src}
