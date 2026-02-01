@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Minus, ExternalLink, User, Phone, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
@@ -22,8 +23,12 @@ const ChatBox = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [leads, setLeads] = useState({ name: "", phone: "" });
     const [interest, setInterest] = useState("");
+    const pathname = usePathname();
 
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Hidden logic for Admin and Test pages
+    const isHiddenPath = pathname.startsWith("/admin") || pathname.startsWith("/test");
 
     // Persistence: Check if user already provided info
     useEffect(() => {
@@ -133,6 +138,8 @@ const ChatBox = () => {
         }
     };
 
+    if (isHiddenPath) return null;
+
     return (
         <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end font-sans">
             <AnimatePresence>
@@ -176,8 +183,8 @@ const ChatBox = () => {
                                 <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                                     <div className={`max-w-[85%] space-y-1`}>
                                         <div className={`rounded-2xl px-4 py-3 text-sm shadow-sm leading-relaxed ${msg.sender === "user"
-                                                ? "bg-primary text-white rounded-tr-none shadow-primary/20"
-                                                : "bg-white text-secondary rounded-tl-none border border-slate-100 shadow-indigo-100/30"
+                                            ? "bg-primary text-white rounded-tr-none shadow-primary/20"
+                                            : "bg-white text-secondary rounded-tl-none border border-slate-100 shadow-indigo-100/30"
                                             }`}>
                                             <p className="whitespace-pre-line">{msg.text}</p>
 
