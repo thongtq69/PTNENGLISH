@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Users, Compass, ShieldCheck, FileText, Lock, UserCheck, GraduationCap, Heart, MessageSquare, Laptop, Globe, ClipboardCheck, ArrowRight } from "lucide-react";
 import React, { useState } from "react";
+import Link from "next/link";
 
 const TEACHERS = [
     {
@@ -411,9 +412,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             </div>
                             <div className="bg-white rounded-[2rem] p-8 shadow-md border border-slate-200 ring-1 ring-primary/5">
                                 <h4 className="text-primary font-heading font-black text-xl mb-4 text-center">Bạn cần tư vấn?</h4>
-                                <button className="w-full bg-primary hover:bg-black text-white py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 transform">
+                                <Link href="/test" className="block w-full bg-primary hover:bg-black text-white py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 transform text-center">
                                     Đăng ký kiểm tra trình độ miễn phí
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

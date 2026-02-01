@@ -220,16 +220,18 @@ export default function TestPage() {
                             <span
                                 key={i}
                                 ref={el => { scrollRefs.current[qIdx] = el; }}
-                                className="inline-block mx-2 group relative align-middle"
+                                className="inline-flex items-center bg-slate-50 border-2 border-slate-200 focus-within:border-primary focus-within:bg-white transition-all rounded-lg shadow-sm pr-1 overflow-hidden h-9 mx-1 align-middle"
                             >
+                                <div className={`px-2 h-full flex items-center justify-center text-[10px] font-black border-r border-slate-200 transition-colors ${answers[skill][qIdx] ? 'bg-primary text-white border-primary' : 'bg-slate-100 text-slate-400'}`}>
+                                    {qIdx}
+                                </div>
                                 <input
                                     type="text"
-                                    className={`w-32 md:w-40 bg-slate-50 border-2 border-slate-200 focus:border-primary focus:bg-white transition-all outline-none px-3 py-1.5 text-sm font-black text-primary rounded-lg shadow-sm ${answers[skill][qIdx] ? 'border-primary bg-primary/[0.02]' : ''}`}
+                                    className="flex-1 bg-transparent outline-none px-3 py-1.5 text-sm font-black text-primary w-24 md:w-32"
                                     value={answers[skill][qIdx] || ""}
                                     onChange={(e) => handleAnswerChange(skill, qIdx, e.target.value)}
-                                    placeholder={""}
+                                    placeholder=""
                                 />
-                                <span className={`absolute -top-5 left-1 text-[10px] font-black uppercase tracking-widest transition-colors ${answers[skill][qIdx] ? 'text-primary' : 'text-slate-400'}`}>Q{qIdx}</span>
                             </span>
                         );
                     }

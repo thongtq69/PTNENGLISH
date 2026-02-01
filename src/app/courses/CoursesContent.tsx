@@ -364,7 +364,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             transition={{ delay: 0.3 }}
                             className="flex flex-wrap justify-center gap-4"
                         >
-                            <Link href="/contact#registration-form" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
+                            <Link href="/test" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
                                 Kiểm tra trình độ miễn phí
                             </Link>
                             <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
@@ -582,9 +582,9 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             </div>
 
                             <div className="flex justify-center lg:justify-start">
-                                <button className="w-full sm:w-auto bg-accent hover:bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold transition-all shadow-xl text-sm md:text-base">
+                                <Link href="/test" className="w-full sm:w-auto bg-accent hover:bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold transition-all shadow-xl text-sm md:text-base text-center">
                                     Đặt lịch kiểm tra đầu vào ngay
-                                </button>
+                                </Link>
                             </div>
                         </div>
 
