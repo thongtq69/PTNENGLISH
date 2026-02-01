@@ -11,8 +11,10 @@ import Link from "next/link";
 import HallOfFame from "@/components/HallOfFame";
 
 import { useState, useEffect } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function HomeContent({ pageData, siteSettings }: { pageData: any; siteSettings: any }) {
+  const { t, language } = useLanguage();
   const [latestPosts, setLatestPosts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             className="px-4 flex flex-col items-center"
           >
             <p className="text-[10px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5">
-              {philosophy}
+              {language === "vi" ? philosophy : t.home.philosophy.text}
             </p>
             <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>
             <div className="mt-3 md:mt-4 flex justify-center items-center gap-3">
@@ -72,14 +74,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             viewport={{ once: true }}
           >
             <h2 className="text-primary font-heading text-xs md:text-xl font-bold uppercase tracking-[0.3em] mb-1">
-              Hệ Thống Đào Tạo Academic Master
+              {t.home.intro.badge}
             </h2>
             <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
-              TTNN PHÚ TÀI NĂNG <br />
+              {t.home.intro.title} <br />
               <span className="text-base md:text-3xl">(PTelc - PT English Language Centre)</span>
             </h3>
             <p className="text-sm md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
-              Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín. Khung chương trình Sáu Cấp Độ (A1-C2) được thiết kế phù hợp với mục đích học và trình độ của từng học viên.
+              {t.home.intro.desc}
             </p>
           </motion.div>
 
@@ -131,18 +133,18 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               <div className="max-w-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-[10px] font-black uppercase tracking-widest leading-none">
-                    Digital Campus
+                    {t.home.campus.badge}
                   </div>
                   <div className="h-px w-12 bg-white/20"></div>
-                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">PTELC Academic System</span>
+                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{t.home.campus.system}</span>
                 </div>
 
                 <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white line-clamp-2">
-                  Hệ Thống <span className="text-primary font-bold">Học Thuật</span> & Thi Thử
+                  {t.home.campus.title.split(' ')[0]} <span className="text-primary font-bold">{t.home.campus.title.split(' ').slice(1).join(' ')}</span>
                 </h3>
 
                 <p className="text-slate-400 text-[10px] md:text-base font-body leading-relaxed max-w-[280px] md:max-w-none">
-                  Bứt phá giới hạn với kho tài liệu độc quyền và hệ thống thi thử IELTS chuẩn quốc tế. Mọi công cụ bạn cần đều tập trung tại đây.
+                  {t.home.campus.desc}
                 </p>
               </div>
 
@@ -163,7 +165,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   </div>
                   <div className="text-left">
                     <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
-                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">Vào cổng học tập</p>
+                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">{t.home.campus.lmsBtn}</p>
                   </div>
                 </motion.a>
 
@@ -178,7 +180,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   </div>
                   <div className="text-left">
                     <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
-                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">Thi thử IELTS</p>
+                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">{t.home.campus.testBtn}</p>
                   </div>
                 </motion.a>
               </div>

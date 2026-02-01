@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Facebook, Instagram, Youtube, Phone, Mail, MessageCircle } from "lucide-react";
+import { Facebook, Instagram, Youtube, Phone, Mail, Globe } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 // TikTok icon is missing from some Lucide versions, adding a custom SVG
 const TikTokIcon = ({ size = 20 }: { size?: number }) => (
@@ -19,19 +20,21 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
     </svg>
 );
 
-const navigation = [
-    { name: "Trang chủ", href: "/" },
-    { name: "Về chúng tôi", href: "/about-us" },
-    { name: "Chương trình học", href: "/courses" },
-    { name: "Góc học viên", href: "/student-corner" },
-    { name: "Blog", href: "/blog" },
-    { name: "Cổng LMS", href: "https://lms.ptelc.edu.vn/" },
-];
-
 export default function Header() {
+    const { language, setLanguage, t } = useLanguage();
+    const pathname = usePathname();
+
+    const navigation = [
+        { name: t.nav.home, href: "/" },
+        { name: t.nav.about, href: "/about-us" },
+        { name: t.nav.courses, href: "/courses" },
+        { name: t.nav.studentCorner, href: "/student-corner" },
+        { name: t.nav.blog, href: "/blog" },
+        { name: t.nav.lms, href: "https://lms.ptelc.edu.vn/" },
+    ];
+
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const pathname = usePathname();
     const isHome = pathname === "/";
 
     useEffect(() => {
@@ -68,11 +71,29 @@ export default function Header() {
                         </a>
                     </div>
                     <div className="flex items-center space-x-5">
-                        <span className="text-slate-500 mr-2">Follow us:</span>
+                        <span className="text-slate-500 mr-2">{t.topbar.followUs}</span>
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><Facebook size={14} /></a>
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><Instagram size={14} /></a>
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><Youtube size={14} /></a>
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><TikTokIcon size={14} /></a>
+
+                        <div className="h-4 w-px bg-white/20 ml-2"></div>
+
+                        <div className="flex items-center gap-2 ml-4">
+                            <button
+                                onClick={() => setLanguage("vi")}
+                                className={`transition-all ${language === "vi" ? "text-primary opacity-100 scale-110 font-black" : "opacity-40 hover:opacity-100"}`}
+                            >
+                                VI
+                            </button>
+                            <span className="text-white/20">/</span>
+                            <button
+                                onClick={() => setLanguage("en")}
+                                className={`transition-all ${language === "en" ? "text-primary opacity-100 scale-110 font-black" : "opacity-40 hover:opacity-100"}`}
+                            >
+                                EN
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -109,28 +130,44 @@ export default function Header() {
                             href="/contact#registration-form"
                             className="bg-primary hover:bg-red-700 text-white px-6 py-2.5 rounded-none font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-red-500/20"
                         >
-                            Đăng ký ngay
+                            {t.nav.register}
                         </Link>
                     </nav>
 
                     {/* Mobile Menu Button */}
-                    <button
-                        onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className={`md:hidden transition-colors ${isTransparent ? "text-white" : "text-accent"} hover:text-primary`}
-                    >
-                        {isMenuOpen ? (
-                            <div className="p-1">
-                                <span className="text-xs font-black uppercase tracking-widest text-[#1e293b] mr-2">Đóng</span>
-                                <svg className="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <div className="flex items-center gap-4 md:hidden">
+                        <div className="flex items-center gap-2 bg-slate-100 rounded-lg px-2 py-1">
+                            <button
+                                onClick={() => setLanguage("vi")}
+                                className={`text-[10px] font-black transition-all ${language === "vi" ? "text-primary" : "text-slate-400"}`}
+                            >
+                                VI
+                            </button>
+                            <button
+                                onClick={() => setLanguage("en")}
+                                className={`text-[10px] font-black transition-all ${language === "en" ? "text-primary" : "text-slate-400"}`}
+                            >
+                                EN
+                            </button>
+                        </div>
+                        <button
+                            onClick={() => setIsMenuOpen(!isMenuOpen)}
+                            className={`transition-colors ${isTransparent ? "text-white" : "text-accent"} hover:text-primary`}
+                        >
+                            {isMenuOpen ? (
+                                <div className="p-1">
+                                    <span className="text-xs font-black uppercase tracking-widest text-[#1e293b] mr-2">{t.nav.close}</span>
+                                    <svg className="w-8 h-8 inline-block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </div>
+                            ) : (
+                                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                                 </svg>
-                            </div>
-                        ) : (
-                            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        )}
-                    </button>
+                            )}
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -171,7 +208,7 @@ export default function Header() {
                                 onClick={() => setIsMenuOpen(false)}
                                 className="w-full bg-primary py-5 text-white font-black uppercase tracking-widest text-center shadow-xl shadow-red-500/20"
                             >
-                                Đăng ký tư vấn
+                                {t.nav.register}
                             </Link>
 
                             <div className="flex justify-center gap-8 text-slate-400">
