@@ -1,101 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PTN English Logo Exporter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=Inter:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@800&family=Inter:wght@700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: #f8fafc;
+            background: #0f172a;
+            /* Dark background to see both versions */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
+            color: white;
         }
+
         .container {
-            background: white;
-            padding: 4rem;
+            background: #1e293b;
+            padding: 3rem;
             border-radius: 2rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        #logo-container {
-            padding: 2rem;
-            background: white;
-            display: inline-block;
-            border: 1px dashed #e2e8f0;
-            border-radius: 1rem;
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
             margin-bottom: 2rem;
         }
+
+        #logo-container {
+            padding: 3rem;
+            background: white;
+            /* Default background */
+            display: inline-block;
+            border-radius: 1.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            min-width: 500px;
+        }
+
+        #logo-container.dark-mode {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .logo-wrap {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .main-text {
             font-family: 'Playfair Display', serif;
             font-size: 80px;
             font-weight: 900;
-            line-height: 1;
-            letter-spacing: -0.02em;
+            line-height: 0.9;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: baseline;
         }
-        .ptn { color: #C7002B; }
-        .english { color: #1e293b; }
+
+        .ptn {
+            color: #C7002B;
+        }
+
+        .english {
+            color: #1e293b;
+            margin-left: 15px;
+        }
+
+        /* White Version */
+        .white-version .ptn,
+        .white-version .english,
+        .white-version .tagline {
+            color: #FFFFFF !important;
+        }
+
         .tagline {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            margin-top: 10px;
+            margin-top: 15px;
             color: #095e7c;
             font-size: 14px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.18em;
         }
-        .tagline span {
-            display: inline-block;
-        }
+
         .btn {
             background: #C7002B;
             color: white;
             border: none;
-            padding: 1rem 2.5rem;
+            padding: 1rem 2rem;
             border-radius: 1rem;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+
+        .btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(199, 0, 43, 0.2);
             filter: brightness(1.1);
         }
+
         .info {
             margin-top: 2rem;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-        canvas {
-            display: none;
+            color: #94a3b8;
+            font-size: 0.8rem;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <h1 style="margin-bottom: 2rem; font-weight: 900; color: #1e293b;">PTN EXPORT TOOL</h1>
-        
+        <h1 style="margin-bottom: 1rem; font-weight: 900;">PTN LOGO EXPORTER V2</h1>
+        <p style="color: #94a3b8; margin-bottom: 2rem;">Choose your version and download high-resolution transparent PNG
+        </p>
+
+        <div class="controls">
+            <button class="btn secondary" onclick="setVersion('color')">Original Color</button>
+            <button class="btn secondary" onclick="setVersion('white')">All White Version</button>
+        </div>
+
         <div id="logo-container">
             <div class="logo-wrap" id="logo-to-export">
                 <div class="main-text">
-                    <span class="ptn">PTN</span><span class="english"> ENGLISH</span>
+                    <span class="ptn">PTN</span>
+                    <span class="english">ENGLISH</span>
                 </div>
                 <div class="tagline">
                     <span>P</span><span>A</span><span>R</span><span>T</span><span>N</span><span>E</span><span>R</span>
@@ -108,39 +158,50 @@
         </div>
 
         <br>
-        <button class="btn" onclick="exportLogo()">Download High-Res PNG (Transparent)</button>
-        
+        <button class="btn" onclick="exportLogo()">Download 4000px PNG (Transparent)</button>
+
         <div class="info">
-            This tool generates a high-quality 4000px PNG from the brand's vector system.<br>
-            Fonts used: Playfair Display & Inter.
+            Fonts: Playfair Display (900) & Inter / Format: PNG 32-bit (Transparent)
         </div>
     </div>
 
-    <canvas id="export-canvas"></canvas>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+        function setVersion(type) {
+            const wrap = document.getElementById('logo-to-export');
+            const container = document.getElementById('logo-container');
+            if (type === 'white') {
+                wrap.classList.add('white-version');
+                container.classList.add('dark-mode');
+            } else {
+                wrap.classList.remove('white-version');
+                container.classList.remove('dark-mode');
+            }
+        }
+
         function exportLogo() {
             const element = document.getElementById('logo-to-export');
-            const btn = document.querySelector('.btn');
-            btn.innerText = "Exporting...";
-            
-            // Wait for fonts to be fully loaded
+            const btn = document.querySelector('.btn:last-of-type');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+
             document.fonts.ready.then(() => {
                 html2canvas(element, {
                     backgroundColor: null,
-                    scale: 4, // 4x scale for high-res
+                    scale: 5, // Even higher resolution
                     logging: false,
                     useCORS: true
                 }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = 'ptn_english_logo_transparent.png';
+                    const isWhite = element.classList.contains('white-version');
+                    link.download = `ptn_logo_${isWhite ? 'white' : 'color'}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
-                    btn.innerText = "Download High-Res PNG (Transparent)";
+                    btn.innerText = originalText;
                 });
             });
         }
     </script>
 </body>
+
 </html>
