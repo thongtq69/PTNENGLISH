@@ -371,7 +371,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         <h3 className="text-4xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 h-auto">
+                    <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 h-auto md:h-[800px]">
                         {/* Large items Mapping */}
                         {playground.items.filter((i: any) => i.size === 'large' || i.size === 'medium').map((item: any, idx: number) => (
                             <motion.div

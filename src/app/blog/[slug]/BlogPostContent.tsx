@@ -58,8 +58,8 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
             {/* Featured Image */}
             <div className="container mx-auto px-6 max-w-4xl -mt-10">
-                <div className="aspect-video w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
-                    <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
+                <div className="w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-white">
+                    <img src={post.image} alt={post.title} className="w-full h-auto block" />
                 </div>
             </div>
 
@@ -90,10 +90,10 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                         {blogPost?.ctaDesc || "Đăng ký để nhận những kiến thức học thuật và lộ trình IELTS độc quyền từ PTN English."}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <input 
-                            type="email" 
-                            placeholder={blogPost?.emailPlaceholder || "Email của bạn..."} 
-                            className="px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-80" 
+                        <input
+                            type="email"
+                            placeholder={blogPost?.emailPlaceholder || "Email của bạn..."}
+                            className="px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-80"
                         />
                         <button className="px-8 py-4 bg-primary text-white font-black rounded-xl hover:scale-105 transition-all shadow-xl shadow-primary/20">
                             {blogPost?.subscribeButton || "ĐĂNG KÝ NGAY"}
