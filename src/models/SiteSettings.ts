@@ -36,6 +36,7 @@ const SiteSettingsSchema = new Schema({
         facebook: String,
         instagram: String,
         youtube: String,
+        tiktok: String,
         mapsUrl: String
     },
     footer: {

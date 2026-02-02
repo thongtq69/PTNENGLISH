@@ -23,6 +23,19 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
 export default function Header() {
     const { language, setLanguage, t } = useLanguage();
     const pathname = usePathname();
+    const [settings, setSettings] = useState<any>(null);
+
+    useEffect(() => {
+        fetch("/api/full-settings")
+            .then(res => res.json())
+            .then(data => setSettings(data))
+            .catch(() => { });
+    }, []);
+
+    const contactData = settings?.contact || {
+        phone: "0902 508 290",
+        email: "info@ptelc.edu.vn"
+    };
 
     const navigation = [
         { name: t.nav.home, href: "/" },
@@ -62,21 +75,21 @@ export default function Header() {
             <div className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 border-b border-white/10 ${isScrolled || isMenuOpen ? "hidden" : "bg-slate-900/80 backdrop-blur-md hidden md:block"}`}>
                 <div className="container mx-auto px-6 h-10 flex justify-between items-center text-[10px] uppercase font-bold tracking-widest text-slate-100">
                     <div className="flex items-center space-x-6">
-                        <a href="tel:0902508290" className="flex items-center hover:text-white transition-colors">
+                        <a href={`tel:${contactData.phone || "0902508290"}`} className="flex items-center hover:text-white transition-colors">
                             <Phone size={12} className="mr-2 text-primary" />
-                            0902 508 290
+                            {contactData.phone || "0902 508 290"}
                         </a>
-                        <a href="mailto:info@ptelc.edu.vn" className="flex items-center hover:text-white transition-colors">
+                        <a href={`mailto:${contactData.email || "info@ptelc.edu.vn"}`} className="flex items-center hover:text-white transition-colors">
                             <Mail size={12} className="mr-2 text-primary" />
-                            info@ptelc.edu.vn
+                            {contactData.email || "info@ptelc.edu.vn"}
                         </a>
                     </div>
                     <div className="flex items-center space-x-5">
                         <span className="text-slate-500 mr-2">{t.topbar.followUs}</span>
-                        <a href="#" className="hover:text-primary transition-all hover:scale-110"><Facebook size={14} /></a>
-                        <a href="#" className="hover:text-primary transition-all hover:scale-110"><Instagram size={14} /></a>
-                        <a href="#" className="hover:text-primary transition-all hover:scale-110"><Youtube size={14} /></a>
-                        <a href="#" className="hover:text-primary transition-all hover:scale-110"><TikTokIcon size={14} /></a>
+                        <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all hover:scale-110"><Facebook size={14} /></a>
+                        <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all hover:scale-110"><Instagram size={14} /></a>
+                        <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all hover:scale-110"><Youtube size={14} /></a>
+                        <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-all hover:scale-110"><TikTokIcon size={14} /></a>
                     </div>
                 </div>
             </div>
@@ -218,10 +231,10 @@ export default function Header() {
                             </Link>
 
                             <div className="flex justify-center gap-8 text-slate-400">
-                                <a href="#" className="hover:text-primary"><Facebook size={24} /></a>
-                                <a href="#" className="hover:text-primary"><Instagram size={24} /></a>
-                                <a href="#" className="hover:text-primary"><Youtube size={24} /></a>
-                                <a href="#" className="hover:text-primary"><TikTokIcon size={24} /></a>
+                                <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary"><Facebook size={24} /></a>
+                                <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary"><Instagram size={24} /></a>
+                                <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary"><Youtube size={24} /></a>
+                                <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="hover:text-primary"><TikTokIcon size={24} /></a>
                             </div>
 
                             <p className="text-[10px] text-center text-slate-400 uppercase font-bold tracking-widest">

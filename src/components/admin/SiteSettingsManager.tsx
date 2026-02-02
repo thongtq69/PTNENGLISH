@@ -130,9 +130,9 @@ export default function SiteSettingsManager() {
                 <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 lg:col-span-2">
                     <h2 className="text-xl font-black text-white flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center text-white"><Facebook size={16} /></div>
-                        Social Media Links
+                        Social Media & Links
                     </h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="bg-white/[0.02] p-6 rounded-2xl space-y-3">
                             <span className="text-[10px] font-black flex items-center gap-2 text-blue-400"><Facebook size={12} /> Facebook URL</span>
                             <input value={settings.contact.facebook} onChange={e => updateNested('contact', 'facebook', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2 text-xs text-slate-400" />
@@ -144,6 +144,13 @@ export default function SiteSettingsManager() {
                         <div className="bg-white/[0.02] p-6 rounded-2xl space-y-3">
                             <span className="text-[10px] font-black flex items-center gap-2 text-red-500"><Youtube size={12} /> YouTube URL</span>
                             <input value={settings.contact.youtube} onChange={e => updateNested('contact', 'youtube', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2 text-xs text-slate-400" />
+                        </div>
+                        <div className="bg-white/[0.02] p-6 rounded-2xl space-y-3">
+                            <span className="text-[10px] font-black flex items-center gap-2 text-slate-200">
+                                <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12.525.01c1.306-.022 2.527.194 3.7.6a8.12 8.12 0 0 1-1.037 3.063c-1.126.311-2.28.324-3.418.331.008 3.582.022 7.164.032 10.745l.004.416c1.115 1.488.583 3.616-.837 4.757-1.42 1.141-3.66.936-4.787-.417-1.428-1.714-1.116-4.473.847-5.594 1.258-.718 2.373-.417 3.254.195.034-4.852.022-9.704.02-14.556 1.15-.013 2.298.423 3.298 1.157 1.15.845 1.574 2.115 1.63 3.447.01.21.007.41-.01.623 1.1-.17 2.2-.14 3.3.09a7.35 7.35 0 0 0-1.85-4.43c-1.44-1.58-3.48-2.31-5.6-.01V.01z" /></svg>
+                                TikTok URL
+                            </span>
+                            <input value={settings.contact.tiktok} onChange={e => updateNested('contact', 'tiktok', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2 text-xs text-slate-400" />
                         </div>
                     </div>
                 </section>
