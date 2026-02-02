@@ -91,7 +91,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           </motion.div>
 
 
-          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
+          <div className="flex flex-wrap justify-evenly gap-y-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
             {programs.map((prog: any, idx: number) => (
               <Link key={idx} href={prog.link || "/courses"} className="w-[28%] md:w-auto">
                 <motion.div
@@ -106,8 +106,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
                       <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 pt-6 md:pt-16 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent flex items-end justify-center">
-                      <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight text-center w-full">{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
+                    <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent flex items-end justify-center min-h-[50%]">
+                      <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight text-center w-full pb-1 md:pb-2">{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
                     </div>
                   </div>
                 </motion.div>

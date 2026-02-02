@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
@@ -17,6 +17,21 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
     const { t, language } = useLanguage();
     const [activeTab, setActiveTab] = useState<"ie" | "eft" | "ge">("ie");
     const [selectedLevel, setSelectedLevel] = useState<any>(null);
+
+    // Read hash from URL and set active tab accordingly
+    useEffect(() => {
+        const hash = window.location.hash.replace('#', '').toLowerCase();
+        if (hash === 'ie' || hash === 'eft' || hash === 'ge') {
+            setActiveTab(hash as "ie" | "eft" | "ge");
+            // Scroll to pathway section after a short delay
+            setTimeout(() => {
+                const pathwaySection = document.getElementById('pathway');
+                if (pathwaySection) {
+                    pathwaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 300);
+        }
+    }, []);
 
     const getLevelData = (pathway: string, level: string) => {
         const levels = t.courses.levels as any;
