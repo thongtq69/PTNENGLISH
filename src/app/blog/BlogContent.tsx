@@ -13,29 +13,32 @@ export default function BlogContent({ pageData }: { pageData: any }) {
     const { t, language } = useLanguage();
     const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState("Tất cả");
+    const [activeTab, setActiveTab] = useState("");
     const [search, setSearch] = useState("");
 
-    // Extract dynamic content
-    const sections = pageData?.sections || [];
-    const hero = sections.find((s: any) => s.type === 'blog-hero')?.content || {
-        title: language === "vi" ? "Góc Tri Thức <br /> Academic Insights" : "Knowledge Hub <br /> Academic Insights",
-        subtitle: "Knowledge Navigator & Editorial",
-        description: language === "vi"
+    // Extract dynamic content - Prioritize translations
+    const hero = {
+        title: t.blogPage?.hero?.title || (language === "vi" ? "Góc Tri Thức <br /> Academic Insights" : "Knowledge Hub <br /> Academic Insights"),
+        subtitle: t.blogPage?.hero?.subtitle || "Knowledge Navigator & Editorial",
+        description: t.blogPage?.hero?.description || (language === "vi"
             ? "Chia sẻ những kinh nghiệm, phương pháp và lộ trình học thuật quý báu từ đội ngũ chuyên gia MA.TESOL của PTN English."
-            : "Sharing valuable experiences, methods, and academic pathways from PTN English's MA.TESOL expert team."
+            : "Sharing valuable experiences, methods, and academic pathways from PTN English's MA.TESOL expert team.")
     };
 
-    // Memoize categories to prevent re-render loops
+    // Memoize categories to prevent re-render loops - always use translated categories
     const categories = useMemo(() => {
-        const dbCategories = sections.find((s: any) => s.type === 'blog-categories')?.content?.items;
-        if (dbCategories && dbCategories.length > 0) return dbCategories;
-
         return language === "vi"
             ? ["Tất cả", "IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập"]
             : ["All", "IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience"];
-    }, [sections, language]);
-    const newsletter = sections.find((s: any) => s.type === 'blog-newsletter')?.content || {
+    }, [language]);
+
+    // Initialize activeTab based on language when empty
+    useEffect(() => {
+        if (!activeTab) {
+            setActiveTab(language === "vi" ? "Tất cả" : "All");
+        }
+    }, [language, activeTab]);
+    const newsletter = {
         title: t.blogPage?.newsletter?.title || (language === "vi" ? "Đăng ký nhận Academic Insights định kỳ" : "Subscribe to Academic Insights"),
         description: t.blogPage?.newsletter?.description || (language === "vi" ? "Cập nhật những thay đổi mới nhất về đề thi IELTS và các chương trình học bổng du học Châu Âu ngay hôm nay." : "Get the latest updates on IELTS exams and scholarship programs for studying in Europe today."),
         buttonText: t.blogPage?.newsletter?.buttonText || (language === "vi" ? "Đăng Ký Ngay" : "Subscribe Now")

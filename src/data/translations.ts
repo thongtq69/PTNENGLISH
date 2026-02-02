@@ -480,6 +480,11 @@ export const translations = {
                 title: "Đăng ký nhận Academic Insights định kỳ",
                 description: "Cập nhật những thay đổi mới nhất về đề thi IELTS và các chương trình học bổng du học Châu Âu ngay hôm nay.",
                 buttonText: "Đăng Ký Ngay"
+            },
+            hero: {
+                title: "Góc Tri Thức <br /> Academic Insights",
+                subtitle: "Knowledge Navigator & Editorial",
+                description: "Chia sẻ những kinh nghiệm, phương pháp và lộ trình học thuật quý báu từ đội ngũ chuyên gia MA.TESOL của PTN English."
             }
         },
         blogPost: {
@@ -1164,6 +1169,11 @@ export const translations = {
                 title: "Subscribe to Academic Insights",
                 description: "Get the latest updates on IELTS exams and scholarship programs for studying in Europe today.",
                 buttonText: "Subscribe Now"
+            },
+            hero: {
+                title: "Knowledge Hub <br /> Academic Insights",
+                subtitle: "Knowledge Navigator & Editorial",
+                description: "Sharing valuable experiences, methods, and academic pathways from PTN English's MA.TESOL expert team."
             }
         },
         blogPost: {

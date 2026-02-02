@@ -146,6 +146,13 @@ const ChatBox = () => {
 
         localStorage.setItem("ptn_chat_leads", JSON.stringify(leads));
 
+        // Send lead to server
+        fetch("/api/chatbot-leads", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...leads, interest })
+        }).catch(err => console.error("Failed to save chatbot lead:", err));
+
         setTimeout(() => {
             setStep("done");
             const rawThanks = t.chatbot?.thanksMsg || fb(
