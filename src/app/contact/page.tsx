@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
 
 export default function ContactPage() {
+    const { t } = useLanguage();
     const [submitted, setSubmitted] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,14 +50,14 @@ export default function ContactPage() {
                         animate={{ opacity: 1, y: 0 }}
                     >
                         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest mb-8">
-                            Join the Professional Academic Community
+                            {t.contact.badge}
                         </div>
                         <h1 className="text-5xl md:text-7xl font-heading font-semibold text-accent mb-10 leading-tight">
-                            Sẵn Sàng Đồng Hành <br />
-                            Cùng Bạn Vươn Bản Lĩnh
+                            {t.contact.title} <br />
+                            {t.contact.subtitle}
                         </h1>
                         <p className="text-slate-500 text-xl font-body leading-relaxed mb-12 mx-auto max-w-2xl">
-                            Dù bạn đang ở bất kỳ trình độ nào, <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> (PTelc) luôn sẵn sàng tư vấn và xây dựng lộ trình học thuật tối ưu nhất cho tương lai của bạn.
+                            {t.contact.desc} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {t.contact.descHighlight}
                         </p>
                     </motion.div>
                 </div>
@@ -66,9 +68,9 @@ export default function ContactPage() {
                 <div className="container mx-auto px-6 max-w-5xl">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-12 text-center mb-12 md:mb-24">
                         {[
-                            { icon: <Phone className="text-primary" />, title: "Hotline", content: "0902 508 290" },
-                            { icon: <Mail className="text-accent" />, title: "Email", content: "info@ptelc.edu.vn" },
-                            { icon: <MapPin className="text-accent" />, title: "Địa Chỉ", content: "146Bis – Đ. Nguyễn Văn Thủ – P. Tân Định – TP. HCM" },
+                            { icon: <Phone className="text-primary" />, title: t.contact.info.hotline, content: "0902 508 290" },
+                            { icon: <Mail className="text-accent" />, title: t.contact.info.email, content: "info@ptelc.edu.vn" },
+                            { icon: <MapPin className="text-accent" />, title: t.contact.info.address, content: "146Bis – Đ. Nguyễn Văn Thủ – P. Tân Định – TP. HCM" },
                         ].map((item, idx) => (
                             <motion.div
                                 key={idx}
@@ -100,38 +102,38 @@ export default function ContactPage() {
                                 <div className="w-24 h-24 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6">
                                     <CheckCircle2 size={48} className="text-secondary animate-bounce" />
                                 </div>
-                                <h3 className="text-4xl font-heading font-bold text-slate-900">Yêu Cầu Đã Được Gửi!</h3>
-                                <p className="text-slate-500 font-body text-lg">Các "Academic Partners" sẽ liên hệ lại với bạn trong vòng 30 phút. <br /> Chân thành cảm ơn sự quan tâm của bạn!</p>
+                                <h3 className="text-4xl font-heading font-bold text-slate-900">{t.contact.form.success.title}</h3>
+                                <p className="text-slate-500 font-body text-lg">{t.contact.form.success.desc}</p>
                             </div>
                         ) : (
                             <>
                                 <div className="text-center mb-16">
-                                    <h2 className="text-3xl font-heading font-bold text-accent mb-4">Đăng Ký Tư Vấn Chuyên Sâu</h2>
+                                    <h2 className="text-3xl font-heading font-bold text-accent mb-4">{t.contact.form.title}</h2>
                                     <div className="w-24 h-1 bg-primary mx-auto"></div>
                                 </div>
 
                                 <form onSubmit={handleSubmit} className="space-y-8 font-body">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-3">
-                                            <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">Họ và tên học viên</label>
-                                            <input required name="name" type="text" placeholder="Nguyễn Văn A" className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all text-slate-700" />
+                                            <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">{t.contact.form.name}</label>
+                                            <input required name="name" type="text" placeholder={t.contact.form.name} className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all text-slate-700" />
                                         </div>
                                         <div className="space-y-3">
-                                            <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">Số điện thoại</label>
-                                            <input required name="phone" type="tel" placeholder="090x xxx xxx" className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all text-slate-700" />
+                                            <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">{t.contact.form.phone}</label>
+                                            <input required name="phone" type="tel" placeholder={t.contact.form.phone} className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all text-slate-700" />
                                         </div>
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">Email liên hệ</label>
-                                        <input required name="email" type="email" placeholder="example@email.com" className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all text-slate-700" />
+                                        <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">{t.contact.form.email}</label>
+                                        <input required name="email" type="email" placeholder={t.contact.form.email} className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all text-slate-700" />
                                     </div>
                                     <div className="space-y-3">
-                                        <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">Gói đào tạo quan tâm</label>
+                                        <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest">{t.contact.form.course}</label>
                                         <select name="course" className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all appearance-none text-slate-700">
-                                            <option>Academic English for Teens (EfT)</option>
-                                            <option>IELTS Preparation Expert</option>
-                                            <option>General English Communication</option>
-                                            <option>Cần tư vấn chưa xác định</option>
+                                            <option>{t.contact.form.options.eft}</option>
+                                            <option>{t.contact.form.options.ielts}</option>
+                                            <option>{t.contact.form.options.general}</option>
+                                            <option>{t.contact.form.options.undecided}</option>
                                         </select>
                                     </div>
                                     <motion.button
@@ -139,7 +141,7 @@ export default function ContactPage() {
                                         whileTap={{ scale: 0.98 }}
                                         className="w-full bg-primary text-white py-6 rounded-[2rem] font-black uppercase tracking-[0.3em] text-sm shadow-2xl shadow-red-500/30 hover:bg-red-700 transition-all flex items-center justify-center mt-12"
                                     >
-                                        Gửi Yêu Cầu Chuyên Gia <Send size={20} className="ml-4" />
+                                        {t.contact.form.submit} <Send size={20} className="ml-4" />
                                     </motion.button>
                                 </form>
                             </>

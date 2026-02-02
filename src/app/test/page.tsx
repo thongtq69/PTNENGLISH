@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     BookOpen, Headphones, PenTool, Clock,
@@ -40,6 +41,7 @@ interface Test {
 }
 
 export default function TestPage() {
+    const { t, language } = useLanguage();
     const [academicTests, setAcademicTests] = useState<Test[]>([]);
     const [selectedTest, setSelectedTest] = useState<Test | null>(null);
     const [step, setStep] = useState(0); // 0: Selection, 1: Intro, 2: Testing, 3: Success
@@ -161,7 +163,7 @@ export default function TestPage() {
     };
 
     const handleSubmit = () => {
-        if (confirm("Bạn có chắc chắn muốn nộp bài?")) {
+        if (confirm(t.test.testing.confirmSubmit)) {
             setStep(3);
         }
     };
@@ -343,13 +345,13 @@ export default function TestPage() {
                             Submission <span className="text-primary">Successful!</span>
                         </h2>
                         <p className="text-slate-500 text-lg mb-12 font-body max-w-2xl mx-auto">
-                            Bài làm của bạn đã được ghi nhận. Chuyên gia <span className="text-primary font-bold">PTN</span> sẽ chấm điểm và gửi kết quả chi tiết qua email trong vòng 24h.
+                            {t.test.success.desc}
                         </p>
                         <button
                             onClick={() => window.location.href = "/"}
                             className="bg-accent text-white px-12 py-5 rounded-full font-bold shadow-xl hover:bg-slate-900 transition-all active:scale-95"
                         >
-                            Quay lại Trang Chủ
+                            {t.test.success.backHome}
                         </button>
                     </motion.div>
                 </div>
@@ -375,7 +377,7 @@ export default function TestPage() {
                         >
                             IELTS Academic <br /> <span className="text-primary">Simulator</span>
                         </motion.h1>
-                        <p className="text-slate-500 text-lg font-body">Trải nghiệm phòng thi thật với các bộ đề chuẩn quốc tế, cấu trúc IELTS 4 kỹ năng.</p>
+                        <p className="text-slate-500 text-lg font-body">{t.test.selection.subtitle}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -435,8 +437,7 @@ export default function TestPage() {
                     </div>
                     <h2 className="text-accent font-heading font-black text-5xl mb-8 leading-tight">{selectedTest?.name}</h2>
                     <p className="text-slate-500 mb-14 text-xl font-body leading-relaxed max-w-2xl mx-auto">
-                        Chào mừng bạn đến với hệ thống thi thử của <strong className="text-accent font-black">PTN English</strong>.
-                        Bài thi được thiết kế để đo lường chính xác các kỹ năng IELTS Academic của bạn.
+                        {t.test.intro.welcome}
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-14">
@@ -519,7 +520,7 @@ export default function TestPage() {
                         onClick={handleSubmit}
                         className="bg-primary hover:bg-red-700 text-white px-5 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all shadow-2xl shadow-primary/20"
                     >
-                        Nộp Bài
+                        {t.test.testing.submit}
                     </button>
                 </div>
             </div>

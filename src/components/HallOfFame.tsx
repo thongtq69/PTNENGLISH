@@ -3,8 +3,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Star, Award, ChevronLeft, ChevronRight } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function HallOfFame() {
+    const { t } = useLanguage();
     const [achievements, setAchievements] = useState<any[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
@@ -77,7 +79,7 @@ export default function HallOfFame() {
                         className="flex justify-center items-center gap-3 mb-6"
                     >
                         <Trophy className="text-primary animate-pulse" size={20} />
-                        <h2 className="text-primary font-heading font-black text-[10px] md:text-xs uppercase tracking-[0.5em]">Hall of Fame</h2>
+                        <h2 className="text-primary font-heading font-black text-[10px] md:text-xs uppercase tracking-[0.5em]">{t.home.hallOfFame.badge}</h2>
                         <Star className="text-primary animate-pulse" size={20} />
                     </motion.div>
 
@@ -88,7 +90,7 @@ export default function HallOfFame() {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-6xl font-heading font-black text-white mb-8 leading-tight uppercase tracking-tight"
                     >
-                        Tôn vinh <span className="text-primary">thành tích</span> rực rỡ
+                        {t.home.hallOfFame.title} <span className="text-primary">{t.home.hallOfFame.titleHighlight}</span> {t.home.hallOfFame.titleEnd}
                     </motion.h3>
 
                     <motion.p
@@ -98,7 +100,7 @@ export default function HallOfFame() {
                         transition={{ delay: 0.2 }}
                         className="text-slate-400 text-sm md:text-xl font-body max-w-2xl mx-auto"
                     >
-                        Hành trình chinh phục đỉnh cao ngôn ngữ của những chiến binh <strong className="text-white">PTN English</strong> tài năng.
+                        {t.home.hallOfFame.description} <strong className="text-white">{t.home.hallOfFame.descriptionHighlight}</strong> {t.home.hallOfFame.descriptionEnd}
                     </motion.p>
                 </div>
 

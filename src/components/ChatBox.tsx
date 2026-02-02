@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X, Send, Minus, ExternalLink, User, Phone, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { useLanguage } from "@/context/LanguageContext";
+
 
 type Message = {
     id: string;
@@ -16,6 +18,7 @@ type Message = {
 };
 
 const ChatBox = () => {
+    const { t, language } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [hasPrompted, setHasPrompted] = useState(false);
@@ -26,6 +29,9 @@ const ChatBox = () => {
     const pathname = usePathname();
 
     const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Fallback helper
+    const fb = (vi: string, en: string) => (language === "vi" ? vi : en);
 
     // Hidden logic for Admin and Test pages
     const isHiddenPath = pathname.startsWith("/admin") || pathname.startsWith("/test");
@@ -64,22 +70,45 @@ const ChatBox = () => {
         return () => clearTimeout(timer);
     }, [hasPrompted]);
 
+    // Update conversation when language changes if it's the beginning
+    useEffect(() => {
+        if (messages.length > 0 && messages.length <= 2 && step === "intro") {
+            const initialMsgs: Message[] = [
+                {
+                    id: "1",
+                    text: t.chatbot?.welcome || fb("Chào bạn! Mình là Lan từ PTN English. 👋", "Hello! I'm Lan from PTN English. 👋"),
+                    sender: "bot",
+                    timestamp: messages[0].timestamp,
+                },
+                {
+                    id: "2",
+                    text: t.chatbot?.question || fb("Bạn đang quan tâm đến lộ trình học nào để Lan hỗ trợ tư vấn chi tiết nhất nhé?", "Which learning pathway are you interested in so I can provide the most detailed advice?"),
+                    sender: "bot",
+                    timestamp: messages[1]?.timestamp || new Date(),
+                    type: "options",
+                    options: t.chatbot?.options || ["Luyện thi IELTS", "Luyện thi PTE Phản xạ", "Tiếng Anh giao tiếp"],
+                }
+            ];
+            setMessages(initialMsgs);
+        }
+    }, [language]);
+
     const startConversation = () => {
         if (messages.length > 0) return;
         const initialMsgs: Message[] = [
             {
                 id: "1",
-                text: "Chào bạn! Mình là Lan từ PTN English. 👋",
+                text: t.chatbot?.welcome || fb("Chào bạn! Mình là Lan từ PTN English. 👋", "Hello! I'm Lan from PTN English. 👋"),
                 sender: "bot",
                 timestamp: new Date(),
             },
             {
                 id: "2",
-                text: "Bạn đang quan tâm đến lộ trình học nào để Lan hỗ trợ tư vấn chi tiết nhất nhé?",
+                text: t.chatbot?.question || fb("Bạn đang quan tâm đến lộ trình học nào để Lan hỗ trợ tư vấn chi tiết nhất nhé?", "Which learning pathway are you interested in so I can provide the most detailed advice?"),
                 sender: "bot",
                 timestamp: new Date(),
                 type: "options",
-                options: ["Luyện thi IELTS", "Luyện thi PTE Phản xạ", "Tiếng Anh giao tiếp"],
+                options: t.chatbot?.options || ["Luyện thi IELTS", "Luyện thi PTE Phản xạ", "Tiếng Anh giao tiếp"],
             }
         ];
         setMessages(initialMsgs);
@@ -96,9 +125,13 @@ const ChatBox = () => {
         setMessages(prev => [...prev, userMsg]);
 
         setTimeout(() => {
+            const rawPrompt = t.chatbot?.leadsPrompt || fb(
+                "Dạ tuyệt vời ạ! Để Lan gửi chi tiết lộ trình {interest} và bộ tài liệu độc quyền qua Zalo cho mình, bạn cho Lan xin thông tin nhé:",
+                "That's wonderful! To send you the details for the {interest} pathway and exclusive materials via Zalo, please provide your information:"
+            );
             const botMsg: Message = {
                 id: (Date.now() + 1).toString(),
-                text: `Dạ tuyệt vời ạ! Để Lan gửi chi tiết lộ trình ${opt} và bộ tài liệu độc quyền qua Zalo cho mình, bạn cho Lan xin thông tin nhé:`,
+                text: rawPrompt.replace("{interest}", opt),
                 sender: "bot",
                 timestamp: new Date(),
             };
@@ -115,9 +148,13 @@ const ChatBox = () => {
 
         setTimeout(() => {
             setStep("done");
+            const rawThanks = t.chatbot?.thanksMsg || fb(
+                "Cảm ơn {name}! Lan đã nhận được thông tin. Bạn nhấn nút bên dưới để chat trực tiếp với Lan qua Zalo ngay nhé!",
+                "Thank you {name}! Lan has received your information. Click the button below to chat directly with me via Zalo now!"
+            );
             const botMsg: Message = {
                 id: (Date.now() + 2).toString(),
-                text: `Cảm ơn ${leads.name}! Lan đã nhận được thông tin. Bạn nhấn nút bên dưới để chat trực tiếp với Lan qua WhatsApp/Zalo ngay nhé!`,
+                text: rawThanks.replace("{name}", leads.name),
                 sender: "bot",
                 timestamp: new Date(),
             };
@@ -126,8 +163,14 @@ const ChatBox = () => {
     };
 
     const formatWhatsAppLink = () => {
-        const text = `Họ tên: ${leads.name}\nSĐT: ${leads.phone}\nQuan tâm: ${interest || "Tư vấn lộ trình"}\n(Từ Website PTN English)`;
-        return `https://wa.me/84900000000?text=${encodeURIComponent(text)}`;
+        const tmpl = t.chatbot?.whatsappTemplate || {
+            name: "Họ tên",
+            phone: "SĐT",
+            interest: "Quan tâm",
+            source: "(Từ Website PTN English)"
+        };
+        const text = `${tmpl.name}: ${leads.name}\n${tmpl.phone}: ${leads.phone}\n${tmpl.interest}: ${interest || "Tư vấn lộ trình"}\n${tmpl.source}`;
+        return `https://wa.me/84902508290?text=${encodeURIComponent(text)}`;
     };
 
     const toggleChat = () => {
@@ -164,7 +207,9 @@ const ChatBox = () => {
                                         <h3 className="text-base font-bold leading-tight">Ms. Lan</h3>
                                         <div className="flex items-center gap-1.5">
                                             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400"></span>
-                                            <p className="text-[11px] font-medium opacity-90">Sẵn sàng tư vấn</p>
+                                            <p className="text-[11px] font-medium opacity-90">
+                                                {t.chatbot?.status || fb("Sẵn sàng tư vấn", "Online")}
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -218,7 +263,9 @@ const ChatBox = () => {
                                     className="rounded-2xl bg-white p-5 border border-primary/10 shadow-xl shadow-primary/5"
                                 >
                                     <div className="mb-4 text-center">
-                                        <p className="text-xs font-bold text-secondary">Vui lòng điền thông nhanh:</p>
+                                        <p className="text-xs font-bold text-secondary">
+                                            {t.chatbot?.leadsFormTitle || fb("Vui lòng điền thông nhanh:", "Please fill in quickly:")}
+                                        </p>
                                     </div>
                                     <form onSubmit={handleLeadsSubmit} className="space-y-3">
                                         <div className="relative">
@@ -226,7 +273,7 @@ const ChatBox = () => {
                                             <input
                                                 required
                                                 type="text"
-                                                placeholder="Họ và tên của bạn"
+                                                placeholder={t.chatbot?.namePlaceholder || fb("Họ và tên của bạn", "Your full name")}
                                                 className="w-full rounded-xl border-slate-100 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium focus:ring-primary/20 transition-all"
                                                 value={leads.name}
                                                 onChange={(e) => setLeads({ ...leads, name: e.target.value })}
@@ -237,7 +284,7 @@ const ChatBox = () => {
                                             <input
                                                 required
                                                 type="tel"
-                                                placeholder="Số điện thoại / Zalo"
+                                                placeholder={t.chatbot?.phonePlaceholder || fb("Số điện thoại / Zalo", "Phone number / Zalo")}
                                                 className="w-full rounded-xl border-slate-100 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium focus:ring-primary/20 transition-all"
                                                 value={leads.phone}
                                                 onChange={(e) => setLeads({ ...leads, phone: e.target.value })}
@@ -247,7 +294,7 @@ const ChatBox = () => {
                                             type="submit"
                                             className="w-full rounded-xl bg-primary py-3 text-xs font-black uppercase tracking-wider text-white shadow-lg shadow-primary/30 transition-all hover:brightness-110 active:scale-[0.98]"
                                         >
-                                            Nhận Lộ Trình & Quà Tặng 🎁
+                                            {t.chatbot?.submitBtn || fb("Nhận Lộ Trình & Quà Tặng 🎁", "Get Pathway & Gifts 🎁")}
                                         </button>
                                     </form>
                                 </motion.div>
@@ -265,7 +312,7 @@ const ChatBox = () => {
                                         target="_blank"
                                         className="flex items-center justify-center gap-3 rounded-xl bg-[#25D366] py-4 text-sm font-black text-white shadow-xl shadow-green-500/30 transition-all hover:scale-[1.03] active:scale-95"
                                     >
-                                        CHAT ZALO NGAY <ExternalLink size={18} />
+                                        {t.chatbot?.whatsappBtn || fb("CHAT ZALO NGAY", "CHAT ZALO NOW")} <ExternalLink size={18} />
                                     </a>
                                     <div className="flex justify-center gap-4">
                                         <button
@@ -277,7 +324,7 @@ const ChatBox = () => {
                                             }}
                                             className="text-[11px] font-bold text-slate-400 hover:text-primary transition-colors flex items-center gap-1"
                                         >
-                                            <Minus size={12} /> Bắt đầu lại
+                                            <Minus size={12} /> {t.chatbot?.resetBtn || fb("Bắt đầu lại", "Start over")}
                                         </button>
                                     </div>
                                 </motion.div>
@@ -320,7 +367,7 @@ const ChatBox = () => {
                             <>
                                 <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-primary/40 opacity-75"></span>
                                 <span className="absolute right-full mr-5 hidden whitespace-nowrap rounded-2xl bg-secondary px-5 py-3 text-sm font-black text-white shadow-2xl transition-all group-hover:block animate-in fade-in slide-in-from-right-4">
-                                    Cần Lan giúp gì không ạ? 👋
+                                    {t.chatbot?.floatingPrompt || fb("Cần Lan giúp gì không ạ? 👋", "Need any help? 👋")}
                                 </span>
                             </>
                         )}
@@ -330,5 +377,6 @@ const ChatBox = () => {
         </div>
     );
 };
+
 
 export default ChatBox;

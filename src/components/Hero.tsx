@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Hero({ initialData }: { initialData?: any }) {
+    const { t, language } = useLanguage();
     const [settings, setSettings] = useState<any>(initialData || null);
 
     // Sync state with props if they change
@@ -22,6 +24,11 @@ export default function Hero({ initialData }: { initialData?: any }) {
     }, [initialData]);
 
     if (!settings) return <div className="h-screen bg-slate-900" />;
+
+    const displayTitle = language === "en" ? t.home.hero.title : settings.title;
+    const displaySubtitle = language === "en" ? t.home.hero.subtitle : settings.subtitle;
+    const displayPrimaryText = language === "en" ? t.home.hero.primaryCTA : settings.primaryCTA.text;
+    const displaySecondaryText = language === "en" ? t.home.hero.secondaryCTA : settings.secondaryCTA.text;
 
     return (
         <section className="relative w-full aspect-video min-h-[280px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-slate-950">
@@ -44,17 +51,17 @@ export default function Hero({ initialData }: { initialData?: any }) {
             <div className="container mx-auto px-4 relative z-10 text-center">
                 <div className="max-w-4xl mx-auto pt-12 md:pt-24 text-center px-4">
                     <h1 className="text-white text-xl md:text-6xl font-heading font-normal tracking-tight leading-tight md:leading-[1.05] mb-4 md:mb-8 animate-fade-in-up max-w-2xl mx-auto whitespace-pre-line text-center">
-                        {settings.title}
+                        {displayTitle}
                     </h1>
                     <p className="text-white text-[10px] md:text-xl mb-4 md:mb-12 max-w-xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body">
-                        {settings.subtitle}
+                        {displaySubtitle}
                     </p>
                     <div className="flex flex-row justify-center gap-2 md:gap-6 animate-fade-in-up delay-200">
-                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-red-700 text-white px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-red-500/30 flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none">
-                            {settings.primaryCTA.text}
+                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-black text-white px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-primary/30 flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none">
+                            {displayPrimaryText}
                         </Link>
                         <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none">
-                            {settings.secondaryCTA.text}
+                            {displaySecondaryText}
                         </Link>
                     </div>
                 </div>

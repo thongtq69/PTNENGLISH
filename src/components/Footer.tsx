@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Facebook, Instagram, Youtube, Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Facebook, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 // TikTok icon custom SVG
-const TikTokIcon = ({ size = 20 }: { size?: number }) => (
+const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: string }) => (
     <svg
         width={size}
         height={size}
+        className={className}
         viewBox="0 0 24 24"
         fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
@@ -17,6 +19,7 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export default function Footer() {
+    const { t, language } = useLanguage();
     const [settings, setSettings] = useState<any>(null);
 
     useEffect(() => {
@@ -26,16 +29,28 @@ export default function Footer() {
             .catch(() => { });
     }, []);
 
-    const footerData = settings?.footer || {
-        aboutText: "Hệ thống đào tạo tiếng Anh Học thuật chuyên sâu dành cho thiếu niên và người lớn.",
-        copyright: "© 2026 Partner To Navigate. All rights reserved."
+    const footerData = {
+        aboutText: t.footer?.about || (language === "en" ? "Shaping a brilliant future through mastering the global language. Committed to providing the best quality education." : "Kiến tạo tương lai rực rỡ thông qua việc làm chủ ngôn ngữ toàn cầu. Cam kết mang đến chất lượng giáo dục tốt nhất."),
+        copyright: t.footer?.copyright || (language === "en" ? "© 2026 Partner To Navigate. All rights reserved." : "© 2026 Partner To Navigate. Bảo lưu mọi quyền.")
     };
+
+
+
     const contactData = settings?.contact || {
         phone: "0902 508 290",
         email: "info@ptelc.edu.vn",
-        address: "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
-        mapsUrl: ""
+        address: language === "en" ? "146 Bis Nguyen Van Thu, Da Kao Ward, District 1, HCMC" : "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
+        mapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4225417961395!2d106.69176567461865!3d10.780506059028596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f385570472f%3A0x2a3c3e387c5a2d8b!2s146%20Bis%20Nguy%E1%BB%85n%20V%C4%83n%20Th%E1%BB%A7%2C%20%C4%90a%20Kao%2C%20Qu%E1%BA%ADn%201%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh%2C%20Vi%E1%BB%87t%20Nam!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s"
     };
+
+    const quickLinks = [
+        { name: t.nav.about, href: "/about-us" },
+        { name: t.nav.courses, href: "/courses" },
+        { name: t.nav.studentCorner, href: "/student-corner" },
+        { name: t.nav.blog, href: "/blog" },
+        { name: t.home.campus.testBtn, href: "/test" },
+        { name: t.topbar.contact, href: "/contact" }
+    ];
 
     return (
         <footer className="bg-slate-900 text-white pt-6 md:pt-12 pb-3 md:pb-6">
@@ -69,20 +84,16 @@ export default function Footer() {
                         <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Youtube size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
+                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                            <TikTokIcon size={12} className="md:w-3.5 md:h-3.5" />
+                        </a>
                     </div>
                 </div>
 
                 <div className="hidden sm:block">
-                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Quick Links</h4>
+                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.quickLinks}</h4>
                     <ul className="grid grid-cols-2 lg:grid-cols-1 gap-1 md:gap-2">
-                        {[
-                            { name: "Về chúng tôi", href: "/about-us" },
-                            { name: "Khóa học", href: "/courses" },
-                            { name: "Góc học viên", href: "/student-corner" },
-                            { name: "Blog", href: "/blog" },
-                            { name: "Thi thử", href: "/test" },
-                            { name: "Liên hệ", href: "/contact" }
-                        ].map((link) => (
+                        {quickLinks.map((link) => (
                             <li key={link.name}>
                                 <a href={link.href} className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
                                     {link.name}
@@ -93,9 +104,9 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Khóa Học</h4>
+                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.courses}</h4>
                     <ul className="grid grid-cols-1 gap-1 md:gap-2">
-                        {["Academic English (EfT)", "Luyện thi IELTS", "General English (GE)"].map((course) => (
+                        {[t.courses?.pathway?.eft?.name || (language === "en" ? "Academic English (EfT)" : "Học thuật Thiếu niên (EfT)"), t.courses?.pathway?.ie?.name || (language === "en" ? "IELTS Preparation (IE)" : "Luyện thi IELTS (IE)"), t.courses?.pathway?.ge?.name || (language === "en" ? "General English (GE)" : "Tiếng Anh Giao tiếp (GE)")].map((course) => (
                             <li key={course}>
                                 <a href="/courses" className="text-slate-400 text-[11px] md:text-[13px] hover:text-primary transition-colors">
                                     {course}
@@ -106,7 +117,7 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">Liên Hệ</h4>
+                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.contact}</h4>
                     <div className="space-y-2 text-slate-400 text-[11px] md:text-sm">
                         <p className="flex items-start">
                             <MapPin className="mr-2 text-primary shrink-0" size={14} />
@@ -116,24 +127,32 @@ export default function Footer() {
                             <Phone className="mr-2 text-primary shrink-0" size={14} />
                             {contactData.phone}
                         </p>
+                        <p className="flex items-center">
+                            <Mail className="mr-2 text-primary shrink-0" size={14} />
+                            {contactData.email}
+                        </p>
                     </div>
                 </div>
             </div>
 
-            {/* Google Maps Section - Hidden on mobile if map is not crucial */}
-            <div className="container mx-auto px-6 mb-4 md:mb-8 hidden md:block">
-                <div className="w-full h-48 rounded-[2rem] overflow-hidden border border-slate-800 shadow-xl opacity-80 hover:opacity-100 transition-opacity">
-                    <iframe
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        loading="lazy"
-                        allowFullScreen
-                        referrerPolicy="no-referrer-when-downgrade"
-                        src={contactData.mapsUrl}
-                    ></iframe>
+            {/* Google Maps Section */}
+            {contactData.mapsUrl && (
+                <div className="container mx-auto px-6 mb-4">
+                    <div className="w-full h-32 md:h-40 rounded-xl overflow-hidden border border-slate-700/50">
+                        <iframe
+                            src={contactData.mapsUrl}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="PTN English Location"
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
+
 
             <div className="container mx-auto px-6 pt-4 md:pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 text-slate-500 text-[9px] md:text-xs">
                 <p>{footerData.copyright}</p>

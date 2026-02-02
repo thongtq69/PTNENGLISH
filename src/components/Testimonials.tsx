@@ -2,12 +2,15 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote, X } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function Testimonials() {
+    const { t } = useLanguage();
     const [testimonials, setTestimonials] = useState<any[]>([]);
     const [index, setIndex] = useState(0);
     const [selectedTestimonial, setSelectedTestimonial] = useState<any>(null);
+
 
     useEffect(() => {
         fetch("/api/testimonials")
@@ -33,7 +36,7 @@ export default function Testimonials() {
                         viewport={{ once: true }}
                         className="text-primary font-heading font-bold text-[10px] md:text-sm uppercase tracking-[0.4em] mb-2 md:mb-4"
                     >
-                        Success Stories
+                        {t.home.testimonials.badge}
                     </motion.h2>
                     <motion.h3
                         initial={{ opacity: 0, y: 10 }}
@@ -42,7 +45,7 @@ export default function Testimonials() {
                         viewport={{ once: true }}
                         className="text-xl md:text-5xl font-heading font-semibold text-accent"
                     >
-                        Cảm nghĩ của phụ huynh & học viên
+                        {t.home.testimonials.title}
                     </motion.h3>
                 </div>
 
@@ -83,7 +86,7 @@ export default function Testimonials() {
                                         "{testimonials[index].text || testimonials[index].content}"
                                     </p>
                                     <button className="mt-4 text-primary font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all mx-auto md:mx-0">
-                                        Xem chi tiết cảm nghĩ <ChevronRight size={16} />
+                                        {t.home.testimonials.viewDetail} <ChevronRight size={16} />
                                     </button>
                                 </div>
                             </div>
@@ -164,13 +167,14 @@ export default function Testimonials() {
                                     onClick={() => setSelectedTestimonial(null)}
                                     className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-primary transition-all"
                                 >
-                                    Đóng cửa sổ
+                                    {t.home.testimonials.closeBtn}
                                 </button>
                             </div>
                         </motion.div>
                     </div>
                 )}
             </AnimatePresence>
+
         </section>
     );
 }

@@ -7,12 +7,16 @@ import fs from 'fs';
 import path from 'path';
 
 export async function GET() {
+    console.log("GET /api/achievements - Start");
     try {
         await dbConnect();
+        console.log("dbConnect successful in /api/achievements");
         const achievements = await Achievement.find({}).sort({ createdAt: -1 });
+        console.log(`Found ${achievements?.length || 0} achievements`);
         if (achievements && achievements.length > 0) return NextResponse.json(achievements);
         throw new Error("No data");
-    } catch (e) {
+    } catch (e: any) {
+        console.log(`Error in /api/achievements: ${e.message}. Falling back to FS.`);
         const filePath = path.join(process.cwd(), 'data', 'achievements.json');
         if (fs.existsSync(filePath)) {
             return NextResponse.json(JSON.parse(fs.readFileSync(filePath, 'utf8')));

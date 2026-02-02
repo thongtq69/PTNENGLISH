@@ -16,8 +16,10 @@ const SiteSettingsSchema = new Schema({
     philosophy: String,
     programs: [{
         name: String,
+        nameEn: String,
         image: String,
-        color: String
+        color: String,
+        link: String
     }],
     partners: [{
         name: String,

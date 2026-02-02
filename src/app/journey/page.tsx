@@ -2,35 +2,9 @@
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 import { Compass, Zap, Trophy, Quote, Star, MapPin } from "lucide-react";
-
-const STEPS = [
-    {
-        title: "Khởi Hành (Analysis)",
-        desc: "Phân tích trình độ học thuật hiện tại và xác định lỗ hổng kiến thức căn bản.",
-        icon: <Compass className="text-accent" />,
-        color: "bg-accent/10",
-    },
-    {
-        title: "Định Hướng (Strategy)",
-        desc: "Xây dựng chiến lược học tập riêng biệt cho mục tiêu du học hoặc định cư.",
-        icon: <MapPin className="text-primary" />,
-        color: "bg-primary/10",
-    },
-    {
-        title: "Dẫn Lộ (Active Learning)",
-        desc: "Học tập dưới sự dẫn dắt của các chuyên gia MA.TESOL bằng phương pháp chủ động.",
-        icon: <Zap className="text-secondary" />,
-        color: "bg-secondary/10",
-    },
-    {
-        title: "Thành Tựu (Excellence)",
-        desc: "Đạt chứng chỉ quốc tế và sẵn sàng hội nhập môi trường học tập toàn cầu.",
-        icon: <Trophy className="text-primary" />,
-        color: "bg-primary/10",
-    },
-];
 
 const SUCCESS_STORIES = [
     {
@@ -57,6 +31,35 @@ const SUCCESS_STORIES = [
 ];
 
 export default function JourneyPage() {
+    const { t, language } = useLanguage();
+
+    const STEPS = [
+        {
+            title: t.journey.steps.analysis.title,
+            desc: t.journey.steps.analysis.desc,
+            icon: <Compass className="text-accent" />,
+            color: "bg-accent/10",
+        },
+        {
+            title: t.journey.steps.strategy.title,
+            desc: t.journey.steps.strategy.desc,
+            icon: <MapPin className="text-primary" />,
+            color: "bg-primary/10",
+        },
+        {
+            title: t.journey.steps.learning.title,
+            desc: t.journey.steps.learning.desc,
+            icon: <Zap className="text-secondary" />,
+            color: "bg-secondary/10",
+        },
+        {
+            title: t.journey.steps.excellence.title,
+            desc: t.journey.steps.excellence.desc,
+            icon: <Trophy className="text-primary" />,
+            color: "bg-primary/10",
+        },
+    ];
+
     return (
         <main className="min-h-screen bg-background">
             <Header />
@@ -69,14 +72,14 @@ export default function JourneyPage() {
                         animate={{ opacity: 1, scale: 1 }}
                     >
                         <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-[10px] font-bold uppercase tracking-widest mb-8">
-                            Empowering Your Global Ambitions
+                            {t.journey.hero.badge}
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-heading font-semibold text-accent mb-10 leading-tight">
-                            Lộ Trình Chiến Lược <br />
-                            Kiến Tạo Tương Lai
-                        </h1>
+                        <h1 
+                            className="text-5xl md:text-7xl font-heading font-semibold text-accent mb-10 leading-tight"
+                            dangerouslySetInnerHTML={{ __html: t.journey.hero.title }}
+                        />
                         <p className="text-slate-500 text-xl font-body leading-relaxed max-w-3xl mx-auto">
-                            "Tại <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>, chúng tôi song hành cùng bạn từ những bước đi chập chững đầu tiên cho đến khi bạn tự tin sải bước trên giảng đường quốc tế."
+                            {t.journey.hero.desc}
                         </p>
                     </motion.div>
                 </div>
@@ -123,33 +126,39 @@ export default function JourneyPage() {
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(199,0,43,0.1),transparent)]"></div>
                 <div className="container mx-auto px-6 relative z-10">
                     <h2 className="text-primary font-heading font-bold text-lg uppercase tracking-[0.3em] mb-16 underline decoration-white/20 decoration-2 underline-offset-8">
-                        Wall of Success & Stories
+                        {t.journey.successWall.title}
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
-                        {SUCCESS_STORIES.map((story, idx) => (
-                            <motion.div
-                                key={idx}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: idx * 0.1 }}
-                                className="bg-white/5 backdrop-blur-lg border border-white/10 p-12 rounded-[4rem] text-center group hover:bg-white/10 transition-all"
-                            >
-                                <Quote className="text-primary w-12 h-12 mx-auto mb-8 opacity-40" />
-                                <img src={story.image} alt={story.name} className="w-24 h-24 rounded-full mx-auto mb-8 object-cover ring-4 ring-white/10 group-hover:ring-primary/50 transition-all" />
-                                <div className="space-y-4 mb-8">
-                                    <p className="text-white font-heading font-bold text-xl">{story.name}</p>
-                                    <p className="text-primary text-[10px] font-bold uppercase tracking-widest">{story.target}</p>
-                                </div>
-                                <p className="text-slate-400 font-body text-sm leading-relaxed mb-8">
-                                    "{story.text}"
-                                </p>
-                                <div className="flex justify-center space-x-1 text-primary">
-                                    {[...Array(story.stars)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
+                    {language === "vi" ? (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
+                            {SUCCESS_STORIES.map((story, idx) => (
+                                <motion.div
+                                    key={idx}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: idx * 0.1 }}
+                                    className="bg-white/5 backdrop-blur-lg border border-white/10 p-12 rounded-[4rem] text-center group hover:bg-white/10 transition-all"
+                                >
+                                    <Quote className="text-primary w-12 h-12 mx-auto mb-8 opacity-40" />
+                                    <img src={story.image} alt={story.name} className="w-24 h-24 rounded-full mx-auto mb-8 object-cover ring-4 ring-white/10 group-hover:ring-primary/50 transition-all" />
+                                    <div className="space-y-4 mb-8">
+                                        <p className="text-white font-heading font-bold text-xl">{story.name}</p>
+                                        <p className="text-primary text-[10px] font-bold uppercase tracking-widest">{story.target}</p>
+                                    </div>
+                                    <p className="text-slate-400 font-body text-sm leading-relaxed mb-8">
+                                        "{story.text}"
+                                    </p>
+                                    <div className="flex justify-center space-x-1 text-primary">
+                                        {[...Array(story.stars)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-slate-400 font-body text-lg">
+                            Student testimonials coming soon in English.
+                        </p>
+                    )}
                 </div>
             </section>
 
@@ -157,13 +166,13 @@ export default function JourneyPage() {
             <section className="py-32 bg-background border-t border-slate-100 text-center">
                 <div className="container mx-auto px-6 max-w-4xl">
                     <h2 className="text-accent text-4xl md:text-6xl font-heading font-semibold mb-10 leading-tight">
-                        Kiến tạo Navigation riêng của bạn
+                        {t.journey.cta.title}
                     </h2>
                     <p className="text-slate-500 text-lg mb-12 max-w-2xl mx-auto font-body leading-relaxed">
-                        Hãy bắt đầu lộ trình từ hôm nay để rút ngắn khoảng cách đến giảng đường mơ ước tại Anh, Mỹ, Úc hay Châu Âu.
+                        {t.journey.cta.desc}
                     </p>
                     <button className="bg-primary hover:bg-red-700 text-white px-12 py-6 rounded-full font-bold text-xl shadow-2xl shadow-red-500/20 transition-all transform hover:scale-105">
-                        Đặt lịch phân tích học thuật 1-1
+                        {t.journey.cta.button}
                     </button>
                 </div>
             </section>

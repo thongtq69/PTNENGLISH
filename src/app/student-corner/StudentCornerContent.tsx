@@ -9,8 +9,10 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function StudentCornerContent({ pageData }: { pageData: any }) {
+    const { t, language } = useLanguage();
     const [isMobile, setIsMobile] = React.useState(false);
 
     React.useEffect(() => {
@@ -20,69 +22,100 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
+    // Helper for language-aware fallbacks (works with both string and string[])
+    const fb = <T extends string | string[]>(vi: T, en: T): T => language === 'en' ? en : vi;
+
     // Extract sections with fallbacks
     const sections = pageData?.sections || [];
 
-    const hero = sections.find((s: any) => s.type === 'student-hero')?.content || {
-        title: "Góc Học Viên",
-        subtitle: "Dành riêng cho học viên PTN English",
-        description: "Không gian số hội tụ đầy đủ các công cụ, tài liệu và lộ trình học tập tối ưu, giúp bạn bứt phá và làm chủ tri thức mỗi ngày."
+    const heroData = sections.find((s: any) => s.type === 'student-hero')?.content;
+    const hero = {
+        title: t.studentCorner?.hero?.title || heroData?.title || fb("Góc Học Viên", "Student Corner"),
+        subtitle: t.studentCorner?.hero?.subtitle || heroData?.subtitle || fb("Dành riêng cho học viên PTN English", "Exclusively for PTN English Students"),
+        description: t.studentCorner?.hero?.desc || heroData?.description || fb(
+            "Không gian số hội tụ đầy đủ các công cụ, tài liệu và lộ trình học tập tối ưu, giúp bạn bứt phá và làm chủ tri thức mỗi ngày.",
+            "A digital space fully equipped with tools, materials, and optimized learning pathways to help you break through and master knowledge every day."
+        )
     };
 
-    const playground = sections.find((s: any) => s.type === 'student-playground')?.content || {
-        title: "Hoạt động thường nhật & Sân chơi học viên",
-        headline: "PTN Playground",
-        items: [
-            { id: 1, type: 'image', size: 'large', src: "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/600349560_811824385145541_924529116167773166_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=WrY3AmzobhsQ7kNvwEn4CKw&_nc_oc=Adnmgkplx_LTyk9c-hUbzVarhTwhrLUBSzCD0uiDfoAXYzTQw_bz849RWOQUl3hK3O8&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=x3LbkFcIHWTpcw3xM-kfCA&oh=00_AfprMZKVjjgaBCy1Nvm9AmHxJLbSdtEzmcB6F_9igPgNfw&oe=697937FB", label: "Featured Workshop", title: "Academic Mastery <br />& Debate Skills" },
-            { id: 2, type: 'image', size: 'medium', src: "https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/512614209_670142242647090_8961518773189171975_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=cK75sFRaF_IQ7kNvwGgDA4g&_nc_oc=AdkHowDUM1ksA7R5SgNBUWuiG1MPWNh1t0fAnY6wm923yDIJcRtP1WIwS5AlEXRVzD0&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=gcezZhlCLo3osHQGtAfGfw&oh=00_AfrpDGP0UUafCpx4SFhKepmE1W2SL-Yy-ONQ5-kg3f1BPw&oe=6979550A", title: "PTN Chill Room" },
+    const playgroundData = sections.find((s: any) => s.type === 'student-playground')?.content;
+    const playground = {
+        title: t.studentCorner?.playground?.title || playgroundData?.title || fb("Hoạt động thường nhật & Sân chơi học viên", "Daily Activities & Student Playground"),
+        headline: t.studentCorner?.playground?.headline || playgroundData?.headline || "PTN Playground",
+        items: (playgroundData?.items || [
+            { id: 1, type: 'image', size: 'large', src: "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/600349560_811824385145541_924529116167773166_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_ohc=WrY3AmzobhsQ7kNvwEn4CKw&_nc_oc=Adnmgkplx_LTyk9c-hUbzVarhTwhrLUBSzCD0uiDfoAXYzTQw_bz849RWOQUl3hK3O8&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=x3LbkFcIHWTpcw3xM-kfCA&oh=00_AfprMZKVjjgaBCy1Nvm9AmHxJLbSdtEzmcB6F_9igPgNfw&oe=697937FB", label: fb("Hoạt động nổi bật", "Featured Workshop"), title: fb("Làm chủ Học thuật <br />& Kỹ năng Tranh biện", "Academic Mastery <br />& Debate Skills") },
+            { id: 2, type: 'image', size: 'medium', src: "https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/512614209_670142242647090_8961518773189171975_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=cK75sFRaF_IQ7kNvwGgDA4g&_nc_oc=AdkHowDUM1ksA7R5SgNBUWuiG1MPWNh1t0fAnY6wm923yDIJcRtP1WIwS5AlEXRVzD0&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=gcezZhlCLo3osHQGtAfGfw&oh=00_AfrpDGP0UUafCpx4SFhKepmE1W2SL-Yy-ONQ5-kg3f1BPw&oe=6979550A", title: fb("Phòng thư giãn PTN", "PTN Chill Room") },
             { id: 3, type: 'image', size: 'small', src: "https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/604346724_815746011420045_1980336211823099106_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=qkLGV5Y5KSgQ7kNvwGJsDoK&_nc_oc=AdntDpZoz4yfKEI0j-Hv878q7mWIWTW5oGmMn9F5fPSS-SlIgkoN1lDvE0yvWJH6q0k&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=u7onphvhD4Z99P4LGaRv_A&oh=00_AfriXULs8DInaQCLKejSaQtSojNbi4ZUTHCZWT2iMQltzQ&oe=69794BE7" },
             { id: 4, type: 'image', size: 'small', src: "https://scontent.fsgn2-5.fna.fbcdn.net/v/t39.30808-6/597251461_806720128989300_4899544521814172881_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_ohc=2Oq8wx-fJf4Q7kNvwGJ5r1V&_nc_oc=AdlXmd5w0vZ38pDbd51romsYEKcLIWmebDEnj6yNjGJucDFJWhOoMzt-mwq8kmDkIHI&_nc_zt=23&_nc_ht=scontent.fsgn2-5.fna&_nc_gid=TL2nZsVgFS8B57vSeDOb2A&oh=00_AfqzWqpezjeU14LZv63tB7HOg2tGplHMYcwE60k48sTt9w&oe=69793FC0" },
             { id: 5, type: 'image', size: 'tiny', src: "https://scontent.fsgn2-11.fna.fbcdn.net/v/t39.30808-6/605711185_815745994753380_1350455286566131952_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=bbbY55kwlk0Q7kNvwHRa7RP&_nc_oc=Admy6SDvlmTH1Tr72HAjNa_G7eGPNHMK5CIgrYqEbKRjh5Uj_cF6eoZ6aLdvE4K0SDA&_nc_zt=23&_nc_ht=scontent.fsgn2-11.fna&_nc_gid=xoPy26A-wxyUkCQVcUWUkQ&oh=00_AfpKY0mVKSDuTmkccf8YXyg-FWzGwwhpRTVo2XCmpz9O7w&oe=69793079" },
             { id: 6, type: 'image', size: 'tiny', src: "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/542167879_726034340391213_5658940871196288765_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_ohc=St8AHxsrVR0Q7kNvwFwOmLn&_nc_oc=Adl4Lp49qB-RMMmxbPGKygiUPbK8J1w-4Hf5eStBm49VtwgCm4qhQQNbOZiMwoz3N2Y&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=4g6YCtrOndWcVU0oKj0sfg&oh=00_AfprlDPBuc_MyGOygUib5r29YCf4W16wniEBLf1aVvsM8w&oe=69791B83" },
             { id: 7, type: 'image', size: 'tiny', src: "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-6/525214975_697220113272636_4528856525560068367_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=3vVyVZowSvMQ7kNvwFRwTUp&_nc_oc=AdnRBw0O3ICn3o11Kj3zLnOOG2-emM1DfG1cgc8mnw7C_Ru9NI0suh4t-EGZLWhiaMw&_nc_zt=23&_nc_ht=scontent.fsgn2-7.fna&_nc_gid=jjHX8Hxw9nv6VMh6HDCS8g&oh=00_Afqr46-YmMLLOuFiGyfotdQCfenqJ6hs8HjaxMMCjANu-g&oe=69793F31" },
             { id: 8, type: 'video', size: 'tiny', src: "https://scontent.fsgn2-4.fna.fbcdn.net/v/t39.30808-6/503126116_651142867880361_4587213466788932149_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_ohc=JwCQsjroqCIQ7kNvwEe3I67&_nc_oc=Adl9pgY9ZbbM8XDTi2IRRtQVpS-EnI2AiGApOF0adVTLk8y0l8DnORpMwmG_XdG1XTE&_nc_zt=23&_nc_ht=scontent.fsgn2-4.fna&_nc_gid=S-dStxBKkC4PjgNayZw-BQ&oh=00_Afq66Dxbl0GpuLOKUMSasJQLaQV7xiefRXktJjMQ3ZhXBA&oe=69795068", link: "https://www.facebook.com/100089539590679/videos/pcb.683230831338231/1234526698354766" }
-        ]
+        ]).map((item: any) => ({
+            ...item,
+            label: item.label ? (typeof item.label === 'string' ? item.label : item.label[language]) : undefined,
+            title: item.title ? (typeof item.title === 'string' ? item.title : item.title[language]) : undefined
+        }))
     };
 
-    const lms = sections.find((s: any) => s.type === 'student-lms')?.content || {
-        title: "Kho Tài Liệu <br /> <span className='text-primary font-bold'>Độc Quyền</span>",
-        description: "Truy cập tức thì vào hệ thống học tập LMS hiện đại của PTN English. Nơi lưu trữ hàng ngàn slide bài giảng, bài tập bổ trợ, và giáo trình chuyên sâu được biên soạn riêng cho từng khóa học.",
-        items: [
-            "Hệ thống bài tập Online tương tác",
-            "Thư viện giáo trình MA.TESOL biên soạn",
-            "Theo dõi lộ trình & kết quả học tập",
-            "Kho video bài giảng xem lại 24/7"
-        ],
-        buttonText: "Vào cổng học tập",
-        buttonLink: "https://lms.ptelc.edu.vn/"
+
+    const lmsData = sections.find((s: any) => s.type === 'student-lms')?.content;
+    const lms = {
+        title: t.studentCorner?.lms?.title || lmsData?.title || fb("Kho Tài Liệu <br /> <span className='text-primary font-bold'>Độc Quyền</span>", "Exclusive <br /> <span className='text-primary font-bold'>Resource Library</span>"),
+        description: t.studentCorner?.lms?.desc || lmsData?.description || fb(
+            "Truy cập tức thì vào hệ thống học tập LMS hiện đại của PTN English. Nơi lưu trữ hàng ngàn slide bài giảng, bài tập bổ trợ, và giáo trình chuyên sâu được biên soạn riêng cho từng khóa học.",
+            "Instant access to PTN English's modern LMS learning system. A repository of thousands of lecture slides, supplementary exercises, and in-depth curriculum materials specially compiled for each course."
+        ),
+        items: t.studentCorner?.lms?.items || lmsData?.items || fb(
+            ["Hệ thống bài tập Online tương tác", "Thư viện giáo trình MA.TESOL biên soạn", "Theo dõi lộ trình & kết quả học tập", "Kho video bài giảng xem lại 24/7"],
+            ["Interactive Online exercise system", "MA.TESOL compiled curriculum library", "Track progress & learning results", "24/7 lecture video archive"]
+        ),
+        buttonText: t.studentCorner?.lms?.button || lmsData?.buttonText || fb("Vào cổng học tập", "Enter Learning Portal"),
+        buttonLink: lmsData?.buttonLink || "https://lms.ptelc.edu.vn/"
     };
 
-    const mocktest = sections.find((s: any) => s.type === 'student-mocktest')?.content || {
-        title: "Luyện Thi Thử <br /> <span className='text-primary font-bold'>Chuẩn Quốc Tế</span>",
-        description: "Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề và nhận phân tích chi tiết kỹ năng ngay lập tức.",
-        items: [
-            "Mock Test IELTS 4 kỹ năng chuẩn IDP/BC",
-            "Kho đề thi cập nhật mới nhất hàng quý",
-            "Chấm điểm & Phân tích lỗi sai chi tiết",
-            "Giao diện chuẩn phòng thi thực tế"
-        ],
-        buttonText: "Bắt đầu thi thử",
-        buttonLink: "/test"
+    const mocktestData = sections.find((s: any) => s.type === 'student-mocktest')?.content;
+    const mocktest = {
+        title: t.studentCorner?.mocktest?.title || mocktestData?.title || fb("Luyện Thi Thử <br /> <span className='text-primary font-bold'>Chuẩn Quốc Tế</span>", "International Standard <br /> <span className='text-primary font-bold'>Mock Tests</span>"),
+        description: t.studentCorner?.mocktest?.desc || mocktestData?.description || fb(
+            "Trải nghiệm hệ thống thi thử trực tuyến mô phỏng 100% môi trường thi thật. Giúp học viên quen với áp lực phòng thi, nắm vững cấu trúc đề và nhận phân tích chi tiết kỹ năng ngay lập tức.",
+            "Experience an online mock testing system that simulates 100% of the real exam environment. Helps students get used to exam pressure, master test structures, and receive detailed skill analysis immediately."
+        ),
+        items: t.studentCorner?.mocktest?.items || mocktestData?.items || fb(
+            ["Mock Test IELTS 4 kỹ năng chuẩn IDP/BC", "Kho đề thi cập nhật mới nhất hàng quý", "Chấm điểm & Phân tích lỗi sai chi tiết", "Giao diện chuẩn phòng thi thực tế"],
+            ["IDP/BC standard IELTS 4-skill Mock Test", "Quarterly updated question bank", "Detailed scoring & error analysis", "Authentic exam room interface"]
+        ),
+        buttonText: t.studentCorner?.mocktest?.button || mocktestData?.buttonText || fb("Bắt đầu thi thử", "Start Mock Test"),
+        buttonLink: mocktestData?.buttonLink || "/test"
     };
 
-    const support = sections.find((s: any) => s.type === 'student-support')?.content || {
-        title: "Bạn gặp khó khăn <br className='md:hidden' /> <span className='text-primary'>khi truy cập?</span>",
-        description: "Đội ngũ kỹ thuật và bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.",
-        phone: "0902 508 290",
-        emailLink: "/contact#registration-form"
+
+    const supportData = sections.find((s: any) => s.type === 'student-support')?.content;
+    const support = {
+        title: t.studentCorner?.support?.title || supportData?.title || fb(
+            "Bạn gặp khó khăn <br className='md:hidden' /> <span className='text-primary'>khi truy cập?</span>",
+            "Having trouble <br className='md:hidden' /> <span className='text-primary'>accessing?</span>"
+        ),
+        description: t.studentCorner?.support?.desc || supportData?.description || fb(
+            "Đội ngũ kỹ thuật và bộ phận Academic luôn sẵn sàng hỗ trợ bạn 24/7. Hãy chọn phương thức liên hệ thuận tiện nhất.",
+            "Our technical team and Academic department are always ready to support you 24/7. Choose the most convenient contact method for you."
+        ),
+        phone: t.studentCorner?.support?.phone || supportData?.phone || "Hotline",
+        emailLink: supportData?.emailLink || "/contact#registration-form"
     };
+
 
     // Student Messages Section - Image Gallery Style
-    const studentMessages = sections.find((s: any) => s.type === 'student-messages')?.content || {
-        title: "Lời Nhắn Từ Học Viên",
-        subtitle: "Student's Messages",
-        description: "Những dòng chữ chân thành từ các học viên PTN English được lưu giữ qua từng khoảnh khắc",
-        notes: [
+    const studentMessagesData = sections.find((s: any) => s.type === 'student-messages')?.content;
+    const studentMessages = {
+        title: t.studentCorner?.messages?.title || studentMessagesData?.title || fb("Lời Nhắn Từ Học Viên", "Messages From Students"),
+        subtitle: t.studentCorner?.messages?.subtitle || studentMessagesData?.subtitle || "Student's Messages",
+        description: t.studentCorner?.messages?.desc || studentMessagesData?.description || fb(
+            "Những dòng chữ chân thành từ các học viên PTN English được lưu giữ qua từng khoảnh khắc",
+            "Sincere words from PTN English students preserved through every moment"
+        ),
+        notes: studentMessagesData?.notes || [
+
             {
                 id: 1,
                 image: "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/526743323_122171120402241571_3498967980315481358_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_ohc=f6H8y1r6WVsQ7kNvwFfAAnH&_nc_oc=Adkb6oE-Cj-XvUpc2c31i20I90hY-uS_x93o9g5j1k9-h6Y9C1Z9-h6Y9C1Z9-h6Y9&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=A6_h7-y1P-7Q1-7Q1-7Q1&oh=00_AfB-P1-Q1-7Q1-7Q1&oe=697937FB",
@@ -276,7 +309,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             {hero.subtitle}
                         </div>
                         <h1 className="text-white text-4xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
-                            Góc <span className="text-primary font-black">Học Viên</span>
+                            {t.studentCorner?.hero?.mainTitle?.split(' ')?.[0] || fb('Góc', 'Student')} <span className="text-primary font-black">{t.studentCorner?.hero?.mainTitle?.split(' ')?.slice(1)?.join(' ') || fb('Học Viên', 'Corner')}</span>
                         </h1>
                         <p className="text-slate-300 text-base md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
                             {hero.description}
@@ -320,7 +353,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                     className="w-full h-full object-contain max-h-[80vh] rounded-sm"
                                 />
                                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-slate-400 font-bold tracking-widest text-[10px] uppercase">
-                                    PTN Student Message · Full View
+                                    {t.studentCorner?.messages?.fullView || 'PTN Student Message · Full View'}
                                 </div>
                             </motion.div>
                         </motion.div>
@@ -401,7 +434,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                                     <path d="M8 5v14l11-7z" />
                                                 </svg>
                                             </div>
-                                            <span className="mt-2 md:mt-4 text-white font-heading font-black text-[8px] md:text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Xem Video</span>
+                                            <span className="mt-2 md:mt-4 text-white font-heading font-black text-[8px] md:text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{t.studentCorner?.video?.watch || fb('Xem Video', 'Watch Video')}</span>
                                         </div>
                                     </a>
                                 ) : (
@@ -526,8 +559,8 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                         <MessageCircle size={18} />
                                     </div>
                                     <div className="text-left">
-                                        <p className="font-bold text-sm">Trung tâm hỗ trợ</p>
-                                        <p className="text-[8px] text-slate-500 uppercase">Gửi yêu cầu</p>
+                                        <p className="font-bold text-sm">{t.studentCorner?.support?.supportCenter || fb('Trung tâm hỗ trợ', 'Support Center')}</p>
+                                        <p className="text-[8px] text-slate-500 uppercase">{t.studentCorner?.support?.sendRequest || fb('Gửi yêu cầu', 'Send Request')}</p>
                                     </div>
                                 </Link>
 
@@ -540,14 +573,14 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                     </div>
                                     <div className="text-left">
                                         <p className="font-bold text-sm">{support.phone}</p>
-                                        <p className="text-[8px] text-slate-500 uppercase">Hotline hỗ trợ</p>
+                                        <p className="text-[8px] text-slate-500 uppercase">{t.studentCorner?.support?.hotlineLabel || fb('Hotline hỗ trợ', 'Support Hotline')}</p>
                                     </div>
                                 </a>
                             </div>
 
                             <div className="mt-12 pt-12 border-t border-white/5">
                                 <p className="text-slate-500 text-sm font-medium uppercase tracking-[0.2em]">
-                                    Partner To Navigate · PTN English
+                                    {t.studentCorner?.footer?.brand || 'Partner To Navigate · PTN English'}
                                 </p>
                             </div>
                         </div>

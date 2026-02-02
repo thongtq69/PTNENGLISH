@@ -5,7 +5,7 @@ import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
 import Testimonials from "@/components/Testimonials";
 import { motion } from "framer-motion";
-import { BookOpen, ExternalLink, ChevronRight, ArrowRight } from "lucide-react";
+import { BookOpen, ExternalLink, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 import HallOfFame from "@/components/HallOfFame";
@@ -21,13 +21,17 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
     fetch("/api/posts", { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
+        if (!Array.isArray(data)) {
+          console.error("Posts data is not an array:", data);
+          return;
+        }
         // Sort by createdAt descending to get the most recent posts
         const sorted = [...data].sort((a: any, b: any) => {
-          const dateA = new Date(a.createdAt || a.date).getTime();
-          const dateB = new Date(b.createdAt || b.date).getTime();
+          const dateA = new Date(a.createdAt || a.date || 0).getTime();
+          const dateB = new Date(b.createdAt || b.date || 0).getTime();
           return dateB - dateA;
         });
-        setLatestPosts(sorted.slice(0, 3));
+        setLatestPosts(sorted.slice(0, 3).filter(p => !!p));
       })
       .catch(err => console.error("Error fetching posts:", err));
   }, []);
@@ -58,9 +62,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>
             <div className="mt-3 md:mt-4 flex justify-center items-center gap-3">
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
-              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[7px] md:text-[9px]">PTN Philosophy</span>
+              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[7px] md:text-[9px]">{t.home.philosophy.title}</span>
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
             </div>
+
           </motion.div>
         </div>
       </section>
@@ -98,16 +103,22 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                 >
                   <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                     <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    {prog.name === "PTE Academic" && (
+                    {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
                       <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
                     )}
-                    <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 pt-6 md:pt-16 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent flex items-end">
-                      <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight">{prog.name}</p>
+                    <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 pt-6 md:pt-16 bg-gradient-to-t from-slate-900/95 via-slate-900/40 to-transparent flex items-end justify-center">
+                      <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight text-center w-full">{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
                     </div>
                   </div>
                 </motion.div>
               </Link>
             ))}
+          </div>
+
+          <div className="flex justify-center mt-6 md:mt-10">
+            <Link href="/about-us" className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all border-b-2 border-primary/20 pb-1">
+              {t.home.intro.aboutBtn} <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </section>
@@ -194,16 +205,16 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-8 md:py-20 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">Expert Faculty</h2>
-          <h3 className="text-base md:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white">
-            Đội Ngũ Sáng Lập <br />& Giảng Viên MA.TESOL
+          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">{t.home.faculty.badge}</h2>
+          <h3 className="text-base md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white">
+            {t.home.faculty.title}
           </h3>
           <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body px-4">
-            "Từng giảng dạy tại Trung tâm Giáo dục Úc (ACET – IDP), giàu kinh nghiệm, nhiệt huyết, với phương pháp giảng dạy hiệu quả và tài liệu biên soạn tỉ mỉ."
+            {t.home.faculty.desc}
           </p>
-          <button className="bg-primary hover:bg-red-700 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105">
-            Gặp gỡ đội ngũ chuyên gia
-          </button>
+          <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105 inline-block">
+            {t.home.faculty.btn}
+          </Link>
         </div>
       </section>
 
@@ -216,13 +227,13 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 gap-4 md:gap-8">
             <div className="max-w-2xl">
-              <h2 className="text-primary font-heading font-black text-[8px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4">Insights</h2>
+              <h2 className="text-primary font-heading font-black text-[8px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4">{t.home.blog.badge}</h2>
               <h3 className="text-xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
-                Tin tức & <span className="text-primary">Học thuật</span>
+                {t.home.blog.title.split('&')[0]} & <span className="text-primary">{t.home.blog.title.split('&')[1]}</span>
               </h3>
             </div>
             <Link href="/blog" className="group flex items-center gap-2 text-accent font-black uppercase tracking-widest text-[9px] md:text-xs border-b-2 border-primary pb-1 md:pb-2 hover:text-primary transition-colors">
-              Xem tất cả bài viết
+              {t.home.blog.viewAll}
               <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform md:w-4 md:h-4" />
             </Link>
           </div>
@@ -293,7 +304,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               </>
             ) : (
               <div className="md:col-span-12 py-20 text-center text-slate-400 font-bold uppercase tracking-widest">
-                Đang tải bài viết mới nhất...
+                {t.common.loading}
               </div>
             )}
           </div>
@@ -302,7 +313,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
       <section className="py-8 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8">Đối tác chiến lược & Khảo thí</p>
+          <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8">
+            {t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí"}
+          </p>
+
           <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center items-center gap-4 md:gap-16">
             {partners.map((p: any, idx: number) => (
               <motion.div

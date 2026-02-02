@@ -4,143 +4,89 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { BookOpen, Users, Compass, ShieldCheck, FileText, Lock, UserCheck, GraduationCap, Heart, MessageSquare, Laptop, Globe, ClipboardCheck, ArrowRight } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
-const TEACHERS = [
-    {
-        name: "Thầy Đặng Trần Phong (MA.TESOL)",
-        image: "https://ptelc.edu.vn/wp-content/uploads/2022/07/gv-1-1-203x203.png",
-        certs: "Thủ khoa Sư phạm Anh & MA.TESOL (Australia)",
-        exp: "25+ năm kinh nghiệm giảng dạy tại ACET-IDP, ĐH Bách Khoa.",
-        desc: "Nguyên HS chuyên Lê Hồng Phong, truyền cảm hứng học thuật sâu sắc."
-    },
-    {
-        name: "Cô Nguyễn Lê Quỳnh Trâm (MA.TESOL)",
-        image: "https://ptelc.edu.vn/wp-content/uploads/2022/07/gv2-1-1-203x203.png",
-        certs: "Cử nhân Sư phạm Anh & MA.TESOL (Australia)",
-        exp: "20+ năm kinh nghiệm tại ACET-IDP, ĐH Bách Khoa, Học viện Hàng không.",
-        desc: "Kinh nghiệm quốc tế đa dạng, từng hỗ trợ SV quốc tế tại ĐH Adelaide."
-    },
-    {
-        name: "Thầy Nguyễn Trí Nhân (MA.TESOL)",
-        image: "http://ptelc.edu.vn/wp-content/uploads/2024/10/Thầy-Nhân-website-1-164x203.jpg",
-        certs: "MA.TESOL (Uni of Sydney), Học bổng ADS - AUSAID",
-        exp: "25+ năm kinh nghiệm, nguyên Trưởng phòng HTQT ĐH Hồng Bàng.",
-        desc: "Từng giảng dạy tại UTS College & ĐH Deakin (Melbourne)."
-    },
-    {
-        name: "Cô Đoàn Như Thục Quyên (MA.TESOL)",
-        image: "http://ptelc.edu.vn/wp-content/uploads/2025/06/Ms.-Quyên-1-199x203.jpg",
-        certs: "MA.TESOL (University of Canberra)",
-        exp: "15+ năm kinh nghiệm, Cố vấn Học vụ tại ACET-IDP.",
-        desc: "Chuyên gia đào tạo Anh ngữ cho bác sĩ BV 175 và lực lượng gìn giữ hòa bình."
-    }
+const TEACHER_IMAGES = [
+    "https://ptelc.edu.vn/wp-content/uploads/2022/07/gv-1-1-203x203.png",
+    "https://ptelc.edu.vn/wp-content/uploads/2022/07/gv2-1-1-203x203.png",
+    "http://ptelc.edu.vn/wp-content/uploads/2024/10/Thầy-Nhân-website-1-164x203.jpg",
+    "http://ptelc.edu.vn/wp-content/uploads/2025/06/Ms.-Quyên-1-199x203.jpg"
 ];
 
-const PHILOSOPHY = [
-    {
-        title: "Học thuật",
-        desc: "Dạy học có chiều sâu, chú trọng nền tảng vững thay vì các mẹo làm bài ngắn hạn.",
-        icon: <BookOpen className="w-8 h-8" />
-    },
-    {
-        title: "Nhân văn",
-        desc: "Tôn trọng nhịp tiến bộ riêng, lắng nghe và thấu hiểu nhu cầu của từng học viên.",
-        icon: <Users className="w-8 h-8" />
-    },
-    {
-        title: "Đồng hành",
-        desc: "Partner To Navigate - không chỉ là giáo viên, chúng tôi là người dẫn đường tận tâm.",
-        icon: <Compass className="w-8 h-8" />
-    }
-];
-
-const POLICIES = [
-    { title: "Thông tin công khai", icon: <ShieldCheck className="w-5 h-5 text-primary" /> },
-    { title: "Điều khoản & Quy định", icon: <FileText className="w-5 h-5 text-primary" /> },
-    { title: "Chính sách bảo mật", icon: <Lock className="w-5 h-5 text-primary" /> },
-    { title: "Quy định học viên", icon: <UserCheck className="w-5 h-5 text-primary" /> }
-];
-
-const VALUES = [
-    { title: "Tận tâm", desc: "Luôn đặt sự tiến bộ của học viên làm ưu tiên hàng đầu." },
-    { title: "Chuyên nghiệp", desc: "Đội ngũ MA.TESOL với phương pháp sư phạm chuẩn quốc tế." },
-    { title: "Minh bạch", desc: "Quy trình đào tạo và đánh giá rõ ràng, trung thực." },
-    { title: "Đổi mới", desc: "Cập nhật tài liệu và phương pháp dạy học theo xu hướng mới nhất." }
-];
-
-const NEW_DIFFERENCES = [
-    {
-        id: 1,
-        title: "Teacher‑led",
-        fullTitle: "Trung tâm được dẫn dắt bởi giáo viên",
-        desc: "PTN English được xây dựng và vận hành bởi đội ngũ giáo viên, không phải bởi mô hình kinh doanh. Mọi quyết định về chương trình, phương pháp và lộ trình học tập đều xuất phát từ trải nghiệm giảng dạy thực tế trong lớp học và nhu cầu thật của người học.\nChúng tôi tin rằng chất lượng giáo dục bền vững chỉ có thể được dẫn dắt bởi những người trực tiếp đứng lớp, hiểu người học và chịu trách nhiệm cho sự tiến bộ của họ.",
-        icon: <UserCheck className="w-6 h-6" />
-    },
-    {
-        id: 2,
-        title: "Academic Focus",
-        fullTitle: "Nền tảng học thuật đi trước kỹ thuật làm bài",
-        desc: "PTN English không tiếp cận tiếng Anh như một tập hợp mẹo thi. Chúng tôi đặt trọng tâm vào:\n• Nền tảng ngôn ngữ\n• Tư duy học thuật\n• Khả năng lập luận và diễn đạt rõ ràng\nKỹ thuật làm bài IELTS hay PTE được xây dựng trên nền tảng đó, giúp học viên sử dụng tiếng Anh hiệu quả trong học tập và cuộc sống.",
-        icon: <GraduationCap className="w-6 h-6" />
-    },
-    {
-        id: 3,
-        title: "Local Insight",
-        fullTitle: "Am hiểu sâu người học Việt Nam",
-        desc: "Đội ngũ giảng viên PTN English trưởng thành từ các môi trường học thuật quốc tế như ACET và các trường đại học Úc. Chúng tôi hiểu rõ:\n• Vì sao học viên gặp khó khăn khi viết và nói\n• Lỗi nằm ở tư duy và cấu trúc diễn đạt\n• Cách hướng dẫn để học viên tiến bộ bền vững, không phụ thuộc vào khuôn mẫu.",
-        icon: <Heart className="w-6 h-6" />
-    },
-    {
-        id: 4,
-        title: "Personal Feedback",
-        fullTitle: "Phản hồi cá nhân hóa từng người học",
-        desc: "Một trong những khác biệt lớn nhất tại PTN English là feedback chi tiết và có định hướng. Bài viết và phần nói được nhận xét cụ thể, không chung chung. Học viên được chỉ ra vì sao sai, cần cải thiện điều gì, và làm thế nào để tốt hơn. Sự tiến bộ được theo dõi qua từng giai đoạn.",
-        icon: <MessageSquare className="w-6 h-6" />
-    },
-    {
-        id: 5,
-        title: "Small Classes",
-        fullTitle: "Lớp học quy mô nhỏ & lộ trình rõ ràng",
-        desc: "PTN English duy trì quy mô lớp học phù hợp để đảm bảo giáo viên có thể theo sát từng học viên, tạo không gian trao đổi và được lắng nghe. Mỗi học viên đều có lộ trình học tập rõ ràng, được điều chỉnh linh hoạt thay vì học theo một khuôn cố định cho tất cả.",
-        icon: <Users className="w-6 h-6" />
-    },
-    {
-        id: 6,
-        title: "Blended Learning",
-        fullTitle: "Học tập liên tục trong & ngoài lớp",
-        desc: "Việc học tại PTN English không dừng lại khi buổi học kết thúc:\n• Trên lớp: Hướng dẫn, thảo luận và phản hồi trực tiếp\n• Ngoài lớp: Luyện tập qua hệ thống LMS, Google Classroom và Cambridge One\nCách học này giúp duy trì nhịp học đều đặn và phát triển năng lực tự học.",
-        icon: <Laptop className="w-6 h-6" />
-    },
-    {
-        id: 7,
-        title: "Global Connect",
-        fullTitle: "Kết nối học thuật quốc tế luôn cập nhật",
-        desc: "Chúng tôi duy trì kết nối chặt chẽ với cộng đồng giáo dục quốc tế qua:\n• Sử dụng 100% giáo trình gốc của Cambridge University Press\n• Hợp tác theo chuẩn của các tổ chức khảo thí IELTS và PTE\n• Đội ngũ giảng viên tham gia tích cực các hoạt động học thuật quốc tế.",
-        icon: <Globe className="w-6 h-6" />
-    },
-    {
-        id: 8,
-        title: "Partner To Navigate",
-        fullTitle: "Đồng hành để định hướng tương lai",
-        desc: "PTN English lựa chọn vai trò đối tác đồng hành, hỗ trợ người học hiểu mình đang ở đâu, xác định hướng đi phù hợp và tự tin bước tiếp trên con đường học tập lâu dài. Thành công không chỉ là điểm số, mà là năng lực và sự tự tin sau khi rời lớp học.",
-        icon: <Compass className="w-6 h-6" />
-    },
-    {
-        id: 9,
-        title: "Academic Advising",
-        fullTitle: "Tư vấn học thuật cá nhân hóa 1:1",
-        desc: "Mỗi học viên có buổi tư vấn riêng với giáo viên để:\n• Giải đáp thắc mắc chuyên sâu về Writing/Speaking\n• Xây dựng chiến lược và định hướng học thuật\n• Rà soát tiến độ và điều chỉnh lộ trình cá nhân hóa\nGiúp học viên hiểu rõ vị thế bản thân và cách thức tối ưu để tiến bộ.",
-        icon: <ClipboardCheck className="w-6 h-6" />
-    }
+const DIFFERENCE_ICONS = [
+    UserCheck,
+    GraduationCap,
+    Heart,
+    MessageSquare,
+    Users,
+    Laptop,
+    Globe,
+    Compass,
+    ClipboardCheck
 ];
 
 export default function AboutUsContent({ pageData }: { pageData: any }) {
+    const { t, language } = useLanguage();
+
+    // Get teachers data based on language
+    const teachersData = useMemo(() => {
+        const items = t.home.about.teachers.items;
+        return items.map((teacher: any, idx: number) => ({
+            ...teacher,
+            image: TEACHER_IMAGES[idx] || teacher.image
+        }));
+    }, [t]);
+
+    // Get differences data based on language
+    const differencesData = useMemo(() => {
+        return t.home.about.differences.items.map((item: any, idx: number) => ({
+            id: idx + 1,
+            title: item.title || item.fullTitle,
+            fullTitle: item.fullTitle,
+            desc: item.desc,
+            Icon: DIFFERENCE_ICONS[idx]
+        }));
+    }, [t]);
+
+
+    const PHILOSOPHY = [
+        {
+            title: t.home.about.philosophy.academic.title,
+            desc: t.home.about.philosophy.academic.desc,
+            icon: <BookOpen className="w-8 h-8" />
+        },
+        {
+            title: t.home.about.philosophy.humane.title,
+            desc: t.home.about.philosophy.humane.desc,
+            icon: <Users className="w-8 h-8" />
+        },
+        {
+            title: t.home.about.philosophy.partner.title,
+            desc: t.home.about.philosophy.partner.desc,
+            icon: <Compass className="w-8 h-8" />
+        }
+    ];
+
+    const POLICIES = [
+        { title: t.home.about.policies.items.transparent, icon: <ShieldCheck className="w-5 h-5 text-primary" /> },
+        { title: t.home.about.policies.items.terms, icon: <FileText className="w-5 h-5 text-primary" /> },
+        { title: t.home.about.policies.items.privacy, icon: <Lock className="w-5 h-5 text-primary" /> },
+        { title: t.home.about.policies.items.regulations, icon: <UserCheck className="w-5 h-5 text-primary" /> }
+    ];
+
+    const VALUES = [
+        { title: t.home.about.values.dedication.title, desc: t.home.about.values.dedication.desc },
+        { title: t.home.about.values.professionalism.title, desc: t.home.about.values.professionalism.desc },
+        { title: t.home.about.values.transparency.title, desc: t.home.about.values.transparency.desc },
+        { title: t.home.about.values.innovation.title, desc: t.home.about.values.innovation.desc }
+    ];
+
     const sections = pageData?.sections || [];
     const storyData = sections.find((s: any) => s.type === 'about-story')?.content || {};
     const teacherFromDB = sections.find((s: any) => s.type === 'about-teachers')?.content?.items;
-    const teachersToDisplay = (teacherFromDB && teacherFromDB.length > 0) ? teacherFromDB : TEACHERS;
+    const teachersToDisplay = (teacherFromDB && teacherFromDB.length > 0) ? teacherFromDB : teachersData;
 
     return (
         <main className="min-h-screen bg-white">
@@ -156,13 +102,13 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         className="max-w-4xl"
                     >
                         <h1 className="text-primary font-heading font-bold text-sm uppercase tracking-[0.4em] mb-4">
-                            Về Chúng Tôi
+                            {t.home.about.hero.badge}
                         </h1>
                         <h2 className="text-2xl md:text-6xl font-heading font-medium text-accent mb-4 leading-tight">
-                            Kiến tạo hành trình <br /> tri thức cùng <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>
+                            {t.home.about.hero.title.split('\n')[0]} <br /> {t.home.about.hero.title.split('\n')[1]} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>
                         </h2>
                         <p className="text-sm md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-2 md:border-l-4 border-primary pl-4 md:pl-6 py-0.5">
-                            "Đồng hành – Tận tâm – Bền vững: Để mỗi người học đều có một hành trình tiếng Anh của riêng mình."
+                            &ldquo;{t.home.about.hero.desc}&rdquo;
                         </p>
                     </motion.div>
                 </div>
@@ -180,23 +126,23 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         >
                             <h3 className="text-lg md:text-3xl font-heading font-black text-accent mb-4 flex items-center justify-center lg:justify-start gap-4">
                                 <span className="w-6 h-0.5 bg-primary" />
-                                Câu Chuyện Hình Thành
+                                {t.home.about.story.subtitle}
                                 <span className="w-6 h-0.5 bg-primary lg:hidden" />
                             </h3>
                             <div className="space-y-4 text-sm md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
                                 <p className="text-xl leading-snug">
-                                    <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> bắt đầu từ những lớp học tâm huyết của ba người thầy: <br />
-                                    <span className="font-black text-accent border-b-2 border-primary/20">Phong – Trâm – Nhân</span>.
+                                    <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {t.home.about.story.p1} <br />
+                                    <span className="font-black text-accent border-b-2 border-primary/20">{t.home.about.story.teachers}</span>.
                                 </p>
                                 <p>
-                                    Chúng tôi hiểu người học thực sự cần nền tảng vững chắc, sự dẫn dắt tận tâm và một lộ trình có ý nghĩa lâu dài thay vì những mẹo làm bài ngắn hạn.
+                                    {t.home.about.story.p2}
                                 </p>
                                 <div className="bg-primary/5 p-8 border-l-[6px] border-primary rounded-r-2xl text-base shadow-sm">
-                                    <p className="mb-3"><strong>PTN</strong> là viết tắt của ba người sáng lập.</p>
-                                    <p><strong>PTN</strong> là tinh thần <strong>Partner To Navigate</strong> – đồng hành để định hướng.</p>
+                                    <p className="mb-3"><strong>PTN</strong> {t.home.about.story.ptnAcronym}</p>
+                                    <p><strong>PTN</strong> {t.home.about.story.ptnSpirit}</p>
                                 </div>
                                 <p className="text-accent font-medium italic">
-                                    "Thành công là sự tự tin khi học viên tự mình bước tiếp trên con đường học tập và cuộc sống."
+                                    &ldquo;{t.home.about.story.quote}&rdquo;
                                 </p>
                             </div>
                         </motion.div>
@@ -215,7 +161,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             </div>
                             <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-[1.5rem] shadow-lg border border-slate-100 hidden md:block">
                                 <p className="text-3xl font-heading font-black text-primary mb-0.5">25+</p>
-                                <p className="uppercase tracking-widest text-[10px] font-bold text-accent">Năm Kinh Nghiệm</p>
+                                <p className="uppercase tracking-widest text-[10px] font-bold text-accent">{t.home.about.story.expBadge}</p>
                             </div>
                         </motion.div>
                     </div>
@@ -230,14 +176,14 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="text-center max-w-3xl mx-auto mb-12">
-                        <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.3em] mb-4">The PTN Difference</h2>
+                        <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.3em] mb-4">{t.home.about.differences.badge}</h2>
                         <h3 className="text-xl md:text-4xl font-heading font-extrabold mb-2 text-accent leading-tight">
-                            Tại sao chọn <span className="text-primary">PTN</span> <span className="text-accent">English</span>?
+                            {t.home.about.differences.title} <span className="text-primary">PTN</span> <span className="text-accent">English</span>?
                         </h3>
-                        <p className="text-slate-600 font-body text-base">Hệ thống đào tạo học thuật chuyên sâu, đồng hành cùng sự phát triển của từng cá nhân.</p>
+                        <p className="text-slate-600 font-body text-base">{t.home.about.differences.subtitle}</p>
                     </div>
 
-                    <DifferencesHub />
+                    <DifferencesHub differencesData={differencesData} />
                 </div>
             </section>
 
@@ -249,8 +195,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         {/* Left: Philosophy */}
                         <div className="lg:col-span-12 xl:col-span-5 flex flex-col justify-center">
                             <div className="mb-8 lg:mb-0">
-                                <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">Philosophy</h2>
-                                <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">Triết lý Giáo dục</h3>
+                                <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">{t.home.about.philosophy.badge}</h2>
+                                <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">{t.home.about.philosophy.title}</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-4">
                                     {PHILOSOPHY.map((item, idx) => (
                                         <motion.div
@@ -275,8 +221,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                         {/* Right: Core Values */}
                         <div className="lg:col-span-12 xl:col-span-7 flex flex-col justify-center">
-                            <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">Core Values</h2>
-                            <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">Giá trị Cốt lõi</h3>
+                            <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">{t.home.about.values.badge}</h2>
+                            <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">{t.home.about.values.title}</h3>
                             <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 gap-3">
                                 {VALUES.map((val, idx) => (
                                     <motion.div
@@ -300,9 +246,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             <section id="teachers" className="py-24 bg-slate-50">
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-[0.4em] mb-4">The Leadership</h2>
+                        <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-[0.4em] mb-4">{t.home.about.teachers.badge}</h2>
                         <h3 className="text-xl md:text-5xl font-heading font-extrabold text-accent leading-tight">
-                            Hội đồng Sáng lập & <br /> Ban Giám đốc Học thuật
+                            {t.home.about.teachers.title} <br /> {t.home.about.teachers.subtitle}
                         </h3>
                     </div>
 
@@ -327,12 +273,12 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                                     <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                                         <div className="w-12 h-1 bg-primary mb-6" />
-                                        <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-3">Qualifications</p>
+                                        <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-3">{t.home.about.teachers.qualifications}</p>
                                         <p className="text-white text-sm leading-relaxed mb-6 font-medium whitespace-pre-line">{teacher.certs}</p>
                                         <p className="text-white/70 text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line">{teacher.desc}</p>
                                     </div>
                                     <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/10 text-white text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all shadow-xl">
-                                        Founder / Board Member
+                                        {t.home.about.teachers.founderBadge}
                                     </div>
                                 </div>
                                 <div className="mt-4 md:mt-8 text-center group-hover:text-primary transition-colors">
@@ -353,7 +299,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             <div className="flex items-center gap-8 mb-16">
                                 <div className="h-px flex-1 bg-slate-200" />
                                 <h3 className="text-sm md:text-2xl font-heading font-black text-slate-400 uppercase tracking-[0.2em] whitespace-nowrap">
-                                    Đội ngũ Giảng viên Chuyên gia
+                                    {t.home.about.teachers.facultyTitle}
                                 </h3>
                                 <div className="h-px flex-1 bg-slate-200" />
                             </div>
@@ -397,9 +343,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                     <div className="bg-slate-100 rounded-[3rem] p-8 md:p-12 shadow-sm border border-slate-200">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                             <div>
-                                <h3 className="text-2xl font-heading font-bold text-accent mb-4">Cam kết của <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span></h3>
+                                <h3 className="text-2xl font-heading font-bold text-accent mb-4">{t.home.about.policies.title} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span></h3>
                                 <p className="text-slate-600 font-body mb-8 leading-relaxed text-base">
-                                    Quyền lợi học viên được đảm bảo qua các chính sách minh bạch và tiêu chuẩn học thuật cao nhất.
+                                    {t.home.about.policies.subtitle}
                                 </p>
                                 <div className="grid grid-cols-2 gap-2 md:gap-3">
                                     {POLICIES.map((p, idx) => (
@@ -411,9 +357,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 </div>
                             </div>
                             <div className="bg-white rounded-[2rem] p-8 shadow-md border border-slate-200 ring-1 ring-primary/5">
-                                <h4 className="text-primary font-heading font-black text-xl mb-4 text-center">Bạn cần tư vấn?</h4>
+                                <h4 className="text-primary font-heading font-black text-xl mb-4 text-center">{t.home.about.policies.ctaTitle}</h4>
                                 <Link href="/test" className="block w-full bg-primary hover:bg-black text-white py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 transform text-center">
-                                    Đăng ký kiểm tra trình độ miễn phí
+                                    {t.home.about.policies.ctaButton}
                                 </Link>
                             </div>
                         </div>
@@ -426,8 +372,33 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
     );
 }
 
-function DifferencesHub() {
+// Difference titles are static English short names
+const DIFFERENCE_TITLES = [
+    "Teacher‑led",
+    "Academic Focus",
+    "Local Insight",
+    "Personal Feedback",
+    "Small Classes",
+    "Blended Learning",
+    "Global Connect",
+    "Partner To Navigate",
+    "Academic Advising"
+];
+
+interface DifferenceItem {
+    id: number;
+    title: string;
+    fullTitle: string;
+    desc: string;
+    Icon: React.ComponentType<{ className?: string }>;
+}
+
+function DifferencesHub({ differencesData }: { differencesData: DifferenceItem[] }) {
     const [hovered, setHovered] = useState<number | null>(null);
+    const { language } = useLanguage();
+
+    const exploreText = language === 'en' ? 'Explore our core values' : 'Khám phá giá trị cốt lõi';
+    const clickText = language === 'en' ? 'Click icons to explore differences' : 'Nhấn vào biểu tượng để khám phá';
 
     return (
         <div className="relative min-h-[550px] flex items-center justify-center scale-100 md:scale-110">
@@ -442,8 +413,8 @@ function DifferencesHub() {
                         </radialGradient>
                     </defs>
                     {/* Decorative circles removed as per request */}
-                    {NEW_DIFFERENCES.map((_, idx) => {
-                        const angle = (idx * 360) / NEW_DIFFERENCES.length;
+                    {differencesData.map((_, idx) => {
+                        const angle = (idx * 360) / differencesData.length;
                         const x2 = 375 + Math.cos((angle - 90) * (Math.PI / 180)) * 280;
                         const y2 = 375 + Math.sin((angle - 90) * (Math.PI / 180)) * 280;
                         return (
@@ -451,9 +422,9 @@ function DifferencesHub() {
                                 key={idx}
                                 x1="375" y1="375" x2={x2} y2={y2}
                                 stroke="url(#lineGradient)"
-                                strokeWidth={hovered === NEW_DIFFERENCES[idx].id ? "2" : "1"}
+                                strokeWidth={hovered === differencesData[idx].id ? "2" : "1"}
                                 initial={{ pathLength: 0, opacity: 0 }}
-                                animate={{ pathLength: 1, opacity: hovered === NEW_DIFFERENCES[idx].id ? 0.8 : 0.2 }}
+                                animate={{ pathLength: 1, opacity: hovered === differencesData[idx].id ? 0.8 : 0.2 }}
                                 transition={{ duration: 1, ease: "easeOut" }}
                             />
                         );
@@ -478,13 +449,16 @@ function DifferencesHub() {
                                         animate={{ scale: 1 }}
                                         className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-6 shadow-inner"
                                     >
-                                        {React.cloneElement(NEW_DIFFERENCES.find(d => d.id === hovered)?.icon as React.ReactElement<any>, { className: "w-8 h-8" })}
+                                        {(() => {
+                                            const Icon = differencesData.find(d => d.id === hovered)?.Icon;
+                                            return Icon ? <Icon className="w-8 h-8" /> : null;
+                                        })()}
                                     </motion.div>
                                     <h4 className="text-xl font-heading font-black mb-4 text-accent leading-tight max-w-[300px]">
-                                        {NEW_DIFFERENCES.find(d => d.id === hovered)?.fullTitle}
+                                        {differencesData.find(d => d.id === hovered)?.fullTitle}
                                     </h4>
                                     <p className="text-slate-500 font-body text-[13px] leading-relaxed max-w-[340px] whitespace-pre-line text-left px-6">
-                                        {NEW_DIFFERENCES.find(d => d.id === hovered)?.desc}
+                                        {differencesData.find(d => d.id === hovered)?.desc}
                                     </p>
                                     <div className="mt-8 flex gap-1.5">
                                         {[...Array(3)].map((_, i) => (
@@ -525,7 +499,7 @@ function DifferencesHub() {
                                         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                                         className="mt-16 flex flex-col items-center"
                                     >
-                                        <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-400 mb-3">Explore our core values</span>
+                                        <span className="text-[10px] uppercase tracking-[0.4em] font-black text-slate-400 mb-3">{exploreText}</span>
                                         <div className="w-px h-16 bg-gradient-to-b from-primary/60 to-transparent"></div>
                                     </motion.div>
                                 </motion.div>
@@ -535,11 +509,12 @@ function DifferencesHub() {
                 </div>
 
                 {/* Orbiting Items */}
-                {NEW_DIFFERENCES.map((item, idx) => {
-                    const angle = (idx * 360) / NEW_DIFFERENCES.length;
-                    const radius = 280; // Adjusted radius for better compactness
+                {differencesData.map((item, idx) => {
+                    const angle = (idx * 360) / differencesData.length;
+                    const radius = 280;
                     const x = Math.cos((angle - 90) * (Math.PI / 180)) * radius;
                     const y = Math.sin((angle - 90) * (Math.PI / 180)) * radius;
+                    const Icon = item.Icon;
 
                     return (
                         <motion.div
@@ -558,7 +533,7 @@ function DifferencesHub() {
                             <div className="relative flex flex-col items-center group w-44">
                                 {/* The Icon Button - Glassmorphism Style */}
                                 <div className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-500 backdrop-blur-md ${hovered === item.id ? "bg-primary border-2 border-primary shadow-[0_0_40px_8px_rgba(199,0,43,0.4)] text-white" : "bg-accent border-2 border-white/10 text-white shadow-[0_12px_40px_-8px_rgba(0,0,0,0.3)] group-hover:border-primary/50 group-hover:shadow-[0_12px_40px_-4px_rgba(199,0,43,0.2)]"}`}>
-                                    {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-9 h-9" })}
+                                    <Icon className="w-9 h-9" />
                                 </div>
 
                                 {/* Always Visible Label */}
@@ -578,22 +553,26 @@ function DifferencesHub() {
             <div className="lg:hidden w-full flex flex-col gap-6">
                 {/* Icon Grid (Fixed, compressed & centered) */}
                 <div className="flex flex-wrap justify-center gap-3">
-                    {NEW_DIFFERENCES.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => setHovered(item.id)}
-                            className={`w-[22%] aspect-square rounded-xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_20px_4px_rgba(199,0,43,0.3)]" : "bg-accent border-2 border-white/10 text-white shadow-[0_8px_32px_-4px_rgba(0,0,0,0.25)]"}`}
-                        >
-                            {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-6 h-6" })}
-                        </button>
-                    ))}
+                    {differencesData.map((item) => {
+                        const Icon = item.Icon;
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => setHovered(item.id)}
+                                className={`w-[22%] aspect-square rounded-xl flex items-center justify-center transition-all backdrop-blur-md ${hovered === item.id || (hovered === null && item.id === 1) ? "bg-primary border-2 border-primary text-white shadow-[0_0_20px_4px_rgba(199,0,43,0.3)]" : "bg-accent border-2 border-white/10 text-white shadow-[0_8px_32px_-4px_rgba(0,0,0,0.25)]"}`}
+                            >
+                                <Icon className="w-6 h-6" />
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Content Area */}
                 <div className="bg-white border-2 border-slate-100 p-6 rounded-[2rem] shadow-xl relative min-h-[250px]">
                     <AnimatePresence mode="wait">
                         {(() => {
-                            const activeItem = NEW_DIFFERENCES.find(d => d.id === (hovered || 1));
+                            const activeItem = differencesData.find(d => d.id === (hovered || 1));
+                            const ActiveIcon = activeItem?.Icon;
                             return (
                                 <motion.div
                                     key={activeItem?.id}
@@ -604,7 +583,7 @@ function DifferencesHub() {
                                 >
                                     <div className="flex items-center gap-3 mb-4">
                                         <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                                            {React.cloneElement(activeItem?.icon as React.ReactElement<any>, { className: "w-5 h-5" })}
+                                            {ActiveIcon && <ActiveIcon className="w-5 h-5" />}
                                         </div>
                                         <h4 className="text-lg font-heading font-black text-accent uppercase leading-tight tracking-tighter">
                                             {activeItem?.title}
@@ -623,7 +602,7 @@ function DifferencesHub() {
                 </div>
 
                 <p className="text-[10px] text-center text-slate-400 font-black uppercase tracking-[0.3em]">
-                    Click icons to explore differences
+                    {clickText}
                 </p>
             </div>
         </div>

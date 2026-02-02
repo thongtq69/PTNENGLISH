@@ -270,17 +270,33 @@ export default function HomeEditor() {
 
                             <div className="flex gap-4 items-center">
                                 <div className="flex-1 space-y-2">
-                                    <input
-                                        value={prog.name}
-                                        onChange={(e) => {
-                                            const newList = [...settings.programs];
-                                            newList[idx].name = e.target.value;
-                                            setSettings({ ...settings, programs: newList });
-                                        }}
-                                        className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1 placeholder:text-slate-600"
-                                        placeholder="Program Name"
-                                    />
-                                    <div className="flex items-center gap-2 bg-slate-950 border border-white/10 rounded-lg px-3 py-1.5 focus-within:border-primary transition-all">
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Tiếng Việt</label>
+                                        <input
+                                            value={prog.name}
+                                            onChange={(e) => {
+                                                const newList = [...settings.programs];
+                                                newList[idx].name = e.target.value;
+                                                setSettings({ ...settings, programs: newList });
+                                            }}
+                                            className="w-full bg-transparent border-b border-white/10 outline-none text-white font-bold text-sm focus:border-primary transition-all py-1 placeholder:text-slate-600"
+                                            placeholder="Tên chương trình (VN)"
+                                        />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">English</label>
+                                        <input
+                                            value={prog.nameEn || ''}
+                                            onChange={(e) => {
+                                                const newList = [...settings.programs];
+                                                newList[idx].nameEn = e.target.value;
+                                                setSettings({ ...settings, programs: newList });
+                                            }}
+                                            className="w-full bg-transparent border-b border-white/10 outline-none text-slate-300 font-bold text-sm focus:border-primary transition-all py-1 placeholder:text-slate-600"
+                                            placeholder="Program Name (EN)"
+                                        />
+                                    </div>
+                                    <div className="flex items-center gap-2 bg-slate-950 border border-white/10 rounded-lg px-3 py-1.5 focus-within:border-primary transition-all mt-2">
                                         <LinkIcon size={12} className="text-slate-600" />
                                         <input
                                             value={prog.link}

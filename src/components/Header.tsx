@@ -36,6 +36,7 @@ export default function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const isHome = pathname === "/";
+    const isAdmin = pathname.startsWith("/admin");
 
     useEffect(() => {
         const handleScroll = () => {
@@ -76,24 +77,6 @@ export default function Header() {
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><Instagram size={14} /></a>
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><Youtube size={14} /></a>
                         <a href="#" className="hover:text-primary transition-all hover:scale-110"><TikTokIcon size={14} /></a>
-
-                        <div className="h-4 w-px bg-white/20 ml-2"></div>
-
-                        <div className="flex items-center gap-2 ml-4">
-                            <button
-                                onClick={() => setLanguage("vi")}
-                                className={`transition-all ${language === "vi" ? "text-primary opacity-100 scale-110 font-black" : "opacity-40 hover:opacity-100"}`}
-                            >
-                                VI
-                            </button>
-                            <span className="text-white/20">/</span>
-                            <button
-                                onClick={() => setLanguage("en")}
-                                className={`transition-all ${language === "en" ? "text-primary opacity-100 scale-110 font-black" : "opacity-40 hover:opacity-100"}`}
-                            >
-                                EN
-                            </button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -128,28 +111,51 @@ export default function Header() {
                         ))}
                         <Link
                             href="/contact#registration-form"
-                            className="bg-primary hover:bg-red-700 text-white px-6 py-2.5 rounded-none font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-red-500/20"
+                            className="bg-primary hover:bg-black text-white px-6 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20"
                         >
                             {t.nav.register}
                         </Link>
+
+                        {!isAdmin && (
+                            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isTransparent ? "border-white/20 bg-white/5" : "border-slate-200 bg-slate-50"}`}>
+                                <Globe size={14} className={isTransparent ? "text-white/60" : "text-slate-400"} />
+                                <div className="flex items-center gap-1.5 text-[10px] font-black tracking-tighter">
+                                    <button
+                                        onClick={() => setLanguage("vi")}
+                                        className={`transition-all ${language === "vi" ? "text-primary scale-110" : isTransparent ? "text-white/40 hover:text-white" : "text-slate-400 hover:text-slate-600"}`}
+                                    >
+                                        VI
+                                    </button>
+                                    <span className={isTransparent ? "text-white/10" : "text-slate-200"}>|</span>
+                                    <button
+                                        onClick={() => setLanguage("en")}
+                                        className={`transition-all ${language === "en" ? "text-primary scale-110" : isTransparent ? "text-white/40 hover:text-white" : "text-slate-400 hover:text-slate-600"}`}
+                                    >
+                                        EN
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </nav>
 
                     {/* Mobile Menu Button */}
                     <div className="flex items-center gap-4 md:hidden">
-                        <div className="flex items-center gap-2 bg-slate-100 rounded-lg px-2 py-1">
-                            <button
-                                onClick={() => setLanguage("vi")}
-                                className={`text-[10px] font-black transition-all ${language === "vi" ? "text-primary" : "text-slate-400"}`}
-                            >
-                                VI
-                            </button>
-                            <button
-                                onClick={() => setLanguage("en")}
-                                className={`text-[10px] font-black transition-all ${language === "en" ? "text-primary" : "text-slate-400"}`}
-                            >
-                                EN
-                            </button>
-                        </div>
+                        {!isAdmin && (
+                            <div className="flex items-center gap-2 bg-slate-100 rounded-lg px-2 py-1">
+                                <button
+                                    onClick={() => setLanguage("vi")}
+                                    className={`text-[10px] font-black transition-all ${language === "vi" ? "text-primary" : "text-slate-400"}`}
+                                >
+                                    VI
+                                </button>
+                                <button
+                                    onClick={() => setLanguage("en")}
+                                    className={`text-[10px] font-black transition-all ${language === "en" ? "text-primary" : "text-slate-400"}`}
+                                >
+                                    EN
+                                </button>
+                            </div>
+                        )}
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className={`transition-colors ${isTransparent ? "text-white" : "text-accent"} hover:text-primary`}
