@@ -95,22 +95,29 @@ export default function BlogManager() {
         e.preventDefault();
         setSaving(true);
 
-        let newList;
-        if (editingPost._id) {
-            // Edit existing
-            newList = posts.map(p => p._id === editingPost._id ? editingPost : p);
-        } else {
-            // New Post
-            const newPost = { ...editingPost, _id: Date.now().toString(), createdAt: new Date().toISOString() };
-            newList = [newPost, ...posts];
-        }
-
         try {
-            await fetch('/api/posts', {
+            let newList;
+            if (editingPost._id && !editingPost._id.startsWith('temp_')) {
+                // Edit existing
+                newList = posts.map(p => p._id === editingPost._id ? editingPost : p);
+            } else {
+                // New Post - Strip temp_ prefix if exists
+                const { _id, ...postData } = editingPost;
+                const newPost = {
+                    ...postData,
+                    createdAt: new Date().toISOString()
+                };
+                newList = [newPost, ...posts];
+            }
+
+            const res = await fetch('/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newList)
             });
+
+            if (!res.ok) throw new Error("Save failed");
+
             // Re-fetch to get real DB IDs for new posts
             const updatedPosts = await fetch('/api/posts', { cache: 'no-store' }).then(res => res.json());
             setPosts(updatedPosts);
@@ -125,14 +132,15 @@ export default function BlogManager() {
 
     const openEditor = (post: any = null) => {
         if (post) {
-            setEditingPost(post);
+            setEditingPost({ ...post });
         } else {
             setEditingPost({
+                _id: 'temp_' + Date.now(),
                 title: '',
                 slug: '',
                 excerpt: '',
                 content: '',
-                category: pageData.categories[0] || 'IELTS Expert',
+                category: pageData?.categories?.[0] || 'IELTS Expert',
                 author: 'Admin PTN',
                 date: new Date().toLocaleDateString('vi-VN'),
                 readTime: '5 phút',
@@ -448,7 +456,7 @@ export default function BlogManager() {
                                         <FileUpload
                                             label="Featured Image"
                                             value={editingPost.image}
-                                            onChange={(url) => setEditingPost({ ...editingPost, image: url })}
+                                            onChange={(url) => setEditingPost((prev: any) => prev ? { ...prev, image: url } : null)}
                                             folder="blog"
                                             aspect={16 / 9}
                                         />
@@ -487,7 +495,7 @@ export default function BlogManager() {
                                         disabled={saving}
                                         className="bg-primary text-white px-12 py-4 rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all"
                                     >
-                                        {saving ? "Saving..." : "Publish Article"}
+                                        {saving ? "Saving..." : (editingPost._id && !editingPost._id.startsWith('temp_') ? "Update Article" : "Publish Article")}
                                     </button>
                                 </div>
                             </form>

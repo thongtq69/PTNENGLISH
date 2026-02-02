@@ -1,6 +1,6 @@
 export const dynamic = "force-dynamic";
-import CourseManager from '@/components/admin/CourseManager';
+import CoursesPageEditor from '@/components/admin/CoursesPageEditor';
 
 export default function AdminCoursesPage() {
-    return <CourseManager />;
+    return <CoursesPageEditor />;
 }

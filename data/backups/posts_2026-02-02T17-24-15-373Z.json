@@ -1,5 +1,20 @@
 [
   {
+    "_id": "6980dcecd3cbdd3140370fff",
+    "title": "a",
+    "slug": "a",
+    "excerpt": "",
+    "content": "",
+    "category": "Tất cả",
+    "author": "Admin PTN",
+    "date": "3/2/2026",
+    "readTime": "5 phút",
+    "image": "",
+    "createdAt": "2026-02-02T17:20:44.305Z",
+    "updatedAt": "2026-02-02T17:24:02.427Z",
+    "__v": 0
+  },
+  {
     "_id": "6980a8cbf32ba1bca8e2bbfc",
     "title": "Khơi dậy tư duy tranh luận (critical thinking) cho teens với nguồn digital từ The Week Junior",
     "slug": "khoi-day-tu-duy-tranh-luan-critical-thinking-cho-teens-voi-nguon-digital-tu-the-week-junior",
@@ -11,7 +26,7 @@
     "readTime": "8 phút",
     "image": "https://d3ry4o1su9a59w.cloudfront.net/public/60104007ace1090010e00499/62bec16d0ecf52000869203d/6662c2bb1090485e640c1519/1/432-0001.jpg",
     "createdAt": "2026-02-02T13:38:19.519Z",
-    "updatedAt": "2026-02-02T17:24:15.435Z",
+    "updatedAt": "2026-02-02T17:24:02.427Z",
     "__v": 0
   },
   {
@@ -26,7 +41,7 @@
     "readTime": "10 phút",
     "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1769706129/ptn_english/blog/cznkir8t6ioplxkpv5mw.png",
     "createdAt": "2026-01-29T16:53:52.573Z",
-    "updatedAt": "2026-02-02T17:24:15.435Z",
+    "updatedAt": "2026-02-02T17:24:02.427Z",
     "__v": 0
   },
   {
@@ -41,7 +56,7 @@
     "readTime": "5 phút",
     "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1769666810/ptn_english/blog/nmv6teyczqyp11gddfyc.jpg",
     "createdAt": "2026-01-28T09:14:05.716Z",
-    "updatedAt": "2026-02-02T17:24:15.435Z",
+    "updatedAt": "2026-02-02T17:24:02.427Z",
     "__v": 0
   },
   {
@@ -56,7 +71,7 @@
     "readTime": "5 phút",
     "image": "https://www.easepdf.com/images/pdf-tips/childrenslibrary-homepage.png",
     "createdAt": "2026-01-28T09:06:50.499Z",
-    "updatedAt": "2026-02-02T17:24:15.435Z",
+    "updatedAt": "2026-02-02T17:24:02.427Z",
     "__v": 0
   },
   {
@@ -71,7 +86,7 @@
     "readTime": "5 phút",
     "image": "",
     "createdAt": "2026-01-28T09:03:05.298Z",
-    "updatedAt": "2026-02-02T17:24:15.435Z",
+    "updatedAt": "2026-02-02T17:24:02.427Z",
     "__v": 0
   }
 ]

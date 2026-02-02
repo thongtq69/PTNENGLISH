@@ -117,6 +117,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                         onCropChange={onCropChange}
                         onCropComplete={onCropCompleteInternal}
                         onZoomChange={onZoomChange}
+                        restrictPosition={false}
                     />
                 </div>
 
@@ -132,7 +133,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                                 <input
                                     type="range"
                                     value={zoom}
-                                    min={1}
+                                    min={0.5}
                                     max={3}
                                     step={0.1}
                                     onChange={(e) => setZoom(Number(e.target.value))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
@@ -13,10 +13,52 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function CoursesContent({ pageData }: { pageData: any }) {
+// Helper function to merge data with fallback
+const mergeWithFallback = (dbData: any, fallback: any): any => {
+    if (!dbData) return fallback;
+    if (typeof fallback !== 'object' || fallback === null) return dbData ?? fallback;
+    if (Array.isArray(fallback)) return dbData ?? fallback;
+
+    const result: any = { ...fallback };
+    for (const key of Object.keys(fallback)) {
+        if (dbData[key] !== undefined) {
+            result[key] = mergeWithFallback(dbData[key], fallback[key]);
+        }
+    }
+    return result;
+};
+
+export default function CoursesContent({ pageData: initialPageData }: { pageData: any }) {
     const { t, language } = useLanguage();
     const [activeTab, setActiveTab] = useState<"ie" | "eft" | "ge">("ie");
     const [selectedLevel, setSelectedLevel] = useState<any>(null);
+    const [dbData, setDbData] = useState<any>(initialPageData?.content || null);
+
+    // Fetch dynamic content when language changes
+    useEffect(() => {
+        const fetchContent = async () => {
+            try {
+                const res = await fetch(`/api/courses-page?lang=${language}`);
+                const data = await res.json();
+                if (data) setDbData(data);
+            } catch (err) {
+                console.error("Failed to fetch language-specific content", err);
+            }
+        };
+        fetchContent();
+    }, [language]);
+
+    // Get content from database or fallback to translations
+    const content = useMemo(() => {
+        const translationContent = t.courses;
+
+        if (!dbData) {
+            return translationContent;
+        }
+
+        // Merge database content with translations as fallback
+        return mergeWithFallback(dbData, translationContent);
+    }, [dbData, t.courses]);
 
     // Read hash from URL and set active tab accordingly
     useEffect(() => {
@@ -34,19 +76,19 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
     }, []);
 
     const getLevelData = (pathway: string, level: string) => {
-        const levels = t.courses.levels as any;
+        const levels = content.levels as any;
         return levels?.[pathway]?.[level] || {};
     };
 
     const PATHWAY_DATA = {
         ie: {
             id: "ie",
-            name: t.courses.pathway.ie.name,
-            subtitle: t.courses.pathway.ie.subtitle,
+            name: content.pathway?.ie?.name || t.courses.pathway.ie.name,
+            subtitle: content.pathway?.ie?.subtitle || t.courses.pathway.ie.subtitle,
             color: "primary",
             theme: "from-primary to-accent",
             bgLight: "bg-primary/5",
-            description: t.courses.pathway.ie.desc,
+            description: content.pathway?.ie?.desc || t.courses.pathway.ie.desc,
             levels: [
                 {
                     id: "ie-foundation",
@@ -94,12 +136,12 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
         },
         eft: {
             id: "eft",
-            name: t.courses.pathway.eft.name,
-            subtitle: t.courses.pathway.eft.subtitle,
+            name: content.pathway?.eft?.name || t.courses.pathway.eft.name,
+            subtitle: content.pathway?.eft?.subtitle || t.courses.pathway.eft.subtitle,
             color: "primary",
             theme: "from-primary to-secondary",
             bgLight: "bg-primary/5",
-            description: t.courses.pathway.eft.desc,
+            description: content.pathway?.eft?.desc || t.courses.pathway.eft.desc,
             levels: [
                 {
                     id: "eft-foundation",
@@ -147,12 +189,12 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
         },
         ge: {
             id: "ge",
-            name: t.courses.pathway.ge.name,
-            subtitle: t.courses.pathway.ge.subtitle,
+            name: content.pathway?.ge?.name || t.courses.pathway.ge.name,
+            subtitle: content.pathway?.ge?.subtitle || t.courses.pathway.ge.subtitle,
             color: "primary",
             theme: "from-accent to-primary",
             bgLight: "bg-primary/5",
-            description: t.courses.pathway.ge.desc,
+            description: content.pathway?.ge?.desc || t.courses.pathway.ge.desc,
             levels: [
                 {
                     id: "ge-foundation",
@@ -203,33 +245,55 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
     const COMMON_INFO = [
         {
             icon: <Clock size={24} />,
-            title: t.courses.specs.hours.title,
-            desc: t.courses.specs.hours.desc
+            title: content.specs?.hours?.title || t.courses.specs.hours.title,
+            desc: content.specs?.hours?.desc || t.courses.specs.hours.desc
         },
         {
             icon: <Calendar size={24} />,
-            title: t.courses.specs.schedule.title,
-            desc: t.courses.specs.schedule.desc
+            title: content.specs?.schedule?.title || t.courses.specs.schedule.title,
+            desc: content.specs?.schedule?.desc || t.courses.specs.schedule.desc
         },
         {
             icon: <BookOpen size={24} />,
-            title: t.courses.specs.materials.title,
-            desc: t.courses.specs.materials.desc
+            title: content.specs?.materials?.title || t.courses.specs.materials.title,
+            desc: content.specs?.materials?.desc || t.courses.specs.materials.desc
         },
         {
             icon: <Zap size={24} />,
-            title: t.courses.specs.transfer.title,
-            desc: t.courses.specs.transfer.desc
+            title: content.specs?.transfer?.title || t.courses.specs.transfer.title,
+            desc: content.specs?.transfer?.desc || t.courses.specs.transfer.desc
         }
     ];
 
     const SCHEDULES = [
-        { label: t.courses.schedules.morning.label, time: t.courses.schedules.morning.time, duration: t.courses.schedules.morning.duration },
-        { label: t.courses.schedules.evening.label, time: t.courses.schedules.evening.time, duration: t.courses.schedules.evening.duration },
-        { label: t.courses.schedules.weekend.label, time: t.courses.schedules.weekend.time, duration: t.courses.schedules.weekend.duration },
+        {
+            label: content.schedules?.morning?.label || t.courses.schedules.morning.label,
+            time: content.schedules?.morning?.time || t.courses.schedules.morning.time,
+            duration: content.schedules?.morning?.duration || t.courses.schedules.morning.duration
+        },
+        {
+            label: content.schedules?.evening?.label || t.courses.schedules.evening.label,
+            time: content.schedules?.evening?.time || t.courses.schedules.evening.time,
+            duration: content.schedules?.evening?.duration || t.courses.schedules.evening.duration
+        },
+        {
+            label: content.schedules?.weekend?.label || t.courses.schedules.weekend.label,
+            time: content.schedules?.weekend?.time || t.courses.schedules.weekend.time,
+            duration: content.schedules?.weekend?.duration || t.courses.schedules.weekend.duration
+        },
     ];
 
     const currentPathway = PATHWAY_DATA[activeTab];
+
+    // Helper to get target audience groups
+    const getTargetGroup = (key: string) => {
+        const groups = content.targetAudience?.groups;
+        const fallbackGroups = t.courses.targetAudience.groups as any;
+        return {
+            title: groups?.[key]?.title || fallbackGroups[key]?.title,
+            sub: groups?.[key]?.sub || fallbackGroups[key]?.sub
+        };
+    };
 
     return (
         <main className="min-h-screen bg-slate-50">
@@ -249,7 +313,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] mb-8"
                         >
                             <Target size={14} className="text-primary" />
-                            {t.courses.hero.badge}
+                            {content.hero?.badge || t.courses.hero.badge}
                         </motion.div>
                         <motion.h1
                             initial={{ opacity: 0, y: 30 }}
@@ -257,8 +321,8 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             transition={{ delay: 0.1 }}
                             className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1]"
                         >
-                            {t.courses.hero.title.split(' ').slice(0, 2).join(' ')} <br />
-                            <span className="text-primary font-black">{t.courses.hero.title.split(' ').slice(2).join(' ')}</span>
+                            {(content.hero?.title || t.courses.hero.title).split(' ').slice(0, 2).join(' ')} <br />
+                            <span className="text-primary font-black">{(content.hero?.title || t.courses.hero.title).split(' ').slice(2).join(' ')}</span>
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 30 }}
@@ -266,7 +330,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             transition={{ delay: 0.2 }}
                             className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-2xl mb-8 md:mb-12"
                         >
-                            {t.courses.hero.subtitle}
+                            {content.hero?.subtitle || t.courses.hero.subtitle}
                         </motion.p>
 
                         <motion.div
@@ -276,10 +340,10 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             className="flex flex-wrap justify-center gap-4"
                         >
                             <Link href="/test" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
-                                {t.courses.hero.cta1}
+                                {content.hero?.cta1 || t.courses.hero.cta1}
                             </Link>
                             <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
-                                {t.courses.hero.cta2}
+                                {content.hero?.cta2 || t.courses.hero.cta2}
                             </a>
                         </motion.div>
                     </div>
@@ -293,22 +357,24 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                         {/* Target Audience */}
                         <div className="space-y-10">
                             <div>
-                                <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">{t.courses.targetAudience.title}</h2>
-                                <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">{t.courses.targetAudience.subtitle}</p>
+                                <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">
+                                    {content.targetAudience?.title || t.courses.targetAudience.title}
+                                </h2>
+                                <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">
+                                    {content.targetAudience?.subtitle || t.courses.targetAudience.subtitle}
+                                </p>
                             </div>
                             <div className="grid grid-cols-2 gap-3 md:gap-4">
-                                {[
-                                    { text: t.courses.targetAudience.groups.students.title, sub: t.courses.targetAudience.groups.students.sub },
-                                    { text: t.courses.targetAudience.groups.teens.title, sub: t.courses.targetAudience.groups.teens.sub },
-                                    { text: t.courses.targetAudience.groups.graduates.title, sub: t.courses.targetAudience.groups.graduates.sub },
-                                    { text: t.courses.targetAudience.groups.communicators.title, sub: t.courses.targetAudience.groups.communicators.sub }
-                                ].map((item, i) => (
-                                    <div key={i} className="p-3 md:p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
-                                        <CheckCircle2 size={18} className="text-primary mb-2 md:mb-4 opacity-50 group-hover:opacity-100 md:w-6 md:h-6" />
-                                        <h4 className="font-heading font-black text-slate-800 text-[10px] md:text-base mb-1">{item.text}</h4>
-                                        <p className="text-[8px] md:text-xs text-slate-400 font-bold uppercase tracking-wider">{item.sub}</p>
-                                    </div>
-                                ))}
+                                {['students', 'teens', 'graduates', 'communicators'].map((key, i) => {
+                                    const group = getTargetGroup(key);
+                                    return (
+                                        <div key={i} className="p-3 md:p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
+                                            <CheckCircle2 size={18} className="text-primary mb-2 md:mb-4 opacity-50 group-hover:opacity-100 md:w-6 md:h-6" />
+                                            <h4 className="font-heading font-black text-slate-800 text-[10px] md:text-base mb-1">{group.title}</h4>
+                                            <p className="text-[8px] md:text-xs text-slate-400 font-bold uppercase tracking-wider">{group.sub}</p>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
 
@@ -317,7 +383,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
 
                             <h3 className="text-white font-heading text-2xl font-bold mb-10 flex items-center gap-4">
-                                <Zap className="text-primary" /> {t.courses.specs.title}
+                                <Zap className="text-primary" /> {content.specs?.title || t.courses.specs.title}
                             </h3>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -353,7 +419,9 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                 <div className="container mx-auto px-6">
                     {/* Tab Navigation */}
                     <div className="flex flex-col items-center mb-12">
-                        <h2 className="text-accent font-heading text-3xl md:text-5xl font-black mb-8 text-center">{t.courses.pathway.title}</h2>
+                        <h2 className="text-accent font-heading text-3xl md:text-5xl font-black mb-8 text-center">
+                            {content.pathway?.title || t.courses.pathway.title}
+                        </h2>
                         <div className="bg-white p-2 rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-wrap justify-center gap-2">
                             {(Object.values(PATHWAY_DATA)).map((tab) => (
                                 <button
@@ -452,7 +520,7 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                                     </p>
                                                 </div>
                                                 <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-xs font-black uppercase md:opacity-0 group-hover:opacity-100 transition-opacity pt-2">
-                                                    {t.courses.levelModal.badge} <ArrowRight size={10} className="md:w-4 md:h-4" />
+                                                    {content.levelModal?.badge || t.courses.levelModal.badge} <ArrowRight size={10} className="md:w-4 md:h-4" />
                                                 </div>
                                             </div>
                                         </motion.div>
@@ -470,31 +538,39 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                     <div className="bg-white rounded-[4rem] p-8 md:p-14 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.1)] border border-slate-100 relative overflow-hidden flex flex-col md:flex-row items-center gap-16">
                         <div className="flex-1 space-y-8">
                             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
-                                <Trophy size={16} /> {t.courses.placement.badge}
+                                <Trophy size={16} /> {content.placement?.badge || t.courses.placement.badge}
                             </div>
                             <h2 className="text-xl md:text-6xl font-heading font-black text-accent leading-tight text-center lg:text-left">
-                                {t.courses.placement.title.split(' ').slice(0, 4).join(' ')} <br /> <span className="text-primary">{t.courses.placement.title.split(' ').slice(4).join(' ')}</span>
+                                {(content.placement?.title || t.courses.placement.title).split(' ').slice(0, 4).join(' ')} <br /> <span className="text-primary">{(content.placement?.title || t.courses.placement.title).split(' ').slice(4).join(' ')}</span>
                             </h2>
                             <p className="text-slate-500 text-[10px] md:text-lg leading-relaxed text-center lg:text-left mx-auto lg:mx-0">
-                                {t.courses.placement.desc}
+                                {content.placement?.desc || t.courses.placement.desc}
                             </p>
 
                             <div className="grid grid-cols-2 gap-4 md:gap-6">
                                 <div className="space-y-3 md:space-y-4">
                                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-accent text-white flex items-center justify-center font-black text-xs md:text-base">1</div>
-                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">{t.courses.placement.step1.title}</h4>
-                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">{t.courses.placement.step1.desc}</p>
+                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">
+                                        {content.placement?.step1?.title || t.courses.placement.step1.title}
+                                    </h4>
+                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">
+                                        {content.placement?.step1?.desc || t.courses.placement.step1.desc}
+                                    </p>
                                 </div>
                                 <div className="space-y-3 md:space-y-4">
                                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary text-white flex items-center justify-center font-black text-xs md:text-base">2</div>
-                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">{t.courses.placement.step2.title}</h4>
-                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">{t.courses.placement.step2.desc}</p>
+                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">
+                                        {content.placement?.step2?.title || t.courses.placement.step2.title}
+                                    </h4>
+                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">
+                                        {content.placement?.step2?.desc || t.courses.placement.step2.desc}
+                                    </p>
                                 </div>
                             </div>
 
                             <div className="flex justify-center lg:justify-start">
                                 <Link href="/test" className="w-full sm:w-auto bg-accent hover:bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold transition-all shadow-xl text-sm md:text-base text-center">
-                                    {t.courses.placement.cta}
+                                    {content.placement?.cta || t.courses.placement.cta}
                                 </Link>
                             </div>
                         </div>
@@ -547,16 +623,22 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                                         <X size={18} className="md:w-6 md:h-6" />
                                     </button>
 
-                                    <div className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-2 md:mb-4 opacity-70">{t.courses.levelModal.badge}</div>
+                                    <div className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-2 md:mb-4 opacity-70">
+                                        {content.levelModal?.badge || t.courses.levelModal.badge}
+                                    </div>
                                     <h3 className="text-2xl md:text-5xl font-heading font-black mb-3 md:mb-6 leading-tight">{selectedLevel.name}</h3>
 
                                     <div className="flex gap-2 md:gap-4 justify-center">
                                         <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold border border-white/20 flex flex-col">
-                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">{t.courses.levelModal.cefr}</span>
+                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">
+                                                {content.levelModal?.cefr || t.courses.levelModal.cefr}
+                                            </span>
                                             {selectedLevel.cefr}
                                         </div>
                                         <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold border border-white/20 flex flex-col">
-                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">{t.courses.levelModal.exit}</span>
+                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">
+                                                {content.levelModal?.exit || t.courses.levelModal.exit}
+                                            </span>
                                             {selectedLevel.exit}
                                         </div>
                                     </div>
@@ -570,16 +652,19 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
                             {/* Modal Body */}
                             <div className="p-5 md:p-10 pt-10 md:pt-16 max-h-[65vh] overflow-y-auto">
                                 <div className="mb-6 md:mb-10">
-                                    <h5 className="text-accent font-heading font-black text-base md:text-xl mb-2 md:mb-4">{t.courses.levelModal.description}</h5>
+                                    <h5 className="text-accent font-heading font-black text-base md:text-xl mb-2 md:mb-4">
+                                        {content.levelModal?.description || t.courses.levelModal.description}
+                                    </h5>
                                     <p className="text-slate-500 leading-relaxed text-xs md:text-base">{selectedLevel.fullDesc}</p>
                                 </div>
 
                                 <div className="mb-6">
                                     <h5 className="text-accent font-heading font-black text-sm md:text-lg mb-2 md:mb-4 flex items-center gap-2">
-                                        <Trophy size={14} className="text-primary md:w-[18px] md:h-[18px]" /> {t.courses.levelModal.benefits}
+                                        <Trophy size={14} className="text-primary md:w-[18px] md:h-[18px]" />
+                                        {content.levelModal?.benefits || t.courses.levelModal.benefits}
                                     </h5>
                                     <div className="grid grid-cols-1 gap-2 md:gap-3">
-                                        {selectedLevel.benefits.map((b: string, i: number) => (
+                                        {selectedLevel.benefits?.map((b: string, i: number) => (
                                             <div key={i} className="flex gap-2 md:gap-3 items-start p-2 md:p-3 bg-slate-50 rounded-lg md:rounded-xl">
                                                 <CheckCircle2 size={12} className="text-primary mt-0.5 shrink-0 md:w-4 md:h-4" />
                                                 <span className="text-[10px] md:text-sm text-slate-600 font-medium">{b}</span>
@@ -590,13 +675,13 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
 
                                 <div className="mt-8 md:mt-12 flex flex-col md:flex-row gap-2.5 md:gap-4">
                                     <Link href="/contact#registration-form" className="w-full md:flex-1 bg-accent text-white py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] text-center hover:bg-black transition-all">
-                                        {t.courses.levelModal.register}
+                                        {content.levelModal?.register || t.courses.levelModal.register}
                                     </Link>
                                     <button
                                         onClick={() => setSelectedLevel(null)}
                                         className="w-full md:w-auto px-6 py-3.5 md:py-0 border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all text-[9px] uppercase tracking-widest"
                                     >
-                                        {t.courses.levelModal.close}
+                                        {content.levelModal?.close || t.courses.levelModal.close}
                                     </button>
                                 </div>
                             </div>
@@ -609,16 +694,18 @@ export default function CoursesContent({ pageData }: { pageData: any }) {
             <section className="py-20 bg-accent overflow-hidden relative text-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(199,0,43,0.1),transparent)]"></div>
                 <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-                    <h2 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-8 leading-tight">{t.courses.bottomCta.title}</h2>
+                    <h2 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-8 leading-tight">
+                        {content.bottomCta?.title || t.courses.bottomCta.title}
+                    </h2>
                     <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed font-body">
-                        {t.courses.bottomCta.desc}
+                        {content.bottomCta?.desc || t.courses.bottomCta.desc}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6">
                         <Link href="/contact#registration-form" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20">
-                            {t.courses.bottomCta.cta1}
+                            {content.bottomCta?.cta1 || t.courses.bottomCta.cta1}
                         </Link>
                         <button className="bg-white/5 hover:bg-white/10 text-white border border-white/20 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
-                            {t.courses.bottomCta.cta2}
+                            {content.bottomCta?.cta2 || t.courses.bottomCta.cta2}
                         </button>
                     </div>
                 </div>

@@ -6,7 +6,10 @@ export const dynamic = 'force-dynamic';
 
 export default async function CoursesPage() {
     await dbConnect();
-    const pageData = await Page.findOne({ slug: 'courses' }).lean();
+
+    // Load courses page content data (default to Vietnamese on server-side)
+    const pageData = await Page.findOne({ slug: 'courses-content-vi' }).lean();
 
     return <CoursesContent pageData={pageData ? JSON.parse(JSON.stringify(pageData)) : null} />;
 }
+
