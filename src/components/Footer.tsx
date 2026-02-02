@@ -75,16 +75,16 @@ export default function Footer() {
                         {footerData.aboutText}
                     </p>
                     <div className="flex space-x-3">
-                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Facebook size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Instagram size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Youtube size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href="#" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <TikTokIcon size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
                     </div>
