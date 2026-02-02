@@ -450,6 +450,7 @@ export default function BlogManager() {
                                             value={editingPost.image}
                                             onChange={(url) => setEditingPost({ ...editingPost, image: url })}
                                             folder="blog"
+                                            aspect={16 / 9}
                                         />
                                     </div>
                                 </div>

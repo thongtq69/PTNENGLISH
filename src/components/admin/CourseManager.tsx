@@ -176,6 +176,7 @@ export default function CourseManager() {
                                                         value={course.image}
                                                         onChange={(url) => updateCourse(idx, 'image', url)}
                                                         folder="courses"
+                                                        aspect={4 / 3}
                                                     />
                                                 </div>
                                             </div>

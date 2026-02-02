@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef } from 'react';
-import { Upload, X, Loader2, Image as ImageIcon, FileText, Video, Headphones } from 'lucide-react';
+import { Upload, X, Loader2, Image as ImageIcon, FileText, Video, Headphones, Crop } from 'lucide-react';
+import ImageCropper from './ImageCropper';
 
 interface FileUploadProps {
     value: string;
@@ -11,6 +12,7 @@ interface FileUploadProps {
     compact?: boolean;
     accept?: string;
     mode?: 'image' | 'pdf' | 'video' | 'audio' | 'word' | 'all';
+    aspect?: number;
 }
 
 export default function FileUpload({
@@ -20,9 +22,12 @@ export default function FileUpload({
     folder = 'uploads',
     compact = false,
     accept = "image/*",
-    mode = 'image'
+    mode = 'image',
+    aspect
 }: FileUploadProps) {
     const [uploading, setUploading] = useState(false);
+    const [isCropping, setIsCropping] = useState(false);
+    const [tempFileUrl, setTempFileUrl] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const getIcon = () => {
@@ -42,19 +47,23 @@ export default function FileUpload({
             alert('Vui lòng chọn tệp hình ảnh.');
             return;
         }
-        if (mode === 'pdf' && file.type !== 'application/pdf') {
-            alert('Vui lòng chọn tệp PDF.');
+
+        if (mode === 'image' && file.type.startsWith('image/')) {
+            // Instead of direct upload, show cropper first if it's an image
+            const url = URL.createObjectURL(file);
+            setTempFileUrl(url);
+            setIsCropping(true);
+            if (fileInputRef.current) fileInputRef.current.value = '';
             return;
         }
 
-        if (file.size > 20 * 1024 * 1024) { // 20MB limit for general files
-            alert('Kích thước tệp không được vượt quá 20MB.');
-            return;
-        }
+        uploadToServer(file);
+    };
 
+    const uploadToServer = async (file: File | Blob) => {
         setUploading(true);
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('file', file instanceof File ? file : new File([file], "cropped.jpg", { type: 'image/jpeg' }));
         formData.append('folder', folder);
 
         try {
@@ -76,6 +85,13 @@ export default function FileUpload({
             setUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
         }
+    };
+
+    const handleCropComplete = async (croppedBlob: Blob) => {
+        setIsCropping(false);
+        if (tempFileUrl) URL.revokeObjectURL(tempFileUrl);
+        setTempFileUrl(null);
+        uploadToServer(croppedBlob);
     };
 
     const renderPreview = () => {
@@ -120,13 +136,15 @@ export default function FileUpload({
                     className="hidden"
                     accept={mode === 'pdf' ? '.pdf' : mode === 'video' ? 'video/*' : mode === 'audio' ? 'audio/*' : mode === 'word' ? '.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document' : (mode === 'all' ? 'image/*,application/pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document' : accept)}
                 />
-                <input
-                    type="text"
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
-                    placeholder="URL..."
-                    className="w-full bg-slate-950 border border-white/5 rounded-lg px-2 py-1 text-[8px] text-slate-500 text-center outline-none focus:border-primary/50 transition-all"
-                />
+
+                {isCropping && tempFileUrl && (
+                    <ImageCropper
+                        image={tempFileUrl}
+                        aspect={aspect}
+                        onCropComplete={handleCropComplete}
+                        onCancel={() => { setIsCropping(false); setTempFileUrl(null); }}
+                    />
+                )}
             </div>
         );
     }
@@ -142,13 +160,28 @@ export default function FileUpload({
                         {renderPreview()}
                     </div>
                     {value && (
-                        <button
-                            type="button"
-                            onClick={() => onChange('')}
-                            className="absolute -top-2 -right-2 bg-red-500 text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform"
-                        >
-                            <X size={12} />
-                        </button>
+                        <div className="absolute -top-2 -right-2 flex flex-col gap-1">
+                            <button
+                                type="button"
+                                onClick={() => onChange('')}
+                                className="bg-red-500 text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform"
+                            >
+                                <X size={12} />
+                            </button>
+                            {mode === 'image' && (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setTempFileUrl(value);
+                                        setIsCropping(true);
+                                    }}
+                                    className="bg-primary text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform"
+                                    title="Chỉnh sửa ảnh"
+                                >
+                                    <Crop size={12} />
+                                </button>
+                            )}
+                        </div>
                     )}
                 </div>
 
@@ -184,6 +217,16 @@ export default function FileUpload({
                     </div>
                 </div>
             </div>
+
+            {isCropping && tempFileUrl && (
+                <ImageCropper
+                    image={tempFileUrl}
+                    aspect={aspect}
+                    onCropComplete={handleCropComplete}
+                    onCancel={() => { setIsCropping(false); if (!value) setTempFileUrl(null); }}
+                />
+            )}
         </div>
     );
 }
+
