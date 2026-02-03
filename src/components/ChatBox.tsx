@@ -171,10 +171,9 @@ const ChatBox = () => {
         }, 600);
     };
 
-    const formatWhatsAppLink = () => {
-        const phone = config?.whatsappNumber || '84902508290';
-        const text = `Họ tên: ${leads.name}\nSĐT: ${leads.phone}\nQuan tâm: ${interest || "Tư vấn lộ trình"}\n(Từ Website PTN English)`;
-        return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+    const formatZaloLink = () => {
+        const phone = "0902508290";
+        return `https://zalo.me/${phone}`;
     };
 
     const toggleChat = () => {
@@ -312,7 +311,7 @@ const ChatBox = () => {
                                     className="space-y-3"
                                 >
                                     <a
-                                        href={formatWhatsAppLink()}
+                                        href={formatZaloLink()}
                                         target="_blank"
                                         className="flex items-center justify-center gap-3 rounded-xl bg-[#25D366] py-4 text-sm font-black text-white shadow-xl shadow-green-500/30 transition-all hover:scale-[1.03] active:scale-95"
                                     >

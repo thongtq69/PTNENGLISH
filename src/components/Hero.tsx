@@ -50,8 +50,33 @@ export default function Hero({ initialData }: { initialData?: any }) {
             {/* Content */}
             <div className="container mx-auto px-4 relative z-10 text-center">
                 <div className="max-w-4xl mx-auto pt-12 md:pt-24 text-center px-4">
-                    <h1 className="text-white text-xl md:text-6xl font-heading font-normal tracking-tight leading-tight md:leading-[1.05] mb-4 md:mb-8 animate-fade-in-up max-w-2xl mx-auto whitespace-pre-line text-center">
-                        {displayTitle}
+                    <h1 className="text-white text-xl md:text-6xl font-heading font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-3xl mx-auto [text-wrap:balance]">
+                        {(() => {
+                            const title = displayTitle;
+                            if (title.includes('|')) {
+                                const parts = title.split('|');
+                                return (
+                                    <>
+                                        <span className="block mb-1 md:mb-2">{parts[0].trim()}</span>
+                                        <span className="text-primary block md:inline-block">{parts[1].trim()}</span>
+                                    </>
+                                );
+                            }
+                            const words = title.split(' ');
+                            if (words.length <= 1) return title;
+
+                            const firstPart = words.slice(0, -2).join(' ');
+                            const lastPart = words.slice(-2).join(' ');
+
+                            return (
+                                <div className="flex flex-col md:block items-center">
+                                    {firstPart && <span className="md:mr-3">{firstPart}</span>}
+                                    <span className="text-primary whitespace-nowrap inline-block">
+                                        {lastPart}
+                                    </span>
+                                </div>
+                            );
+                        })()}
                     </h1>
                     <p className="text-white text-[10px] md:text-xl mb-4 md:mb-12 max-w-xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body">
                         {displaySubtitle}

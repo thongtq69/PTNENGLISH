@@ -319,16 +319,44 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1]"
+                            className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1] [text-wrap:balance] max-w-5xl mx-auto"
                         >
-                            {(content.hero?.title || t.courses.hero.title).split(' ').slice(0, 2).join(' ')} <br />
-                            <span className="text-primary font-black">{(content.hero?.title || t.courses.hero.title).split(' ').slice(2).join(' ')}</span>
+                            {(() => {
+                                const title = content.hero?.title || t.courses.hero.title;
+                                if (title.includes('|')) {
+                                    const parts = title.split('|');
+                                    return (
+                                        <>
+                                            <span className="block mb-2">{parts[0].trim()}</span>
+                                            <span className="text-primary font-black whitespace-nowrap block md:inline-block">{parts[1].trim()}</span>
+                                        </>
+                                    );
+                                }
+                                const words = title.split(' ');
+                                if (words.length <= 1) {
+                                    return <span className="text-primary font-black">{title}</span>;
+                                }
+
+                                // Logic: Keep the last 2 words together as the primary highlight
+                                // This prevents a single word like "HỌC" from dropping alone.
+                                const firstPart = words.slice(0, -2).join(' ');
+                                const lastPart = words.slice(-2).join(' ');
+
+                                return (
+                                    <div className="flex flex-col md:block items-center">
+                                        {firstPart && <span className="md:mr-4">{firstPart}</span>}
+                                        <span className="text-primary font-black whitespace-nowrap inline-block">
+                                            {lastPart}
+                                        </span>
+                                    </div>
+                                );
+                            })()}
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-2xl mb-8 md:mb-12"
+                            className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-3xl mx-auto mb-8 md:mb-12 text-center [text-wrap:balance]"
                         >
                             {content.hero?.subtitle || t.courses.hero.subtitle}
                         </motion.p>
