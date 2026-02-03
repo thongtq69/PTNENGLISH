@@ -126,23 +126,23 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         >
                             <h3 className="text-lg md:text-3xl font-heading font-black text-accent mb-4 flex items-center justify-center lg:justify-start gap-4">
                                 <span className="w-6 h-0.5 bg-primary" />
-                                {t.home.about.story.subtitle}
+                                {storyData.subtitle || t.home.about.story.subtitle}
                                 <span className="w-6 h-0.5 bg-primary lg:hidden" />
                             </h3>
                             <div className="space-y-4 text-sm md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
                                 <p className="text-xl leading-snug">
-                                    <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {t.home.about.story.p1} <br />
-                                    <span className="font-black text-accent border-b-2 border-primary/20">{t.home.about.story.teachers}</span>.
+                                    <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {storyData.p1 || t.home.about.story.p1} <br />
+                                    <span className="font-black text-accent border-b-2 border-primary/20">{storyData.teachers || t.home.about.story.teachers}</span>.
                                 </p>
                                 <p>
-                                    {t.home.about.story.p2}
+                                    {storyData.p2 || t.home.about.story.p2}
                                 </p>
                                 <div className="bg-primary/5 p-8 border-l-[6px] border-primary rounded-r-2xl text-base shadow-sm">
-                                    <p className="mb-3"><strong>PTN</strong> {t.home.about.story.ptnAcronym}</p>
-                                    <p><strong>PTN</strong> {t.home.about.story.ptnSpirit}</p>
+                                    <p className="mb-3"><strong>PTN</strong> {storyData.ptnAcronym || t.home.about.story.ptnAcronym}</p>
+                                    <p><strong>PTN</strong> {storyData.ptnSpirit || t.home.about.story.ptnSpirit}</p>
                                 </div>
                                 <p className="text-accent font-medium italic">
-                                    &ldquo;{t.home.about.story.quote}&rdquo;
+                                    &ldquo;{storyData.quote || t.home.about.story.quote}&rdquo;
                                 </p>
                             </div>
                         </motion.div>
@@ -160,8 +160,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 />
                             </div>
                             <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-[1.5rem] shadow-lg border border-slate-100 hidden md:block">
-                                <p className="text-3xl font-heading font-black text-primary mb-0.5">25+</p>
-                                <p className="uppercase tracking-widest text-[10px] font-bold text-accent">{t.home.about.story.expBadge}</p>
+                                <p className="text-3xl font-heading font-black text-primary mb-0.5">{storyData.expValue || "25+"}</p>
+                                <p className="uppercase tracking-widest text-[10px] font-bold text-accent">{storyData.expBadge || t.home.about.story.expBadge}</p>
                             </div>
                         </motion.div>
                     </div>

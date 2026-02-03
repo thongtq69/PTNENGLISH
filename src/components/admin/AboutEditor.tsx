@@ -165,22 +165,127 @@ export default function AboutEditor() {
 
                     {/* STORY TAB */}
                     {activeTab === 'story' && (
-                        <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
-                            <h2 className="text-xl font-black text-white flex items-center gap-3">
-                                <span className="w-8 h-1 bg-primary rounded-full"></span>
-                                Brand Story Image
-                            </h2>
-                            <div className="space-y-6">
-                                <FileUpload
-                                    label="Story Image"
-                                    value={data.story.image || ''}
-                                    onChange={(url) => setData({ ...data, story: { ...data.story, image: url } })}
-                                    folder="about/story"
-                                />
-                                <div className="p-6 bg-amber-500/10 border border-amber-500/20 rounded-2xl">
-                                    <p className="text-amber-500 text-xs font-bold leading-relaxed">
-                                        Lưu ý: Phần văn bản của "Câu Chuyện Hình Thành" hiện đã được cố định (hardcode) theo yêu cầu thiết kế. Tại đây bạn chỉ có thể thay đổi hình ảnh hiển thị bên cạnh câu chuyện.
-                                    </p>
+                        <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-10 shadow-2xl">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                                <div className="space-y-8">
+                                    <h2 className="text-xl font-black text-white flex items-center gap-3">
+                                        <span className="w-8 h-1 bg-primary rounded-full"></span>
+                                        Văn bản nội dung
+                                    </h2>
+
+                                    <div className="space-y-5">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Tiêu đề phụ (Subtitle)</label>
+                                            <input
+                                                value={data.story.subtitle || ''}
+                                                onChange={e => setData({ ...data, story: { ...data.story, subtitle: e.target.value } })}
+                                                placeholder="Ví dụ: Câu Chuyện Hình Thành"
+                                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white font-bold outline-none focus:border-primary/50"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Đoạn mở đầu (Paragraph 1)</label>
+                                            <textarea
+                                                value={data.story.p1 || ''}
+                                                onChange={e => setData({ ...data, story: { ...data.story, p1: e.target.value } })}
+                                                rows={2}
+                                                placeholder="PTN English bắt đầu từ những lớp học tâm huyết..."
+                                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-slate-300 text-sm outline-none focus:border-primary/50"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Điểm nhấn giảng viên (Highlight Teachers)</label>
+                                            <input
+                                                value={data.story.teachers || ''}
+                                                onChange={e => setData({ ...data, story: { ...data.story, teachers: e.target.value } })}
+                                                placeholder="Ví dụ: Phong – Trâm – Nhân."
+                                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-primary font-black outline-none focus:border-primary/50"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Đoạn nội dung chính (Paragraph 2)</label>
+                                            <textarea
+                                                value={data.story.p2 || ''}
+                                                onChange={e => setData({ ...data, story: { ...data.story, p2: e.target.value } })}
+                                                rows={3}
+                                                placeholder="Chúng tôi hiểu người học thực sự cần nền tảng vững chắc..."
+                                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-slate-300 text-sm outline-none focus:border-primary/50"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="p-6 bg-white/[0.02] border border-white/5 rounded-[2rem] space-y-6">
+                                        <h3 className="text-white font-bold text-xs uppercase tracking-widest">Định nghĩa PTN Box</h3>
+                                        <div className="space-y-4">
+                                            <div className="space-y-2">
+                                                <label className="text-[9px] font-black text-slate-600 uppercase tracking-widest block">Giải nghĩa từ viết tắt (Acronym)</label>
+                                                <input
+                                                    value={data.story.ptnAcronym || ''}
+                                                    onChange={e => setData({ ...data, story: { ...data.story, ptnAcronym: e.target.value } })}
+                                                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-slate-300 text-xs outline-none focus:border-primary/50"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-[9px] font-black text-slate-600 uppercase tracking-widest block">Giải nghĩa tinh thần (Spirit)</label>
+                                                <input
+                                                    value={data.story.ptnSpirit || ''}
+                                                    onChange={e => setData({ ...data, story: { ...data.story, ptnSpirit: e.target.value } })}
+                                                    className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-2 text-slate-300 text-xs outline-none focus:border-primary/50"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Trích dẫn (Quote)</label>
+                                        <textarea
+                                            value={data.story.quote || ''}
+                                            onChange={e => setData({ ...data, story: { ...data.story, quote: e.target.value } })}
+                                            rows={2}
+                                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-amber-500 italic font-medium outline-none focus:border-primary/50"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="space-y-8">
+                                    <h2 className="text-xl font-black text-white flex items-center gap-3">
+                                        <span className="w-8 h-1 bg-primary rounded-full"></span>
+                                        Hình ảnh & Chỉ số
+                                    </h2>
+
+                                    <div className="space-y-6">
+                                        <FileUpload
+                                            label="Hình ảnh chính"
+                                            value={data.story.image || ''}
+                                            onChange={(url) => setData({ ...data, story: { ...data.story, image: url } })}
+                                            folder="about/story"
+                                        />
+
+                                        <div className="p-8 bg-slate-950 border border-white/5 rounded-[2rem] space-y-6">
+                                            <h3 className="text-white font-bold text-xs uppercase tracking-widest">Huy hiệu kinh nghiệm</h3>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-2">
+                                                    <label className="text-[9px] font-black text-slate-600 uppercase tracking-widest block">Giá trị (VD: 25+)</label>
+                                                    <input
+                                                        value={data.story.expValue || ''}
+                                                        onChange={e => setData({ ...data, story: { ...data.story, expValue: e.target.value } })}
+                                                        className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-primary font-black lg:text-2xl outline-none focus:border-primary/50"
+                                                    />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <label className="text-[9px] font-black text-slate-600 uppercase tracking-widest block">Nhãn (Label)</label>
+                                                    <input
+                                                        value={data.story.expBadge || ''}
+                                                        onChange={e => setData({ ...data, story: { ...data.story, expBadge: e.target.value } })}
+                                                        className="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-white font-bold text-xs outline-none focus:border-primary/50 uppercase"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
