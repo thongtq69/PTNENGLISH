@@ -57,9 +57,9 @@ interface CoursesData {
         ge: { name: string; subtitle: string; desc: string };
     };
     levels: {
-        ie: Record<string, { target: string; benefits: string[]; fullDesc: string }>;
-        eft: Record<string, { target: string; benefits: string[]; fullDesc: string }>;
-        ge: Record<string, { target: string; benefits: string[]; fullDesc: string }>;
+        ie: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
+        eft: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
+        ge: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
     };
     placement: {
         badge: string;
@@ -139,11 +139,22 @@ export default function CoursesPageEditor() {
         setData(newData);
     };
 
+    const updateLevelField = (pathway: string, level: string, field: string, value: any) => {
+        if (!data) return;
+        const newData = JSON.parse(JSON.stringify(data));
+        if (!newData.levels[pathway]) newData.levels[pathway] = {};
+        if (!newData.levels[pathway][level]) {
+            newData.levels[pathway][level] = { name: '', cefr: '', exit: '', target: '', benefits: [], fullDesc: '' };
+        }
+        newData.levels[pathway][level][field] = value;
+        setData(newData);
+    };
+
     const updateBenefit = (pathway: string, level: string, index: number, value: string) => {
         if (!data) return;
         const newData = JSON.parse(JSON.stringify(data));
         if (!newData.levels[pathway][level]) {
-            newData.levels[pathway][level] = { target: '', benefits: [], fullDesc: '' };
+            newData.levels[pathway][level] = { name: '', cefr: '', exit: '', target: '', benefits: [], fullDesc: '' };
         }
         newData.levels[pathway][level].benefits[index] = value;
         setData(newData);
@@ -602,7 +613,7 @@ export default function CoursesPageEditor() {
                             {/* Levels for selected pathway */}
                             <div className="space-y-4">
                                 {LEVEL_KEYS.map(level => {
-                                    const levelData = data.levels[expandedPathway as keyof typeof data.levels]?.[level] || { target: '', benefits: [], fullDesc: '' };
+                                    const levelData = data.levels[expandedPathway as keyof typeof data.levels]?.[level] || { name: '', cefr: '', exit: '', target: '', benefits: [], fullDesc: '' };
                                     const levelId = `${expandedPathway}-${level}`;
 
                                     return (
@@ -616,8 +627,10 @@ export default function CoursesPageEditor() {
                                                         {level.slice(0, 2)}
                                                     </div>
                                                     <div>
-                                                        <h3 className="text-white font-bold capitalize">{level}</h3>
-                                                        <p className="text-slate-500 text-xs">{levelData.target || 'Chưa có mô tả'}</p>
+                                                        <h3 className="text-white font-bold capitalize">{levelData.name || level}</h3>
+                                                        <p className="text-slate-500 text-xs">
+                                                            {levelData.cefr || 'CEFR ?'} | {levelData.exit || 'Target ?'}
+                                                        </p>
                                                     </div>
                                                 </div>
                                                 {expandedLevel === levelId ? <ChevronUp className="text-slate-400" size={18} /> : <ChevronDown className="text-slate-400" size={18} />}
@@ -632,19 +645,43 @@ export default function CoursesPageEditor() {
                                                         className="border-t border-white/5 overflow-hidden"
                                                     >
                                                         <div className="p-6 space-y-6">
+                                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                                <div className="space-y-2">
+                                                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tên cấp độ</label>
+                                                                    <input
+                                                                        value={levelData.name}
+                                                                        onChange={e => updateLevelField(expandedPathway!, level, 'name', e.target.value)}
+                                                                        className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2.5 text-white"
+                                                                        placeholder="Ví dụ: Foundation"
+                                                                    />
+                                                                </div>
+                                                                <div className="space-y-2">
+                                                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">CEFR</label>
+                                                                    <input
+                                                                        value={levelData.cefr}
+                                                                        onChange={e => updateLevelField(expandedPathway!, level, 'cefr', e.target.value)}
+                                                                        className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2.5 text-white"
+                                                                        placeholder="Ví dụ: A1 / Pre-A1"
+                                                                    />
+                                                                </div>
+                                                                <div className="space-y-2">
+                                                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Mục tiêu đầu ra</label>
+                                                                    <input
+                                                                        value={levelData.exit}
+                                                                        onChange={e => updateLevelField(expandedPathway!, level, 'exit', e.target.value)}
+                                                                        className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2.5 text-white"
+                                                                        placeholder="Ví dụ: READY FOR IELTS"
+                                                                    />
+                                                                </div>
+                                                            </div>
+
                                                             <div className="space-y-2">
-                                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Đối tượng mục tiêu</label>
+                                                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Mô tả tóm tắt (Hiện ở card lộ trình)</label>
                                                                 <input
                                                                     value={levelData.target}
-                                                                    onChange={e => {
-                                                                        const newData = JSON.parse(JSON.stringify(data));
-                                                                        if (!newData.levels[expandedPathway!]) newData.levels[expandedPathway!] = {};
-                                                                        if (!newData.levels[expandedPathway!][level]) newData.levels[expandedPathway!][level] = { target: '', benefits: [], fullDesc: '' };
-                                                                        newData.levels[expandedPathway!][level].target = e.target.value;
-                                                                        setData(newData);
-                                                                    }}
+                                                                    onChange={e => updateLevelField(expandedPathway!, level, 'target', e.target.value)}
                                                                     className="w-full bg-slate-950 border border-white/5 rounded-lg px-4 py-2.5 text-white"
-                                                                    placeholder="Ví dụ: Học viên mất gốc hoặc cần củng cố"
+                                                                    placeholder="Ví dụ: Học viên mất gốc hoặc cần củng cố kiến thức"
                                                                 />
                                                             </div>
 
