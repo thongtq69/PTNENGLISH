@@ -7,6 +7,7 @@ import ImageCropper from './ImageCropper';
 interface FileUploadProps {
     value: string;
     onChange: (url: string) => void;
+    onUploading?: (loading: boolean) => void;
     label?: string;
     folder?: string;
     compact?: boolean;
@@ -18,6 +19,7 @@ interface FileUploadProps {
 export default function FileUpload({
     value,
     onChange,
+    onUploading,
     label,
     folder = 'uploads',
     compact = false,
@@ -62,6 +64,8 @@ export default function FileUpload({
 
     const uploadToServer = async (file: File | Blob) => {
         setUploading(true);
+        if (onUploading) onUploading(true);
+
         const formData = new FormData();
         formData.append('file', file instanceof File ? file : new File([file], "cropped.jpg", { type: 'image/jpeg' }));
         formData.append('folder', folder);
@@ -83,6 +87,7 @@ export default function FileUpload({
             alert('Lỗi kết nối máy chủ.');
         } finally {
             setUploading(false);
+            if (onUploading) onUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = '';
         }
     };

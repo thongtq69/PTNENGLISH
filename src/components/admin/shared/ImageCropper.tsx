@@ -102,7 +102,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                         <h3 className="text-xl font-bold text-white">Crop Image</h3>
                         <p className="text-xs text-slate-500">Drag to adjust the visible area</p>
                     </div>
-                    <button onClick={onCancel} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+                    <button type="button" onClick={onCancel} className="p-2 hover:bg-white/5 rounded-full transition-colors">
                         <X size={20} className="text-slate-500" />
                     </button>
                 </div>
@@ -117,7 +117,6 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                         onCropChange={onCropChange}
                         onCropComplete={onCropCompleteInternal}
                         onZoomChange={onZoomChange}
-                        restrictPosition={false}
                     />
                 </div>
 
@@ -133,7 +132,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                                 <input
                                     type="range"
                                     value={zoom}
-                                    min={0.5}
+                                    min={1}
                                     max={3}
                                     step={0.1}
                                     onChange={(e) => setZoom(Number(e.target.value))}
@@ -165,12 +164,14 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
 
                     <div className="flex gap-4">
                         <button
+                            type="button"
                             onClick={onCancel}
                             className="flex-1 py-4 rounded-xl font-bold text-slate-400 hover:bg-white/5 transition-all text-sm"
                         >
                             Cancel
                         </button>
                         <button
+                            type="button"
                             onClick={handleConfirm}
                             className="flex-1 py-4 bg-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 text-sm"
                         >
