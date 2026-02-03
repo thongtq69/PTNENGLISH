@@ -9,7 +9,9 @@ const PostSchema = new Schema({
     author: String,
     date: String,
     readTime: String,
-    image: String
+    image: String,
+    originalImage: String,
+    imagePosition: Schema.Types.Mixed
 }, { timestamps: true });
 
 export default mongoose.models.Post || mongoose.model('Post', PostSchema);

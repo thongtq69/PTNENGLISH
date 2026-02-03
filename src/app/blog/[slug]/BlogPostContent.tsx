@@ -12,6 +12,7 @@ interface BlogPostContentProps {
         readTime?: string;
         author: string;
         image: string;
+        originalImage?: string;
         content?: string;
         excerpt?: string;
     };
@@ -56,10 +57,10 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                 </div>
             </section>
 
-            {/* Featured Image */}
+            {/* Featured Image - Display original uncropped image */}
             <div className="container mx-auto px-6 max-w-4xl -mt-10">
                 <div className="w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-white">
-                    <img src={post.image} alt={post.title} className="w-full h-auto block" />
+                    <img src={post.originalImage || post.image} alt={post.title} className="w-full h-auto block" />
                 </div>
             </div>
 

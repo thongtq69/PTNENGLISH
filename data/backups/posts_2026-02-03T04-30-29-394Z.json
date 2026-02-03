@@ -69,7 +69,12 @@
     "author": "Admin PTN",
     "date": "28/1/2026",
     "readTime": "5 phút",
-    "image": "",
+    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770093026/ptn_english/blog/ccoy6lrsln5wsbvlg0zd.jpg",
+    "originalImage": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770092810/ptn_english/blog/atjgktrwin23ma1tpmsy.png",
+    "imagePosition": {
+      "x": 50,
+      "y": 50
+    },
     "createdAt": "2026-01-28T09:03:05.298Z",
     "updatedAt": "2026-02-03T01:36:12.913Z",
     "__v": 0

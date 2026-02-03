@@ -193,8 +193,16 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                     >
                                         <Link href={`/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
                                         <div className="h-72 overflow-hidden relative">
-                                            {post.image ? (
-                                                <img src={post.image} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                                            {(post.originalImage || post.image) ? (
+                                                <img
+                                                    src={post.originalImage || post.image}
+                                                    alt={post.title}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                    style={{ 
+                                                        objectPosition: post.imagePosition ? `${post.imagePosition.x}% ${post.imagePosition.y}%` : 'center center',
+                                                        objectFit: post.originalImage ? 'cover' : 'contain'
+                                                    }}
+                                                />
                                             ) : (
                                                 <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-300">
                                                     <ImageIcon size={48} />

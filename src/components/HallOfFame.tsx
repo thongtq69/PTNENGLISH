@@ -5,9 +5,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Trophy, Star, Award, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function HallOfFame() {
+export default function HallOfFame({ config }: { config?: any }) {
     const { t } = useLanguage();
     const [achievements, setAchievements] = useState<any[]>([]);
+
+    // Use config from props or fallback to translations
+    const badge = config?.badge || t.home.hallOfFame.badge;
+    const title = config?.title || t.home.hallOfFame.title;
+    const titleHighlight = config?.titleHighlight || t.home.hallOfFame.titleHighlight;
+    const titleEnd = config?.titleEnd || t.home.hallOfFame.titleEnd;
+    const description = config?.description || t.home.hallOfFame.description;
+    const descriptionHighlight = config?.descriptionHighlight || t.home.hallOfFame.descriptionHighlight;
+    const descriptionEnd = config?.descriptionEnd || t.home.hallOfFame.descriptionEnd;
     const [currentIndex, setCurrentIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
@@ -79,7 +88,7 @@ export default function HallOfFame() {
                         className="flex justify-center items-center gap-3 mb-6"
                     >
                         <Trophy className="text-primary animate-pulse" size={20} />
-                        <h2 className="text-primary font-heading font-black text-[10px] md:text-xs uppercase tracking-[0.5em]">{t.home.hallOfFame.badge}</h2>
+                        <h2 className="text-primary font-heading font-black text-[10px] md:text-xs uppercase tracking-[0.5em]">{badge}</h2>
                         <Star className="text-primary animate-pulse" size={20} />
                     </motion.div>
 
@@ -90,7 +99,7 @@ export default function HallOfFame() {
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-6xl font-heading font-black text-white mb-8 leading-tight uppercase tracking-tight"
                     >
-                        {t.home.hallOfFame.title} <span className="text-primary">{t.home.hallOfFame.titleHighlight}</span> {t.home.hallOfFame.titleEnd}
+                        {title} <span className="text-primary">{titleHighlight}</span> {titleEnd}
                     </motion.h3>
 
                     <motion.p
@@ -100,7 +109,7 @@ export default function HallOfFame() {
                         transition={{ delay: 0.2 }}
                         className="text-slate-400 text-sm md:text-xl font-body max-w-2xl mx-auto"
                     >
-                        {t.home.hallOfFame.description} <strong className="text-white">{t.home.hallOfFame.descriptionHighlight}</strong> {t.home.hallOfFame.descriptionEnd}
+                        {description} <strong className="text-white">{descriptionHighlight}</strong> {descriptionEnd}
                     </motion.p>
                 </div>
 

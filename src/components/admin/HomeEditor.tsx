@@ -66,6 +66,13 @@ export default function HomeEditor() {
         });
     };
 
+    const updateSection = (section: string, field: string, value: string) => {
+        setSettings({
+            ...settings,
+            [section]: { ...(settings[section] || {}), [field]: value }
+        });
+    };
+
     if (loading) return (
         <div className="flex items-center justify-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
@@ -228,6 +235,293 @@ export default function HomeEditor() {
                 </div>
             </section>
 
+            {/* Introduction Section */}
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
+                    <div className="p-3 rounded-2xl bg-blue-500 text-white shadow-lg">
+                        <Type size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black text-white">Introduction Section</h2>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Main center introduction titles</p>
+                    </div>
+                </div>
+                <div className="p-10 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <input
+                                value={settings.intro?.badge || ''}
+                                onChange={e => updateSection('intro', 'badge', e.target.value)}
+                                placeholder="e.g. Hệ Thống Đào Tạo Academic Master"
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Main Title</label>
+                            <input
+                                value={settings.intro?.title || ''}
+                                onChange={e => updateSection('intro', 'title', e.target.value)}
+                                placeholder="e.g. TTNN PHÚ TÀI NĂNG"
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Description</label>
+                        <textarea
+                            rows={3}
+                            value={settings.intro?.description || ''}
+                            onChange={e => updateSection('intro', 'description', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary h-32"
+                        />
+                    </div>
+                    <div className="w-1/2 space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">About Button Text</label>
+                        <input
+                            value={settings.intro?.aboutBtn || ''}
+                            onChange={e => updateSection('intro', 'aboutBtn', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            {/* Digital Campus Section */}
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
+                    <div className="p-3 rounded-2xl bg-indigo-500 text-white shadow-lg">
+                        <LinkIcon size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black text-white">Academic System & Mock Test</h2>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">LMS portal & test system messaging</p>
+                    </div>
+                </div>
+                <div className="p-10 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <input
+                                value={settings.campus?.badge || ''}
+                                onChange={e => updateSection('campus', 'badge', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">System Name</label>
+                            <input
+                                value={settings.campus?.system || ''}
+                                onChange={e => updateSection('campus', 'system', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Title</label>
+                        <input
+                            value={settings.campus?.title || ''}
+                            onChange={e => updateSection('campus', 'title', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                        />
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Description</label>
+                        <textarea
+                            rows={3}
+                            value={settings.campus?.description || ''}
+                            onChange={e => updateSection('campus', 'description', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none h-24"
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">LMS Button Text</label>
+                            <input
+                                value={settings.campus?.lmsBtn || ''}
+                                onChange={e => updateSection('campus', 'lmsBtn', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Mock Test Button Text</label>
+                            <input
+                                value={settings.campus?.testBtn || ''}
+                                onChange={e => updateSection('campus', 'testBtn', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Faculty Section */}
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
+                    <div className="p-3 rounded-2xl bg-teal-500 text-white shadow-lg">
+                        <GraduationCap size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black text-white">Faculty Highlight</h2>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Founders & teachers section</p>
+                    </div>
+                </div>
+                <div className="p-10 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <input
+                                value={settings.faculty?.badge || ''}
+                                onChange={e => updateSection('faculty', 'badge', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Title</label>
+                            <input
+                                value={settings.faculty?.title || ''}
+                                onChange={e => updateSection('faculty', 'title', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Description</label>
+                        <textarea
+                            rows={3}
+                            value={settings.faculty?.description || ''}
+                            onChange={e => updateSection('faculty', 'description', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none h-24"
+                        />
+                    </div>
+                    <div className="w-1/2 space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Button Text</label>
+                        <input
+                            value={settings.faculty?.btn || ''}
+                            onChange={e => updateSection('faculty', 'btn', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            {/* Blog Section Titles */}
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
+                    <div className="p-3 rounded-2xl bg-pink-500 text-white shadow-lg">
+                        <ImageIcon size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black text-white">Home Blog Section</h2>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Titles for latest news section</p>
+                    </div>
+                </div>
+                <div className="p-10 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <input
+                                value={settings.homeBlog?.badge || ''}
+                                onChange={e => updateSection('homeBlog', 'badge', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4 md:col-span-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Title (supports & highlight)</label>
+                            <input
+                                value={settings.homeBlog?.title || ''}
+                                onChange={e => updateSection('homeBlog', 'title', e.target.value)}
+                                placeholder="e.g. Tin tức & Học thuật"
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div className="w-1/3 space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">View All Text</label>
+                        <input
+                            value={settings.homeBlog?.viewAll || ''}
+                            onChange={e => updateSection('homeBlog', 'viewAll', e.target.value)}
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                        />
+                    </div>
+                </div>
+            </section>
+
+            {/* Hall of Fame Titles */}
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+                <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
+                    <div className="p-3 rounded-2xl bg-amber-500 text-white shadow-lg">
+                        <CheckCircle2 size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-black text-white">Hall of Fame Section</h2>
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Student achievements main titles</p>
+                    </div>
+                </div>
+                <div className="p-10 space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <input
+                                value={settings.hallOfFame?.badge || ''}
+                                onChange={e => updateSection('hallOfFame', 'badge', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Title Start</label>
+                            <input
+                                value={settings.hallOfFame?.title || ''}
+                                onChange={e => updateSection('hallOfFame', 'title', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Title Highlight</label>
+                            <input
+                                value={settings.hallOfFame?.titleHighlight || ''}
+                                onChange={e => updateSection('hallOfFame', 'titleHighlight', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Title End</label>
+                            <input
+                                value={settings.hallOfFame?.titleEnd || ''}
+                                onChange={e => updateSection('hallOfFame', 'titleEnd', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Desc Start</label>
+                            <input
+                                value={settings.hallOfFame?.description || ''}
+                                onChange={e => updateSection('hallOfFame', 'description', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Desc Highlight</label>
+                            <input
+                                value={settings.hallOfFame?.descriptionHighlight || ''}
+                                onChange={e => updateSection('hallOfFame', 'descriptionHighlight', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                        <div className="space-y-4">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Desc End</label>
+                            <input
+                                value={settings.hallOfFame?.descriptionEnd || ''}
+                                onChange={e => updateSection('hallOfFame', 'descriptionEnd', e.target.value)}
+                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Programs List */}
             <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
@@ -339,7 +633,7 @@ export default function HomeEditor() {
                         </motion.div>
                     ))}
                 </div>
-            </section >
+            </section>
 
             {/* Partners List */}
             <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
@@ -353,15 +647,26 @@ export default function HomeEditor() {
                             <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Logo carousel section</p>
                         </div>
                     </div>
-                    <button
-                        onClick={() => {
-                            const newList = [...(settings.partners || []), { name: 'New Partner', logo: '' }];
-                            setSettings({ ...settings, partners: newList });
-                        }}
-                        className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white font-bold text-xs transition-all border border-white/10"
-                    >
-                        <Plus size={16} /> Add Partner
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <div className="space-x-2 flex items-center bg-slate-950 border border-white/10 rounded-xl px-3 py-1.5 translate-y-0.5">
+                            <label className="text-[8px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Badge:</label>
+                            <input
+                                value={settings.partnersSection?.badge || ''}
+                                onChange={e => updateSection('partnersSection', 'badge', e.target.value)}
+                                placeholder="Đối tác chiến lược..."
+                                className="bg-transparent border-none outline-none text-[10px] text-white w-32"
+                            />
+                        </div>
+                        <button
+                            onClick={() => {
+                                const newList = [...(settings.partners || []), { name: 'New Partner', logo: '' }];
+                                setSettings({ ...settings, partners: newList });
+                            }}
+                            className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 text-white font-bold text-xs transition-all border border-white/10"
+                        >
+                            <Plus size={16} /> Add Partner
+                        </button>
+                    </div>
                 </div>
 
                 <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
@@ -410,10 +715,10 @@ export default function HomeEditor() {
                         </div>
                     ))}
                 </div>
-            </section >
+            </section>
 
             {/* Philosophy Section */}
-            < section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl" >
+            <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
                 <div className="p-8 border-b border-white/5 bg-white/[0.02] flex items-center gap-4">
                     <div className="p-3 rounded-2xl bg-indigo-500 text-white shadow-lg">
                         <Type size={24} />
@@ -423,17 +728,28 @@ export default function HomeEditor() {
                         <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Educational focus and mission text</p>
                     </div>
                 </div>
-                <div className="p-10">
-                    <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 block">Philosophy Text (Vietnamse)</label>
-                    <textarea
-                        rows={4}
-                        value={settings.philosophy || ''}
-                        onChange={(e) => setSettings({ ...settings, philosophy: e.target.value })}
-                        placeholder="Xuất phát từ niềm tin của các nhà sáng lập..."
-                        className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed"
-                    />
+                <div className="p-10 space-y-8">
+                    <div className="space-y-4">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Philosophy Section Title</label>
+                        <input
+                            value={settings.philosophyTitle || ''}
+                            onChange={e => setSettings({ ...settings, philosophyTitle: e.target.value })}
+                            placeholder="e.g. Triết lý giáo dục"
+                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                        />
+                    </div>
+                    <div className="space-y-4">
+                        <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 block">Philosophy Text (Vietnamse)</label>
+                        <textarea
+                            rows={4}
+                            value={settings.philosophy || ''}
+                            onChange={(e) => setSettings({ ...settings, philosophy: e.target.value })}
+                            placeholder="Xuất phát từ niềm tin của các nhà sáng lập..."
+                            className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed"
+                        />
+                    </div>
                 </div>
-            </section >
-        </div >
+            </section>
+        </div>
     );
 }

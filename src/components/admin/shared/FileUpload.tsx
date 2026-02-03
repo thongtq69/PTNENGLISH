@@ -6,7 +6,9 @@ import ImageCropper from './ImageCropper';
 
 interface FileUploadProps {
     value: string;
-    onChange: (url: string) => void;
+    originalValue?: string;
+    onChange: (url: string, meta?: { isCropped: boolean }) => void;
+    onPositionChange?: (pos: { x: number, y: number }) => void;
     onUploading?: (loading: boolean) => void;
     label?: string;
     folder?: string;
@@ -18,7 +20,9 @@ interface FileUploadProps {
 
 export default function FileUpload({
     value,
+    originalValue,
     onChange,
+    onPositionChange,
     onUploading,
     label,
     folder = 'uploads',
@@ -44,30 +48,21 @@ export default function FileUpload({
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Basic validation
         if (mode === 'image' && !file.type.startsWith('image/')) {
             alert('Vui lòng chọn tệp hình ảnh.');
             return;
         }
 
-        if (mode === 'image' && file.type.startsWith('image/')) {
-            // Instead of direct upload, show cropper first if it's an image
-            const url = URL.createObjectURL(file);
-            setTempFileUrl(url);
-            setIsCropping(true);
-            if (fileInputRef.current) fileInputRef.current.value = '';
-            return;
-        }
-
+        // Upload the full original image first
         uploadToServer(file);
     };
 
-    const uploadToServer = async (file: File | Blob) => {
+    const uploadToServer = async (file: File | Blob, isCroppedImage: boolean = false) => {
         setUploading(true);
         if (onUploading) onUploading(true);
 
         const formData = new FormData();
-        formData.append('file', file instanceof File ? file : new File([file], "cropped.jpg", { type: 'image/jpeg' }));
+        formData.append('file', file instanceof File ? file : new File([file], "image.jpg", { type: 'image/jpeg' }));
         formData.append('folder', folder);
 
         try {
@@ -78,7 +73,13 @@ export default function FileUpload({
 
             const data = await res.json();
             if (data.url) {
-                onChange(data.url);
+                onChange(data.url, { isCropped: isCroppedImage });
+
+                // Only automatically open cropper for original image upload (not for cropped thumbnail)
+                if (mode === 'image' && !isCroppedImage) {
+                    setTempFileUrl(data.url);
+                    setIsCropping(true);
+                }
             } else {
                 alert(data.error || 'Lỗi khi tải tệp lên.');
             }
@@ -92,11 +93,27 @@ export default function FileUpload({
         }
     };
 
-    const handleCropComplete = async (croppedBlob: Blob) => {
+    const handleCropComplete = async (croppedImageUrl: string, position: { x: number; y: number }) => {
         setIsCropping(false);
-        if (tempFileUrl) URL.revokeObjectURL(tempFileUrl);
         setTempFileUrl(null);
-        uploadToServer(croppedBlob);
+        
+        // Upload the cropped image to server
+        try {
+            // Convert data URL to blob
+            const response = await fetch(croppedImageUrl);
+            const blob = await response.blob();
+            
+            // Upload the cropped image (pass true to indicate this is a cropped image)
+            await uploadToServer(blob, true);
+            
+            // Also pass the position for reference
+            if (onPositionChange) {
+                onPositionChange(position);
+            }
+        } catch (error) {
+            console.error('Error uploading cropped image:', error);
+            alert('Lỗi khi tải ảnh đã cắt lên server.');
+        }
     };
 
     const renderPreview = () => {
@@ -177,7 +194,7 @@ export default function FileUpload({
                                 <button
                                     type="button"
                                     onClick={() => {
-                                        setTempFileUrl(value);
+                                        setTempFileUrl(originalValue || value);
                                         setIsCropping(true);
                                     }}
                                     className="bg-primary text-white p-1 rounded-full shadow-lg hover:scale-110 transition-transform"

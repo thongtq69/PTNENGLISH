@@ -51,6 +51,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         readTime: post.readTime,
         author: post.author,
         image: post.image,
+        originalImage: (post as any).originalImage,
         content: post.content,
         excerpt: post.excerpt,
     };

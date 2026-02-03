@@ -126,7 +126,12 @@ export default function BlogManager() {
 
     const openEditor = (post: any = null) => {
         if (post) {
-            setEditingPost(post);
+            // Ensure originalImage is set for existing posts so users can re-crop
+            const postWithOriginalImage = {
+                ...post,
+                originalImage: post.originalImage || post.image || ''
+            };
+            setEditingPost(postWithOriginalImage);
         } else {
             setEditingPost({
                 title: '',
@@ -248,7 +253,17 @@ export default function BlogManager() {
                                         className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-primary/30 transition-all flex flex-col shadow-sm hover:shadow-2xl"
                                     >
                                         <div className="h-48 relative overflow-hidden">
-                                            {post.image ? <img src={post.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" /> : <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-700"><ImageIcon size={48} /></div>}
+                                            {post.image ? (
+                                                <img
+                                                    src={post.image}
+                                                    alt={post.title}
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-700">
+                                                    <ImageIcon size={48} />
+                                                </div>
+                                            )}
                                             <div className="absolute top-4 left-4 bg-primary text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest shadow-xl">{post.category}</div>
                                         </div>
                                         <div className="p-8 flex-1 flex flex-col">
@@ -447,9 +462,24 @@ export default function BlogManager() {
                                     </div>
                                     <div className="md:col-span-2">
                                         <FileUpload
-                                            label="Featured Image"
+                                            label="Featured Image (Select view area for thumbnail)"
                                             value={editingPost.image}
-                                            onChange={(url) => setEditingPost({ ...editingPost, image: url })}
+                                            originalValue={editingPost.originalImage}
+                                            onChange={(url, meta) => {
+                                                // Use functional update to access latest state
+                                                setEditingPost((prev: any) => {
+                                                    // Check if this is a cropped image upload
+                                                    if (meta?.isCropped) {
+                                                        // This is the cropped thumbnail - only update image
+                                                        return { ...prev, image: url };
+                                                    } else {
+                                                        // This is a new original image upload
+                                                        // Set both image and originalImage to the same URL
+                                                        return { ...prev, image: url, originalImage: url };
+                                                    }
+                                                });
+                                            }}
+                                            onPositionChange={(pos) => setEditingPost((prev: any) => ({ ...prev, imagePosition: pos }))}
                                             onUploading={setIsUploadingImage}
                                             folder="blog"
                                             aspect={16 / 9}

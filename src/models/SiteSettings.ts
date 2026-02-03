@@ -14,6 +14,44 @@ const SiteSettingsSchema = new Schema({
         link: String
     },
     philosophy: String,
+    philosophyTitle: String,
+    intro: {
+        badge: String,
+        title: String,
+        description: String,
+        aboutBtn: String
+    },
+    campus: {
+        badge: String,
+        system: String,
+        title: String,
+        description: String,
+        lmsBtn: String,
+        testBtn: String
+    },
+    faculty: {
+        badge: String,
+        title: String,
+        description: String,
+        btn: String
+    },
+    homeBlog: {
+        badge: String,
+        title: String,
+        viewAll: String
+    },
+    hallOfFame: {
+        badge: String,
+        title: String,
+        titleHighlight: String,
+        titleEnd: String,
+        description: String,
+        descriptionHighlight: String,
+        descriptionEnd: String
+    },
+    partnersSection: {
+        badge: String
+    },
     programs: [{
         name: String,
         nameEn: String,

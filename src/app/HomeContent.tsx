@@ -40,7 +40,12 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
   const homeHero = siteSettings?.hero || pageData?.sections?.find((s: any) => s.type === 'hero')?.content;
   const programs = siteSettings?.programs || [];
   const partners = siteSettings?.partners || [];
-  const philosophy = siteSettings?.philosophy || siteSettings?.homeContent?.philosophyText || "“Xuất phát từ niềm tin của các nhà sáng lập vào giáo dục có chiều sâu...”";
+  const philosophy = siteSettings?.philosophy || siteSettings?.homeContent?.philosophyText || t.home.philosophy.text;
+  const philosophyTitle = siteSettings?.philosophyTitle || t.home.philosophy.title;
+  const intro = siteSettings?.intro || t.home.intro;
+  const campus = siteSettings?.campus || t.home.campus;
+  const faculty = siteSettings?.faculty || t.home.faculty;
+  const homeBlog = siteSettings?.homeBlog || t.home.blog;
 
   return (
     <main className="min-h-screen bg-background">
@@ -57,12 +62,12 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             className="px-4 flex flex-col items-center"
           >
             <p className="text-[10px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5">
-              {language === "vi" ? philosophy : t.home.philosophy.text}
+              {philosophy}
             </p>
             <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>
             <div className="mt-3 md:mt-4 flex justify-center items-center gap-3">
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
-              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[7px] md:text-[9px]">{t.home.philosophy.title}</span>
+              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[7px] md:text-[9px]">{philosophyTitle}</span>
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
             </div>
 
@@ -79,14 +84,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             viewport={{ once: true }}
           >
             <h2 className="text-primary font-heading text-xs md:text-xl font-bold uppercase tracking-[0.3em] mb-1">
-              {t.home.intro.badge}
+              {intro.badge}
             </h2>
             <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
-              {t.home.intro.title} <br />
+              {intro.title} <br />
               <span className="text-base md:text-3xl">(PTelc - PT English Language Centre)</span>
             </h3>
             <p className="text-sm md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
-              {t.home.intro.desc}
+              {intro.description || intro.desc}
             </p>
           </motion.div>
 
@@ -117,14 +122,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
           <div className="flex justify-center mt-6 md:mt-10">
             <Link href="/about-us" className="inline-flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all border-b-2 border-primary/20 pb-1">
-              {t.home.intro.aboutBtn} <ArrowRight size={18} />
+              {intro.aboutBtn} <ArrowRight size={18} />
             </Link>
           </div>
         </div>
       </section>
 
       {/* Hall Of Fame - Student Success - Moved higher as requested */}
-      <HallOfFame />
+      <HallOfFame config={siteSettings?.hallOfFame} />
 
 
 
@@ -144,18 +149,18 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               <div className="max-w-xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-[10px] font-black uppercase tracking-widest leading-none">
-                    {t.home.campus.badge}
+                    {campus.badge}
                   </div>
                   <div className="h-px w-12 bg-white/20"></div>
-                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{t.home.campus.system}</span>
+                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{campus.system}</span>
                 </div>
 
                 <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white line-clamp-2">
-                  {t.home.campus.title.split(' ')[0]} <span className="text-primary font-bold">{t.home.campus.title.split(' ').slice(1).join(' ')}</span>
+                  {campus.title?.split(' ')[0]} <span className="text-primary font-bold">{campus.title?.split(' ').slice(1).join(' ')}</span>
                 </h3>
 
                 <p className="text-slate-400 text-[10px] md:text-base font-body leading-relaxed max-w-[280px] md:max-w-none">
-                  {t.home.campus.desc}
+                  {campus.description || campus.desc}
                 </p>
               </div>
 
@@ -176,7 +181,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   </div>
                   <div className="text-left">
                     <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
-                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">{t.home.campus.lmsBtn}</p>
+                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">{campus.lmsBtn}</p>
                   </div>
                 </motion.a>
 
@@ -191,7 +196,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   </div>
                   <div className="text-left">
                     <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
-                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">{t.home.campus.testBtn}</p>
+                    <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase">{campus.testBtn}</p>
                   </div>
                 </motion.a>
               </div>
@@ -205,15 +210,15 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-8 md:py-20 bg-slate-900 relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">{t.home.faculty.badge}</h2>
+          <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">{faculty.badge}</h2>
           <h3 className="text-base md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white">
-            {t.home.faculty.title}
+            {faculty.title}
           </h3>
           <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body px-4">
-            {t.home.faculty.desc}
+            {faculty.description || faculty.desc}
           </p>
           <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105 inline-block">
-            {t.home.faculty.btn}
+            {faculty.btn}
           </Link>
         </div>
       </section>
@@ -227,13 +232,13 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 gap-4 md:gap-8">
             <div className="max-w-2xl">
-              <h2 className="text-primary font-heading font-black text-[8px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4">{t.home.blog.badge}</h2>
+              <h2 className="text-primary font-heading font-black text-[8px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4">{homeBlog.badge}</h2>
               <h3 className="text-xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
-                {t.home.blog.title.split('&')[0]} & <span className="text-primary">{t.home.blog.title.split('&')[1]}</span>
+                {homeBlog.title?.split('&')[0]} & <span className="text-primary">{homeBlog.title?.split('&')[1]}</span>
               </h3>
             </div>
             <Link href="/blog" className="group flex items-center gap-2 text-accent font-black uppercase tracking-widest text-[9px] md:text-xs border-b-2 border-primary pb-1 md:pb-2 hover:text-primary transition-colors">
-              {t.home.blog.viewAll}
+              {homeBlog.viewAll}
               <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform md:w-4 md:h-4" />
             </Link>
           </div>
@@ -314,7 +319,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-8 md:py-12 bg-white border-y border-slate-100">
         <div className="container mx-auto px-6 text-center">
           <p className="text-slate-400 font-bold uppercase text-[7px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8">
-            {t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí"}
+            {siteSettings?.partnersSection?.badge || t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí"}
           </p>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center items-center gap-4 md:gap-16">

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
-import Cropper from 'react-easy-crop';
+import Cropper, { Area } from 'react-easy-crop';
 import { X, Check, RotateCcw, ZoomIn, ZoomOut } from 'lucide-react';
 
 interface ImageCropperProps {
     image: string;
-    onCropComplete: (croppedImage: Blob) => void;
+    onCropComplete: (croppedImageUrl: string, position: { x: number, y: number }) => void;
     onCancel: () => void;
     aspect?: number;
 }
@@ -15,9 +15,11 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+    const [croppedAreaPercentages, setCroppedAreaPercentages] = useState<Area | null>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const onCropChange = (crop: any) => {
+    const onCropChange = (crop: { x: number; y: number }) => {
         setCrop(crop);
     };
 
@@ -25,72 +27,79 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
         setZoom(zoom);
     };
 
-    const onCropCompleteInternal = useCallback((_croppedArea: any, pixels: any) => {
-        setCroppedAreaPixels(pixels);
+    const onCropCompleteInternal = useCallback((croppedAreaPercent: Area, croppedAreaPx: Area) => {
+        setCroppedAreaPercentages(croppedAreaPercent);
+        setCroppedAreaPixels(croppedAreaPx);
     }, []);
 
     const createImage = (url: string): Promise<HTMLImageElement> =>
         new Promise((resolve, reject) => {
-            const image = new Image();
-            image.addEventListener('load', () => resolve(image));
-            image.addEventListener('error', (error) => reject(error));
-            image.setAttribute('crossOrigin', 'anonymous'); // needed to avoid cross-origin issues
-            image.src = url;
+            const img = new Image();
+            img.addEventListener('load', () => resolve(img));
+            img.addEventListener('error', (error) => reject(error));
+            img.src = url;
+            img.setAttribute('crossOrigin', 'anonymous');
         });
 
     const getCroppedImg = async (
         imageSrc: string,
-        pixelCrop: any,
-        rotation = 0
-    ): Promise<Blob | null> => {
+        pixelCrop: Area,
+        rotation: number = 0
+    ): Promise<string> => {
         const image = await createImage(imageSrc);
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
 
-        if (!ctx) return null;
+        if (!ctx) {
+            throw new Error('No 2d context');
+        }
 
-        const rotRad = (rotation * Math.PI) / 180;
-        const { width: bWidth, height: bHeight } = {
-            width: Math.abs(Math.cos(rotRad) * image.width) + Math.abs(Math.sin(rotRad) * image.height),
-            height: Math.abs(Math.sin(rotRad) * image.width) + Math.abs(Math.cos(rotRad) * image.height),
-        };
+        // Set canvas size to match the cropped area
+        canvas.width = pixelCrop.width;
+        canvas.height = pixelCrop.height;
 
-        canvas.width = bWidth;
-        canvas.height = bHeight;
+        // Apply rotation if needed
+        if (rotation !== 0) {
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate((rotation * Math.PI) / 180);
+            ctx.translate(-canvas.width / 2, -canvas.height / 2);
+        }
 
-        ctx.translate(bWidth / 2, bHeight / 2);
-        ctx.rotate(rotRad);
-        ctx.translate(-image.width / 2, -image.height / 2);
-
-        ctx.drawImage(image, 0, 0);
-
-        const data = ctx.getImageData(
+        // Draw the cropped image
+        ctx.drawImage(
+            image,
             pixelCrop.x,
             pixelCrop.y,
+            pixelCrop.width,
+            pixelCrop.height,
+            0,
+            0,
             pixelCrop.width,
             pixelCrop.height
         );
 
-        canvas.width = pixelCrop.width;
-        canvas.height = pixelCrop.height;
-
-        ctx.putImageData(data, 0, 0);
-
-        return new Promise((resolve) => {
-            canvas.toBlob((file) => {
-                resolve(file);
-            }, 'image/jpeg');
-        });
+        // Return as data URL
+        return canvas.toDataURL('image/jpeg', 0.95);
     };
 
     const handleConfirm = async () => {
+        if (!croppedAreaPixels || !croppedAreaPercentages) return;
+
+        setIsProcessing(true);
         try {
-            const croppedBlob = await getCroppedImg(image, croppedAreaPixels, rotation);
-            if (croppedBlob) {
-                onCropComplete(croppedBlob);
-            }
-        } catch (e) {
-            console.error(e);
+            // Generate the actual cropped image
+            const croppedImageUrl = await getCroppedImg(image, croppedAreaPixels, rotation);
+            
+            // Calculate center position for reference
+            const x = croppedAreaPercentages.x + croppedAreaPercentages.width / 2;
+            const y = croppedAreaPercentages.y + croppedAreaPercentages.height / 2;
+            
+            onCropComplete(croppedImageUrl, { x, y });
+        } catch (error) {
+            console.error('Error cropping image:', error);
+            alert('Lỗi khi cắt ảnh. Vui lòng thử lại.');
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -117,6 +126,8 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                         onCropChange={onCropChange}
                         onCropComplete={onCropCompleteInternal}
                         onZoomChange={onZoomChange}
+                        minZoom={0.1}
+                        restrictPosition={false}
                     />
                 </div>
 
@@ -132,9 +143,9 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                                 <input
                                     type="range"
                                     value={zoom}
-                                    min={1}
+                                    min={0.1}
                                     max={3}
-                                    step={0.1}
+                                    step={0.05}
                                     onChange={(e) => setZoom(Number(e.target.value))}
                                     className="flex-1 accent-primary bg-slate-800 h-1 rounded-full appearance-none"
                                 />
@@ -166,16 +177,27 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="flex-1 py-4 rounded-xl font-bold text-slate-400 hover:bg-white/5 transition-all text-sm"
+                            disabled={isProcessing}
+                            className="flex-1 py-4 rounded-xl font-bold text-slate-400 hover:bg-white/5 transition-all text-sm disabled:opacity-50"
                         >
                             Cancel
                         </button>
                         <button
                             type="button"
                             onClick={handleConfirm}
-                            className="flex-1 py-4 bg-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 text-sm"
+                            disabled={isProcessing}
+                            className="flex-1 py-4 bg-primary text-white rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 text-sm disabled:opacity-50"
                         >
-                            <Check size={18} /> Apply Selection
+                            {isProcessing ? (
+                                <>
+                                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    Processing...
+                                </>
+                            ) : (
+                                <>
+                                    <Check size={18} /> Apply Selection
+                                </>
+                            )}
                         </button>
                     </div>
                 </div>
