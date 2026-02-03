@@ -188,14 +188,14 @@ const ChatBox = () => {
     if (isHiddenPath) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end font-sans">
+        <div className="fixed bottom-4 right-4 z-[9999] font-sans">
             <AnimatePresence>
                 {isOpen && config && (
                     <motion.div
                         initial={{ opacity: 0, y: 30, scale: 0.9, transformOrigin: "bottom right" }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 30, scale: 0.9 }}
-                        className="mb-4 w-[350px] overflow-hidden rounded-[2rem] border border-white/20 bg-white/80 shadow-2xl shadow-indigo-200/50 backdrop-blur-2xl md:w-[380px]"
+                        className="w-[350px] overflow-hidden rounded-[2rem] border border-white/20 bg-white/80 shadow-2xl shadow-indigo-200/50 backdrop-blur-2xl md:w-[380px]"
                     >
                         {/* Header */}
                         <div className="bg-gradient-to-r from-secondary to-indigo-900 p-5 text-white">
@@ -218,7 +218,7 @@ const ChatBox = () => {
                                     </div>
                                 </div>
                                 <button onClick={toggleChat} className="rounded-full bg-white/10 p-2 hover:bg-white/20 transition-all">
-                                    <Minus size={20} />
+                                    <X size={20} />
                                 </button>
                             </div>
                         </div>
@@ -350,24 +350,23 @@ const ChatBox = () => {
 
             {/* Floating Button */}
             <AnimatePresence>
-                {isVisible && (
+                {isVisible && !isOpen && (
                     <motion.button
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                         onClick={toggleChat}
-                        className={`group relative flex h-16 w-16 items-center justify-center rounded-full shadow-2xl transition-all hover:scale-105 active:scale-90 ${isOpen ? "bg-white text-secondary" : "bg-primary text-white"
-                            }`}
+                        className="group relative flex h-16 w-16 items-center justify-center rounded-full shadow-2xl transition-all hover:scale-105 active:scale-90 bg-primary text-white"
                     >
-                        {isOpen ? <X size={28} /> : <MessageCircle size={32} />}
+                        <MessageCircle size={32} />
 
-                        {!isOpen && !hasPrompted && (
+                        {!hasPrompted && (
                             <span className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-secondary text-[11px] font-black text-white ring-4 ring-white">
                                 1
                             </span>
                         )}
 
-                        {!isOpen && config && (
+                        {config && (
                             <>
                                 <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-primary/40 opacity-75"></span>
                                 <span className="absolute right-full mr-5 hidden whitespace-nowrap rounded-2xl bg-secondary px-5 py-3 text-sm font-black text-white shadow-2xl transition-all group-hover:block animate-in fade-in slide-in-from-right-4">
@@ -380,6 +379,7 @@ const ChatBox = () => {
             </AnimatePresence>
         </div>
     );
+
 };
 
 

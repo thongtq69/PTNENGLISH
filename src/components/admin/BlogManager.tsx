@@ -252,15 +252,16 @@ export default function BlogManager() {
                                         layout
                                         className="bg-slate-900 border border-white/5 rounded-[2.5rem] overflow-hidden group hover:border-primary/30 transition-all flex flex-col shadow-sm hover:shadow-2xl"
                                     >
-                                        <div className="h-48 relative overflow-hidden">
+                                        <div className="h-48 relative overflow-hidden bg-slate-800">
                                             {post.image ? (
                                                 <img
                                                     src={post.image}
                                                     alt={post.title}
-                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                    style={{ objectPosition: 'center center' }}
                                                 />
                                             ) : (
-                                                <div className="w-full h-full bg-slate-800 flex items-center justify-center text-slate-700">
+                                                <div className="w-full h-full flex items-center justify-center text-slate-700">
                                                     <ImageIcon size={48} />
                                                 </div>
                                             )}

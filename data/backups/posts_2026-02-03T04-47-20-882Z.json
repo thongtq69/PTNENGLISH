@@ -1,5 +1,25 @@
 [
   {
+    "_id": "69817ba5c3f0d3d5cb075871",
+    "title": "1",
+    "slug": "1",
+    "excerpt": "",
+    "content": "",
+    "category": "Tất cả",
+    "author": "Admin PTN",
+    "date": "3/2/2026",
+    "readTime": "5 phút",
+    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770093474/ptn_english/blog/y4chqsdi3bbwoeirvwqx.jpg",
+    "originalImage": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770093472/ptn_english/blog/idpejwzoxv1w16ugsyel.png",
+    "imagePosition": {
+      "x": 50,
+      "y": 50
+    },
+    "createdAt": "2026-02-03T04:37:56.964Z",
+    "updatedAt": "2026-02-03T04:37:57.039Z",
+    "__v": 0
+  },
+  {
     "_id": "6980a8cbf32ba1bca8e2bbfc",
     "title": "Khơi dậy tư duy tranh luận (critical thinking) cho teens với nguồn digital từ The Week Junior",
     "slug": "khoi-day-tu-duy-tranh-luan-critical-thinking-cho-teens-voi-nguon-digital-tu-the-week-junior",
@@ -39,10 +59,15 @@
     "author": "Thầy Nguyễn Trí Nhân",
     "date": "28/1/2026",
     "readTime": "5 phút",
-    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1769666810/ptn_english/blog/nmv6teyczqyp11gddfyc.jpg",
+    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770094037/ptn_english/blog/ydtwqbmkjlicnqxtdkus.jpg",
     "createdAt": "2026-01-28T09:14:05.716Z",
     "updatedAt": "2026-02-03T01:36:12.913Z",
-    "__v": 0
+    "__v": 0,
+    "originalImage": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1769666810/ptn_english/blog/nmv6teyczqyp11gddfyc.jpg",
+    "imagePosition": {
+      "x": 50,
+      "y": 50
+    }
   },
   {
     "_id": "6979d1a95309f5dac5e09b7f",
@@ -69,10 +94,10 @@
     "author": "Admin PTN",
     "date": "28/1/2026",
     "readTime": "5 phút",
-    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770092954/ptn_english/blog/dm52v8qbkagat6wtki37.jpg",
+    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770093026/ptn_english/blog/ccoy6lrsln5wsbvlg0zd.jpg",
     "originalImage": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770092810/ptn_english/blog/atjgktrwin23ma1tpmsy.png",
     "imagePosition": {
-      "x": 13.283582089552239,
+      "x": 50,
       "y": 50
     },
     "createdAt": "2026-01-28T09:03:05.298Z",

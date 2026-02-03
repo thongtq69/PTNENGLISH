@@ -39,7 +39,12 @@
     "author": "Thầy Nguyễn Trí Nhân",
     "date": "28/1/2026",
     "readTime": "5 phút",
-    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1769666810/ptn_english/blog/nmv6teyczqyp11gddfyc.jpg",
+    "image": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1770094537/ptn_english/blog/rxemnetfnwk35wqww7zs.jpg",
+    "originalImage": "https://res.cloudinary.com/dtzegtrxb/image/upload/v1769666810/ptn_english/blog/nmv6teyczqyp11gddfyc.jpg",
+    "imagePosition": {
+      "x": 50.000000000000014,
+      "y": 50
+    },
     "createdAt": "2026-01-28T09:14:05.716Z",
     "updatedAt": "2026-02-03T01:36:12.913Z",
     "__v": 0
