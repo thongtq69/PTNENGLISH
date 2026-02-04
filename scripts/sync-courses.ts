@@ -1,7 +1,6 @@
-
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const path = require('path');
+import mongoose from 'mongoose';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 // Load env
 dotenv.config({ path: path.join(process.cwd(), '.env.local') });
@@ -17,7 +16,7 @@ const PageSchema = new mongoose.Schema({
 const Page = mongoose.models.Page || mongoose.model('Page', PageSchema);
 
 // The hardcoded data from CoursesContent.tsx
-const HARDCODED_LEVELS = {
+const HARDCODED_LEVELS: Record<string, any[]> = {
     ie: [
         { id: 'foundation', name: "Foundation", cefr: "A1 / Pre-A1", exit: "Ready for IELTS" },
         { id: 'starter', name: "IELTS Starter", cefr: "A2", exit: "IELTS 4.0" },
@@ -46,6 +45,9 @@ const HARDCODED_LEVELS = {
 
 async function sync() {
     try {
+        if (!process.env.MONGODB_URI) {
+            throw new Error('MONGODB_URI is not defined');
+        }
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('Connected to MongoDB');
 
@@ -108,3 +110,5 @@ async function sync() {
 }
 
 sync();
+
+export { };
