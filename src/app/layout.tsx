@@ -63,6 +63,10 @@ export async function generateMetadata(): Promise<Metadata> {
       template: `%s | ${settings.site.title}`,
     },
     description: settings.site.description,
+    icons: {
+      icon: "/favicon.png",
+      apple: "/apple-icon.png",
+    },
     keywords: ["IELTS", "PTE", "Tiếng Anh giao tiếp", "PTN English", "Học tiếng anh", "Luyện thi IELTS"],
     authors: [{ name: "PTN English" }],
     creator: "PTN English",
