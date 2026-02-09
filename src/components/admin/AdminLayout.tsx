@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
     LayoutDashboard,
     FileText,
@@ -21,9 +21,11 @@ import {
     Trophy,
     Heart,
     Megaphone,
-    MessageCircle
+    MessageCircle,
+    Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import AdminLogin from './AdminLogin';
 
 const MENU_ITEMS = [
     {
@@ -56,7 +58,46 @@ const MENU_ITEMS = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
+    const router = useRouter();
     const [collapsed, setCollapsed] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('/api/admin/login');
+                const data = await response.json();
+                setIsAuthenticated(data.authenticated);
+            } catch (error) {
+                setIsAuthenticated(false);
+            }
+        };
+        checkAuth();
+    }, []);
+
+    const handleLogout = async () => {
+        if (confirm('Are you sure you want to sign out?')) {
+            try {
+                await fetch('/api/admin/login', { method: 'DELETE' });
+                setIsAuthenticated(false);
+                router.push('/admin');
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        }
+    };
+
+    if (isAuthenticated === null) {
+        return (
+            <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+                <Loader2 className="animate-spin text-primary" size={40} />
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return <AdminLogin onLoginSuccess={() => setIsAuthenticated(true)} />;
+    }
 
     return (
         <div className="flex min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-primary/30">
@@ -127,7 +168,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 {/* Footer info/Logout */}
                 <div className="p-4 border-t border-white/5">
                     <button
-                        onClick={() => alert('Logout clicked')}
+                        onClick={handleLogout}
                         className="w-full flex items-center gap-4 px-4 py-4 text-slate-500 hover:text-red-400 transition-colors rounded-xl hover:bg-red-400/5 group"
                     >
                         <LogOut size={20} className="group-hover:translate-x-1 transition-transform" />
