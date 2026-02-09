@@ -252,8 +252,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         </h3>
                     </div>
 
-                    {/* PTN Founders (First 3) - Centered Flex on Mobile */}
-                    <div className="flex flex-wrap justify-center gap-4 md:grid md:grid-cols-3 md:gap-10 mb-12 md:mb-24">
+                    {/* PTN Founders (First 3) - Centered Flex */}
+                    <div className="flex flex-wrap justify-center gap-4 md:flex md:flex-wrap md:justify-center md:gap-10 mb-12 md:mb-24">
                         {teachersToDisplay.slice(0, 3).map((teacher: any, idx: number) => (
                             <motion.div
                                 key={idx}
@@ -261,7 +261,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="group w-[45%] md:w-auto"
+                                className="group w-[45%] md:w-[320px] lg:w-[380px]"
                             >
                                 <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100">
                                     <img
@@ -304,14 +304,14 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 <div className="h-px flex-1 bg-slate-200" />
                             </div>
 
-                            <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-4 md:gap-8">
+                            <div className="flex flex-wrap justify-center gap-3 md:flex md:flex-wrap md:justify-center md:gap-8">
                                 {teachersToDisplay.slice(3).map((teacher: any, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: true }}
-                                        className="group w-[46%] md:w-auto"
+                                        className="group w-[46%] md:w-[260px] lg:w-[280px]"
                                     >
                                         <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500">
                                             <img
