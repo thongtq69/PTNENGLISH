@@ -106,10 +106,14 @@ export default function Footer() {
                 <div>
                     <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.courses}</h4>
                     <ul className="grid grid-cols-1 gap-1 md:gap-2">
-                        {[t.courses?.pathway?.eft?.name || (language === "en" ? "Academic English (EfT)" : "Học thuật Thiếu niên (EfT)"), t.courses?.pathway?.ie?.name || (language === "en" ? "IELTS Preparation (IE)" : "Luyện thi IELTS (IE)"), t.courses?.pathway?.ge?.name || (language === "en" ? "General English (GE)" : "Tiếng Anh Giao tiếp (GE)")].map((course) => (
-                            <li key={course}>
-                                <a href="/courses" className="text-slate-400 text-[11px] md:text-[13px] hover:text-primary transition-colors">
-                                    {course}
+                        {[
+                            { name: t.courses?.pathway?.ie?.name || (language === "en" ? "IELTS Preparation (IE)" : "Luyện thi IELTS (IE)"), href: "/courses#ie" },
+                            { name: t.courses?.pathway?.eft?.name || (language === "en" ? "Academic English (EfT)" : "Học thuật Thiếu niên (EfT)"), href: "/courses#eft" },
+                            { name: t.courses?.pathway?.ge?.name || (language === "en" ? "General English (GE)" : "Tiếng Anh Giao tiếp (GE)"), href: "/courses#ge" }
+                        ].map((course) => (
+                            <li key={course.name}>
+                                <a href={course.href} className="text-slate-400 text-[11px] md:text-[13px] hover:text-primary transition-colors">
+                                    {course.name}
                                 </a>
                             </li>
                         ))}

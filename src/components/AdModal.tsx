@@ -171,6 +171,15 @@ export default function AdModal() {
                             <div className="space-y-3 md:space-y-4 mb-6 md:mb-12">
                                 {ad.items.map((item, i) => {
                                     const Icon = ICON_MAP[item.icon] || Check;
+                                    // Auto-detect correct hash if link is just /courses
+                                    let finalLink = item.link;
+                                    if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
+                                        const text = item.text.toLowerCase();
+                                        if (text.includes('ielts')) finalLink = '/courses#ie';
+                                        else if (text.includes('teens')) finalLink = '/courses#eft';
+                                        else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';
+                                    }
+
                                     return (
                                         <motion.div
                                             key={i}
@@ -179,7 +188,7 @@ export default function AdModal() {
                                             transition={{ delay: 0.6 + (i * 0.1) }}
                                         >
                                             <Link
-                                                href={item.link}
+                                                href={finalLink}
                                                 onClick={closeAd}
                                                 className="group flex items-center justify-between p-4 md:p-6 bg-slate-50 hover:bg-primary rounded-xl md:rounded-none transition-all hover:scale-[1.02] border border-slate-100"
                                             >

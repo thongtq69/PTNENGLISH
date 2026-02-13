@@ -62,17 +62,23 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
 
     // Read hash from URL and set active tab accordingly
     useEffect(() => {
-        const hash = window.location.hash.replace('#', '').toLowerCase();
-        if (hash === 'ie' || hash === 'eft' || hash === 'ge') {
-            setActiveTab(hash as "ie" | "eft" | "ge");
-            // Scroll to pathway section after a short delay
-            setTimeout(() => {
-                const pathwaySection = document.getElementById('pathway');
-                if (pathwaySection) {
-                    pathwaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            }, 300);
-        }
+        const handleHashChange = () => {
+            const hash = window.location.hash.replace('#', '').toLowerCase();
+            if (hash === 'ie' || hash === 'eft' || hash === 'ge') {
+                setActiveTab(hash as "ie" | "eft" | "ge");
+                // Scroll to pathway section after a short delay to allow tab content to render
+                setTimeout(() => {
+                    const pathwaySection = document.getElementById('pathway');
+                    if (pathwaySection) {
+                        pathwaySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 300);
+            }
+        };
+
+        handleHashChange();
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
     }, []);
 
     const getLevelData = (pathway: string, level: string) => {
@@ -443,7 +449,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
             </section>
 
             {/* PATHWAY SECTION */}
-            <section id="pathway" className="py-12 relative overflow-hidden">
+            <section id="pathway" className="py-12 relative overflow-hidden scroll-mt-24 md:scroll-mt-32">
                 <div className="container mx-auto px-6">
                     {/* Tab Navigation */}
                     <div className="flex flex-col items-center mb-12">

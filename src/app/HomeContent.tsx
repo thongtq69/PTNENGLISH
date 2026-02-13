@@ -97,27 +97,38 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
 
           <div className="flex flex-wrap justify-evenly gap-y-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
-            {programs.map((prog: any, idx: number) => (
-              <Link key={idx} href={prog.link || "/courses"} className="w-[28%] md:w-auto">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: idx * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group cursor-pointer h-full"
-                >
-                  <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
-                    <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                    {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
-                      <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent flex items-end justify-center min-h-[50%]">
-                      <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight text-center w-full pb-1 md:pb-2">{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
+            {programs.map((prog: any, idx: number) => {
+              // Auto-detect correct hash if link is just /courses
+              let finalLink = prog.link || "/courses";
+              if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
+                const text = (prog.nameEn || prog.name || '').toLowerCase();
+                if (text.includes('ielts')) finalLink = '/courses#ie';
+                else if (text.includes('teens')) finalLink = '/courses#eft';
+                else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';
+              }
+
+              return (
+                <Link key={idx} href={finalLink} className="w-[28%] md:w-auto">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.1 }}
+                    viewport={{ once: true }}
+                    className="group cursor-pointer h-full"
+                  >
+                    <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                      <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
+                        <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
+                      )}
+                      <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent flex items-end justify-center min-h-[50%]">
+                        <p className="text-white font-heading font-black text-[9px] md:text-[15px] leading-tight uppercase tracking-tight text-center w-full pb-1 md:pb-2">{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              </Link>
-            ))}
+                  </motion.div>
+                </Link>
+              )
+            })}
           </div>
 
           <div className="flex justify-center mt-6 md:mt-10">
