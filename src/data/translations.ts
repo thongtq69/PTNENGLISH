@@ -18,7 +18,7 @@ export const translations = {
         },
         home: {
             hero: {
-                title: "Kiến tạo hành trình \n tri thức",
+                title: "<span class='text-primary font-bold'>Kiến tạo</span> hành trình tri thức",
                 subtitle: "Partner to navigate your learning journey",
                 primaryCTA: "Đăng ký học thử ngay",
                 secondaryCTA: "Tìm hiểu phương pháp"
@@ -697,7 +697,7 @@ export const translations = {
         },
         home: {
             hero: {
-                title: "Shaping Your \n Knowledge Journey",
+                title: "<span class='text-primary font-bold'>Shaping</span> Your Knowledge Journey",
                 subtitle: "Partner to navigate your learning journey",
                 primaryCTA: "Book a Trial Class",
                 secondaryCTA: "Our Methodology"

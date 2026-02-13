@@ -175,7 +175,7 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
                         value={parts.suffix}
                         onChange={e => updateValue({ ...parts, suffix: e.target.value })}
                         placeholder="..."
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-slate-400 text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
                     />
                 </div>
 
@@ -197,7 +197,7 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
                         value={parts.line2}
                         onChange={e => updateValue({ ...parts, line2: e.target.value })}
                         placeholder="Nội dung dòng tiếp theo..."
-                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-slate-300 text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
                     />
                 </div>
             </div>

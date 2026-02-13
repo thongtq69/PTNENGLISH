@@ -4,7 +4,9 @@ const SiteSettingsSchema = new Schema({
     hero: {
         videoUrl: String,
         title: String,
+        titleEn: String,
         subtitle: String,
+        subtitleEn: String,
         primaryCTA: { text: String, link: String },
         secondaryCTA: { text: String, link: String }
     },

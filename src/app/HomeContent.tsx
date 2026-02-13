@@ -54,14 +54,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
       {/* Philosophy Section - Compact & Dark */}
       <section className="py-2 md:py-12 bg-slate-900 border-y border-white/5">
-        <div className="container mx-auto px-6 text-center max-w-3xl">
+        <div className="container mx-auto px-6 text-center max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="px-4 flex flex-col items-center"
           >
-            <p className="text-[10px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5">
+            <p className="text-[10px] md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5 whitespace-pre-line">
               {philosophy}
             </p>
             <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>
@@ -89,7 +89,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
               {(() => {
                 const title = intro.title || "";
-                if (title.includes('<br />') || title.includes('<br/>')) {
+                if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {
                   return <span dangerouslySetInnerHTML={{ __html: title }} />;
                 }
                 if (title.includes('|')) {
@@ -168,11 +168,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
         <div className="container mx-auto px-6 relative z-10">
           <div className="bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl md:rounded-[3rem] p-4 md:p-10 shadow-2xl">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+            <div className="flex flex-col items-center text-center gap-10">
 
-              {/* Left Side: Consolidated Info */}
-              <div className="max-w-xl">
-                <div className="flex items-center gap-3 mb-4">
+              {/* Consolidated Info - Centered */}
+              <div className="max-w-3xl">
+                <div className="flex items-center justify-center gap-3 mb-4">
                   <div className="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-[10px] font-black uppercase tracking-widest leading-none">
                     {campus.badge}
                   </div>
@@ -180,10 +180,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">{campus.system}</span>
                 </div>
 
-                <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white line-clamp-2">
+                <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white">
                   {(() => {
                     const title = campus.title || "";
-                    if (title.includes('<br />') || title.includes('<br/>')) {
+                    if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {
                       return <span dangerouslySetInnerHTML={{ __html: title }} />;
                     }
                     if (title.includes('|')) {
@@ -194,22 +194,18 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                         </>
                       );
                     }
-                    return (
-                      <>
-                        {title.split(' ')[0]} <span className="text-primary font-bold">{title.split(' ').slice(1).join(' ')}</span>
-                      </>
-                    );
+                    // Default fallback
+                    return title;
                   })()}
                 </h3>
 
-                <p className="text-slate-400 text-[10px] md:text-base font-body leading-relaxed max-w-[280px] md:max-w-none">
+                <p className="text-slate-400 text-[10px] md:text-base font-body leading-relaxed max-w-xl mx-auto whitespace-pre-line">
                   {campus.description || campus.desc}
                 </p>
               </div>
 
-
-              {/* Right Side: Refined Action Buttons */}
-              <div className="flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-5 w-full lg:w-auto shrink-0">
+              {/* Action Buttons - Centered */}
+              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto shrink-0 sm:justify-center">
                 <motion.a
                   href="https://lms.ptelc.edu.vn/"
                   target="_blank"
@@ -256,7 +252,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">{faculty.badge}</h2>
           <h3 className="text-base md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white"
             dangerouslySetInnerHTML={{ __html: faculty.title || "" }} />
-          <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body px-4">
+          <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body whitespace-pre-line">
             {faculty.description || faculty.desc}
           </p>
           <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105 inline-block uppercase">
@@ -408,6 +404,6 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
 
       <Footer />
-    </main>
+    </main >
   );
 }

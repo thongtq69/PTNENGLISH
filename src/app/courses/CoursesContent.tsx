@@ -325,7 +325,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1] [text-wrap:balance] max-w-5xl mx-auto"
+                            className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1] max-w-5xl mx-auto"
                         >
                             {(() => {
                                 const title = content.hero?.title || t.courses.hero.title;
@@ -365,7 +365,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-3xl mx-auto mb-8 md:mb-12 text-center [text-wrap:balance]"
+                            className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-4xl mx-auto mb-8 md:mb-12 text-center whitespace-pre-line"
                         >
                             {content.hero?.subtitle || t.courses.hero.subtitle}
                         </motion.p>

@@ -162,25 +162,48 @@ export default function HomeEditor() {
 
                     <hr className="border-white/5" />
 
-                    {/* Titles */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                        <div className="space-y-4">
-                            <RichTitleEditor
-                                value={settings.hero.title}
-                                onChange={(val) => updateHero('title', val)}
-                                label="Main Headline"
-                            />
+                    {/* Titles - Bilingual */}
+                    <div className="space-y-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div className="space-y-4">
+                                <RichTitleEditor
+                                    value={settings.hero.title}
+                                    onChange={(val) => updateHero('title', val)}
+                                    label="Main Headline (VN)"
+                                />
+                            </div>
+                            <div className="space-y-4">
+                                <RichTitleEditor
+                                    value={settings.hero.titleEn}
+                                    onChange={(val) => updateHero('titleEn', val)}
+                                    label="Main Headline (EN)"
+                                />
+                            </div>
                         </div>
-                        <div className="space-y-4">
-                            <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
-                                Subheadline
-                            </label>
-                            <textarea
-                                rows={2}
-                                value={settings.hero.subtitle}
-                                onChange={(e) => updateHero('subtitle', e.target.value)}
-                                className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed h-[130px]"
-                            />
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div className="space-y-4">
+                                <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                                    Subheadline (VN)
+                                </label>
+                                <textarea
+                                    rows={2}
+                                    value={settings.hero.subtitle}
+                                    onChange={(e) => updateHero('subtitle', e.target.value)}
+                                    className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed h-[130px]"
+                                />
+                            </div>
+                            <div className="space-y-4">
+                                <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                                    Subheadline (EN)
+                                </label>
+                                <textarea
+                                    rows={2}
+                                    value={settings.hero.subtitleEn}
+                                    onChange={(e) => updateHero('subtitleEn', e.target.value)}
+                                    className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-300 outline-none focus:ring-2 focus:ring-primary font-medium leading-relaxed h-[130px]"
+                                />
+                            </div>
                         </div>
                     </div>
 

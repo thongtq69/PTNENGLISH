@@ -25,8 +25,18 @@ export default function Hero({ initialData }: { initialData?: any }) {
 
     if (!settings) return <div className="h-screen bg-slate-900" />;
 
-    const displayTitle = language === "en" ? t.home.hero.title : settings.title;
-    const displaySubtitle = language === "en" ? t.home.hero.subtitle : settings.subtitle;
+    // Use DB value only if it contains HTML formatting from RichTitleEditor
+    // Otherwise fallback to translations.ts which has the correct formatting
+    const hasHtmlFormatting = (text: string | undefined) =>
+        text && (text.includes('<span') || text.includes('<br'));
+
+    const displayTitle = language === "en"
+        ? (hasHtmlFormatting(settings.titleEn) ? settings.titleEn : t.home.hero.title)
+        : (hasHtmlFormatting(settings.title) ? settings.title : t.home.hero.title);
+
+    const displaySubtitle = language === "en"
+        ? (settings.subtitleEn || t.home.hero.subtitle)
+        : (settings.subtitle || t.home.hero.subtitle);
     const displayPrimaryText = language === "en" ? t.home.hero.primaryCTA : settings.primaryCTA.text;
     const displaySecondaryText = language === "en" ? t.home.hero.secondaryCTA : settings.secondaryCTA.text;
 
@@ -50,41 +60,10 @@ export default function Hero({ initialData }: { initialData?: any }) {
             {/* Content */}
             <div className="container mx-auto px-4 relative z-10 text-center">
                 <div className="max-w-4xl mx-auto pt-12 md:pt-24 text-center px-4">
-                    <h1 className="text-white text-xl md:text-6xl font-heading font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-3xl mx-auto [text-wrap:balance]">
-                        {(() => {
-                            const title = displayTitle;
-
-                            // Support manual <br /> tags
-                            if (title.includes('<br />') || title.includes('<br/>')) {
-                                return <div dangerouslySetInnerHTML={{ __html: title }} />;
-                            }
-
-                            if (title.includes('|')) {
-                                const parts = title.split('|');
-                                return (
-                                    <div className="flex flex-col items-center">
-                                        <span className="block mb-1 md:mb-2">{parts[0].trim()}</span>
-                                        <span className="text-primary font-bold">{parts[1].trim()}</span>
-                                    </div>
-                                );
-                            }
-                            const words = title.split(' ');
-                            if (words.length <= 1) return title;
-
-                            const firstPart = words.slice(0, -2).join(' ');
-                            const lastPart = words.slice(-2).join(' ');
-
-                            return (
-                                <div className="flex flex-wrap justify-center items-baseline gap-x-3 md:gap-x-4">
-                                    {firstPart && <span>{firstPart}</span>}
-                                    <span className="text-primary whitespace-nowrap inline-block">
-                                        {lastPart}
-                                    </span>
-                                </div>
-                            );
-                        })()}
+                    <h1 className="text-white text-xl md:text-6xl font-heading font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-4xl mx-auto">
+                        <span dangerouslySetInnerHTML={{ __html: displayTitle }} />
                     </h1>
-                    <p className="text-white text-[10px] md:text-xl mb-4 md:mb-12 max-w-xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body">
+                    <p className="text-white text-[10px] md:text-xl mb-4 md:mb-12 max-w-4xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body whitespace-pre-line">
                         {displaySubtitle}
                     </p>
                     <div className="flex flex-row justify-center gap-2 md:gap-6 animate-fade-in-up delay-200">

@@ -107,7 +107,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        className="text-slate-400 text-sm md:text-xl font-body max-w-2xl mx-auto"
+                        className="text-slate-400 text-sm md:text-xl font-body max-w-4xl mx-auto whitespace-pre-line"
                     >
                         {description} <strong className="text-white">{descriptionHighlight}</strong> {descriptionEnd}
                     </motion.p>
