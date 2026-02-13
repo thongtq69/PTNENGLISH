@@ -309,7 +309,26 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             {hero.subtitle}
                         </div>
                         <h1 className="text-white text-4xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
-                            {t.studentCorner?.hero?.mainTitle?.split(' ')?.[0] || fb('Góc', 'Student')} <span className="text-primary font-black">{t.studentCorner?.hero?.mainTitle?.split(' ')?.slice(1)?.join(' ') || fb('Học Viên', 'Corner')}</span>
+                            {(() => {
+                                const title = t.studentCorner?.hero?.mainTitle || hero.title;
+                                if (title.includes('<br />') || title.includes('<br/>')) {
+                                    return <span dangerouslySetInnerHTML={{ __html: title }} />;
+                                }
+                                if (title.includes('|')) {
+                                    const parts = title.split('|');
+                                    return (
+                                        <>
+                                            {parts[0].trim()} <span className="text-primary font-black">{parts[1].trim()}</span>
+                                        </>
+                                    );
+                                }
+                                const words = title.split(' ');
+                                return (
+                                    <>
+                                        {words[0]} <span className="text-primary font-black">{words.slice(1).join(' ')}</span>
+                                    </>
+                                );
+                            })()}
                         </h1>
                         <p className="text-slate-300 text-base md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
                             {hero.description}

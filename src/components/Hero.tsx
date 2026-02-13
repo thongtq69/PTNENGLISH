@@ -45,7 +45,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
             </video>
 
             {/* Overlay */}
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-slate-900/80 via-slate-900/40 to-transparent"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-slate-900/30 via-slate-900/5 to-transparent"></div>
 
             {/* Content */}
             <div className="container mx-auto px-4 relative z-10 text-center">
@@ -53,13 +53,19 @@ export default function Hero({ initialData }: { initialData?: any }) {
                     <h1 className="text-white text-xl md:text-6xl font-heading font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-3xl mx-auto [text-wrap:balance]">
                         {(() => {
                             const title = displayTitle;
+
+                            // Support manual <br /> tags
+                            if (title.includes('<br />') || title.includes('<br/>')) {
+                                return <div dangerouslySetInnerHTML={{ __html: title }} />;
+                            }
+
                             if (title.includes('|')) {
                                 const parts = title.split('|');
                                 return (
-                                    <>
+                                    <div className="flex flex-col items-center">
                                         <span className="block mb-1 md:mb-2">{parts[0].trim()}</span>
-                                        <span className="text-primary block md:inline-block">{parts[1].trim()}</span>
-                                    </>
+                                        <span className="text-primary font-bold">{parts[1].trim()}</span>
+                                    </div>
                                 );
                             }
                             const words = title.split(' ');
@@ -69,8 +75,8 @@ export default function Hero({ initialData }: { initialData?: any }) {
                             const lastPart = words.slice(-2).join(' ');
 
                             return (
-                                <div className="flex flex-col md:block items-center">
-                                    {firstPart && <span className="md:mr-3">{firstPart}</span>}
+                                <div className="flex flex-wrap justify-center items-baseline gap-x-3 md:gap-x-4">
+                                    {firstPart && <span>{firstPart}</span>}
                                     <span className="text-primary whitespace-nowrap inline-block">
                                         {lastPart}
                                     </span>

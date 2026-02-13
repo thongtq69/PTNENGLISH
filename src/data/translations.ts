@@ -30,7 +30,7 @@ export const translations = {
 
             intro: {
                 badge: "Hệ Thống Đào Tạo Academic Master",
-                title: "TTNN PHÚ TÀI NĂNG",
+                title: "Trung tâm Ngoại ngữ Phú Tài Năng",
                 desc: "Là trung tâm đào tạo tiếng Anh Học thuật dành cho thiếu niên và người lớn, luyện thi chứng chỉ IELTS chuyên nghiệp và uy tín.",
                 aboutBtn: "Về PTN English"
             },
@@ -709,7 +709,7 @@ export const translations = {
 
             intro: {
                 badge: "Academic Master Education System",
-                title: "PHU TAI NANG LANGUAGE CENTER",
+                title: "Phu Tai Nang Language Center",
                 desc: "A center for Academic English training for teens and adults, professional and prestigious IELTS test preparation.",
                 aboutBtn: "More about PTN"
             },

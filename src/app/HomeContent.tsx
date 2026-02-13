@@ -87,7 +87,22 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               {intro.badge}
             </h2>
             <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
-              {intro.title}
+              {(() => {
+                const title = intro.title || "";
+                if (title.includes('<br />') || title.includes('<br/>')) {
+                  return <span dangerouslySetInnerHTML={{ __html: title }} />;
+                }
+                if (title.includes('|')) {
+                  const parts = title.split('|');
+                  return parts.map((p: string, i: number) => (
+                    <span key={i} className={i === 1 ? 'text-primary' : ''}>
+                      {p.trim()}
+                      {i < parts.length - 1 && <br />}
+                    </span>
+                  ));
+                }
+                return title;
+              })()}
             </h3>
             <p className="text-sm md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
               {intro.description || intro.desc}
@@ -166,7 +181,25 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                 </div>
 
                 <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white line-clamp-2">
-                  {campus.title?.split(' ')[0]} <span className="text-primary font-bold">{campus.title?.split(' ').slice(1).join(' ')}</span>
+                  {(() => {
+                    const title = campus.title || "";
+                    if (title.includes('<br />') || title.includes('<br/>')) {
+                      return <span dangerouslySetInnerHTML={{ __html: title }} />;
+                    }
+                    if (title.includes('|')) {
+                      const parts = title.split('|');
+                      return (
+                        <>
+                          {parts[0].trim()} <span className="text-primary font-bold">{parts[1].trim()}</span>
+                        </>
+                      );
+                    }
+                    return (
+                      <>
+                        {title.split(' ')[0]} <span className="text-primary font-bold">{title.split(' ').slice(1).join(' ')}</span>
+                      </>
+                    );
+                  })()}
                 </h3>
 
                 <p className="text-slate-400 text-[10px] md:text-base font-body leading-relaxed max-w-[280px] md:max-w-none">
@@ -221,9 +254,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
           <h2 className="text-primary font-heading font-bold text-[10px] md:text-lg uppercase tracking-widest mb-1 md:mb-4">{faculty.badge}</h2>
-          <h3 className="text-base md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white">
-            {faculty.title}
-          </h3>
+          <h3 className="text-base md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white"
+            dangerouslySetInnerHTML={{ __html: faculty.title || "" }} />
           <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body px-4">
             {faculty.description || faculty.desc}
           </p>
@@ -244,7 +276,29 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             <div className="max-w-2xl">
               <h2 className="text-primary font-heading font-black text-[8px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4">{homeBlog.badge}</h2>
               <h3 className="text-xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
-                {homeBlog.title?.split('&')[0]} & <span className="text-primary">{homeBlog.title?.split('&')[1]}</span>
+                {(() => {
+                  const title = homeBlog.title || "";
+                  if (title.includes('<br />') || title.includes('<br/>')) {
+                    return <span dangerouslySetInnerHTML={{ __html: title }} />;
+                  }
+                  if (title.includes('|')) {
+                    const parts = title.split('|');
+                    return parts.map((p: string, i: number) => (
+                      <span key={i} className={i === 1 ? 'text-primary' : ''}>
+                        {p.trim()}
+                        {i < parts.length - 1 && <br />}
+                      </span>
+                    ));
+                  }
+                  if (title.includes('&')) {
+                    return (
+                      <>
+                        {title.split('&')[0]} & <span className="text-primary">{title.split('&')[1]}</span>
+                      </>
+                    );
+                  }
+                  return title;
+                })()}
               </h3>
             </div>
             <Link href="/blog" className="group flex items-center gap-2 text-accent font-black uppercase tracking-widest text-[9px] md:text-xs border-b-2 border-primary pb-1 md:pb-2 hover:text-primary transition-colors">
