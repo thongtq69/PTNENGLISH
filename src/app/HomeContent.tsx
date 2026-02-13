@@ -228,7 +228,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           <p className="text-slate-200 text-[10px] md:text-lg mb-4 md:mb-8 leading-relaxed font-body px-4">
             {faculty.description || faculty.desc}
           </p>
-          <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105 inline-block">
+          <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-[10px] md:text-base transition-all transform hover:scale-105 inline-block uppercase">
             {faculty.btn}
           </Link>
         </div>

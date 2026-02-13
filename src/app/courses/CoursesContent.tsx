@@ -373,10 +373,10 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             transition={{ delay: 0.3 }}
                             className="flex flex-wrap justify-center gap-4"
                         >
-                            <Link href="/test" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1">
+                            <Link href="/test" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1 uppercase">
                                 {content.hero?.cta1 || t.courses.hero.cta1}
                             </Link>
-                            <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
+                            <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all uppercase">
                                 {content.hero?.cta2 || t.courses.hero.cta2}
                             </a>
                         </motion.div>
@@ -603,7 +603,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             </div>
 
                             <div className="flex justify-center lg:justify-start">
-                                <Link href="/test" className="w-full sm:w-auto bg-accent hover:bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold transition-all shadow-xl text-sm md:text-base text-center">
+                                <Link href="/test" className="w-full sm:w-auto bg-accent hover:bg-black text-white px-8 md:px-10 py-4 md:py-5 rounded-full font-bold transition-all shadow-xl text-sm md:text-base text-center uppercase">
                                     {content.placement?.cta || t.courses.placement.cta}
                                 </Link>
                             </div>
@@ -735,10 +735,10 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                         {content.bottomCta?.desc || t.courses.bottomCta.desc}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6">
-                        <Link href="/contact#registration-form" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20">
+                        <Link href="/contact#registration-form" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl shadow-primary/20 uppercase">
                             {content.bottomCta?.cta1 || t.courses.bottomCta.cta1}
                         </Link>
-                        <button className="bg-white/5 hover:bg-white/10 text-white border border-white/20 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all">
+                        <button className="bg-white/5 hover:bg-white/10 text-white border border-white/20 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all uppercase">
                             {content.bottomCta?.cta2 || t.courses.bottomCta.cta2}
                         </button>
                     </div>

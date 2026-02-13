@@ -82,10 +82,10 @@ export default function Hero({ initialData }: { initialData?: any }) {
                         {displaySubtitle}
                     </p>
                     <div className="flex flex-row justify-center gap-2 md:gap-6 animate-fade-in-up delay-200">
-                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-black text-white px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-primary/30 flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none">
+                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-black text-white px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-primary/30 flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none uppercase">
                             {displayPrimaryText}
                         </Link>
-                        <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none">
+                        <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-4 py-2.5 md:px-10 md:py-5 rounded-full font-bold text-[9px] md:text-lg transition-all flex items-center justify-center flex-1 md:flex-none max-w-[130px] md:max-w-none uppercase">
                             {displaySecondaryText}
                         </Link>
                     </div>

@@ -358,7 +358,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             </div>
                             <div className="bg-white rounded-[2rem] p-8 shadow-md border border-slate-200 ring-1 ring-primary/5">
                                 <h4 className="text-primary font-heading font-black text-xl mb-4 text-center">{t.home.about.policies.ctaTitle}</h4>
-                                <Link href="/test" className="block w-full bg-primary hover:bg-black text-white py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 transform text-center">
+                                <Link href="/test" className="block w-full bg-primary hover:bg-black text-white py-4 rounded-xl font-bold transition-all shadow-lg active:scale-95 transform text-center uppercase">
                                     {t.home.about.policies.ctaButton}
                                 </Link>
                             </div>

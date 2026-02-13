@@ -485,7 +485,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 href={lms.buttonLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-primary text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg shadow-lg shadow-primary/20 transition-all"
+                                className="inline-flex items-center gap-2 bg-primary text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg shadow-lg shadow-primary/20 transition-all uppercase"
                             >
                                 {lms.buttonText}
                                 <ArrowRight size={10} className="md:w-5 md:h-5" />
@@ -521,7 +521,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
                             <Link
                                 href={mocktest.buttonLink}
-                                className="inline-flex items-center gap-2 bg-white text-accent hover:bg-primary hover:text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg transition-all"
+                                className="inline-flex items-center gap-2 bg-white text-accent hover:bg-primary hover:text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg transition-all uppercase"
                             >
                                 {mocktest.buttonText}
                                 <ArrowRight size={10} className="md:w-5 md:h-5" />

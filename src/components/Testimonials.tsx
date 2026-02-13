@@ -85,7 +85,7 @@ export default function Testimonials() {
                                     <p className="text-slate-600 font-serif text-base md:text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2">
                                         "{testimonials[index].text || testimonials[index].content}"
                                     </p>
-                                    <button className="mt-4 text-primary font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all mx-auto md:mx-0">
+                                    <button className="mt-4 text-primary font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all mx-auto md:mx-0 uppercase">
                                         {t.home.testimonials.viewDetail} <ChevronRight size={16} />
                                     </button>
                                 </div>
@@ -165,7 +165,7 @@ export default function Testimonials() {
                             <div className="mt-14 pt-8 border-t border-slate-50 text-center">
                                 <button
                                     onClick={() => setSelectedTestimonial(null)}
-                                    className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-primary transition-all"
+                                    className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-primary transition-all uppercase"
                                 >
                                     {t.home.testimonials.closeBtn}
                                 </button>

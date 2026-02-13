@@ -124,7 +124,7 @@ export default function Header() {
                         ))}
                         <Link
                             href="/contact#registration-form"
-                            className="bg-primary hover:bg-black text-white px-6 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20"
+                            className="bg-primary hover:bg-black text-white px-6 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20 uppercase"
                         >
                             {t.nav.register}
                         </Link>

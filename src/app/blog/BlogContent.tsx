@@ -194,9 +194,9 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                         <Link href={`/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
                                         <div className="h-72 min-h-[18rem] overflow-hidden relative shrink-0">
                                             {(post.originalImage || post.image) ? (
-                                                <div 
+                                                <div
                                                     className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
-                                                    style={{ 
+                                                    style={{
                                                         backgroundImage: `url(${post.image})`,
                                                         backgroundPosition: 'center center'
                                                     }}
@@ -273,7 +273,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                         </p>
                         <div className="flex flex-col md:flex-row gap-6 justify-center">
                             <input type="email" placeholder={t.blogPage.newsletter.emailPlaceholder} className="w-full md:w-96 px-10 py-5 rounded-full bg-white/10 border border-white/20 text-white placeholder:text-blue-200 outline-none focus:ring-4 focus:ring-white/10 transition-all font-body" />
-                            <Link href="/contact#registration-form" className="bg-primary text-white hover:bg-red-700 px-12 py-5 rounded-full font-bold text-xl shadow-2xl transition-all transform hover:scale-105 whitespace-nowrap flex items-center justify-center">
+                            <Link href="/contact#registration-form" className="bg-primary text-white hover:bg-red-700 px-12 py-5 rounded-full font-bold text-xl shadow-2xl transition-all transform hover:scale-105 whitespace-nowrap flex items-center justify-center uppercase">
                                 {newsletter.buttonText}
                             </Link>
                         </div>
