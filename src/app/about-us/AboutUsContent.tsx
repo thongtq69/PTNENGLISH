@@ -15,6 +15,10 @@ const TEACHER_IMAGES = [
     "http://ptelc.edu.vn/wp-content/uploads/2025/06/Ms.-Quyên-1-199x203.jpg"
 ];
 
+const ICON_MAP: Record<string, any> = {
+    BookOpen, Users, Compass, ShieldCheck, FileText, Lock, UserCheck, GraduationCap, Heart, MessageSquare, Laptop, Globe, ClipboardCheck, ArrowRight
+};
+
 const DIFFERENCE_ICONS = [
     UserCheck,
     GraduationCap,
@@ -30,6 +34,31 @@ const DIFFERENCE_ICONS = [
 export default function AboutUsContent({ pageData }: { pageData: any }) {
     const { t, language } = useLanguage();
 
+    const sections = pageData?.sections || [];
+
+    // Get differences data from DB if available, otherwise fallback to translations
+    const differencesFromDB = sections.find((s: any) => s.type === 'about-differences')?.content?.items;
+
+    const differencesData = useMemo(() => {
+        if (differencesFromDB && differencesFromDB.length > 0) {
+            return differencesFromDB.map((item: any, idx: number) => ({
+                id: item.id || idx + 1,
+                title: item.title,
+                fullTitle: item.fullTitle,
+                desc: item.desc,
+                Icon: ICON_MAP[item.icon] || ArrowRight
+            }));
+        }
+
+        return t.home.about.differences.items.map((item: any, idx: number) => ({
+            id: idx + 1,
+            title: item.title || item.fullTitle,
+            fullTitle: item.fullTitle,
+            desc: item.desc,
+            Icon: DIFFERENCE_ICONS[idx] || ArrowRight
+        }));
+    }, [t, differencesFromDB]);
+
     // Get teachers data based on language
     const teachersData = useMemo(() => {
         const items = t.home.about.teachers.items;
@@ -39,16 +68,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
         }));
     }, [t]);
 
-    // Get differences data based on language
-    const differencesData = useMemo(() => {
-        return t.home.about.differences.items.map((item: any, idx: number) => ({
-            id: idx + 1,
-            title: item.title || item.fullTitle,
-            fullTitle: item.fullTitle,
-            desc: item.desc,
-            Icon: DIFFERENCE_ICONS[idx]
-        }));
-    }, [t]);
+
 
 
     const PHILOSOPHY = [
@@ -83,7 +103,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
         { title: t.home.about.values.innovation.title, desc: t.home.about.values.innovation.desc }
     ];
 
-    const sections = pageData?.sections || [];
+
     const storyData = sections.find((s: any) => s.type === 'about-story')?.content || {};
     const teacherFromDB = sections.find((s: any) => s.type === 'about-teachers')?.content?.items;
     const teachersToDisplay = (teacherFromDB && teacherFromDB.length > 0) ? teacherFromDB : teachersData;

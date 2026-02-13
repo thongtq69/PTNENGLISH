@@ -70,6 +70,11 @@ export default function TestPage() {
     const [resultTab, setResultTab] = useState<"listening" | "reading" | "writing">("listening");
     const [writingContact, setWritingContact] = useState({ name: "", phone: "", email: "" });
     const [writingContactSubmitted, setWritingContactSubmitted] = useState(false);
+    const [listeningPrepTime, setListeningPrepTime] = useState(60); // 60s preparation
+    const [listeningPhase, setListeningPhase] = useState<"prep" | "playing" | "done">("prep");
+    const prepTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const [audioProgress, setAudioProgress] = useState(0);
+    const [audioDuration, setAudioDuration] = useState(0);
 
     useEffect(() => {
         fetch("/api/mock-tests")
@@ -180,6 +185,68 @@ export default function TestPage() {
             }
         }
     };
+
+    // Start listening preparation countdown
+    const startListeningPrep = useCallback(() => {
+        setListeningPhase("prep");
+        setListeningPrepTime(60);
+        if (prepTimerRef.current) clearInterval(prepTimerRef.current);
+        prepTimerRef.current = setInterval(() => {
+            setListeningPrepTime(prev => {
+                if (prev <= 1) {
+                    clearInterval(prepTimerRef.current!);
+                    startListeningAudio();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+    }, []);
+
+    const startListeningAudio = useCallback(() => {
+        setListeningPhase("playing");
+        if (prepTimerRef.current) clearInterval(prepTimerRef.current);
+        const section = selectedTest?.listening?.sections?.[activeSectionIdx];
+        if (section?.audioUrl && audioRef.current) {
+            audioRef.current.src = section.audioUrl;
+            audioRef.current.play();
+            setCurrentAudioUrl(section.audioUrl);
+            setIsPlaying(true);
+        }
+    }, [selectedTest, activeSectionIdx]);
+
+    const skipPrep = useCallback(() => {
+        if (prepTimerRef.current) clearInterval(prepTimerRef.current);
+        startListeningAudio();
+    }, [startListeningAudio]);
+
+    // When switching listening sections, start prep
+    useEffect(() => {
+        if (step === 2 && currentSkill === 'listening' && selectedTest) {
+            startListeningPrep();
+        }
+        return () => { if (prepTimerRef.current) clearInterval(prepTimerRef.current); };
+    }, [activeSectionIdx, currentSkill, step]);
+
+    // Audio progress tracking
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+        const onTimeUpdate = () => setAudioProgress(audio.currentTime);
+        const onDurationChange = () => setAudioDuration(audio.duration || 0);
+        const onEnded = () => {
+            setIsPlaying(false);
+            setListeningPhase("done");
+        };
+        audio.addEventListener('timeupdate', onTimeUpdate);
+        audio.addEventListener('durationchange', onDurationChange);
+        audio.addEventListener('ended', onEnded);
+        return () => {
+            audio.removeEventListener('timeupdate', onTimeUpdate);
+            audio.removeEventListener('durationchange', onDurationChange);
+            audio.removeEventListener('ended', onEnded);
+        };
+    }, []);
 
     const handleSubmit = () => {
         if (confirm(t.test.testing.confirmSubmit)) {
@@ -983,7 +1050,7 @@ export default function TestPage() {
                 );
             })()}
 
-            {/* Main Content - Reading uses new split view */}
+            {/* Main Content */}
             {currentSkill === 'reading' && selectedTest ? (
                 <ReadingTestView
                     sections={selectedTest.reading.sections || []}
@@ -992,7 +1059,98 @@ export default function TestPage() {
                     answers={answers.reading}
                     onAnswerChange={handleReadingAnswerChange}
                 />
+            ) : currentSkill === 'listening' && selectedTest ? (
+                /* ── LISTENING: Full-width single page with audio player ── */
+                <div className="flex-1 flex flex-col overflow-hidden relative">
+                    {/* Audio Player Bar */}
+                    {(() => {
+                        const section = selectedTest.listening?.sections?.[activeSectionIdx];
+                        if (!section?.audioUrl) return null;
+                        const pct = audioDuration > 0 ? (audioProgress / audioDuration) * 100 : 0;
+                        return (
+                            <div className="bg-slate-900 shrink-0 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center gap-3 sm:gap-5 border-b border-white/5">
+                                <button
+                                    onClick={() => toggleAudio(section.audioUrl)}
+                                    disabled={listeningPhase === 'prep'}
+                                    className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                                        listeningPhase === 'prep'
+                                            ? 'bg-white/5 text-white/20 cursor-not-allowed'
+                                            : isPlaying
+                                                ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105'
+                                                : 'bg-white/10 text-white hover:bg-white/20'
+                                    }`}
+                                >
+                                    {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                                </button>
+
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between mb-1">
+                                        <span className="text-[9px] sm:text-[10px] font-black text-white/60 uppercase tracking-widest truncate">{section.title}</span>
+                                        <span className="text-[9px] sm:text-[10px] font-mono text-white/40 tabular-nums shrink-0 ml-2">
+                                            {formatTime(Math.floor(audioProgress))} / {formatTime(Math.floor(audioDuration))}
+                                        </span>
+                                    </div>
+                                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                        <div
+                                            className="h-full bg-gradient-to-r from-primary to-red-400 rounded-full transition-all duration-300"
+                                            style={{ width: `${pct}%` }}
+                                        />
+                                    </div>
+                                </div>
+
+                                <Volume2 size={14} className="text-white/30 shrink-0 hidden sm:block" />
+                            </div>
+                        );
+                    })()}
+
+                    {/* Listening Content — Full width */}
+                    <div className="flex-1 overflow-y-auto custom-scrollbar">
+                        <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10 pb-32">
+                            {renderAnswerSheet()}
+                        </div>
+                    </div>
+
+                    {/* Preparation Overlay */}
+                    <AnimatePresence>
+                        {listeningPhase === 'prep' && (
+                            <motion.div
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="absolute inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center"
+                            >
+                                <motion.div
+                                    initial={{ scale: 0.9, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    exit={{ scale: 0.9, opacity: 0 }}
+                                    className="bg-white rounded-3xl sm:rounded-[2.5rem] p-8 sm:p-12 max-w-md mx-4 text-center shadow-2xl"
+                                >
+                                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                                        <Headphones size={36} className="text-primary" />
+                                    </div>
+                                    <h3 className="text-xl sm:text-2xl font-heading font-black text-accent mb-2">
+                                        Preparation Time
+                                    </h3>
+                                    <p className="text-sm text-slate-500 mb-6">
+                                        Read the questions for <strong>Section {activeSectionIdx + 1}</strong> before the audio begins.
+                                    </p>
+                                    <div className="text-5xl sm:text-6xl font-heading font-black text-primary mb-8 tabular-nums">
+                                        0:{listeningPrepTime < 10 ? '0' : ''}{listeningPrepTime}
+                                    </div>
+                                    <button
+                                        onClick={skipPrep}
+                                        className="px-8 sm:px-10 py-3.5 sm:py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-primary/20 flex items-center gap-3 mx-auto"
+                                    >
+                                        <Play size={16} />
+                                        Start Now
+                                    </button>
+                                </motion.div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             ) : (
+                /* ── WRITING & fallback: Split PDF/Answer view ── */
                 <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
                     {/* PDF Block */}
                     <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "flex-1 min-w-0" : "w-0")}`}>
@@ -1005,7 +1163,6 @@ export default function TestPage() {
                         <div className="flex-1 bg-slate-800 relative min-h-0 overflow-hidden">
                             {(() => {
                                 const pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
-
                                 if (!pdfUrl) {
                                     return (
                                         <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
@@ -1014,10 +1171,7 @@ export default function TestPage() {
                                         </div>
                                     );
                                 }
-
-                                return (
-                                    <ModernPDFViewer url={pdfUrl} />
-                                );
+                                return <ModernPDFViewer url={pdfUrl} />;
                             })()}
                         </div>
                     </div>
@@ -1027,44 +1181,11 @@ export default function TestPage() {
                         <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
                             <div className="flex items-center gap-6">
                                 {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
-
-                                {/* Highlighting Tools */}
-                                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                                    <button
-                                        onClick={() => setIsHighlighterActive(!isHighlighterActive)}
-                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${isHighlighterActive ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-accent'}`}
-                                    >
-                                        <Highlighter size={12} /> {isHighlighterActive ? 'Highlighter ON' : 'Highlighter OFF'}
-                                    </button>
-                                    {highlights[`${currentSkill}-${activeSectionIdx}`]?.length > 0 && (
-                                        <button
-                                            onClick={() => setHighlights(prev => ({ ...prev, [`${currentSkill}-${activeSectionIdx}`]: [] }))}
-                                            className="p-1.5 text-slate-400 hover:text-red-500 transition-all"
-                                            title="Clear all highlights in this section"
-                                        >
-                                            <Eraser size={14} />
-                                        </button>
-                                    )}
-                                </div>
-
                                 <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
                                     <CheckCircle2 size={12} /> Active Response Area
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3">
-                                <div className="hidden md:flex items-center gap-2">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    <span className="text-[9px] font-black text-emerald-600 uppercase">Live Saving</span>
-                                </div>
-                                {isMobile && (
-                                    <div className="md:hidden flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full">
-                                        <Clock size={10} className="text-primary" />
-                                        <span className="text-[10px] font-black text-accent">{formatTime(currentTime)}</span>
-                                    </div>
-                                )}
-                            </div>
                         </div>
-
                         <div className="flex-1 overflow-y-auto p-4 md:p-12 custom-scrollbar pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed opacity-[0.98]">
                             {renderAnswerSheet()}
                         </div>
@@ -1072,8 +1193,8 @@ export default function TestPage() {
                 </div>
             )}
 
-            {/* Mobile View Toggle (not for reading - it has its own) */}
-            {isMobile && currentSkill !== 'reading' && (
+            {/* Mobile View Toggle (only for writing - reading & listening have their own views) */}
+            {isMobile && currentSkill === 'writing' && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] flex bg-slate-900/90 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-2xl">
                     <button
                         onClick={() => setViewMode('pdf')}

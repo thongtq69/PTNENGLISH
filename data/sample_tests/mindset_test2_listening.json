@@ -1,0 +1,82 @@
+{
+  "name": "Mindset for IELTS Practice Tests: Test 2",
+  "category": "ielts-academic",
+  "listening": {
+    "pdf": "/academic_tests/mindset_test2/listening/listening.pdf",
+    "totalQuestions": 40,
+    "sections": [
+      {
+        "title": "Part 1 — Bournchester Town Festival",
+        "audioUrl": "/academic_tests/mindset_test2/listening/part1.mp3",
+        "questionsCount": 10,
+        "content": "<h3>Questions 1–5</h3>\n<p><em>Complete the table below. Write <strong>ONE WORD ONLY</strong> for each answer.</em></p>\n\n<h4 class=\"text-center\">BOURNCHESTER TOWN FESTIVAL</h4>\n\n<table>\n<tr><th>Event</th><th>Cost</th><th>Location</th><th>Other information</th></tr>\n<tr>\n<td>Art exhibition</td>\n<td>Requested donation: £2.50 per adult</td>\n<td>Town Hall</td>\n<td>All works on display are available to buy (except <strong>1</strong> [Q1])</td>\n</tr>\n<tr>\n<td>Parade</td>\n<td>Free</td>\n<td>Starts in front of the <strong>2</strong> [Q2]</td>\n<td>People in the parade will be wearing national costumes</td>\n</tr>\n<tr>\n<td>Concert</td>\n<td>£12 per ticket (£1 for under-8s).</td>\n<td>The Venue, May Road</td>\n<td>Main act: Royce's Rhythm Orchestra<br/><br/>Opening speech by famous local <strong>3</strong> [Q3]</td>\n</tr>\n<tr>\n<td>Funfair</td>\n<td>£5 for <strong>4</strong> [Q4] tickets</td>\n<td>West <strong>5</strong> [Q5]</td>\n<td>The exit at Reed St. is closed at 7pm</td>\n</tr>\n</table>\n\n<hr/>\n\n<h3>Questions 6–10</h3>\n<p><em>Complete the notes below. Write <strong>ONE WORD ONLY</strong> for each answer.</em></p>\n\n<div style=\"border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; background: #fafbfc;\">\n<h4>Camping</h4>\n<p>750m from city centre in <strong>6</strong> [Q6] Park</p>\n\n<p><strong>The Badger Field:</strong></p>\n<ul>\n<li>close to festival</li>\n<li>noisy</li>\n</ul>\n\n<p><strong>The Fox Field:</strong></p>\n<ul>\n<li>better option for <strong>7</strong> [Q7]</li>\n<li><strong>8</strong> [Q8] available at each space</li>\n</ul>\n\n<p><strong>Facilities</strong></p>\n<ul>\n<li>Café</li>\n<li>Boating Lake (<strong>9</strong> [Q9] not allowed in the park)</li>\n<li>Activity centre with mini golf course and <strong>10</strong> [Q10]</li>\n</ul>\n</div>",
+        "answers": {
+          "1": "sculptures",
+          "2": "cathedral",
+          "3": "comedian",
+          "4": "six",
+          "5": "Park",
+          "6": "Jubilee",
+          "7": "families",
+          "8": "electricity",
+          "9": "swimming",
+          "10": "climbing"
+        }
+      },
+      {
+        "title": "Part 2 — Attending a Jobs Fair",
+        "audioUrl": "/academic_tests/mindset_test2/listening/part2.mp3",
+        "questionsCount": 10,
+        "content": "<h3>Questions 11–16</h3>\n<p><em>Complete the flow-chart below.</em></p>\n<p><em>Choose <strong>SIX</strong> answers from the box and write the correct letter, <strong>A–H</strong>, next to questions 11–16.</em></p>\n\n<table>\n<tr>\n<td><strong>A</strong> &nbsp; advice &nbsp;&nbsp;&nbsp; <strong>B</strong> &nbsp; body language &nbsp;&nbsp;&nbsp; <strong>C</strong> &nbsp; contact details &nbsp;&nbsp;&nbsp; <strong>D</strong> &nbsp; first impressions</td>\n</tr>\n<tr>\n<td><strong>E</strong> &nbsp; interview &nbsp;&nbsp;&nbsp; <strong>F</strong> &nbsp; introduction &nbsp;&nbsp;&nbsp; <strong>G</strong> &nbsp; meeting &nbsp;&nbsp;&nbsp; <strong>H</strong> &nbsp; questions</td>\n</tr>\n</table>\n\n<h4 class=\"text-center\">Attending a Jobs Fair – before, during and after</h4>\n\n<div style=\"border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; background: #fafbfc;\">\n<p style=\"text-align:center; padding: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;\">Research the companies which will be present<br/>Think of relevant <strong>11</strong> [MH11:A,B,C,D,E,F,G,H] for each company.</p>\n<p style=\"text-align:center; font-size: 1.5rem;\">⬇</p>\n<p style=\"text-align:center; padding: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;\">Practise by imagining yourself speaking in an important <strong>12</strong> [MH12:A,B,C,D,E,F,G,H] .</p>\n<p style=\"text-align:center; font-size: 1.5rem;\">⬇</p>\n<p style=\"text-align:center; padding: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;\">Take a little time to plan your <strong>13</strong> [MH13:A,B,C,D,E,F,G,H] to each company.</p>\n<p style=\"text-align:center; font-size: 1.5rem;\">⬇</p>\n<p style=\"text-align:center; padding: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;\">When speaking, always remember the importance of <strong>14</strong> [MH14:A,B,C,D,E,F,G,H] .</p>\n<p style=\"text-align:center; font-size: 1.5rem;\">⬇</p>\n<p style=\"text-align:center; padding: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;\">Request <strong>15</strong> [MH15:A,B,C,D,E,F,G,H] from the people you speak to.</p>\n<p style=\"text-align:center; font-size: 1.5rem;\">⬇</p>\n<p style=\"text-align:center; padding: 0.75rem; background: white; border: 1px solid #e2e8f0; border-radius: 8px;\">Follow up with a brief email – thank them for their time and any <strong>16</strong> [MH16:A,B,C,D,E,F,G,H] .</p>\n</div>\n\n<hr/>\n\n<h3>Questions 17–20</h3>\n<p><em>What does the speaker recommend about the following jobs fairs?</em></p>\n<p><em>Write the correct letter, <strong>A, B</strong> or <strong>C</strong>, next to Questions 17–20.</em></p>\n\n<table>\n<tr><td><strong>A</strong> &nbsp; the size</td></tr>\n<tr><td><strong>B</strong> &nbsp; the business sector</td></tr>\n<tr><td><strong>C</strong> &nbsp; the location</td></tr>\n</table>\n\n<h4>Job fairs</h4>\n\n<p><strong>17</strong> &nbsp; Network [MH17:A,B,C]</p>\n<p><strong>18</strong> &nbsp; Big Careers [MH18:A,B,C]</p>\n<p><strong>19</strong> &nbsp; Twenty Times [MH19:A,B,C]</p>\n<p><strong>20</strong> &nbsp; Media Movers [MH20:A,B,C]</p>",
+        "answers": {
+          "11": "H",
+          "12": "E",
+          "13": "F",
+          "14": "B",
+          "15": "C",
+          "16": "A",
+          "17": "C",
+          "18": "A",
+          "19": "B",
+          "20": "A"
+        }
+      },
+      {
+        "title": "Part 3 — Games Design Course Discussion",
+        "audioUrl": "/academic_tests/mindset_test2/listening/part3.mp3",
+        "questionsCount": 10,
+        "content": "<h3>Questions 21 and 22</h3>\n<p><em>Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</em></p>\n<p>Which <strong>TWO</strong> parts of their first semester do the students agree were beneficial?</p>\n<p><strong>A</strong> &nbsp; the tutorials</p>\n<p><strong>B</strong> &nbsp; the workshops</p>\n<p><strong>C</strong> &nbsp; the lectures</p>\n<p><strong>D</strong> &nbsp; the study materials</p>\n<p><strong>E</strong> &nbsp; the games company visit</p>\n[MCM21:A,B,C,D,E/2]\n[MCM22:A,B,C,D,E/2]\n\n<hr/>\n\n<h3>Questions 23 and 24</h3>\n<p><em>Choose <strong>TWO</strong> letters, <strong>A–E</strong>.</em></p>\n<p>Which <strong>TWO</strong> of the course aims do the students both feel confident they will meet?</p>\n<p><strong>A</strong> &nbsp; successfully working as a team</p>\n<p><strong>B</strong> &nbsp; improving knowledge of business practices</p>\n<p><strong>C</strong> &nbsp; developing a full range of programming skills</p>\n<p><strong>D</strong> &nbsp; understanding why games become popular</p>\n<p><strong>E</strong> &nbsp; producing a practice-based portfolio</p>\n[MCM23:A,B,C,D,E/2]\n[MCM24:A,B,C,D,E/2]\n\n<hr/>\n\n<h3>Questions 25–30</h3>\n<p><em>What comments do the students make about each of the games?</em></p>\n<p><em>Choose <strong>SIX</strong> answers from the box and write the correct letter, <strong>A–H</strong>, next to questions 25–30.</em></p>\n\n<table>\n<tr><th colspan=\"2\" style=\"text-align:center;\">Comments</th></tr>\n<tr><td><strong>A</strong></td><td>It illustrates the benefits of repetition.</td></tr>\n<tr><td><strong>B</strong></td><td>It is targeted at a particular type of person.</td></tr>\n<tr><td><strong>C</strong></td><td>It helps to increase levels of patience.</td></tr>\n<tr><td><strong>D</strong></td><td>It aids the growth of a winning mentality.</td></tr>\n<tr><td><strong>E</strong></td><td>It is useful for developing independence.</td></tr>\n<tr><td><strong>F</strong></td><td>It promotes certain negative stereotypes.</td></tr>\n<tr><td><strong>G</strong></td><td>It creates issues in interpersonal relationships.</td></tr>\n<tr><td><strong>H</strong></td><td>It requires the ability to react quickly.</td></tr>\n</table>\n\n<h4>Games</h4>\n\n<p><strong>25</strong> &nbsp; Age of Arms [MH25:A,B,C,D,E,F,G,H]</p>\n<p><strong>26</strong> &nbsp; Zorian [MH26:A,B,C,D,E,F,G,H]</p>\n<p><strong>27</strong> &nbsp; Fittish [MH27:A,B,C,D,E,F,G,H]</p>\n<p><strong>28</strong> &nbsp; Cloud Kudos [MH28:A,B,C,D,E,F,G,H]</p>\n<p><strong>29</strong> &nbsp; Solar Quest [MH29:A,B,C,D,E,F,G,H]</p>\n<p><strong>30</strong> &nbsp; Pentrax [MH30:A,B,C,D,E,F,G,H]</p>",
+        "answers": {
+          "21": "B,E",
+          "22": "B,E",
+          "23": "A,E",
+          "24": "A,E",
+          "25": "F",
+          "26": "H",
+          "27": "B",
+          "28": "G",
+          "29": "D",
+          "30": "A"
+        }
+      },
+      {
+        "title": "Part 4 — History of Open Water Swimming",
+        "audioUrl": "/academic_tests/mindset_test2/listening/part4.mp3",
+        "questionsCount": 10,
+        "content": "<h3>Questions 31–40</h3>\n<p><em>Complete the notes below. Write <strong>ONE WORD ONLY</strong> for each answer.</em></p>\n\n<div style=\"border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; margin: 1rem 0; background: #fafbfc;\">\n<h4 class=\"text-center\">History of open water swimming</h4>\n\n<ul style=\"list-style: disc; padding-left: 1.5rem;\">\n<li><strong>1st century BCE:</strong>\n<ul style=\"list-style: none; padding-left: 1rem;\">\n<li>– open water swimming races in Japan</li>\n<li>– Romans held events in the river Tiber</li>\n</ul>\n</li>\n\n<li><strong>8th–11th century AD:</strong>\n<ul style=\"list-style: none; padding-left: 1rem;\">\n<li>– appears in Anglo-Saxon literature</li>\n<li>– Viking tales of <strong>31</strong> [Q31] competing against each other at sea</li>\n</ul>\n</li>\n\n<li><strong>18th–19th centuries:</strong>\n<ul style=\"list-style: none; padding-left: 1rem;\">\n<li>– Sir John Floyer wrote how cold water helped to manage <strong>32</strong> [Q32]</li>\n<li>– Romantic poets used open water swimming to connect to the <strong>33</strong> [Q33]</li>\n</ul>\n</li>\n\n<li><strong>Mid to late 19th century:</strong>\n<ul style=\"list-style: none; padding-left: 1rem;\">\n<li>– the <strong>34</strong> [Q34] helped to increase its popularity with the public</li>\n<li>– new regulations to deal with the large <strong>35</strong> [Q35] at the seaside</li>\n</ul>\n</li>\n</ul>\n\n<h4>Modern-day open water swimmers</h4>\n<ul style=\"list-style: disc; padding-left: 1.5rem;\">\n<li>current research reveals more participation in the sport than ever</li>\n<li>most interviewees gave <strong>36</strong> [Q36] as their reason for taking part</li>\n<li>generally feel there are too many <strong>37</strong> [Q37] in pool swimming</li>\n<li>rarely swim without a <strong>38</strong> [Q38]</li>\n<li>a technique called 'sighting' is used to make up for the lack of <strong>39</strong> [Q39]</li>\n<li>focus on maximising <strong>40</strong> [Q40] while swimming</li>\n</ul>\n</div>",
+        "answers": {
+          "31": "kings",
+          "32": "asthma",
+          "33": "landscape",
+          "34": "railway",
+          "35": "crowds",
+          "36": "wellbeing",
+          "37": "rules",
+          "38": "wetsuit",
+          "39": "lines",
+          "40": "efficiency"
+        }
+      }
+    ]
+  }
+}
