@@ -16,16 +16,17 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
         highlight: '',
         suffix: '',
         line2: '',
-        hasBreak: false
+        hasBreak: false,
+        prefixNowrap: false,
+        highlightNowrap: true, // Default true for highlight
+        suffixNowrap: false
     });
 
     // Parse HTML string into parts
     useEffect(() => {
         if (!value) return;
 
-        // Simple regex to extract common patterns
-        // Pattern: prefix <span class='...'>highlight</span> suffix <br /> line2
-        const spanRegex = /<span [^>]*>(.*?)<\/span>/;
+        const spanRegex = /<span [^>]*class=['"]([^'"]*)['"][^>]*>(.*?)<\/span>/;
         const breakRegex = /<br\s*\/?>/;
 
         let tempValue = value;
@@ -42,24 +43,35 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
         let prefix = tempValue;
         let highlight = '';
         let suffix = '';
+        let highlightNowrap = true;
 
         const spanMatch = tempValue.match(spanRegex);
         if (spanMatch) {
-            highlight = spanMatch[1];
+            highlight = spanMatch[2];
+            highlightNowrap = spanMatch[1].includes('whitespace-nowrap');
             const splitBySpan = tempValue.split(spanMatch[0]);
             prefix = splitBySpan[0].trim();
             suffix = splitBySpan[1]?.trim() || '';
         }
 
-        const newState = { prefix, highlight, suffix, line2, hasBreak };
+        const newState = {
+            prefix,
+            highlight,
+            suffix,
+            line2,
+            hasBreak,
+            prefixNowrap: prefix.includes('whitespace-nowrap'), // This is simplified, actually prefix isn't wrapped in span usually
+            highlightNowrap,
+            suffixNowrap: suffix.includes('whitespace-nowrap')
+        };
 
-        // Only update if state actually changed to avoid infinite cycles and React warnings
         setParts(prev => {
             if (prev.prefix === newState.prefix &&
                 prev.highlight === newState.highlight &&
                 prev.suffix === newState.suffix &&
                 prev.line2 === newState.line2 &&
-                prev.hasBreak === newState.hasBreak) {
+                prev.hasBreak === newState.hasBreak &&
+                prev.highlightNowrap === newState.highlightNowrap) {
                 return prev;
             }
             return newState;
@@ -69,16 +81,25 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
     const updateValue = (newParts: any) => {
         setParts(newParts);
 
-        let html = newParts.prefix;
+        let html = '';
+
+        if (newParts.prefix) {
+            html += newParts.prefixNowrap ? `<span class='whitespace-nowrap'>${newParts.prefix}</span>` : newParts.prefix;
+        }
+
         if (newParts.highlight) {
-            html += ` <span class='text-primary font-bold'>${newParts.highlight}</span>`;
+            const classes = `text-primary font-bold ${newParts.highlightNowrap ? 'whitespace-nowrap' : ''}`.trim();
+            html += ` <span class='${classes}'>${newParts.highlight}</span>`;
         }
+
         if (newParts.suffix) {
-            html += ` ${newParts.suffix}`;
+            html += ` ${newParts.suffixNowrap ? `<span class='whitespace-nowrap'>${newParts.suffix}</span>` : newParts.suffix}`;
         }
+
         if (newParts.hasBreak) {
             html += ` <br />`;
         }
+
         if (newParts.line2) {
             html += ` ${newParts.line2}`;
         }
@@ -87,72 +108,114 @@ export default function RichTitleEditor({ value, onChange, label, compact }: Ric
     };
 
     return (
-        <div className={`${compact ? 'p-4' : 'p-6'} bg-slate-950/50 border border-white/5 rounded-3xl space-y-4`}>
+        <div className={`${compact ? 'p-4' : 'p-6'} bg-slate-900 border border-white/10 rounded-3xl space-y-5 shadow-2xl`}>
             {label && (
-                <div className="flex items-center gap-2 mb-2">
-                    <Type size={14} className="text-primary" />
-                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{label}</label>
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                        <Type size={16} className="text-primary" />
+                        <label className="text-[11px] font-black text-white uppercase tracking-[0.2em]">{label}</label>
+                    </div>
                 </div>
             )}
 
-            <div className={`grid grid-cols-1 ${compact ? '' : 'md:grid-cols-2'} gap-4`}>
-                <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-slate-600 uppercase ml-2">Phần đầu</label>
+            <div className={`grid grid-cols-1 ${compact ? '' : 'md:grid-cols-2'} gap-6`}>
+                {/* Prefix */}
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between px-2">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Phần đầu</label>
+                        <button
+                            onClick={(e) => { e.preventDefault(); updateValue({ ...parts, prefixNowrap: !parts.prefixNowrap }); }}
+                            className={`text-[9px] font-black px-2 py-0.5 rounded transition-all ${parts.prefixNowrap ? 'bg-primary text-white' : 'bg-slate-800 text-slate-500'}`}
+                            title="Ngăn không cho chữ tự động xuống dòng"
+                        >
+                            NOWRAP
+                        </button>
+                    </div>
                     <input
                         value={parts.prefix}
                         onChange={e => updateValue({ ...parts, prefix: e.target.value })}
                         placeholder="Text..."
-                        className="w-full bg-slate-900 border border-white/5 rounded-xl px-4 py-2 text-white text-xs outline-none focus:border-primary/50"
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
                     />
                 </div>
-                <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-primary uppercase ml-2">Nổi bật (Đỏ)</label>
+
+                {/* Highlight */}
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between px-2">
+                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">Nổi bật (Đỏ)</label>
+                        <button
+                            onClick={(e) => { e.preventDefault(); updateValue({ ...parts, highlightNowrap: !parts.highlightNowrap }); }}
+                            className={`text-[9px] font-black px-2 py-0.5 rounded transition-all ${parts.highlightNowrap ? 'bg-primary text-white' : 'bg-slate-800 text-slate-500'}`}
+                            title="Ngăn không cho chữ tự động xuống dòng"
+                        >
+                            NOWRAP
+                        </button>
+                    </div>
                     <input
                         value={parts.highlight}
                         onChange={e => updateValue({ ...parts, highlight: e.target.value })}
                         placeholder="Highlight..."
-                        className="w-full bg-slate-900 border border-primary/20 rounded-xl px-4 py-2 text-primary font-bold text-xs outline-none focus:border-primary"
+                        className="w-full bg-slate-950 border border-primary/30 rounded-xl px-4 py-3 text-primary font-black text-sm outline-none focus:ring-2 focus:ring-primary transition-all shadow-lg shadow-primary/5"
                     />
                 </div>
-                <div className="space-y-1.5">
-                    <label className="text-[9px] font-bold text-slate-600 uppercase ml-2">Phần sau</label>
+
+                {/* Suffix */}
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between px-2">
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Phần sau</label>
+                        <button
+                            onClick={(e) => { e.preventDefault(); updateValue({ ...parts, suffixNowrap: !parts.suffixNowrap }); }}
+                            className={`text-[9px] font-black px-2 py-0.5 rounded transition-all ${parts.suffixNowrap ? 'bg-primary text-white' : 'bg-slate-800 text-slate-500'}`}
+                            title="Ngăn không cho chữ tự động xuống dòng"
+                        >
+                            NOWRAP
+                        </button>
+                    </div>
                     <input
                         value={parts.suffix}
                         onChange={e => updateValue({ ...parts, suffix: e.target.value })}
-                        className="w-full bg-slate-900 border border-white/5 rounded-xl px-4 py-2 text-slate-400 text-xs outline-none"
+                        placeholder="..."
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-slate-400 text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
                     />
                 </div>
-                <div className="space-y-1.5">
-                    <div className="flex items-center justify-between ml-2">
-                        <label className="text-[9px] font-bold text-slate-600 uppercase">Dòng 2</label>
+
+                {/* Break & Line 2 */}
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between px-2">
+                        <div className="flex items-center gap-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Dòng 2</label>
+                            <span className="text-[8px] text-slate-600 bg-white/5 px-1.5 rounded">BREAK</span>
+                        </div>
                         <button
-                            onClick={(e) => {
-                                e.preventDefault();
-                                updateValue({ ...parts, hasBreak: !parts.hasBreak });
-                            }}
-                            className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[8px] font-black transition-all ${parts.hasBreak ? 'bg-primary text-white' : 'bg-slate-800 text-slate-500'}`}
+                            onClick={(e) => { e.preventDefault(); updateValue({ ...parts, hasBreak: !parts.hasBreak }); }}
+                            className={`flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-black transition-all ${parts.hasBreak ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20' : 'bg-slate-800 text-slate-500'}`}
                         >
-                            <AlignLeft size={8} /> {parts.hasBreak ? 'BR' : 'NO BR'}
+                            <AlignLeft size={10} /> {parts.hasBreak ? 'CÓ NGẮT DÒNG' : 'LIỀN MẠCH'}
                         </button>
                     </div>
                     <input
                         value={parts.line2}
                         onChange={e => updateValue({ ...parts, line2: e.target.value })}
-                        placeholder="Xuống hàng..."
-                        className="w-full bg-slate-900 border border-white/5 rounded-xl px-4 py-2 text-slate-300 text-xs outline-none"
+                        placeholder="Nội dung dòng tiếp theo..."
+                        className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-slate-300 text-sm outline-none focus:ring-2 focus:ring-primary/40 transition-all font-medium"
                     />
                 </div>
             </div>
 
             {!compact && (
-                <div className="pt-4 border-t border-white/5 flex items-start gap-3">
-                    <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400 shrink-0">
-                        <Info size={14} />
-                    </div>
-                    <div>
-                        <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
-                            <span className="text-slate-300 font-bold">Xem trước mã (tự động):</span> <code className="text-primary/70 bg-black/30 px-2 py-0.5 rounded">{value || '...'}</code>
-                        </p>
+                <div className="pt-5 border-t border-white/5 flex flex-col gap-3">
+                    <div className="flex items-start gap-3">
+                        <div className="p-2 rounded-xl bg-primary/10 text-primary shrink-0">
+                            <Info size={16} />
+                        </div>
+                        <div className="space-y-1">
+                            <h4 className="text-[10px] font-black text-white uppercase tracking-wider">Hướng dẫn tinh tế</h4>
+                            <p className="text-[10px] text-slate-500 leading-relaxed font-medium">
+                                • Bật <span className="text-primary font-bold">NOWRAP</span> để giữ các từ đi cùng nhau (không bị ngắt giữa chữ).<br />
+                                • Dùng <span className="text-indigo-400 font-bold">CÓ NGẮT DÒNG</span> để chủ động xuống hàng tại vị trí mong muốn.<br />
+                                • <span className="text-slate-300 font-bold">Mã của bạn:</span> <code className="text-primary/70 bg-black/40 px-2 py-1 rounded-lg ml-1">{value || '...'}</code>
+                            </p>
+                        </div>
                     </div>
                 </div>
             )}

@@ -329,9 +329,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                         >
                             {(() => {
                                 const title = content.hero?.title || t.courses.hero.title;
-
-                                // Support manual <br /> tags
-                                if (title.includes('<br />') || title.includes('<br/>')) {
+                                if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {
                                     return <div dangerouslySetInnerHTML={{ __html: title }} />;
                                 }
 

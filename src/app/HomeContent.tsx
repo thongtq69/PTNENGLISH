@@ -278,7 +278,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               <h3 className="text-xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter">
                 {(() => {
                   const title = homeBlog.title || "";
-                  if (title.includes('<br />') || title.includes('<br/>')) {
+                  if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {
                     return <span dangerouslySetInnerHTML={{ __html: title }} />;
                   }
                   if (title.includes('|')) {

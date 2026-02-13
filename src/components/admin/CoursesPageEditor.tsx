@@ -272,13 +272,11 @@ export default function CoursesPageEditor() {
                                         placeholder="Ví dụ: Lộ trình Học thuật"
                                     />
                                 </div>
-                                <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tiêu đề chính</label>
-                                    <input
+                                <div className="space-y-3 lg:col-span-2">
+                                    <RichTitleEditor
+                                        label="Tiêu đề chính"
                                         value={data.hero.title}
-                                        onChange={e => updateData('hero.title', e.target.value)}
-                                        className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold"
-                                        placeholder="Khung Chương Trình Học"
+                                        onChange={val => updateData('hero.title', val)}
                                     />
                                 </div>
                             </div>
@@ -330,11 +328,11 @@ export default function CoursesPageEditor() {
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tiêu đề section</label>
-                                    <input
+                                    <RichTitleEditor
+                                        label="Tiêu đề section"
                                         value={data.targetAudience.title}
-                                        onChange={e => updateData('targetAudience.title', e.target.value)}
-                                        className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold"
+                                        onChange={val => updateData('targetAudience.title', val)}
+                                        compact
                                     />
                                 </div>
                                 <div className="space-y-3">
@@ -396,11 +394,11 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tiêu đề section</label>
-                                <input
+                                <RichTitleEditor
+                                    label="Tiêu đề section"
                                     value={data.specs.title}
-                                    onChange={e => updateData('specs.title', e.target.value)}
-                                    className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold"
+                                    onChange={val => updateData('specs.title', val)}
+                                    compact
                                 />
                             </div>
 
@@ -487,11 +485,11 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tiêu đề section</label>
-                                <input
+                                <RichTitleEditor
+                                    label="Tiêu đề section"
                                     value={data.pathway.title}
-                                    onChange={e => updateData('pathway.title', e.target.value)}
-                                    className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold"
+                                    onChange={val => updateData('pathway.title', val)}
+                                    compact
                                 />
                             </div>
 
@@ -767,11 +765,11 @@ export default function CoursesPageEditor() {
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tiêu đề</label>
-                                    <input
+                                    <RichTitleEditor
+                                        label="Tiêu đề"
                                         value={data.placement.title}
-                                        onChange={e => updateData('placement.title', e.target.value)}
-                                        className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white font-bold"
+                                        onChange={val => updateData('placement.title', val)}
+                                        compact
                                     />
                                 </div>
                             </div>

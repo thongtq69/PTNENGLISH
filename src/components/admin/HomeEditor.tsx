@@ -258,12 +258,11 @@ export default function HomeEditor() {
                             />
                         </div>
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Main Title</label>
-                            <input
+                            <RichTitleEditor
+                                label="Main Title"
                                 value={settings.intro?.title || ''}
-                                onChange={e => updateSection('intro', 'title', e.target.value)}
-                                placeholder="e.g. TTNN PHÚ TÀI NĂNG"
-                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                                onChange={val => updateSection('intro', 'title', val)}
+                                compact
                             />
                         </div>
                     </div>
@@ -318,11 +317,11 @@ export default function HomeEditor() {
                         </div>
                     </div>
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Title</label>
-                        <input
+                        <RichTitleEditor
+                            label="Section Title"
                             value={settings.campus?.title || ''}
-                            onChange={e => updateSection('campus', 'title', e.target.value)}
-                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                            onChange={val => updateSection('campus', 'title', val)}
+                            compact
                         />
                     </div>
                     <div className="space-y-4">
@@ -377,11 +376,11 @@ export default function HomeEditor() {
                             />
                         </div>
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Title</label>
-                            <input
+                            <RichTitleEditor
+                                label="Section Title"
                                 value={settings.faculty?.title || ''}
-                                onChange={e => updateSection('faculty', 'title', e.target.value)}
-                                className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
+                                onChange={val => updateSection('faculty', 'title', val)}
+                                compact
                             />
                         </div>
                     </div>
@@ -730,12 +729,11 @@ export default function HomeEditor() {
                 </div>
                 <div className="p-10 space-y-8">
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Philosophy Section Title</label>
-                        <input
+                        <RichTitleEditor
+                            label="Philosophy Section Title"
                             value={settings.philosophyTitle || ''}
-                            onChange={e => setSettings({ ...settings, philosophyTitle: e.target.value })}
-                            placeholder="e.g. Triết lý giáo dục"
-                            className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                            onChange={val => setSettings({ ...settings, philosophyTitle: val })}
+                            compact
                         />
                     </div>
                     <div className="space-y-4">
