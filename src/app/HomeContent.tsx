@@ -83,12 +83,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-primary font-heading text-xs md:text-xl font-bold uppercase tracking-[0.3em] mb-1">
+            <h2 className="text-primary font-heading text-xs md:text-xl font-bold tracking-[0.3em] mb-1">
               {intro.badge}
             </h2>
             <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center">
-              {intro.title} <br />
-              <span className="text-base md:text-3xl">(PTelc - PT English Language Centre)</span>
+              {intro.title}
             </h3>
             <p className="text-sm md:text-xl text-slate-600 font-body leading-relaxed mb-6 md:mb-10 mx-auto max-w-4xl px-4 text-center">
               {intro.description || intro.desc}
