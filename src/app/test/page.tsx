@@ -186,7 +186,20 @@ export default function TestPage() {
         }
     };
 
-    // Start listening preparation countdown
+    // Start listening audio playback
+    const startListeningAudio = useCallback(() => {
+        setListeningPhase("playing");
+        if (prepTimerRef.current) clearInterval(prepTimerRef.current);
+        const section = selectedTest?.listening?.sections?.[activeSectionIdx];
+        if (section?.audioUrl && audioRef.current) {
+            audioRef.current.src = section.audioUrl;
+            audioRef.current.play();
+            setCurrentAudioUrl(section.audioUrl);
+            setIsPlaying(true);
+        }
+    }, [selectedTest, activeSectionIdx]);
+
+    // Start listening preparation countdown (60s → auto play)
     const startListeningPrep = useCallback(() => {
         setListeningPhase("prep");
         setListeningPrepTime(60);
@@ -201,19 +214,7 @@ export default function TestPage() {
                 return prev - 1;
             });
         }, 1000);
-    }, []);
-
-    const startListeningAudio = useCallback(() => {
-        setListeningPhase("playing");
-        if (prepTimerRef.current) clearInterval(prepTimerRef.current);
-        const section = selectedTest?.listening?.sections?.[activeSectionIdx];
-        if (section?.audioUrl && audioRef.current) {
-            audioRef.current.src = section.audioUrl;
-            audioRef.current.play();
-            setCurrentAudioUrl(section.audioUrl);
-            setIsPlaying(true);
-        }
-    }, [selectedTest, activeSectionIdx]);
+    }, [startListeningAudio]);
 
     const skipPrep = useCallback(() => {
         if (prepTimerRef.current) clearInterval(prepTimerRef.current);
@@ -462,17 +463,49 @@ export default function TestPage() {
         const sections = selectedTest[currentSkill].sections || [];
         const activeSection = sections[activeSectionIdx];
 
+        // For listening, skip section tabs (tracker bar handles navigation)
+        if (currentSkill === 'listening') {
+            return (
+                <div className="space-y-4">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={`listening-${activeSectionIdx}`}
+                            initial={{ opacity: 0, y: 8 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -8 }}
+                            className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 min-h-[50vh]"
+                        >
+                            {activeSection ? (
+                                <>
+                                    <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                                        <h4 className="text-base sm:text-lg md:text-xl font-heading font-black text-accent">{activeSection.title}</h4>
+                                    </div>
+                                    {parseContentWithInputs(activeSection.content, currentSkill)}
+                                </>
+                            ) : (
+                                <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
+                                    <AlertCircle size={40} className="opacity-10" />
+                                    <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+            );
+        }
+
+        // Reading/other: show section tabs
         return (
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {/* Section Navigation Header */}
                 <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2 sticky top-0 bg-slate-50 z-20 pt-2">
                     {sections.map((sec, idx) => (
                         <button
                             key={idx}
                             onClick={() => setActiveSectionIdx(idx)}
-                            className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-sm border ${activeSectionIdx === idx ? 'bg-primary border-primary text-white' : 'bg-white border-slate-100 text-slate-400 hover:bg-slate-50'}`}
+                            className={`px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest transition-all whitespace-nowrap shadow-sm border ${activeSectionIdx === idx ? 'bg-primary border-primary text-white' : 'bg-white border-slate-100 text-slate-400 hover:bg-slate-50'}`}
                         >
-                            {currentSkill === 'listening' ? `Section 0${idx + 1}` : `Passage 0${idx + 1}`}
+                            Passage 0{idx + 1}
                         </button>
                     ))}
                 </div>
@@ -480,30 +513,21 @@ export default function TestPage() {
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={`${currentSkill}-${activeSectionIdx}`}
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="bg-white p-6 md:p-12 rounded-[2.5rem] shadow-sm border border-slate-100 min-h-[60vh]"
+                        exit={{ opacity: 0, y: -8 }}
+                        className="bg-white p-4 sm:p-6 md:p-10 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 min-h-[50vh]"
                     >
                         {activeSection ? (
                             <>
-                                <div className="flex flex-col md:flex-row md:items-center justify-between mb-10 gap-4 border-b border-slate-50 pb-8">
-                                    <h4 className="text-xl md:text-2xl font-heading font-black text-accent">{activeSection.title}</h4>
-                                    {currentSkill === 'listening' && activeSection.audioUrl && (
-                                        <button
-                                            onClick={() => toggleAudio(activeSection.audioUrl)}
-                                            className={`p-4 rounded-2xl flex items-center gap-3 transition-all ${isPlaying ? 'bg-primary text-white scale-105 shadow-lg shadow-primary/30' : 'bg-slate-100 text-slate-900 hover:bg-slate-200'}`}
-                                        >
-                                            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                                            <span className="text-[10px] font-black uppercase tracking-widest">Listen This Section</span>
-                                        </button>
-                                    )}
+                                <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                                    <h4 className="text-base sm:text-lg md:text-xl font-heading font-black text-accent">{activeSection.title}</h4>
                                 </div>
                                 {parseContentWithInputs(activeSection.content, currentSkill)}
                             </>
                         ) : (
-                            <div className="flex flex-col items-center justify-center py-20 text-slate-300 gap-4">
-                                <AlertCircle size={48} className="opacity-10" />
+                            <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
+                                <AlertCircle size={40} className="opacity-10" />
                                 <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
                             </div>
                         )}
@@ -827,7 +851,7 @@ export default function TestPage() {
                         <p className="text-slate-500 text-lg font-body">{t.test.selection.subtitle}</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
                         {academicTests.map((test, idx) => (
                             <motion.div
                                 key={test._id}
@@ -925,105 +949,90 @@ export default function TestPage() {
 
     return (
         <main className={`h-screen flex flex-col bg-slate-100 overflow-hidden relative`}>
-            {/* Pro Navbar */}
-            <div className="bg-slate-900 h-14 sm:h-16 md:h-20 shrink-0 px-2 sm:px-4 md:px-10 flex items-center justify-between text-white border-b border-white/5 relative z-[100] shadow-2xl">
+            {/* Pro Navbar — compact */}
+            <div className="bg-slate-900 h-11 sm:h-12 shrink-0 px-2 sm:px-4 md:px-6 flex items-center justify-between text-white border-b border-white/5 relative z-[100]">
                 {/* Left: Logo + test info */}
-                <div className="flex items-center gap-2 sm:gap-4 md:gap-10 shrink-0">
+                <div className="flex items-center gap-2 sm:gap-3 md:gap-6 shrink-0">
                     <button className="cursor-pointer" onClick={() => window.location.href = "/"}>
-                        <span className="text-base sm:text-xl font-heading font-extrabold tracking-tighter whitespace-nowrap">
+                        <span className="text-sm sm:text-base font-heading font-extrabold tracking-tighter whitespace-nowrap">
                             <span className="text-primary uppercase">PTN</span>
                             <span className="uppercase text-white hidden md:inline"> Simulator</span>
                         </span>
                     </button>
-                    <div className="h-10 w-px bg-white/10 hidden xl:block"></div>
-                    <div className="hidden xl:flex flex-col">
-                        <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500">IELTS Academic</span>
-                        <span className="text-xs font-bold text-white truncate max-w-[200px]">{selectedTest?.name}</span>
+                    <div className="h-6 w-px bg-white/10 hidden xl:block"></div>
+                    <div className="hidden xl:block">
+                        <span className="text-[9px] font-bold text-white/50 truncate max-w-[200px]">{selectedTest?.name}</span>
                     </div>
                 </div>
 
                 {/* Center: Skill Selector */}
                 <div className="flex items-center justify-center flex-1 min-w-0 px-2">
-                    <div className="bg-white/5 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl flex gap-0.5 sm:gap-1 border border-white/10">
-                        {(["listening", "reading", "writing"] as const).map(skill => {
-                            return (
-                                <button
-                                    key={skill}
-                                    onClick={() => {
-                                        setCurrentSkill(skill);
-                                        setIsPlaying(false);
-                                        setActiveSectionIdx(0);
-                                    }}
-                                    className={`relative px-2.5 sm:px-4 md:px-7 py-1.5 sm:py-2 md:py-3 rounded-lg sm:rounded-xl text-[7px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wider sm:tracking-widest transition-all ${currentSkill === skill ? "bg-primary text-white shadow-xl" : "text-slate-400 hover:text-white"}`}
-                                >
-                                    {skill}
-                                </button>
-                            );
-                        })}
+                    <div className="bg-white/5 p-0.5 sm:p-1 rounded-lg sm:rounded-xl flex gap-0.5 border border-white/10">
+                        {(["listening", "reading", "writing"] as const).map(skill => (
+                            <button
+                                key={skill}
+                                onClick={() => {
+                                    setCurrentSkill(skill);
+                                    setIsPlaying(false);
+                                    setActiveSectionIdx(0);
+                                }}
+                                className={`px-2.5 sm:px-4 md:px-6 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[7px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all ${currentSkill === skill ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-white"}`}
+                            >
+                                {skill}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
                 {/* Right: Timer + Submit */}
-                <div className="flex items-center gap-2 sm:gap-3 md:gap-6 shrink-0">
-                    <div className="hidden sm:flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-white/10">
-                        <Clock size={16} className="text-primary" />
-                        <span className="font-mono text-lg sm:text-xl md:text-2xl font-black tabular-nums">{formatTime(currentTime)}</span>
+                <div className="flex items-center gap-1.5 sm:gap-2 md:gap-4 shrink-0">
+                    <div className="flex items-center gap-1.5 sm:gap-2 bg-white/5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-white/10">
+                        <Clock size={12} className="text-primary hidden sm:block" />
+                        <span className="font-mono text-sm sm:text-base md:text-lg font-black tabular-nums">{formatTime(currentTime)}</span>
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className="bg-primary hover:bg-red-700 text-white px-3 sm:px-5 md:px-8 py-2 sm:py-2.5 md:py-3.5 rounded-lg sm:rounded-xl md:rounded-2xl font-black text-[7px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.2em] transition-all shadow-2xl shadow-primary/20 whitespace-nowrap"
+                        className="bg-primary hover:bg-red-700 text-white px-2.5 sm:px-4 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-black text-[7px] sm:text-[9px] md:text-[10px] uppercase tracking-wider transition-all shadow-lg shadow-primary/20 whitespace-nowrap"
                     >
                         {t.test.testing.submit}
                     </button>
                 </div>
             </div>
 
-            {/* Question Tracker Bar — below navbar (only for listening, reading has its own) */}
+            {/* Question Tracker Bar — compact, only for listening */}
             {currentSkill === 'listening' && selectedTest && (() => {
                 const skillData = selectedTest[currentSkill];
                 const sections = skillData?.sections || [];
-                const isListening = currentSkill === 'listening';
                 return (
-                    <div className="bg-white/95 backdrop-blur-sm border-b border-slate-200 shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                        <div className="flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 overflow-x-auto no-scrollbar">
-                            {/* Prev button */}
+                    <div className="bg-white/95 backdrop-blur-sm border-b border-slate-200 shrink-0">
+                        <div className="flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-2 py-1.5 sm:py-2 overflow-x-auto no-scrollbar">
+                            {/* Prev */}
                             <button
                                 onClick={() => activeSectionIdx > 0 && setActiveSectionIdx(activeSectionIdx - 1)}
                                 disabled={activeSectionIdx === 0}
-                                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-                                    activeSectionIdx === 0
-                                        ? "text-slate-200 cursor-not-allowed"
-                                        : "text-slate-500 hover:bg-slate-100 hover:text-primary"
-                                }`}
+                                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === 0 ? "text-slate-200 cursor-not-allowed" : "text-slate-500 hover:bg-slate-100 hover:text-primary"}`}
                             >
-                                <ChevronLeft size={18} />
+                                <ChevronLeft size={14} />
                             </button>
 
-                            {/* Section label pill */}
-                            <button
-                                className="flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-wider shrink-0 shadow-md"
-                            >
+                            {/* Section pill */}
+                            <button className="flex items-center px-2.5 sm:px-3 py-1 rounded-full bg-primary text-white text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider shrink-0 shadow-sm">
                                 Section {activeSectionIdx + 1}
                             </button>
 
-                            {/* Question number buttons for active section */}
+                            {/* Question numbers */}
                             {(() => {
-                                const s = isListening ? activeSectionIdx * 10 + 1 : (activeSectionIdx === 0 ? 1 : activeSectionIdx === 1 ? 14 : 27);
-                                const e = isListening ? (activeSectionIdx + 1) * 10 : (activeSectionIdx === 0 ? 13 : activeSectionIdx === 1 ? 26 : 40);
-                                const partTotal = e - s + 1;
+                                const s = activeSectionIdx * 10 + 1;
+                                const e = (activeSectionIdx + 1) * 10;
                                 return (
-                                    <div className="flex items-center gap-[3px] sm:gap-1 md:gap-1.5">
-                                        {Array.from({ length: partTotal }, (__, i) => s + i).map((q) => {
+                                    <div className="flex items-center gap-[2px] sm:gap-1">
+                                        {Array.from({ length: e - s + 1 }, (__, i) => s + i).map(q => {
                                             const isAnswered = !!answers[currentSkill][q];
                                             return (
                                                 <button
                                                     key={q}
                                                     onClick={() => scrollToQuestion(q)}
-                                                    className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-md sm:rounded-lg flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold transition-all duration-200 ${
-                                                        isAnswered
-                                                            ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600"
-                                                            : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
-                                                    }`}
+                                                    className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md flex items-center justify-center text-[9px] sm:text-[10px] md:text-xs font-bold transition-all ${isAnswered ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-400 hover:bg-slate-200"}`}
                                                 >
                                                     {q}
                                                 </button>
@@ -1033,17 +1042,13 @@ export default function TestPage() {
                                 );
                             })()}
 
-                            {/* Next button */}
+                            {/* Next */}
                             <button
                                 onClick={() => activeSectionIdx < sections.length - 1 && setActiveSectionIdx(activeSectionIdx + 1)}
                                 disabled={activeSectionIdx === sections.length - 1}
-                                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-                                    activeSectionIdx === sections.length - 1
-                                        ? "text-slate-200 cursor-not-allowed"
-                                        : "text-slate-500 hover:bg-slate-100 hover:text-primary"
-                                }`}
+                                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === sections.length - 1 ? "text-slate-200 cursor-not-allowed" : "text-slate-500 hover:bg-slate-100 hover:text-primary"}`}
                             >
-                                <ChevronRight size={18} />
+                                <ChevronRight size={14} />
                             </button>
                         </div>
                     </div>
@@ -1062,35 +1067,35 @@ export default function TestPage() {
             ) : currentSkill === 'listening' && selectedTest ? (
                 /* ── LISTENING: Full-width single page with audio player ── */
                 <div className="flex-1 flex flex-col overflow-hidden relative">
-                    {/* Audio Player Bar */}
+                    {/* Audio Player Bar — slim */}
                     {(() => {
                         const section = selectedTest.listening?.sections?.[activeSectionIdx];
                         if (!section?.audioUrl) return null;
                         const pct = audioDuration > 0 ? (audioProgress / audioDuration) * 100 : 0;
                         return (
-                            <div className="bg-slate-900 shrink-0 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center gap-3 sm:gap-5 border-b border-white/5">
+                            <div className="bg-slate-900 shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3 border-b border-white/5">
                                 <button
                                     onClick={() => toggleAudio(section.audioUrl)}
                                     disabled={listeningPhase === 'prep'}
-                                    className={`w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 transition-all ${
+                                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
                                         listeningPhase === 'prep'
                                             ? 'bg-white/5 text-white/20 cursor-not-allowed'
                                             : isPlaying
-                                                ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105'
+                                                ? 'bg-primary text-white shadow-md shadow-primary/30'
                                                 : 'bg-white/10 text-white hover:bg-white/20'
                                     }`}
                                 >
-                                    {isPlaying ? <Pause size={18} /> : <Play size={18} />}
+                                    {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                                 </button>
 
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between mb-1">
-                                        <span className="text-[9px] sm:text-[10px] font-black text-white/60 uppercase tracking-widest truncate">{section.title}</span>
-                                        <span className="text-[9px] sm:text-[10px] font-mono text-white/40 tabular-nums shrink-0 ml-2">
+                                    <div className="flex items-center justify-between mb-0.5">
+                                        <span className="text-[8px] sm:text-[9px] font-bold text-white/50 uppercase tracking-wider truncate">{section.title}</span>
+                                        <span className="text-[8px] sm:text-[9px] font-mono text-white/30 tabular-nums shrink-0 ml-2">
                                             {formatTime(Math.floor(audioProgress))} / {formatTime(Math.floor(audioDuration))}
                                         </span>
                                     </div>
-                                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-gradient-to-r from-primary to-red-400 rounded-full transition-all duration-300"
                                             style={{ width: `${pct}%` }}
@@ -1098,53 +1103,52 @@ export default function TestPage() {
                                     </div>
                                 </div>
 
-                                <Volume2 size={14} className="text-white/30 shrink-0 hidden sm:block" />
+                                <Volume2 size={12} className="text-white/20 shrink-0 hidden sm:block" />
                             </div>
                         );
                     })()}
 
-                    {/* Listening Content — Full width */}
+                    {/* Listening Content — Full width, max content space */}
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
-                        <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 py-6 sm:py-8 md:py-10 pb-32">
+                        <div className="max-w-4xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 pb-24">
                             {renderAnswerSheet()}
                         </div>
                     </div>
 
-                    {/* Preparation Overlay */}
+                    {/* Preparation Overlay — semi-transparent so questions visible behind */}
                     <AnimatePresence>
                         {listeningPhase === 'prep' && (
                             <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="absolute inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 20 }}
+                                className="absolute bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-slate-900 via-slate-900/95 to-transparent"
                             >
-                                <motion.div
-                                    initial={{ scale: 0.9, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={{ scale: 0.9, opacity: 0 }}
-                                    className="bg-white rounded-3xl sm:rounded-[2.5rem] p-8 sm:p-12 max-w-md mx-4 text-center shadow-2xl"
-                                >
-                                    <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                                        <Headphones size={36} className="text-primary" />
+                                <div className="px-4 sm:px-6 py-4 sm:py-6 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                                            <Headphones size={20} className="text-primary" />
+                                        </div>
+                                        <div className="text-white">
+                                            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/60">
+                                                Chuẩn bị — Section {activeSectionIdx + 1}
+                                            </p>
+                                            <p className="text-xs sm:text-sm text-white/80">Lướt qua câu hỏi trước khi audio bắt đầu</p>
+                                        </div>
                                     </div>
-                                    <h3 className="text-xl sm:text-2xl font-heading font-black text-accent mb-2">
-                                        Preparation Time
-                                    </h3>
-                                    <p className="text-sm text-slate-500 mb-6">
-                                        Read the questions for <strong>Section {activeSectionIdx + 1}</strong> before the audio begins.
-                                    </p>
-                                    <div className="text-5xl sm:text-6xl font-heading font-black text-primary mb-8 tabular-nums">
-                                        0:{listeningPrepTime < 10 ? '0' : ''}{listeningPrepTime}
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="text-3xl sm:text-4xl font-heading font-black text-primary tabular-nums min-w-[70px] text-center">
+                                            0:{listeningPrepTime < 10 ? '0' : ''}{listeningPrepTime}
+                                        </div>
+                                        <button
+                                            onClick={skipPrep}
+                                            className="px-4 sm:px-6 py-2 sm:py-2.5 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-red-700 transition-all shadow-lg shadow-primary/30 flex items-center gap-2"
+                                        >
+                                            <Play size={14} />
+                                            Bắt đầu ngay
+                                        </button>
                                     </div>
-                                    <button
-                                        onClick={skipPrep}
-                                        className="px-8 sm:px-10 py-3.5 sm:py-4 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-primary/20 flex items-center gap-3 mx-auto"
-                                    >
-                                        <Play size={16} />
-                                        Start Now
-                                    </button>
-                                </motion.div>
+                                </div>
                             </motion.div>
                         )}
                     </AnimatePresence>
