@@ -16,11 +16,15 @@ export default function BlogContent({ pageData }: { pageData: any }) {
     const [activeTab, setActiveTab] = useState("");
     const [search, setSearch] = useState("");
 
-    // Extract dynamic content - Prioritize translations
+    // Extract hero data from pageData (from admin) - priority 1
+    const heroSection = pageData?.sections?.find((s: any) => s.type === 'blog-hero')?.content;
+    const newsletterSection = pageData?.sections?.find((s: any) => s.type === 'blog-newsletter')?.content;
+
+    // Extract dynamic content - Prioritize pageData from admin, then translations
     const hero = {
-        title: t.blogPage?.hero?.title || (language === "vi" ? "Góc Tri Thức <br /> Academic Insights" : "Knowledge Hub <br /> Academic Insights"),
-        subtitle: t.blogPage?.hero?.subtitle || "Knowledge Navigator & Editorial",
-        description: t.blogPage?.hero?.description || (language === "vi"
+        title: heroSection?.title || t.blogPage?.hero?.title || (language === "vi" ? "Góc Tri Thức <br /> Academic Insights" : "Knowledge Hub <br /> Academic Insights"),
+        subtitle: heroSection?.subtitle || t.blogPage?.hero?.subtitle || "Knowledge Navigator & Editorial",
+        description: heroSection?.description || t.blogPage?.hero?.description || (language === "vi"
             ? "Chia sẻ những kinh nghiệm, phương pháp và lộ trình học thuật quý báu từ đội ngũ chuyên gia MA.TESOL của PTN English."
             : "Sharing valuable experiences, methods, and academic pathways from PTN English's MA.TESOL expert team.")
     };
@@ -39,9 +43,9 @@ export default function BlogContent({ pageData }: { pageData: any }) {
         }
     }, [language, activeTab]);
     const newsletter = {
-        title: t.blogPage?.newsletter?.title || (language === "vi" ? "Đăng ký nhận Academic Insights định kỳ" : "Subscribe to Academic Insights"),
-        description: t.blogPage?.newsletter?.description || (language === "vi" ? "Cập nhật những thay đổi mới nhất về đề thi IELTS và các chương trình học bổng du học Châu Âu ngay hôm nay." : "Get the latest updates on IELTS exams and scholarship programs for studying in Europe today."),
-        buttonText: t.blogPage?.newsletter?.buttonText || (language === "vi" ? "Đăng Ký Ngay" : "Subscribe Now")
+        title: newsletterSection?.title || t.blogPage?.newsletter?.title || (language === "vi" ? "Đăng ký nhận Academic Insights định kỳ" : "Subscribe to Academic Insights"),
+        description: newsletterSection?.description || t.blogPage?.newsletter?.description || (language === "vi" ? "Cập nhật những thay đổi mới nhất về đề thi IELTS và các chương trình học bổng du học Châu Âu ngay hôm nay." : "Get the latest updates on IELTS exams and scholarship programs for studying in Europe today."),
+        buttonText: newsletterSection?.buttonText || t.blogPage?.newsletter?.buttonText || (language === "vi" ? "Đăng Ký Ngay" : "Subscribe Now")
     };
 
     useEffect(() => {
