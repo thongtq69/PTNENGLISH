@@ -11,9 +11,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import FileUpload from './shared/FileUpload';
 import AdvancedEditor from './shared/AdvancedEditor';
 import { convertScannedText } from '@/lib/testUtils';
+import { generateTag, type QuestionType } from '@/lib/questionParser';
+import QuestionGuide from './QuestionGuide';
 
 interface TestSection {
     title: string;
+    passage?: string;
     content: string;
     answers: Record<string, string>;
     questionsCount: number;
@@ -257,15 +260,7 @@ export default function MockTestManager() {
                                             {test[activeSkill].sections[activeSectionIdx] ? (
                                                 <div className="space-y-8 animate-in fade-in duration-500">
                                                     <div className="space-y-4">
-                                                        <div className="bg-primary/10 border border-primary/20 p-4 rounded-2xl mb-6">
-                                                            <p className="text-[9px] font-black text-primary uppercase mb-1 flex items-center gap-2"><Info size={12} /> Hướng dẫn tạo đề:</p>
-                                                            <p className="text-[10px] text-slate-400 leading-relaxed font-body">
-                                                                1. Tải lên file PDF, Word hoặc Ảnh đề thi tương ứng.<br />
-                                                                2. Copy nội dung văn bản (đã scan) vào ô soạn thảo.<br />
-                                                                3. Chèn tag <strong>[Q1]</strong>, <strong>[Q2]</strong>... vào vị trí cần điền đáp án.<br />
-                                                                4. Nhập đáp án đúng vào bảng Answer Keys phía dưới.
-                                                            </p>
-                                                        </div>
+                                                        <QuestionGuide />
                                                         <label className="text-[10px] font-black text-slate-500 uppercase">Section Title</label>
                                                         <input
                                                             value={test[activeSkill].sections[activeSectionIdx].title}
@@ -277,6 +272,28 @@ export default function MockTestManager() {
                                                             className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white text-lg font-bold"
                                                         />
                                                     </div>
+
+                                                    {/* Reading Passage Editor - only for reading skill */}
+                                                    {activeSkill === 'reading' && (
+                                                        <div className="space-y-4">
+                                                            <div className="bg-blue-500/10 border border-blue-500/20 p-4 rounded-2xl">
+                                                                <p className="text-[9px] font-black text-blue-400 uppercase mb-1 flex items-center gap-2"><BookOpen size={12} /> Bài đọc (Reading Passage)</p>
+                                                                <p className="text-[10px] text-slate-400 leading-relaxed font-body">
+                                                                    Paste nội dung bài đọc vào đây. Học viên sẽ thấy bài đọc ở panel bên trái, câu hỏi ở panel bên phải.
+                                                                </p>
+                                                            </div>
+                                                            <label className="text-[10px] font-black text-slate-500 uppercase">Reading Passage Content (hiển thị bên trái)</label>
+                                                            <AdvancedEditor
+                                                                value={test[activeSkill].sections[activeSectionIdx].passage || ''}
+                                                                onChange={val => {
+                                                                    const updated = { ...test };
+                                                                    updated[activeSkill].sections[activeSectionIdx].passage = val;
+                                                                    updateTest(updated);
+                                                                }}
+                                                                placeholder="Paste bài đọc vào đây (hỗ trợ copy từ Word, Docs...)"
+                                                            />
+                                                        </div>
+                                                    )}
 
                                                     <div className="space-y-4">
                                                         <div className="flex justify-between items-center">
@@ -303,6 +320,71 @@ export default function MockTestManager() {
                                                                 <RefreshCw size={12} /> Convert Scanned Text
                                                             </button>
                                                         </div>
+
+                                                        {/* ═══ Question Type Toolbar ═══ */}
+                                                        <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-4 space-y-3">
+                                                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                                                <Layout size={11} /> Insert Question Tag — 14 IELTS Question Types
+                                                            </p>
+                                                            <div className="flex flex-wrap gap-2">
+                                                                {([
+                                                                    { type: "fill" as QuestionType, label: "Fill Blank", desc: "Sentence/Note/Table/Diagram/Short Answer", color: "bg-slate-700 hover:bg-slate-600" },
+                                                                    { type: "mc" as QuestionType, label: "MC (1)", desc: "Multiple Choice single", color: "bg-blue-900 hover:bg-blue-800" },
+                                                                    { type: "mcm" as QuestionType, label: "MC (Multi)", desc: "Multiple Choice multi-answer", color: "bg-blue-800 hover:bg-blue-700" },
+                                                                    { type: "tfng" as QuestionType, label: "T/F/NG", desc: "True False Not Given", color: "bg-emerald-900 hover:bg-emerald-800" },
+                                                                    { type: "ynng" as QuestionType, label: "Y/N/NG", desc: "Yes No Not Given", color: "bg-green-900 hover:bg-green-800" },
+                                                                    { type: "mh" as QuestionType, label: "Match Head", desc: "Matching Headings", color: "bg-purple-900 hover:bg-purple-800" },
+                                                                    { type: "mi" as QuestionType, label: "Match Info", desc: "Matching Information", color: "bg-violet-900 hover:bg-violet-800" },
+                                                                    { type: "mf" as QuestionType, label: "Match Feat", desc: "Matching Features", color: "bg-indigo-900 hover:bg-indigo-800" },
+                                                                    { type: "mse" as QuestionType, label: "Match End", desc: "Matching Sentence Endings", color: "bg-fuchsia-900 hover:bg-fuchsia-800" },
+                                                                    { type: "sc" as QuestionType, label: "Word List", desc: "Summary Completion (word list)", color: "bg-amber-900 hover:bg-amber-800" },
+                                                                ]).map(({ type, label, desc, color }) => (
+                                                                    <button
+                                                                        key={type}
+                                                                        type="button"
+                                                                        title={desc}
+                                                                        onClick={() => {
+                                                                            const qNum = window.prompt(`Question number for "${label}":`);
+                                                                            if (!qNum) return;
+                                                                            const idx = parseInt(qNum, 10);
+                                                                            if (isNaN(idx)) return;
+
+                                                                            let options: string[] | undefined;
+                                                                            let maxSelect: number | undefined;
+
+                                                                            if (["mc", "mcm", "mh", "mi", "mf", "mse", "sc"].includes(type)) {
+                                                                                const raw = window.prompt(
+                                                                                    type === "sc"
+                                                                                        ? 'Enter word list (comma-separated):\ne.g. fossil,solar,wind,nuclear'
+                                                                                        : 'Enter options (comma-separated):\ne.g. A,B,C,D'
+                                                                                );
+                                                                                if (!raw) return;
+                                                                                options = raw.split(",").map(s => s.trim()).filter(Boolean);
+                                                                            }
+
+                                                                            if (type === "mcm") {
+                                                                                const ms = window.prompt("How many answers to select? (default 2):");
+                                                                                maxSelect = ms ? parseInt(ms, 10) || 2 : 2;
+                                                                            }
+
+                                                                            const tag = generateTag(type, idx, options, maxSelect);
+                                                                            const currentContent = test[activeSkill].sections[activeSectionIdx].content || "";
+                                                                            const updated = { ...test };
+                                                                            updated[activeSkill].sections[activeSectionIdx].content = currentContent + "\n" + tag;
+                                                                            updateTest(updated);
+                                                                        }}
+                                                                        className={`${color} text-white/80 hover:text-white px-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all border border-white/5`}
+                                                                    >
+                                                                        {label}
+                                                                    </button>
+                                                                ))}
+                                                            </div>
+                                                            <p className="text-[8px] text-slate-600 leading-relaxed">
+                                                                Click a type → enter question number → enter options (if needed) → tag is appended to content.
+                                                                Tags: <code className="text-primary">[Q1]</code> <code className="text-blue-400">[MC1:A,B,C,D]</code> <code className="text-emerald-400">[TFNG1]</code> <code className="text-purple-400">[MH1:i,ii,iii]</code> <code className="text-amber-400">[SC1:word1,word2]</code> etc.
+                                                            </p>
+                                                        </div>
+
                                                         <AdvancedEditor
                                                             value={test[activeSkill].sections[activeSectionIdx].content}
                                                             onChange={val => {

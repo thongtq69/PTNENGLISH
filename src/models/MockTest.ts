@@ -2,7 +2,8 @@ import mongoose, { Schema } from 'mongoose';
 
 const TestSectionSchema = new Schema({
     title: String,
-    content: String,
+    passage: String, // Rich text reading passage (HTML) - for split-view display
+    content: String, // Interactive questions content with [Q1], [Q2] tags
     answers: { type: Map, of: String },
     questionsCount: Number,
     // For Listening

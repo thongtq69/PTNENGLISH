@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
@@ -12,6 +12,17 @@ import {
     CheckCircle2, ChevronLeft, Volume2, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
+import ReadingTestView from "@/components/test/ReadingTestView";
+import { parseContent } from "@/lib/questionParser";
+import {
+    FillBlank,
+    MultipleChoice,
+    MultipleChoiceMulti,
+    TrueFalseNG,
+    YesNoNG,
+    MatchingDropdown,
+    SummaryWordList,
+} from "@/components/test/questions";
 import dynamic from "next/dynamic";
 const ModernPDFViewer = dynamic(() => import("@/components/ModernPDFViewer"), {
     ssr: false,
@@ -26,6 +37,7 @@ import { Highlighter, Eraser } from "lucide-react";
 
 interface TestSection {
     title: string;
+    passage?: string;
     content: string;
     answers: Record<string, string>;
     questionsCount: number;
@@ -85,10 +97,10 @@ export default function TestPage() {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const scrollRefs = useRef<Record<number, HTMLElement | null>>({});
 
-    // Selection/Highlight Logic
+    // Selection/Highlight Logic (skip for reading - ReadingTestView handles its own)
     useEffect(() => {
         const handleGlobalMouseUp = () => {
-            if (!isHighlighterActive) return;
+            if (!isHighlighterActive || currentSkill === 'reading') return;
             const selection = window.getSelection();
             const selectedText = selection?.toString().trim();
 
@@ -131,7 +143,7 @@ export default function TestPage() {
         return `${m}:${s < 10 ? "0" : ""}${s}`;
     };
 
-    const handleAnswerChange = (skill: string, qIdx: number, val: string) => {
+    const handleAnswerChange = useCallback((skill: string, qIdx: number, val: string) => {
         setAnswers(prev => ({
             ...prev,
             [skill]: {
@@ -139,7 +151,11 @@ export default function TestPage() {
                 [qIdx]: val
             }
         }));
-    };
+    }, []);
+
+    const handleReadingAnswerChange = useCallback((qIdx: number, val: string) => {
+        handleAnswerChange('reading', qIdx, val);
+    }, [handleAnswerChange]);
 
     const toggleAudio = (url?: string) => {
         if (!audioRef.current || !url) return;
@@ -201,43 +217,42 @@ export default function TestPage() {
         const highlightKey = `${skill}-${activeSectionIdx}`;
         if (highlights[highlightKey]) {
             highlights[highlightKey].forEach(text => {
-                // escape regex
                 const escapedText = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(`(${escapedText})`, 'gi');
                 highlightedContent = highlightedContent.replace(regex, '<mark class="highlight-yellow">$1</mark>');
             });
         }
 
-        const parts = highlightedContent.split(/(\[Q\d+\])/g);
+        const parts = parseContent(highlightedContent);
+        const setRef = (qIdx: number) => (el: HTMLElement | null) => { scrollRefs.current[qIdx] = el; };
+        const handleChange = (qIdx: number, val: string) => handleAnswerChange(skill, qIdx, val);
 
         return (
-            <div
-                className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? 'cursor-text' : ''}`}
-            >
+            <div className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? 'cursor-text' : ''}`}>
                 {parts.map((part, i) => {
-                    const match = part.match(/\[Q(\d+)\]/);
-                    if (match) {
-                        const qIdx = parseInt(match[1]);
-                        return (
-                            <span
-                                key={i}
-                                ref={el => { scrollRefs.current[qIdx] = el; }}
-                                className="inline-flex items-center bg-slate-50 border-2 border-slate-200 focus-within:border-primary focus-within:bg-white transition-all rounded-lg shadow-sm pr-1 overflow-hidden h-9 mx-1 align-middle"
-                            >
-                                <div className={`px-2 h-full flex items-center justify-center text-[10px] font-black border-r border-slate-200 transition-colors ${answers[skill][qIdx] ? 'bg-primary text-white border-primary' : 'bg-slate-100 text-slate-400'}`}>
-                                    {qIdx}
-                                </div>
-                                <input
-                                    type="text"
-                                    className="flex-1 bg-transparent outline-none px-3 py-1.5 text-sm font-black text-primary w-24 md:w-32"
-                                    value={answers[skill][qIdx] || ""}
-                                    onChange={(e) => handleAnswerChange(skill, qIdx, e.target.value)}
-                                    placeholder=""
-                                />
-                            </span>
-                        );
+                    if (part.kind === "html") {
+                        return <span key={i} dangerouslySetInnerHTML={{ __html: part.html || "" }} />;
                     }
-                    return <span key={i} dangerouslySetInnerHTML={{ __html: part }} />;
+                    const q = part.question!;
+                    const val = answers[skill][q.qIdx] || "";
+
+                    switch (q.type) {
+                        case "mc":
+                            return <MultipleChoice key={i} qIdx={q.qIdx} options={q.options || ["A","B","C","D"]} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                        case "mcm":
+                            return <MultipleChoiceMulti key={i} qIdx={q.qIdx} options={q.options || ["A","B","C","D","E"]} maxSelect={q.maxSelect || 2} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                        case "tfng":
+                            return <TrueFalseNG key={i} qIdx={q.qIdx} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                        case "ynng":
+                            return <YesNoNG key={i} qIdx={q.qIdx} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                        case "mh": case "mi": case "mf": case "mse":
+                            return <MatchingDropdown key={i} qIdx={q.qIdx} variant={q.type} options={q.options || []} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                        case "sc":
+                            return <SummaryWordList key={i} qIdx={q.qIdx} options={q.options || []} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                        case "fill":
+                        default:
+                            return <FillBlank key={i} qIdx={q.qIdx} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
+                    }
                 })}
             </div>
         );
@@ -525,108 +540,118 @@ export default function TestPage() {
                 </div>
             </div>
 
-            {/* Main Content Split View or Single View on Mobile */}
-            <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
-                {/* PDF Block */}
-                <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "flex-1 min-w-0" : "w-0")}`}>
-                    <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10 shrink-0">
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
-                            <FileText size={12} /> Original PDF Exam
-                        </span>
-                        {!isMobile && <button onClick={() => setIsSidebarOpen(false)} className="text-slate-300 hover:text-accent"><Minimize2 size={14} /></button>}
-                    </div>
-                    <div className="flex-1 bg-slate-800 relative min-h-0 overflow-hidden">
-                        {(() => {
-                            const pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
+            {/* Main Content - Reading uses new split view */}
+            {currentSkill === 'reading' && selectedTest ? (
+                <ReadingTestView
+                    sections={selectedTest.reading.sections || []}
+                    activeSectionIdx={activeSectionIdx}
+                    onSectionChange={setActiveSectionIdx}
+                    answers={answers.reading}
+                    onAnswerChange={handleReadingAnswerChange}
+                />
+            ) : (
+                <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
+                    {/* PDF Block */}
+                    <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "flex-1 min-w-0" : "w-0")}`}>
+                        <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10 shrink-0">
+                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
+                                <FileText size={12} /> Original PDF Exam
+                            </span>
+                            {!isMobile && <button onClick={() => setIsSidebarOpen(false)} className="text-slate-300 hover:text-accent"><Minimize2 size={14} /></button>}
+                        </div>
+                        <div className="flex-1 bg-slate-800 relative min-h-0 overflow-hidden">
+                            {(() => {
+                                const pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
 
-                            if (!pdfUrl) {
+                                if (!pdfUrl) {
+                                    return (
+                                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
+                                            <FileText size={64} className="mb-6 opacity-10" />
+                                            <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
+                                        </div>
+                                    );
+                                }
+
                                 return (
-                                    <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
-                                        <FileText size={64} className="mb-6 opacity-10" />
-                                        <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
-                                    </div>
+                                    <ModernPDFViewer url={pdfUrl} />
                                 );
-                            }
-
-                            return (
-                                <ModernPDFViewer url={pdfUrl} />
-                            );
-                        })()}
+                            })()}
+                        </div>
                     </div>
-                </div>
 
-                {/* Answer Block */}
-                <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "flex-1 min-w-0 border-l border-slate-200")}`}>
-                    <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
-                        <div className="flex items-center gap-6">
-                            {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
+                    {/* Answer Block */}
+                    <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "flex-1 min-w-0 border-l border-slate-200")}`}>
+                        <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
+                            <div className="flex items-center gap-6">
+                                {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
 
-                            {/* Highlighting Tools */}
-                            <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
-                                <button
-                                    onClick={() => setIsHighlighterActive(!isHighlighterActive)}
-                                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${isHighlighterActive ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-accent'}`}
-                                >
-                                    <Highlighter size={12} /> {isHighlighterActive ? 'Highlighter ON' : 'Highlighter OFF'}
-                                </button>
-                                {highlights[`${currentSkill}-${activeSectionIdx}`]?.length > 0 && (
+                                {/* Highlighting Tools */}
+                                <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 shadow-inner">
                                     <button
-                                        onClick={() => setHighlights(prev => ({ ...prev, [`${currentSkill}-${activeSectionIdx}`]: [] }))}
-                                        className="p-1.5 text-slate-400 hover:text-red-500 transition-all"
-                                        title="Clear all highlights in this section"
+                                        onClick={() => setIsHighlighterActive(!isHighlighterActive)}
+                                        className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${isHighlighterActive ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-accent'}`}
                                     >
-                                        <Eraser size={14} />
+                                        <Highlighter size={12} /> {isHighlighterActive ? 'Highlighter ON' : 'Highlighter OFF'}
                                     </button>
+                                    {highlights[`${currentSkill}-${activeSectionIdx}`]?.length > 0 && (
+                                        <button
+                                            onClick={() => setHighlights(prev => ({ ...prev, [`${currentSkill}-${activeSectionIdx}`]: [] }))}
+                                            className="p-1.5 text-slate-400 hover:text-red-500 transition-all"
+                                            title="Clear all highlights in this section"
+                                        >
+                                            <Eraser size={14} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
+                                    <CheckCircle2 size={12} /> Active Response Area
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="hidden md:flex items-center gap-2">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    <span className="text-[9px] font-black text-emerald-600 uppercase">Live Saving</span>
+                                </div>
+                                {isMobile && (
+                                    <div className="md:hidden flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full">
+                                        <Clock size={10} className="text-primary" />
+                                        <span className="text-[10px] font-black text-accent">{formatTime(currentTime)}</span>
+                                    </div>
                                 )}
                             </div>
-
-                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
-                                <CheckCircle2 size={12} /> Active Response Area
-                            </span>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <div className="hidden md:flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span className="text-[9px] font-black text-emerald-600 uppercase">Live Saving</span>
+
+                        <div className="flex-1 overflow-y-auto p-4 md:p-12 custom-scrollbar pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed opacity-[0.98]">
+                            {renderAnswerSheet()}
+                        </div>
+
+                        {/* Question Tracker & Mobile Switcher */}
+                        <div className="h-24 md:h-28 bg-white border-t border-slate-200 px-4 md:px-10 flex items-center gap-3 shrink-0 relative">
+                            <TypographyHint current={currentSkill} />
+                            <div className="h-10 w-px bg-slate-100 mx-2 md:mx-4"></div>
+                            <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2.5 py-4">
+                                {Array.from({ length: 40 }).map((_, i) => {
+                                    const qIdx = i + 1;
+                                    const isAnswered = !!answers[currentSkill][qIdx];
+                                    return (
+                                        <button
+                                            key={qIdx}
+                                            onClick={() => scrollToQuestion(qIdx)}
+                                            className={`w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${isAnswered ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" : "bg-slate-50 text-slate-400 border border-slate-100 hover:border-slate-300"}`}
+                                        >
+                                            {qIdx}
+                                        </button>
+                                    );
+                                })}
                             </div>
-                            {isMobile && (
-                                <div className="md:hidden flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full">
-                                    <Clock size={10} className="text-primary" />
-                                    <span className="text-[10px] font-black text-accent">{formatTime(currentTime)}</span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="flex-1 overflow-y-auto p-4 md:p-12 custom-scrollbar pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed opacity-[0.98]">
-                        {renderAnswerSheet()}
-                    </div>
-
-                    {/* Question Tracker & Mobile Switcher */}
-                    <div className="h-24 md:h-28 bg-white border-t border-slate-200 px-4 md:px-10 flex items-center gap-3 shrink-0 relative">
-                        <TypographyHint current={currentSkill} />
-                        <div className="h-10 w-px bg-slate-100 mx-2 md:mx-4"></div>
-                        <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2.5 py-4">
-                            {Array.from({ length: 40 }).map((_, i) => {
-                                const qIdx = i + 1;
-                                const isAnswered = !!answers[currentSkill][qIdx];
-                                return (
-                                    <button
-                                        key={qIdx}
-                                        onClick={() => scrollToQuestion(qIdx)}
-                                        className={`w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${isAnswered ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" : "bg-slate-50 text-slate-400 border border-slate-100 hover:border-slate-300"}`}
-                                    >
-                                        {qIdx}
-                                    </button>
-                                );
-                            })}
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
 
-            {/* Mobile View Toggle */}
-            {isMobile && (
+            {/* Mobile View Toggle (not for reading - it has its own) */}
+            {isMobile && currentSkill !== 'reading' && (
                 <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] flex bg-slate-900/90 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-2xl">
                     <button
                         onClick={() => setViewMode('pdf')}
