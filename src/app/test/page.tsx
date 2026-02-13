@@ -7,7 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     BookOpen, Headphones, PenTool, Clock,
-    AlertCircle, ChevronRight, Send, Play,
+    AlertCircle, ChevronRight, Play,
     Pause, FileText, Maximize2, Minimize2,
     CheckCircle2, ChevronLeft, Volume2, RefreshCw
 } from "lucide-react";
@@ -67,6 +67,9 @@ export default function TestPage() {
     });
     const [highlights, setHighlights] = useState<Record<string, string[]>>({}); // skill-sectionIdx -> array of highlighted text
     const [isHighlighterActive, setIsHighlighterActive] = useState(false);
+    const [resultTab, setResultTab] = useState<"listening" | "reading" | "writing">("listening");
+    const [writingContact, setWritingContact] = useState({ name: "", phone: "", email: "" });
+    const [writingContactSubmitted, setWritingContactSubmitted] = useState(false);
 
     useEffect(() => {
         fetch("/api/mock-tests")
@@ -182,6 +185,106 @@ export default function TestPage() {
         if (confirm(t.test.testing.confirmSubmit)) {
             setStep(3);
         }
+    };
+
+    /* ── Compute reading score for results page ── */
+    const readingResults = (() => {
+        if (!selectedTest) return { score: 0, total: 40, details: [] as Array<{ q: number; userAnswer: string; correctAnswer: string; isCorrect: boolean }> };
+        const details: Array<{ q: number; userAnswer: string; correctAnswer: string; isCorrect: boolean }> = [];
+        const sections = selectedTest.reading?.sections || [];
+        sections.forEach((sec: TestSection, sIdx: number) => {
+            const sectionAnswers = sec.answers || {};
+            const qStart = sIdx === 0 ? 1 : sIdx === 1 ? 14 : 27;
+            const qEnd = sIdx === 0 ? 13 : sIdx === 1 ? 26 : 40;
+            for (let q = qStart; q <= qEnd; q++) {
+                const userRaw = (answers.reading[q] || "").trim();
+                const correctRaw = (sectionAnswers[String(q)] || "").trim();
+
+                // Normalize: for SC type "D - chemical elements" → just "D"
+                // For fill-in answers, compare case-insensitively
+                const normUser = userRaw.split(" - ")[0].trim().toUpperCase();
+                const normCorrect = correctRaw.split(" - ")[0].trim().toUpperCase();
+
+                // Handle multi-answer (MCM): "A,C" matches "A,C" or "C,A"
+                const userParts = normUser.split(",").map(s => s.trim()).filter(Boolean).sort();
+                const correctParts = normCorrect.split(",").map(s => s.trim()).filter(Boolean).sort();
+
+                const isCorrect = userParts.length > 0 && userParts.join(",") === correctParts.join(",");
+
+                // Display-friendly correct answer: for SC show full label, for others just the value
+                const displayCorrect = correctRaw;
+
+                details.push({
+                    q,
+                    userAnswer: userRaw || "—",
+                    correctAnswer: displayCorrect,
+                    isCorrect,
+                });
+            }
+        });
+        const score = details.filter(d => d.isCorrect).length;
+        return { score, total: 40, details };
+    })();
+
+    /* ── Compute listening score for results page ── */
+    const listeningResults = (() => {
+        if (!selectedTest) return { score: 0, total: 40, details: [] as Array<{ q: number; userAnswer: string; correctAnswer: string; isCorrect: boolean }> };
+        const details: Array<{ q: number; userAnswer: string; correctAnswer: string; isCorrect: boolean }> = [];
+        const sections = selectedTest.listening?.sections || [];
+        sections.forEach((sec: TestSection, sIdx: number) => {
+            const sectionAnswers = sec.answers || {};
+            const qStart = sIdx * 10 + 1;
+            const qEnd = (sIdx + 1) * 10;
+            for (let q = qStart; q <= qEnd; q++) {
+                const userRaw = (answers.listening[q] || "").trim();
+                const correctRaw = (sectionAnswers[String(q)] || "").trim();
+                const normUser = userRaw.split(" - ")[0].trim().toUpperCase();
+                const normCorrect = correctRaw.split(" - ")[0].trim().toUpperCase();
+                const userParts = normUser.split(",").map(s => s.trim()).filter(Boolean).sort();
+                const correctParts = normCorrect.split(",").map(s => s.trim()).filter(Boolean).sort();
+                const isCorrect = correctParts.length > 0 && userParts.length > 0 && userParts.join(",") === correctParts.join(",");
+                details.push({ q, userAnswer: userRaw || "—", correctAnswer: correctRaw, isCorrect });
+            }
+        });
+        const score = details.filter(d => d.isCorrect).length;
+        return { score, total: 40, details };
+    })();
+
+    /* ── IELTS band score estimation ── */
+    const getListeningBandScore = (raw: number): string => {
+        if (raw >= 39) return "9.0";
+        if (raw >= 37) return "8.5";
+        if (raw >= 35) return "8.0";
+        if (raw >= 32) return "7.5";
+        if (raw >= 30) return "7.0";
+        if (raw >= 26) return "6.5";
+        if (raw >= 23) return "6.0";
+        if (raw >= 18) return "5.5";
+        if (raw >= 16) return "5.0";
+        if (raw >= 13) return "4.5";
+        if (raw >= 10) return "4.0";
+        if (raw >= 8) return "3.5";
+        if (raw >= 6) return "3.0";
+        if (raw >= 4) return "2.5";
+        return "2.0";
+    };
+
+    const getBandScore = (raw: number): string => {
+        if (raw >= 39) return "9.0";
+        if (raw >= 37) return "8.5";
+        if (raw >= 35) return "8.0";
+        if (raw >= 33) return "7.5";
+        if (raw >= 30) return "7.0";
+        if (raw >= 27) return "6.5";
+        if (raw >= 23) return "6.0";
+        if (raw >= 19) return "5.5";
+        if (raw >= 15) return "5.0";
+        if (raw >= 13) return "4.5";
+        if (raw >= 10) return "4.0";
+        if (raw >= 8) return "3.5";
+        if (raw >= 6) return "3.0";
+        if (raw >= 4) return "2.5";
+        return "2.0";
     };
 
     const scrollToQuestion = (qIdx: number) => {
@@ -344,27 +447,289 @@ export default function TestPage() {
     };
 
     if (step === 3) {
+        const readingBand = getBandScore(readingResults.score);
+        const readingPct = Math.round((readingResults.score / readingResults.total) * 100);
+        const listeningBand = getListeningBandScore(listeningResults.score);
+        const listeningPct = Math.round((listeningResults.score / listeningResults.total) * 100);
+
+        // Check if listening/reading have answer keys
+        const hasListeningAnswers = (selectedTest?.listening?.sections || []).some((sec: TestSection) => Object.keys(sec.answers || {}).length > 0);
+        const hasReadingAnswers = (selectedTest?.reading?.sections || []).some((sec: TestSection) => Object.keys(sec.answers || {}).length > 0);
+
+        const renderScoreCard = (
+            skillName: string,
+            band: string,
+            score: number,
+            total: number,
+            pct: number,
+            icon: React.ReactNode,
+            hasAnswers: boolean,
+            results: typeof readingResults,
+            sections: TestSection[],
+            getSectionRange: (sIdx: number) => [number, number],
+            sectionLabel: (idx: number) => string
+        ) => (
+            <>
+                {/* Score Header */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-white rounded-3xl sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl border border-slate-100 text-center mb-8 sm:mb-12"
+                >
+                    {!hasAnswers ? (
+                        <div className="flex flex-col items-center gap-4 py-6">
+                            <AlertCircle size={48} className="text-amber-400" />
+                            <p className="text-lg font-heading font-black text-accent">Chưa có đáp án cho phần {skillName}</p>
+                            <p className="text-sm text-slate-400">Đáp án sẽ được cập nhật sớm. Vui lòng quay lại sau.</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16">
+                            <div className="flex flex-col items-center">
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2">{skillName} Band</span>
+                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-gradient-to-br from-primary to-red-700 flex items-center justify-center shadow-2xl shadow-primary/30">
+                                    <span className="text-4xl sm:text-5xl font-heading font-black text-white">{band}</span>
+                                </div>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-2">Raw Score</span>
+                                <div className="flex items-baseline gap-1">
+                                    <span className="text-5xl sm:text-6xl font-heading font-black text-accent">{score}</span>
+                                    <span className="text-2xl font-bold text-slate-300">/{total}</span>
+                                </div>
+                                <span className="text-sm font-bold text-slate-400 mt-1">{pct}% correct</span>
+                            </div>
+                            <div className="flex flex-col items-center gap-3">
+                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400">Breakdown</span>
+                                <div className="flex gap-4">
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="w-3 h-3 rounded-full bg-emerald-500" />
+                                        <span className="text-xs font-bold text-slate-500">{score} correct</span>
+                                    </div>
+                                    <div className="flex items-center gap-1.5">
+                                        <div className="w-3 h-3 rounded-full bg-red-400" />
+                                        <span className="text-xs font-bold text-slate-500">{total - score} incorrect</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </motion.div>
+
+                {/* Detailed Results */}
+                {hasAnswers && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="bg-white rounded-3xl sm:rounded-[3rem] p-6 sm:p-10 shadow-xl border border-slate-100 mb-8 sm:mb-12"
+                    >
+                        <h3 className="text-xl sm:text-2xl font-heading font-black text-accent mb-6 sm:mb-8 flex items-center gap-3">
+                            {icon}
+                            {skillName} — Detailed Results
+                        </h3>
+
+                        {sections.map((sec: TestSection, sIdx: number) => {
+                            const [qStart, qEnd] = getSectionRange(sIdx);
+                            const sectionDetails = results.details.filter(d => d.q >= qStart && d.q <= qEnd);
+                            const sectionCorrect = sectionDetails.filter(d => d.isCorrect).length;
+                            const sectionTotal = sectionDetails.length;
+
+                            return (
+                                <div key={sIdx} className="mb-6 sm:mb-8 last:mb-0">
+                                    <div className="flex items-center justify-between mb-3 sm:mb-4">
+                                        <h4 className="text-sm sm:text-base font-heading font-black text-accent">{sec.title || sectionLabel(sIdx)}</h4>
+                                        <span className={`text-xs sm:text-sm font-black px-3 py-1.5 rounded-full ${sectionCorrect === sectionTotal ? "bg-emerald-100 text-emerald-700" : sectionCorrect >= sectionTotal * 0.7 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}>
+                                            {sectionCorrect}/{sectionTotal}
+                                        </span>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        {sectionDetails.map(({ q, userAnswer, correctAnswer, isCorrect }) => (
+                                            <div key={q} className={`flex items-center gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border transition-all ${isCorrect ? "bg-emerald-50 border-emerald-200" : "bg-red-50 border-red-200"}`}>
+                                                <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center text-[10px] sm:text-xs font-black shrink-0 ${isCorrect ? "bg-emerald-500 text-white" : "bg-red-400 text-white"}`}>
+                                                    {q}
+                                                </div>
+                                                <div className="flex-1 min-w-0 flex items-center gap-2 flex-wrap">
+                                                    <span className={`text-xs sm:text-sm font-bold truncate ${isCorrect ? "text-emerald-700" : "text-red-600 line-through"}`}>
+                                                        {userAnswer}
+                                                    </span>
+                                                    {!isCorrect && (
+                                                        <>
+                                                            <span className="text-slate-300 text-xs">→</span>
+                                                            <span className="text-xs sm:text-sm font-bold text-emerald-600 truncate">{correctAnswer}</span>
+                                                        </>
+                                                    )}
+                                                </div>
+                                                <div className="shrink-0">
+                                                    {isCorrect ? <CheckCircle2 size={16} className="text-emerald-500" /> : <AlertCircle size={16} className="text-red-400" />}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </motion.div>
+                )}
+            </>
+        );
+
         return (
             <main className="min-h-screen bg-slate-50">
                 <Header />
-                <div className="pt-32 pb-20 container mx-auto px-6 max-w-4xl text-center">
+                <div className="pt-28 sm:pt-32 pb-20 container mx-auto px-4 sm:px-6 max-w-5xl">
+                    {/* Tab Selector */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="bg-white rounded-[4rem] p-12 md:p-24 shadow-2xl border border-slate-100"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex justify-center mb-8 sm:mb-10"
                     >
-                        <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-10">
-                            <Send size={48} className="text-primary animate-pulse" />
+                        <div className="bg-white p-1.5 rounded-2xl flex gap-1 border border-slate-200 shadow-lg">
+                            {(["listening", "reading", "writing"] as const).map(tab => {
+                                const isActive = resultTab === tab;
+                                const Icon = tab === "listening" ? Headphones : tab === "reading" ? BookOpen : PenTool;
+                                return (
+                                    <button
+                                        key={tab}
+                                        onClick={() => setResultTab(tab)}
+                                        className={`flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all ${isActive ? "bg-primary text-white shadow-lg" : "text-slate-400 hover:text-slate-600 hover:bg-slate-50"}`}
+                                    >
+                                        <Icon size={14} />
+                                        {tab}
+                                    </button>
+                                );
+                            })}
                         </div>
-                        <h2 className="text-4xl md:text-5xl font-heading font-black text-accent mb-8">
-                            Submission <span className="text-primary">Successful!</span>
-                        </h2>
-                        <p className="text-slate-500 text-lg mb-12 font-body max-w-2xl mx-auto">
-                            {t.test.success.desc}
-                        </p>
+                    </motion.div>
+
+                    {/* Listening Tab */}
+                    {resultTab === "listening" && renderScoreCard(
+                        "Listening",
+                        listeningBand,
+                        listeningResults.score,
+                        listeningResults.total,
+                        listeningPct,
+                        <Headphones size={24} className="text-primary" />,
+                        hasListeningAnswers,
+                        listeningResults,
+                        selectedTest?.listening?.sections || [],
+                        (sIdx) => [sIdx * 10 + 1, (sIdx + 1) * 10],
+                        (idx) => `Section ${idx + 1}`
+                    )}
+
+                    {/* Reading Tab */}
+                    {resultTab === "reading" && renderScoreCard(
+                        "Reading",
+                        readingBand,
+                        readingResults.score,
+                        readingResults.total,
+                        readingPct,
+                        <BookOpen size={24} className="text-primary" />,
+                        hasReadingAnswers,
+                        readingResults,
+                        selectedTest?.reading?.sections || [],
+                        (sIdx) => [sIdx === 0 ? 1 : sIdx === 1 ? 14 : 27, sIdx === 0 ? 13 : sIdx === 1 ? 26 : 40],
+                        (idx) => `Passage ${idx + 1}`
+                    )}
+
+                    {/* Writing Tab — No auto-grading, collect contact info */}
+                    {resultTab === "writing" && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-white rounded-3xl sm:rounded-[3rem] p-8 sm:p-12 shadow-2xl border border-slate-100 mb-8 sm:mb-12"
+                        >
+                            <div className="text-center mb-8">
+                                <div className="w-20 h-20 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-6">
+                                    <PenTool size={36} className="text-amber-600" />
+                                </div>
+                                <h3 className="text-2xl sm:text-3xl font-heading font-black text-accent mb-3">
+                                    Writing — Chờ chấm bài
+                                </h3>
+                                <p className="text-slate-500 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
+                                    Bài Writing của bạn cần được giáo viên chấm thủ công. Vui lòng để lại thông tin liên hệ để chúng tôi gửi kết quả chấm bài cho bạn trong vòng <span className="font-bold text-primary">24 giờ</span>.
+                                </p>
+                            </div>
+
+                            {writingContactSubmitted ? (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center"
+                                >
+                                    <CheckCircle2 size={48} className="text-emerald-500 mx-auto mb-4" />
+                                    <h4 className="text-xl font-heading font-black text-emerald-700 mb-2">Đã gửi thành công!</h4>
+                                    <p className="text-emerald-600 text-sm">Chúng tôi sẽ liên hệ bạn sớm nhất với kết quả chấm bài Writing.</p>
+                                </motion.div>
+                            ) : (
+                                <div className="max-w-md mx-auto space-y-4">
+                                    <div>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Họ và tên *</label>
+                                        <input
+                                            type="text"
+                                            value={writingContact.name}
+                                            onChange={(e) => setWritingContact(prev => ({ ...prev, name: e.target.value }))}
+                                            placeholder="Nguyễn Văn A"
+                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-sm"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Số điện thoại *</label>
+                                        <input
+                                            type="tel"
+                                            value={writingContact.phone}
+                                            onChange={(e) => setWritingContact(prev => ({ ...prev, phone: e.target.value }))}
+                                            placeholder="0912 345 678"
+                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-sm"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Email</label>
+                                        <input
+                                            type="email"
+                                            value={writingContact.email}
+                                            onChange={(e) => setWritingContact(prev => ({ ...prev, email: e.target.value }))}
+                                            placeholder="email@example.com"
+                                            className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-sm"
+                                        />
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            if (!writingContact.name.trim() || !writingContact.phone.trim()) {
+                                                alert("Vui lòng điền họ tên và số điện thoại.");
+                                                return;
+                                            }
+                                            // TODO: Send to API
+                                            setWritingContactSubmitted(true);
+                                        }}
+                                        className="w-full py-4 bg-primary text-white rounded-xl font-black text-sm uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-primary/20 mt-2"
+                                    >
+                                        Gửi yêu cầu chấm bài
+                                    </button>
+                                </div>
+                            )}
+                        </motion.div>
+                    )}
+
+                    {/* Actions */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 }}
+                        className="flex flex-col sm:flex-row gap-4 justify-center"
+                    >
+                        <button
+                            onClick={() => {
+                                setStep(2);
+                                setCurrentSkill(resultTab);
+                            }}
+                            className="px-8 py-4 bg-white border-2 border-slate-200 text-slate-600 rounded-2xl font-black text-sm hover:border-primary hover:text-primary transition-all shadow-lg"
+                        >
+                            ← Review Answers
+                        </button>
                         <button
                             onClick={() => window.location.href = "/"}
-                            className="bg-accent text-white px-12 py-5 rounded-full font-bold shadow-xl hover:bg-slate-900 transition-all active:scale-95"
+                            className="px-8 py-4 bg-accent text-white rounded-2xl font-black text-sm shadow-xl hover:bg-slate-900 transition-all"
                         >
                             {t.test.success.backHome}
                         </button>
@@ -494,51 +859,129 @@ export default function TestPage() {
     return (
         <main className={`h-screen flex flex-col bg-slate-100 overflow-hidden relative`}>
             {/* Pro Navbar */}
-            <div className="bg-slate-900 min-h-[5rem] md:h-24 shrink-0 px-4 md:px-10 flex items-center justify-between text-white border-b border-white/5 relative z-[100] shadow-2xl">
-                <div className="flex items-center gap-4 md:gap-10">
+            <div className="bg-slate-900 h-14 sm:h-16 md:h-20 shrink-0 px-2 sm:px-4 md:px-10 flex items-center justify-between text-white border-b border-white/5 relative z-[100] shadow-2xl">
+                {/* Left: Logo + test info */}
+                <div className="flex items-center gap-2 sm:gap-4 md:gap-10 shrink-0">
                     <button className="cursor-pointer" onClick={() => window.location.href = "/"}>
-                        <span className="text-xl font-heading font-extrabold tracking-tighter">
+                        <span className="text-base sm:text-xl font-heading font-extrabold tracking-tighter whitespace-nowrap">
                             <span className="text-primary uppercase">PTN</span>
-                            <span className="uppercase text-white hidden sm:inline"> Simulator</span>
+                            <span className="uppercase text-white hidden md:inline"> Simulator</span>
                         </span>
                     </button>
-                    <div className="h-10 w-px bg-white/10 hidden lg:block"></div>
-                    <div className="hidden lg:flex flex-col">
+                    <div className="h-10 w-px bg-white/10 hidden xl:block"></div>
+                    <div className="hidden xl:flex flex-col">
                         <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-500">IELTS Academic</span>
-                        <span className="text-xs font-bold text-white">{selectedTest?.name}</span>
+                        <span className="text-xs font-bold text-white truncate max-w-[200px]">{selectedTest?.name}</span>
                     </div>
                 </div>
 
-                {/* Skill Selector - Responsive */}
-                <div className="absolute left-1/2 -translate-x-1/2 bg-white/5 p-1.5 rounded-2xl flex gap-1 border border-white/10 scale-90 md:scale-100">
-                    {(["listening", "reading", "writing"] as const).map(skill => (
-                        <button
-                            key={skill}
-                            onClick={() => {
-                                setCurrentSkill(skill);
-                                setIsPlaying(false);
-                                setActiveSectionIdx(0);
-                            }}
-                            className={`px-4 md:px-8 py-2 md:py-3 rounded-xl text-[9px] md:text-[10px] font-black uppercase tracking-widest transition-all ${currentSkill === skill ? "bg-primary text-white shadow-xl" : "text-slate-400 hover:text-white"}`}
-                        >
-                            {skill}
-                        </button>
-                    ))}
+                {/* Center: Skill Selector */}
+                <div className="flex items-center justify-center flex-1 min-w-0 px-2">
+                    <div className="bg-white/5 p-1 sm:p-1.5 rounded-xl sm:rounded-2xl flex gap-0.5 sm:gap-1 border border-white/10">
+                        {(["listening", "reading", "writing"] as const).map(skill => {
+                            return (
+                                <button
+                                    key={skill}
+                                    onClick={() => {
+                                        setCurrentSkill(skill);
+                                        setIsPlaying(false);
+                                        setActiveSectionIdx(0);
+                                    }}
+                                    className={`relative px-2.5 sm:px-4 md:px-7 py-1.5 sm:py-2 md:py-3 rounded-lg sm:rounded-xl text-[7px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wider sm:tracking-widest transition-all ${currentSkill === skill ? "bg-primary text-white shadow-xl" : "text-slate-400 hover:text-white"}`}
+                                >
+                                    {skill}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
 
-                <div className="flex items-center gap-3 md:gap-8">
-                    <div className="hidden sm:flex items-center gap-3 bg-white/5 px-6 py-3 rounded-2xl border border-white/10">
-                        <Clock size={20} className="text-primary" />
-                        <span className="font-mono text-2xl font-black tabular-nums">{formatTime(currentTime)}</span>
+                {/* Right: Timer + Submit */}
+                <div className="flex items-center gap-2 sm:gap-3 md:gap-6 shrink-0">
+                    <div className="hidden sm:flex items-center gap-2 sm:gap-3 bg-white/5 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl border border-white/10">
+                        <Clock size={16} className="text-primary" />
+                        <span className="font-mono text-lg sm:text-xl md:text-2xl font-black tabular-nums">{formatTime(currentTime)}</span>
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className="bg-primary hover:bg-red-700 text-white px-5 md:px-10 py-3 md:py-4 rounded-xl md:rounded-2xl font-black text-[10px] md:text-xs uppercase tracking-[0.2em] transition-all shadow-2xl shadow-primary/20"
+                        className="bg-primary hover:bg-red-700 text-white px-3 sm:px-5 md:px-8 py-2 sm:py-2.5 md:py-3.5 rounded-lg sm:rounded-xl md:rounded-2xl font-black text-[7px] sm:text-[10px] md:text-xs uppercase tracking-[0.1em] sm:tracking-[0.2em] transition-all shadow-2xl shadow-primary/20 whitespace-nowrap"
                     >
                         {t.test.testing.submit}
                     </button>
                 </div>
             </div>
+
+            {/* Question Tracker Bar — below navbar (only for listening, reading has its own) */}
+            {currentSkill === 'listening' && selectedTest && (() => {
+                const skillData = selectedTest[currentSkill];
+                const sections = skillData?.sections || [];
+                const isListening = currentSkill === 'listening';
+                return (
+                    <div className="bg-white/95 backdrop-blur-sm border-b border-slate-200 shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+                        <div className="flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 overflow-x-auto no-scrollbar">
+                            {/* Prev button */}
+                            <button
+                                onClick={() => activeSectionIdx > 0 && setActiveSectionIdx(activeSectionIdx - 1)}
+                                disabled={activeSectionIdx === 0}
+                                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+                                    activeSectionIdx === 0
+                                        ? "text-slate-200 cursor-not-allowed"
+                                        : "text-slate-500 hover:bg-slate-100 hover:text-primary"
+                                }`}
+                            >
+                                <ChevronLeft size={18} />
+                            </button>
+
+                            {/* Section label pill */}
+                            <button
+                                className="flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-wider shrink-0 shadow-md"
+                            >
+                                Section {activeSectionIdx + 1}
+                            </button>
+
+                            {/* Question number buttons for active section */}
+                            {(() => {
+                                const s = isListening ? activeSectionIdx * 10 + 1 : (activeSectionIdx === 0 ? 1 : activeSectionIdx === 1 ? 14 : 27);
+                                const e = isListening ? (activeSectionIdx + 1) * 10 : (activeSectionIdx === 0 ? 13 : activeSectionIdx === 1 ? 26 : 40);
+                                const partTotal = e - s + 1;
+                                return (
+                                    <div className="flex items-center gap-[3px] sm:gap-1 md:gap-1.5">
+                                        {Array.from({ length: partTotal }, (__, i) => s + i).map((q) => {
+                                            const isAnswered = !!answers[currentSkill][q];
+                                            return (
+                                                <button
+                                                    key={q}
+                                                    onClick={() => scrollToQuestion(q)}
+                                                    className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-md sm:rounded-lg flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold transition-all duration-200 ${
+                                                        isAnswered
+                                                            ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600"
+                                                            : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+                                                    }`}
+                                                >
+                                                    {q}
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                );
+                            })()}
+
+                            {/* Next button */}
+                            <button
+                                onClick={() => activeSectionIdx < sections.length - 1 && setActiveSectionIdx(activeSectionIdx + 1)}
+                                disabled={activeSectionIdx === sections.length - 1}
+                                className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+                                    activeSectionIdx === sections.length - 1
+                                        ? "text-slate-200 cursor-not-allowed"
+                                        : "text-slate-500 hover:bg-slate-100 hover:text-primary"
+                                }`}
+                            >
+                                <ChevronRight size={18} />
+                            </button>
+                        </div>
+                    </div>
+                );
+            })()}
 
             {/* Main Content - Reading uses new split view */}
             {currentSkill === 'reading' && selectedTest ? (
@@ -625,27 +1068,6 @@ export default function TestPage() {
                         <div className="flex-1 overflow-y-auto p-4 md:p-12 custom-scrollbar pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed opacity-[0.98]">
                             {renderAnswerSheet()}
                         </div>
-
-                        {/* Question Tracker & Mobile Switcher */}
-                        <div className="h-24 md:h-28 bg-white border-t border-slate-200 px-4 md:px-10 flex items-center gap-3 shrink-0 relative">
-                            <TypographyHint current={currentSkill} />
-                            <div className="h-10 w-px bg-slate-100 mx-2 md:mx-4"></div>
-                            <div className="flex-1 overflow-x-auto no-scrollbar flex items-center gap-2.5 py-4">
-                                {Array.from({ length: 40 }).map((_, i) => {
-                                    const qIdx = i + 1;
-                                    const isAnswered = !!answers[currentSkill][qIdx];
-                                    return (
-                                        <button
-                                            key={qIdx}
-                                            onClick={() => scrollToQuestion(qIdx)}
-                                            className={`w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-xl flex items-center justify-center text-[10px] font-black transition-all ${isAnswered ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" : "bg-slate-50 text-slate-400 border border-slate-100 hover:border-slate-300"}`}
-                                        >
-                                            {qIdx}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        </div>
                     </div>
                 </div>
             )}
@@ -705,10 +1127,3 @@ export default function TestPage() {
         </main>
     );
 }
-
-const TypographyHint = ({ current }: { current: string }) => (
-    <div className="flex flex-col shrink-0 min-w-[70px]">
-        <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Testing</span>
-        <span className="text-xs font-black text-primary uppercase tracking-tighter leading-none">{current}</span>
-    </div>
-);

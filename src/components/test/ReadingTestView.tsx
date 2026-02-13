@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from "
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Highlighter,
-  Eraser,
   StickyNote,
   X,
   BookOpen,
@@ -14,6 +13,9 @@ import {
   Maximize2,
   Minimize2,
   List,
+  ChevronLeft,
+  ChevronRight,
+  Trash2,
 } from "lucide-react";
 import { parseContent } from "@/lib/questionParser";
 import {
@@ -68,101 +70,77 @@ const PartNavBar = memo(function PartNavBar({
   scrollRefs: React.RefObject<Record<number, HTMLElement | null>>;
 }) {
   const totalAnswered = Object.values(answers).filter((v) => !!v).length;
-  const totalQuestions = 40;
 
   return (
-    <div className="bg-white border-t border-slate-200 shrink-0 shadow-[0_-2px_12px_rgba(0,0,0,0.04)]">
-      <div className="flex items-stretch">
-        {sections.map((_, idx) => {
-          const s = idx === 0 ? 1 : idx === 1 ? 14 : 27;
-          const e = idx === 0 ? 13 : idx === 1 ? 26 : 40;
-          const partAnswered = Array.from({ length: e - s + 1 }, (__, i) => s + i).filter((q) => !!answers[q]).length;
+    <div className="bg-white/95 backdrop-blur-sm border-t border-slate-200 shrink-0 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+      <div className="flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3 px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 overflow-x-auto no-scrollbar">
+        {/* Prev button */}
+        <button
+          onClick={() => activeSectionIdx > 0 && onSectionChange(activeSectionIdx - 1)}
+          disabled={activeSectionIdx === 0}
+          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+            activeSectionIdx === 0
+              ? "text-slate-200 cursor-not-allowed"
+              : "text-slate-500 hover:bg-slate-100 hover:text-primary"
+          }`}
+        >
+          <ChevronLeft size={18} />
+        </button>
+
+        {/* Paragraph label pill */}
+        <button
+          className="flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-wider shrink-0 shadow-md"
+        >
+          Paragraph {activeSectionIdx + 1}
+        </button>
+
+        {/* Question number buttons for active section */}
+        {(() => {
+          const s = activeSectionIdx === 0 ? 1 : activeSectionIdx === 1 ? 14 : 27;
+          const e = activeSectionIdx === 0 ? 13 : activeSectionIdx === 1 ? 26 : 40;
           const partTotal = e - s + 1;
-          const isActive = activeSectionIdx === idx;
-
           return (
-            <div key={idx} className={`flex-1 transition-all ${idx > 0 ? "border-l border-slate-200" : ""}`}>
-              {isActive ? (
-                /* Active part: show question number grid */
-                <div className="px-2 md:px-3 py-2 md:py-2.5">
-                  <div className="flex items-center gap-2 md:gap-3 flex-wrap">
-                    {/* Part label */}
-                    <button
-                      onClick={() => onSectionChange(idx)}
-                      className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary text-white text-[10px] font-extrabold uppercase tracking-wide shrink-0 shadow-sm"
-                    >
-                      Part {idx + 1}
-                    </button>
-
-                    {/* Question number buttons */}
-                    <div className="flex items-center gap-[3px] md:gap-1 flex-wrap">
-                      {Array.from({ length: partTotal }, (__, i) => s + i).map((q) => {
-                        const isAnswered = !!answers[q];
-                        return (
-                          <button
-                            key={q}
-                            onClick={() => {
-                              scrollRefs.current?.[q]?.scrollIntoView({ behavior: "smooth", block: "center" });
-                            }}
-                            className={`w-6 h-6 md:w-[30px] md:h-[30px] rounded-md flex items-center justify-center text-[9px] md:text-[10px] font-bold transition-all ${
-                              isAnswered
-                                ? "bg-emerald-500 text-white shadow-sm"
-                                : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
-                            }`}
-                          >
-                            {q}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                /* Inactive part: show summary */
-                <button
-                  onClick={() => onSectionChange(idx)}
-                  className="w-full h-full px-3 md:px-5 py-3 md:py-4 flex items-center justify-center gap-2 md:gap-3 hover:bg-slate-50 transition-all group"
-                >
-                  <span className="text-[10px] md:text-xs font-extrabold text-slate-500 group-hover:text-slate-700 uppercase tracking-wide">
-                    Part {idx + 1} :
-                  </span>
-                  <span className="text-[10px] md:text-xs font-bold text-slate-400 group-hover:text-slate-500">
-                    {partAnswered} of {partTotal} questions
-                  </span>
-                </button>
-              )}
+            <div className="flex items-center gap-[3px] sm:gap-1 md:gap-1.5">
+              {Array.from({ length: partTotal }, (__, i) => s + i).map((q) => {
+                const isAnswered = !!answers[q];
+                return (
+                  <button
+                    key={q}
+                    onClick={() => {
+                      scrollRefs.current?.[q]?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    }}
+                    className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-md sm:rounded-lg flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold transition-all duration-200 ${
+                      isAnswered
+                        ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600 hover:shadow-md"
+                        : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+                    }`}
+                  >
+                    {q}
+                  </button>
+                );
+              })}
             </div>
           );
-        })}
+        })()}
+
+        {/* Next button */}
+        <button
+          onClick={() => activeSectionIdx < sections.length - 1 && onSectionChange(activeSectionIdx + 1)}
+          disabled={activeSectionIdx === sections.length - 1}
+          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
+            activeSectionIdx === sections.length - 1
+              ? "text-slate-200 cursor-not-allowed"
+              : "text-slate-500 hover:bg-slate-100 hover:text-primary"
+          }`}
+        >
+          <ChevronRight size={18} />
+        </button>
 
         {/* Overall score indicator */}
-        <div className="hidden lg:flex items-center gap-2 px-5 border-l border-slate-200 shrink-0">
+        <div className="hidden xl:flex items-center gap-2 px-3 border-l border-slate-200 shrink-0 ml-1">
           <CheckCircle2 size={14} className="text-emerald-500" />
-          <span className="text-xs font-extrabold text-emerald-600 tabular-nums">{totalAnswered} / {totalQuestions}</span>
+          <span className="text-xs font-extrabold text-emerald-600 tabular-nums">{totalAnswered}/40</span>
         </div>
-      </div>
-    </div>
-  );
-});
-
-const QuickNavGrid = memo(function QuickNavGrid({
-  qStart,
-  qEnd,
-  answers,
-  scrollRefs,
-}: {
-  qStart: number;
-  qEnd: number;
-  answers: Record<number, string>;
-  scrollRefs: React.RefObject<Record<number, HTMLElement | null>>;
-}) {
-  const totalInPart = qEnd - qStart + 1;
-  return (
-    <div className="bg-white border-t border-slate-200 px-3 md:px-5 py-2.5 shrink-0">
-      <div className="flex flex-wrap gap-1 md:gap-1.5 justify-center">
-        {Array.from({ length: totalInPart }, (_, i) => qStart + i).map((q) => (
-          <button key={q} onClick={() => { scrollRefs.current?.[q]?.scrollIntoView({ behavior: "smooth", block: "center" }); }} className={`w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center text-[9px] md:text-[10px] font-bold ${answers[q] ? "bg-emerald-500 text-white shadow-sm shadow-emerald-200" : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"}`}>{q}</button>
-        ))}
       </div>
     </div>
   );
@@ -179,14 +157,17 @@ function ReadingTestViewInner({
   answers,
   onAnswerChange,
 }: ReadingTestViewProps) {
-  const [isHighlighterActive, setIsHighlighterActive] = useState(false);
   const [highlights, setHighlights] = useState<Record<string, Array<{ text: string; color: string }>>>({});
-  const [highlightColor, setHighlightColor] = useState("yellow");
   const [notes, setNotes] = useState<Record<string, Note[]>>({});
   const [showNoteInput, setShowNoteInput] = useState(false);
   const [pendingNoteText, setPendingNoteText] = useState("");
   const [pendingSelectedText, setPendingSelectedText] = useState("");
   const [showNotesPanel, setShowNotesPanel] = useState(false);
+
+  /* ── floating popup state ── */
+  const [popupPos, setPopupPos] = useState<{ x: number; y: number } | null>(null);
+  const [popupText, setPopupText] = useState("");
+  const [popupIsHighlighted, setPopupIsHighlighted] = useState(false);
 
   const [mobileView, setMobileView] = useState<"passage" | "questions">("passage");
   const [isMobile, setIsMobile] = useState(false);
@@ -197,6 +178,7 @@ function ReadingTestViewInner({
   const [fontSize, setFontSize] = useState(15);
 
   const passageRef = useRef<HTMLDivElement>(null);
+  const questionsRef = useRef<HTMLDivElement>(null);
   const scrollRefs = useRef<Record<number, HTMLElement | null>>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -210,32 +192,95 @@ function ReadingTestViewInner({
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  /* Highlight handler */
-  const handleTextSelection = useCallback(() => {
-    if (!isHighlighterActive) return;
+  /* ── Floating popup on text selection (both passage + questions) ── */
+  const closePopup = useCallback(() => {
+    setPopupPos(null);
+    setPopupText("");
+    setPopupIsHighlighted(false);
+  }, []);
+
+  const handleTextSelect = useCallback(() => {
     const selection = window.getSelection();
-    const selectedText = selection?.toString().trim();
-    if (selectedText && selectedText.length > 2) {
-      if (passageRef.current && selection?.anchorNode) {
-        if (passageRef.current.contains(selection.anchorNode)) {
-          setHighlights((prev) => {
-            const existing = prev[highlightKey] || [];
-            if (existing.some((h) => h.text === selectedText)) return prev;
-            return { ...prev, [highlightKey]: [...existing, { text: selectedText, color: highlightColor }] };
-          });
-        }
-      }
-    }
-  }, [isHighlighterActive, highlightKey, highlightColor]);
+    const text = selection?.toString().trim();
+    if (!text || text.length < 2) return;
+
+    const anchor = selection?.anchorNode;
+    if (!anchor) return;
+    const isInPassage = passageRef.current?.contains(anchor);
+    const isInQuestions = questionsRef.current?.contains(anchor);
+    if (!isInPassage && !isInQuestions) return;
+
+    // Don't trigger if selection is inside an input/select/textarea
+    const activeEl = document.activeElement;
+    if (activeEl && (activeEl.tagName === "INPUT" || activeEl.tagName === "SELECT" || activeEl.tagName === "TEXTAREA")) return;
+
+    const range = selection?.getRangeAt(0);
+    if (!range) return;
+    const rect = range.getBoundingClientRect();
+    const x = Math.min(rect.left + rect.width / 2 - 80, window.innerWidth - 200);
+    const y = rect.top - 52;
+
+    const existing = highlights[highlightKey] || [];
+    const isAlreadyHighlighted = existing.some((h) => h.text === text);
+
+    setPopupPos({ x: Math.max(8, x), y: Math.max(8, y) });
+    setPopupText(text);
+    setPopupIsHighlighted(isAlreadyHighlighted);
+  }, [highlightKey, highlights]);
 
   useEffect(() => {
-    document.addEventListener("mouseup", handleTextSelection);
-    document.addEventListener("touchend", handleTextSelection);
-    return () => {
-      document.removeEventListener("mouseup", handleTextSelection);
-      document.removeEventListener("touchend", handleTextSelection);
+    const handleUp = () => setTimeout(handleTextSelect, 10);
+    const handleDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("[data-selection-popup]")) {
+        closePopup();
+      }
     };
-  }, [handleTextSelection]);
+    document.addEventListener("mouseup", handleUp);
+    document.addEventListener("touchend", handleUp);
+    document.addEventListener("mousedown", handleDown);
+    document.addEventListener("touchstart", handleDown);
+    return () => {
+      document.removeEventListener("mouseup", handleUp);
+      document.removeEventListener("touchend", handleUp);
+      document.removeEventListener("mousedown", handleDown);
+      document.removeEventListener("touchstart", handleDown);
+    };
+  }, [handleTextSelect, closePopup]);
+
+  /* Popup actions */
+  const doHighlight = useCallback(() => {
+    if (!popupText) return;
+    setHighlights((prev) => {
+      const existing = prev[highlightKey] || [];
+      if (existing.some((h) => h.text === popupText)) return prev;
+      return { ...prev, [highlightKey]: [...existing, { text: popupText, color: "yellow" }] };
+    });
+    window.getSelection()?.removeAllRanges();
+    closePopup();
+  }, [popupText, highlightKey, closePopup]);
+
+  const doRemoveHighlight = useCallback(() => {
+    if (!popupText) return;
+    setHighlights((prev) => {
+      const existing = prev[highlightKey] || [];
+      return { ...prev, [highlightKey]: existing.filter((h) => h.text !== popupText) };
+    });
+    setNotes((prev) => {
+      const existing = prev[highlightKey] || [];
+      return { ...prev, [highlightKey]: existing.filter((n) => n.selectedText !== popupText) };
+    });
+    window.getSelection()?.removeAllRanges();
+    closePopup();
+  }, [popupText, highlightKey, closePopup]);
+
+  const doOpenNote = useCallback(() => {
+    if (!popupText) return;
+    setPendingSelectedText(popupText);
+    setShowNoteInput(true);
+    window.getSelection()?.removeAllRanges();
+    closePopup();
+  }, [popupText, closePopup]);
 
   /* Resizable splitter */
   const handleDragStart = useCallback((e: React.MouseEvent) => {
@@ -261,15 +306,6 @@ function ReadingTestViewInner({
   }, [isDragging]);
 
   /* Notes */
-  const handleAddNote = useCallback(() => {
-    const selection = window.getSelection();
-    const text = selection?.toString().trim();
-    if (text && text.length > 2) {
-      setPendingSelectedText(text);
-      setShowNoteInput(true);
-    }
-  }, []);
-
   const saveNote = useCallback(() => {
     if (!pendingNoteText.trim()) return;
     const note: Note = { id: Date.now().toString(), text: pendingNoteText, selectedText: pendingSelectedText, timestamp: Date.now() };
@@ -286,10 +322,6 @@ function ReadingTestViewInner({
 
   const removeNote = useCallback((noteId: string) => {
     setNotes((prev) => ({ ...prev, [highlightKey]: (prev[highlightKey] || []).filter((n) => n.id !== noteId) }));
-  }, [highlightKey]);
-
-  const clearHighlights = useCallback(() => {
-    setHighlights((prev) => ({ ...prev, [highlightKey]: [] }));
   }, [highlightKey]);
 
   /* Apply highlights to HTML (memoized) */
@@ -450,8 +482,38 @@ function ReadingTestViewInner({
         )}
       </AnimatePresence>
 
-      {/* Part nav bar */}
-      <PartNavBar sections={sections} activeSectionIdx={activeSectionIdx} onSectionChange={onSectionChange} answers={answers} scrollRefs={scrollRefs} />
+      {/* Floating Selection Popup */}
+      <AnimatePresence>
+        {popupPos && popupText && (
+          <div data-selection-popup>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="fixed z-[250] pointer-events-auto"
+              style={{ left: popupPos.x, top: popupPos.y }}
+            >
+              <div className="bg-slate-900 rounded-xl shadow-2xl shadow-black/30 flex items-center gap-0.5 p-1 border border-white/10">
+                {popupIsHighlighted ? (
+                  <button onClick={doRemoveHighlight} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">
+                    <Trash2 size={14} /><span className="text-[10px] font-bold">Remove</span>
+                  </button>
+                ) : (
+                  <>
+                    <button onClick={doHighlight} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300 transition-all">
+                      <Highlighter size={14} /><span className="text-[10px] font-bold">Highlight</span>
+                    </button>
+                    <div className="w-px h-5 bg-white/10" />
+                    <button onClick={doOpenNote} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-blue-400 hover:bg-blue-500/20 hover:text-blue-300 transition-all">
+                      <StickyNote size={14} /><span className="text-[10px] font-bold">Note</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Main content */}
       {isMobile ? (
@@ -459,28 +521,23 @@ function ReadingTestViewInner({
           <div className="flex-1 overflow-hidden">
             {mobileView === "passage" ? (
               <div className="h-full flex flex-col bg-white">
-                {/* Passage toolbar */}
-                <div className="min-h-[48px] bg-white border-b border-slate-200 px-3 flex items-center justify-between shrink-0 gap-2">
+                {/* Passage toolbar (compact) */}
+                <div className="min-h-[40px] bg-white border-b border-slate-200 px-3 flex items-center justify-between shrink-0 gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <BookOpen size={14} className="text-primary shrink-0" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-500 truncate">{activeSection?.title || "Reading Passage"}</span>
+                    <BookOpen size={13} className="text-primary shrink-0" />
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] text-slate-500 truncate">{activeSection?.title || "Reading Passage"}</span>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                      <button onClick={() => setIsHighlighterActive(!isHighlighterActive)} className={`flex items-center gap-1 px-2 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider ${isHighlighterActive ? "bg-yellow-400 text-yellow-900 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}>
-                        <Highlighter size={12} /><span className="hidden sm:inline">Highlight</span>
+                    {currentNotes.length > 0 && (
+                      <button onClick={() => setShowNotesPanel(!showNotesPanel)} className={`relative flex items-center gap-1 px-2 py-1.5 rounded-lg text-[9px] font-bold ${showNotesPanel ? "bg-blue-500 text-white" : "bg-blue-50 text-blue-500 hover:bg-blue-100"}`}>
+                        <MessageSquare size={12} />
+                        <span className="w-4 h-4 rounded-full bg-blue-600 text-white text-[7px] flex items-center justify-center font-bold absolute -top-1 -right-1">{currentNotes.length}</span>
                       </button>
-                      <button onClick={handleAddNote} className="flex items-center gap-1 px-2 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-blue-600">
-                        <StickyNote size={12} />
-                      </button>
-                      {currentHighlights.length > 0 && (
-                        <button onClick={clearHighlights} className="p-1.5 text-slate-400 hover:text-red-500"><Eraser size={12} /></button>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
                 {/* Passage content */}
-                <div ref={passageRef} className={`flex-1 overflow-y-auto custom-scrollbar p-4 ${isHighlighterActive ? "cursor-crosshair" : ""}`}>
+                <div ref={passageRef} className="flex-1 overflow-y-auto custom-scrollbar p-4">
                   {highlightedPassageHtml ? (
                     <div className="reading-passage select-text" style={{ fontSize: `${fontSize}px`, lineHeight: "1.9" }} dangerouslySetInnerHTML={{ __html: highlightedPassageHtml }} />
                   ) : (
@@ -494,20 +551,36 @@ function ReadingTestViewInner({
               </div>
             ) : (
               <div className="h-full flex flex-col bg-slate-50">
-                <div className="min-h-[48px] bg-white border-b border-slate-200 px-3 flex items-center justify-between shrink-0">
+                {/* Questions toolbar (mobile) */}
+                <div className="min-h-[40px] bg-white border-b border-slate-200 px-3 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 size={14} className="text-emerald-500" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">Questions {qStart}&ndash;{qEnd}</span>
+                    <CheckCircle2 size={13} className="text-emerald-500" />
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] text-slate-500">Questions {qStart}&ndash;{qEnd}</span>
                   </div>
-                  <span className="text-[10px] font-black text-emerald-600 tabular-nums">{answeredInPart}/{totalInPart}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full transition-all duration-300" style={{ width: `${totalInPart > 0 ? (answeredInPart / totalInPart) * 100 : 0}%` }} />
+                    </div>
+                    <span className="text-[9px] sm:text-[10px] font-bold text-emerald-600 tabular-nums">{answeredInPart}/{totalInPart}</span>
+                  </div>
                 </div>
-                <div className="flex-1 overflow-y-auto custom-scrollbar p-4">
+                <div ref={questionsRef} className="flex-1 overflow-y-auto custom-scrollbar p-3 sm:p-4">
                   {activeSection ? (
                     <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                       <div className="px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                         <h4 className="text-sm font-heading font-black text-accent leading-tight">{activeSection.title}</h4>
                       </div>
                       <div className="p-4">{questionsContent}</div>
+                      {/* Prev / Next */}
+                      <div className="px-4 py-3 border-t border-slate-100 flex items-center justify-between">
+                        <button onClick={() => activeSectionIdx > 0 && onSectionChange(activeSectionIdx - 1)} disabled={activeSectionIdx === 0} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${activeSectionIdx === 0 ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-100"}`}>
+                          <ChevronLeft size={15} /> Prev
+                        </button>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Part {activeSectionIdx + 1}/{sections.length}</span>
+                        <button onClick={() => activeSectionIdx < sections.length - 1 && onSectionChange(activeSectionIdx + 1)} disabled={activeSectionIdx === sections.length - 1} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${activeSectionIdx === sections.length - 1 ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-100"}`}>
+                          Next <ChevronRight size={15} />
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <div className="flex flex-col items-center justify-center py-20 text-slate-300 gap-4">
@@ -516,151 +589,158 @@ function ReadingTestViewInner({
                     </div>
                   )}
                 </div>
-                <QuickNavGrid qStart={qStart} qEnd={qEnd} answers={answers} scrollRefs={scrollRefs} />
               </div>
             )}
           </div>
           {/* Mobile tab bar */}
-          <div className="h-14 bg-white border-t border-slate-200 flex shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-            <button onClick={() => setMobileView("passage")} className={`flex-1 flex items-center justify-center gap-2 ${mobileView === "passage" ? "text-primary border-t-2 border-primary bg-primary/5 font-black" : "text-slate-400"}`}>
-              <BookOpen size={16} /><span className="text-[10px] font-black uppercase tracking-widest">Passage</span>
+          <div className="h-11 bg-white border-t border-slate-200 flex shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+            <button onClick={() => setMobileView("passage")} className={`flex-1 flex items-center justify-center gap-1.5 ${mobileView === "passage" ? "text-primary border-t-2 border-primary bg-primary/5 font-black" : "text-slate-400"}`}>
+              <BookOpen size={15} /><span className="text-[9px] font-bold uppercase tracking-wider">Passage</span>
             </button>
             <div className="w-px bg-slate-100" />
-            <button onClick={() => setMobileView("questions")} className={`flex-1 flex items-center justify-center gap-2 relative ${mobileView === "questions" ? "text-primary border-t-2 border-primary bg-primary/5 font-black" : "text-slate-400"}`}>
-              <List size={16} /><span className="text-[10px] font-black uppercase tracking-widest">Questions</span>
-              {answeredInPart > 0 && <span className="absolute top-1.5 ml-24 w-5 h-5 rounded-full bg-emerald-500 text-white text-[8px] font-black flex items-center justify-center">{answeredInPart}</span>}
+            <button onClick={() => setMobileView("questions")} className={`flex-1 flex items-center justify-center gap-1.5 relative ${mobileView === "questions" ? "text-primary border-t-2 border-primary bg-primary/5 font-black" : "text-slate-400"}`}>
+              <List size={15} /><span className="text-[9px] font-bold uppercase tracking-wider">Questions</span>
+              {answeredInPart > 0 && <span className="absolute top-1 right-3 w-4 h-4 rounded-full bg-emerald-500 text-white text-[7px] font-bold flex items-center justify-center">{answeredInPart}</span>}
             </button>
           </div>
+          {/* Mobile bottom nav */}
+          <PartNavBar sections={sections} activeSectionIdx={activeSectionIdx} onSectionChange={onSectionChange} answers={answers} scrollRefs={scrollRefs} />
         </>
       ) : (
-        /* Desktop */
-        <div ref={containerRef} className="flex-1 flex overflow-hidden relative">
-          {/* Passage side */}
-          <div className={`flex flex-col h-full overflow-hidden ${passageFullscreen ? "w-full" : questionsFullscreen ? "w-0 overflow-hidden" : ""}`} style={!passageFullscreen && !questionsFullscreen ? { width: `${splitRatio}%` } : undefined}>
-            <div className="flex flex-col h-full bg-white">
-              {/* Passage toolbar */}
-              <div className="min-h-[48px] bg-white border-b border-slate-200 px-3 md:px-4 flex items-center justify-between shrink-0 gap-2">
-                <div className="flex items-center gap-2 min-w-0">
-                  <BookOpen size={14} className="text-primary shrink-0" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-500 truncate">{activeSection?.title || "Reading Passage"}</span>
-                </div>
-                <div className="flex items-center gap-1 shrink-0">
-                  <div className="flex items-center bg-slate-100 rounded-lg border border-slate-200 overflow-hidden mr-1">
-                    <button onClick={() => setFontSize((f) => Math.max(12, f - 1))} className="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-slate-200 text-[10px] font-bold" title="Decrease font size">A-</button>
-                    <div className="w-px h-4 bg-slate-200" />
-                    <button onClick={() => setFontSize((f) => Math.min(22, f + 1))} className="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-slate-200 text-xs font-bold" title="Increase font size">A+</button>
+        /* Desktop: split view + bottom nav */
+        <div className="flex-1 flex flex-col overflow-hidden">
+          <div ref={containerRef} className="flex-1 flex overflow-hidden relative">
+            {/* Passage side */}
+            <div className={`flex flex-col h-full overflow-hidden ${passageFullscreen ? "w-full" : questionsFullscreen ? "w-0 overflow-hidden" : ""}`} style={!passageFullscreen && !questionsFullscreen ? { width: `${splitRatio}%` } : undefined}>
+              <div className="flex flex-col h-full bg-white">
+                {/* Passage toolbar (clean — no highlight/note buttons) */}
+                <div className="min-h-[40px] bg-white border-b border-slate-200 px-3 md:px-4 flex items-center justify-between shrink-0 gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <BookOpen size={13} className="text-primary shrink-0" />
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] text-slate-500 truncate">{activeSection?.title || "Reading Passage"}</span>
                   </div>
-                  <div className="flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                    <button onClick={() => setIsHighlighterActive(!isHighlighterActive)} className={`flex items-center gap-1 px-2 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider ${isHighlighterActive ? "bg-yellow-400 text-yellow-900 shadow-sm" : "text-slate-400 hover:text-slate-600"}`} title="Toggle highlighter">
-                      <Highlighter size={12} /><span className="hidden sm:inline">Highlight</span>
+                  <div className="flex items-center gap-1 shrink-0">
+                    {/* Font size */}
+                    <div className="hidden md:flex items-center bg-slate-100 rounded-lg border border-slate-200 overflow-hidden">
+                      <button onClick={() => setFontSize((f) => Math.max(12, f - 1))} className="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-slate-200 text-[10px] font-bold">A-</button>
+                      <div className="w-px h-4 bg-slate-200" />
+                      <button onClick={() => setFontSize((f) => Math.min(22, f + 1))} className="w-7 h-7 flex items-center justify-center text-slate-400 hover:bg-slate-200 text-xs font-bold">A+</button>
+                    </div>
+                    {/* Notes panel toggle */}
+                    {currentNotes.length > 0 && (
+                      <button onClick={() => setShowNotesPanel(!showNotesPanel)} className={`relative flex items-center gap-1 px-2 py-1.5 rounded-lg text-[9px] font-bold ml-0.5 ${showNotesPanel ? "bg-blue-500 text-white" : "bg-blue-50 text-blue-500 hover:bg-blue-100"}`}>
+                        <MessageSquare size={12} />
+                        <span className="w-4 h-4 rounded-full bg-blue-600 text-white text-[7px] flex items-center justify-center font-bold absolute -top-1 -right-1">{currentNotes.length}</span>
+                      </button>
+                    )}
+                    {/* Fullscreen */}
+                    <button onClick={() => { setPassageFullscreen(!passageFullscreen); setQuestionsFullscreen(false); }} className="p-1.5 text-slate-400 hover:text-slate-600 ml-0.5">
+                      {passageFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
                     </button>
-                    {isHighlighterActive && (
-                      <div className="flex items-center gap-0.5 ml-0.5 pl-1 border-l border-slate-200">
-                        {[{ color: "yellow", bg: "bg-yellow-300" }, { color: "green", bg: "bg-emerald-300" }, { color: "pink", bg: "bg-pink-300" }, { color: "blue", bg: "bg-blue-300" }].map((c) => (
-                          <button key={c.color} onClick={() => setHighlightColor(c.color)} className={`w-5 h-5 rounded-full ${c.bg} ${highlightColor === c.color ? "ring-2 ring-slate-700 ring-offset-1 scale-110" : "opacity-50 hover:opacity-100"}`} />
-                        ))}
+                  </div>
+                </div>
+                {/* Passage body */}
+                <div className="flex-1 overflow-hidden flex">
+                  <div ref={passageRef} className="flex-1 overflow-y-auto custom-scrollbar" style={{ padding: "20px 28px" }}>
+                    {highlightedPassageHtml ? (
+                      <div className="reading-passage select-text" style={{ fontSize: `${fontSize}px`, lineHeight: "1.9" }} dangerouslySetInnerHTML={{ __html: highlightedPassageHtml }} />
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-slate-300 gap-4 py-20">
+                        <BookOpen size={48} className="opacity-20" />
+                        <p className="text-sm font-bold text-slate-400">No passage content</p>
+                        <p className="text-xs text-slate-400 max-w-sm text-center leading-relaxed">Admin can paste the reading passage in the Mock Test Manager.</p>
                       </div>
                     )}
-                    <button onClick={handleAddNote} className="flex items-center gap-1 px-2 py-1.5 rounded-md text-[9px] font-black uppercase tracking-wider text-slate-400 hover:text-blue-600" title="Add note">
-                      <StickyNote size={12} /><span className="hidden sm:inline">Note</span>
-                    </button>
-                    {currentHighlights.length > 0 && (
-                      <button onClick={clearHighlights} className="p-1.5 text-slate-400 hover:text-red-500" title="Clear all highlights"><Eraser size={12} /></button>
-                    )}
                   </div>
-                  {currentNotes.length > 0 && (
-                    <button onClick={() => setShowNotesPanel(!showNotesPanel)} className={`relative flex items-center gap-1 px-2 py-1.5 rounded-lg text-[9px] font-black uppercase ml-0.5 ${showNotesPanel ? "bg-blue-500 text-white" : "bg-blue-50 text-blue-500 hover:bg-blue-100"}`}>
-                      <MessageSquare size={12} />
-                      <span className="w-4 h-4 rounded-full bg-blue-600 text-white text-[8px] flex items-center justify-center font-black absolute -top-1.5 -right-1.5">{currentNotes.length}</span>
-                    </button>
-                  )}
-                  <button onClick={() => { setPassageFullscreen(!passageFullscreen); setQuestionsFullscreen(false); }} className="p-1.5 text-slate-400 hover:text-slate-600 ml-0.5" title={passageFullscreen ? "Exit fullscreen" : "Fullscreen passage"}>
-                    {passageFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-                  </button>
-                </div>
-              </div>
-              {/* Passage body */}
-              <div className="flex-1 overflow-hidden flex">
-                <div ref={passageRef} className={`flex-1 overflow-y-auto custom-scrollbar ${isHighlighterActive ? "cursor-crosshair" : ""}`} style={{ padding: "24px 32px" }}>
-                  {highlightedPassageHtml ? (
-                    <div className="reading-passage select-text" style={{ fontSize: `${fontSize}px`, lineHeight: "1.9" }} dangerouslySetInnerHTML={{ __html: highlightedPassageHtml }} />
-                  ) : (
-                    <div className="flex flex-col items-center justify-center h-full text-slate-300 gap-4 py-20">
-                      <BookOpen size={48} className="opacity-20" />
-                      <p className="text-sm font-bold text-slate-400">No passage content</p>
-                      <p className="text-xs text-slate-400 max-w-sm text-center leading-relaxed">Admin can paste the reading passage in the Mock Test Manager.</p>
+                  {/* Notes drawer */}
+                  {showNotesPanel && currentNotes.length > 0 && (
+                    <div className="h-full bg-blue-50/80 border-l border-blue-100 overflow-hidden shrink-0 w-[260px]">
+                      <div className="p-3 h-full overflow-y-auto">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="text-[9px] font-black text-blue-600 uppercase tracking-widest flex items-center gap-1.5"><MessageSquare size={11} /> Notes ({currentNotes.length})</h4>
+                          <button onClick={() => setShowNotesPanel(false)} className="text-blue-300 hover:text-blue-600"><X size={13} /></button>
+                        </div>
+                        <div className="space-y-2.5">
+                          {currentNotes.map((note) => (
+                            <div key={note.id} className="bg-white rounded-xl p-2.5 shadow-sm border border-blue-100 group relative">
+                              <p className="text-[9px] font-semibold text-blue-500 mb-1 italic leading-relaxed">&ldquo;{note.selectedText.slice(0, 60)}...&rdquo;</p>
+                              <p className="text-[11px] text-slate-700 leading-relaxed">{note.text}</p>
+                              <button onClick={() => removeNote(note.id)} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-500"><X size={11} /></button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
-                {/* Notes drawer */}
-                {showNotesPanel && currentNotes.length > 0 && (
-                  <div className="h-full bg-blue-50/80 border-l border-blue-100 overflow-hidden shrink-0 w-[280px]">
-                    <div className="p-4 h-full overflow-y-auto w-[280px]">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest flex items-center gap-2"><MessageSquare size={12} /> My Notes ({currentNotes.length})</h4>
-                        <button onClick={() => setShowNotesPanel(false)} className="text-blue-300 hover:text-blue-600"><X size={14} /></button>
-                      </div>
-                      <div className="space-y-3">
-                        {currentNotes.map((note) => (
-                          <div key={note.id} className="bg-white rounded-xl p-3 shadow-sm border border-blue-100 group relative">
-                            <p className="text-[10px] font-semibold text-blue-500 mb-1.5 italic leading-relaxed">&ldquo;{note.selectedText.slice(0, 80)}{note.selectedText.length > 80 ? "..." : ""}&rdquo;</p>
-                            <p className="text-xs text-slate-700 leading-relaxed">{note.text}</p>
-                            <button onClick={() => removeNote(note.id)} className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-500"><X size={12} /></button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
-          </div>
 
-          {/* Resize divider */}
-          {!passageFullscreen && !questionsFullscreen && (
-            <div onMouseDown={handleDragStart} className={`w-[6px] flex items-center justify-center cursor-col-resize shrink-0 group relative z-10 ${isDragging ? "bg-primary/30" : "bg-slate-200 hover:bg-primary/20"}`}>
-              <div className={`w-[3px] h-10 rounded-full ${isDragging ? "bg-primary" : "bg-slate-300 group-hover:bg-primary/50"}`} />
-            </div>
-          )}
+            {/* Resize divider */}
+            {!passageFullscreen && !questionsFullscreen && (
+              <div onMouseDown={handleDragStart} className={`w-[6px] flex items-center justify-center cursor-col-resize shrink-0 group relative z-10 ${isDragging ? "bg-primary/30" : "bg-slate-200 hover:bg-primary/20"}`}>
+                <div className={`w-[3px] h-10 rounded-full ${isDragging ? "bg-primary" : "bg-slate-300 group-hover:bg-primary/50"}`} />
+              </div>
+            )}
 
-          {/* Questions side */}
-          <div className={`flex flex-col h-full overflow-hidden ${questionsFullscreen ? "w-full" : passageFullscreen ? "w-0 overflow-hidden" : "flex-1"}`}>
-            <div className="flex flex-col h-full bg-slate-50">
-              <div className="min-h-[48px] bg-white border-b border-slate-200 px-3 md:px-5 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-emerald-500" />
-                  <span className="text-[10px] font-black uppercase tracking-[0.12em] text-slate-500">Questions {qStart}&ndash;{qEnd}</span>
-                </div>
-                <div className="flex items-center gap-3">
+            {/* Questions side */}
+            <div className={`flex flex-col h-full overflow-hidden ${questionsFullscreen ? "w-full" : passageFullscreen ? "w-0 overflow-hidden" : "flex-1"}`}>
+              <div className="flex flex-col h-full bg-slate-50">
+                <div className="min-h-[40px] bg-white border-b border-slate-200 px-3 md:px-5 flex items-center justify-between shrink-0">
                   <div className="flex items-center gap-2">
-                    <div className="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${totalInPart > 0 ? (answeredInPart / totalInPart) * 100 : 0}%` }} />
-                    </div>
-                    <span className="text-[10px] font-black text-emerald-600 tabular-nums">{answeredInPart}/{totalInPart}</span>
+                    <CheckCircle2 size={13} className="text-emerald-500" />
+                    <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-[0.1em] text-slate-500">Questions {qStart}&ndash;{qEnd}</span>
                   </div>
-                  <button onClick={() => { setQuestionsFullscreen(!questionsFullscreen); setPassageFullscreen(false); }} className="p-1.5 text-slate-400 hover:text-slate-600">
-                    {questionsFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <div className="w-16 sm:w-20 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 rounded-full transition-all duration-300" style={{ width: `${totalInPart > 0 ? (answeredInPart / totalInPart) * 100 : 0}%` }} />
+                    </div>
+                    <span className="text-[9px] sm:text-[10px] font-bold text-emerald-600 tabular-nums">{answeredInPart}/{totalInPart}</span>
+                    <button onClick={() => { setQuestionsFullscreen(!questionsFullscreen); setPassageFullscreen(false); }} className="p-1 text-slate-400 hover:text-slate-600 ml-1">
+                      {questionsFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+                    </button>
+                  </div>
+                </div>
+                <div ref={questionsRef} className="flex-1 overflow-y-auto custom-scrollbar p-3 md:p-5">
+                  {activeSection ? (
+                    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                      <div className="px-4 py-3 md:px-6 md:py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
+                        <h4 className="text-sm md:text-base font-heading font-black text-accent leading-tight">{activeSection.title}</h4>
+                      </div>
+                      <div className="p-4 md:p-6 select-text">{questionsContent}</div>
+                      {/* Prev / Next part navigation */}
+                      <div className="px-4 md:px-6 py-3 border-t border-slate-100 flex items-center justify-between">
+                        <button
+                          onClick={() => activeSectionIdx > 0 && onSectionChange(activeSectionIdx - 1)}
+                          disabled={activeSectionIdx === 0}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${activeSectionIdx === 0 ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-100 hover:text-primary"}`}
+                        >
+                          <ChevronLeft size={15} /> Previous
+                        </button>
+                        <span className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                          Part {activeSectionIdx + 1} / {sections.length}
+                        </span>
+                        <button
+                          onClick={() => activeSectionIdx < sections.length - 1 && onSectionChange(activeSectionIdx + 1)}
+                          disabled={activeSectionIdx === sections.length - 1}
+                          className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${activeSectionIdx === sections.length - 1 ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-100 hover:text-primary"}`}
+                        >
+                          Next <ChevronRight size={15} />
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-20 text-slate-300 gap-4">
+                      <AlertCircle size={40} className="opacity-15" />
+                      <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-6">
-                {activeSection ? (
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="px-4 py-3 md:px-6 md:py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
-                      <h4 className="text-sm md:text-base font-heading font-black text-accent leading-tight">{activeSection.title}</h4>
-                    </div>
-                    <div className="p-4 md:p-6">{questionsContent}</div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center py-20 text-slate-300 gap-4">
-                    <AlertCircle size={40} className="opacity-15" />
-                    <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
-                  </div>
-                )}
-              </div>
-              <QuickNavGrid qStart={qStart} qEnd={qEnd} answers={answers} scrollRefs={scrollRefs} />
             </div>
           </div>
+          {/* Bottom navigation bar — desktop */}
+          <PartNavBar sections={sections} activeSectionIdx={activeSectionIdx} onSectionChange={onSectionChange} answers={answers} scrollRefs={scrollRefs} />
         </div>
       )}
 
@@ -686,13 +766,14 @@ function ReadingTestViewInner({
         .reading-passage th, .reading-passage td { border: 1px solid #e2e8f0; padding: 0.6rem 0.8rem; }
         .reading-passage th { background: #f8fafc; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; color: #64748b; }
         .reading-passage blockquote { border-left: 3px solid #e2e8f0; padding-left: 1rem; margin: 1rem 0; color: #64748b; font-style: italic; }
-        mark.hl-yellow { background-color: #fef08a; color: inherit; padding: 1px 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-        mark.hl-green { background-color: #bbf7d0; color: inherit; padding: 1px 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-        mark.hl-pink { background-color: #fbcfe8; color: inherit; padding: 1px 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-        mark.hl-blue { background-color: #bfdbfe; color: inherit; padding: 1px 3px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+        mark.hl-yellow { background-color: #fef08a; color: inherit; padding: 1px 3px; border-radius: 3px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+        mark.hl-green { background-color: #bbf7d0; color: inherit; padding: 1px 3px; border-radius: 3px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+        mark.hl-pink { background-color: #fbcfe8; color: inherit; padding: 1px 3px; border-radius: 3px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+        mark.hl-blue { background-color: #bfdbfe; color: inherit; padding: 1px 3px; border-radius: 3px; cursor: pointer; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
         .reading-passage ::selection { background-color: rgba(250, 204, 21, 0.4); color: inherit; }
         .reading-passage ::-moz-selection { background-color: rgba(250, 204, 21, 0.4); color: inherit; }
         .select-text, .select-text * { user-select: text !important; -webkit-user-select: text !important; }
+        .prose ::selection { background-color: rgba(59, 130, 246, 0.25); color: inherit; }
       `}</style>
     </div>
   );
