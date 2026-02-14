@@ -256,6 +256,34 @@ export default function TestPage() {
     };
 
     /* ── Compute reading score for results page ── */
+    /* ── Helper: flexible IELTS answer matching ── */
+    const isAnswerMatch = (userRaw: string, correctRaw: string): boolean => {
+        const normUser = userRaw.trim().toUpperCase();
+        if (!normUser) return false;
+
+        // Handle multi-answer (MCM): "B,D" matches "B,D" or "D,B"
+        if (correctRaw.includes(",")) {
+            const userParts = normUser.split(",").map(s => s.trim()).filter(Boolean).sort();
+            const correctParts = correctRaw.toUpperCase().split(",").map(s => s.trim()).filter(Boolean).sort();
+            return userParts.length > 0 && userParts.join(",") === correctParts.join(",");
+        }
+
+        // Handle "(s)" pattern: "sculpture(s)" → accept "sculpture" or "sculptures"
+        const parenMatch = correctRaw.match(/^(.+?)\((.+?)\)$/);
+        if (parenMatch) {
+            const base = parenMatch[1].toUpperCase();
+            const suffix = parenMatch[2].toUpperCase();
+            return normUser === base || normUser === (base + suffix);
+        }
+
+        // Handle SC type "D - chemical elements" → just "D"
+        const scUser = normUser.split(" - ")[0].trim();
+        const scCorrect = correctRaw.split(" - ")[0].trim().toUpperCase();
+
+        return scUser === scCorrect;
+    };
+
+    /* ── Compute reading score for results page ── */
     const readingResults = (() => {
         if (!selectedTest) return { score: 0, total: 40, details: [] as Array<{ q: number; userAnswer: string; correctAnswer: string; isCorrect: boolean }> };
         const details: Array<{ q: number; userAnswer: string; correctAnswer: string; isCorrect: boolean }> = [];
@@ -267,27 +295,8 @@ export default function TestPage() {
             for (let q = qStart; q <= qEnd; q++) {
                 const userRaw = (answers.reading[q] || "").trim();
                 const correctRaw = (sectionAnswers[String(q)] || "").trim();
-
-                // Normalize: for SC type "D - chemical elements" → just "D"
-                // For fill-in answers, compare case-insensitively
-                const normUser = userRaw.split(" - ")[0].trim().toUpperCase();
-                const normCorrect = correctRaw.split(" - ")[0].trim().toUpperCase();
-
-                // Handle multi-answer (MCM): "A,C" matches "A,C" or "C,A"
-                const userParts = normUser.split(",").map(s => s.trim()).filter(Boolean).sort();
-                const correctParts = normCorrect.split(",").map(s => s.trim()).filter(Boolean).sort();
-
-                const isCorrect = userParts.length > 0 && userParts.join(",") === correctParts.join(",");
-
-                // Display-friendly correct answer: for SC show full label, for others just the value
-                const displayCorrect = correctRaw;
-
-                details.push({
-                    q,
-                    userAnswer: userRaw || "—",
-                    correctAnswer: displayCorrect,
-                    isCorrect,
-                });
+                const isCorrect = isAnswerMatch(userRaw, correctRaw);
+                details.push({ q, userAnswer: userRaw || "—", correctAnswer: correctRaw, isCorrect });
             }
         });
         const score = details.filter(d => d.isCorrect).length;
@@ -306,11 +315,7 @@ export default function TestPage() {
             for (let q = qStart; q <= qEnd; q++) {
                 const userRaw = (answers.listening[q] || "").trim();
                 const correctRaw = (sectionAnswers[String(q)] || "").trim();
-                const normUser = userRaw.split(" - ")[0].trim().toUpperCase();
-                const normCorrect = correctRaw.split(" - ")[0].trim().toUpperCase();
-                const userParts = normUser.split(",").map(s => s.trim()).filter(Boolean).sort();
-                const correctParts = normCorrect.split(",").map(s => s.trim()).filter(Boolean).sort();
-                const isCorrect = correctParts.length > 0 && userParts.length > 0 && userParts.join(",") === correctParts.join(",");
+                const isCorrect = isAnswerMatch(userRaw, correctRaw);
                 details.push({ q, userAnswer: userRaw || "—", correctAnswer: correctRaw, isCorrect });
             }
         });
