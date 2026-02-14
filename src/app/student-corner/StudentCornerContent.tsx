@@ -380,84 +380,93 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                 </AnimatePresence>
             </section>
 
-            {/* Student Playground - Bento Grid Layout */}
-            <section className="py-24 bg-slate-50 overflow-hidden">
-                <div className="container mx-auto px-6">
-                    <div className="text-center max-w-3xl mx-auto mb-16">
-                        <h2 className="text-primary font-heading text-lg font-bold uppercase tracking-[0.3em] mb-4">
+            {/* Student Playground - Clean Masonry Grid */}
+            <section className="py-16 md:py-24 bg-slate-50 overflow-hidden">
+                <div className="container mx-auto px-4 md:px-6">
+                    <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+                        <h2 className="text-primary font-heading text-sm md:text-lg font-bold uppercase tracking-[0.3em] mb-3 md:mb-4">
                             {playground.headline}
                         </h2>
-                        <h3 className="text-4xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
+                        <h3 className="text-2xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 md:grid-rows-2 gap-3 md:gap-4 h-auto md:h-[800px]">
-                        {/* Large items Mapping */}
-                        {playground.items.filter((i: any) => i.size === 'large' || i.size === 'medium').map((item: any, idx: number) => (
+                    {/* Row 1: 3 images on mobile (2 cols), 3 images on desktop */}
+                    <div className="grid grid-cols-3 gap-2 md:gap-4 mb-2 md:mb-4">
+                        {playground.items.filter((i: any) => i.size === 'large' || i.size === 'medium').slice(0, 1).map((item: any) => (
                             <motion.div
                                 key={item.id}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: idx * 0.1 }}
-                                className={`
-                                    ${item.size === 'large' ? 'col-span-2 md:row-span-2' : 'col-span-1 md:col-span-2'} 
-                                    relative group rounded-2xl md:rounded-[2rem] overflow-hidden shadow-xl md:shadow-2xl h-[180px] md:h-auto
-                                `}
+                                className="col-span-2 relative group rounded-xl md:rounded-2xl overflow-hidden shadow-lg aspect-[16/10]"
                             >
-                                <img
-                                    src={item.src}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    alt={item.title || "Playground"}
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                                <div className="absolute bottom-4 left-4 md:bottom-10 md:left-10 text-white pr-4 md:pr-10">
-                                    {item.label && <span className="bg-primary px-2 py-1 md:px-4 md:py-1.5 rounded-none text-[8px] md:text-[10px] font-black uppercase tracking-widest mb-1 md:mb-4 inline-block">{item.label}</span>}
-                                    {item.title && <h4 className="text-sm md:text-3xl font-heading font-black leading-tight uppercase tracking-tighter" dangerouslySetInnerHTML={{ __html: item.title }} />}
+                                <img src={item.src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={item.title || "Playground"} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
+                                <div className="absolute bottom-3 left-3 md:bottom-6 md:left-6 text-white">
+                                    {item.label && <span className="bg-primary px-2 py-0.5 md:px-3 md:py-1 text-[7px] md:text-[10px] font-black uppercase tracking-widest mb-1 md:mb-2 inline-block">{item.label}</span>}
+                                    {item.title && <h4 className="text-xs md:text-xl font-heading font-black leading-tight" dangerouslySetInnerHTML={{ __html: item.title }} />}
                                 </div>
                             </motion.div>
                         ))}
-
-                        {/* Small items */}
-                        {playground.items.filter((i: any) => i.size === 'small').map((item: any, idx: number) => (
+                        {playground.items.filter((i: any) => i.size === 'large' || i.size === 'medium').slice(1, 2).map((item: any) => (
                             <motion.div
                                 key={item.id}
-                                initial={{ opacity: 0, scale: 0.95 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: (idx + 2) * 0.1 }}
-                                className="relative group rounded-2xl md:rounded-[2rem] overflow-hidden shadow-lg h-[150px] md:h-auto"
+                                transition={{ delay: 0.1 }}
+                                className="col-span-1 relative group rounded-xl md:rounded-2xl overflow-hidden shadow-lg aspect-[3/4]"
                             >
-                                <img
-                                    src={item.src}
-                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                    alt="Playground small"
-                                />
+                                <img src={item.src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt={item.title || "Playground"} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
+                                {item.title && (
+                                    <div className="absolute bottom-3 left-3 md:bottom-6 md:left-6 text-white">
+                                        <h4 className="text-xs md:text-lg font-heading font-black leading-tight" dangerouslySetInnerHTML={{ __html: item.title }} />
+                                    </div>
+                                )}
                             </motion.div>
                         ))}
                     </div>
 
-                    {/* Secondary Grid for tiny photos - Balanced & Centered on Mobile */}
-                    <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-4 md:gap-4 mt-4">
+                    {/* Row 2: Small items — 2 on mobile, all on desktop */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-2 md:mb-4">
+                        {playground.items.filter((i: any) => i.size === 'small').map((item: any, idx: number) => (
+                            <motion.div
+                                key={item.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="relative group rounded-xl md:rounded-2xl overflow-hidden shadow-lg aspect-[4/3]"
+                            >
+                                <img src={item.src} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Playground" />
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Row 3: Tiny items — equal grid */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
                         {playground.items.filter((i: any) => i.size === 'tiny').map((item: any, idx: number) => (
                             <motion.div
                                 key={item.id}
-                                whileHover={{ y: -5 }}
-                                className="w-[46%] md:w-auto aspect-square rounded-2xl overflow-hidden shadow-lg group relative bg-accent"
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.05 }}
+                                className="relative group rounded-xl md:rounded-2xl overflow-hidden shadow-lg aspect-[4/3] bg-accent"
                             >
                                 {item.type === 'video' ? (
                                     <a href={item.link} target="_blank" rel="noopener noreferrer" className="block w-full h-full relative">
                                         <img src={item.src} className="w-full h-full object-cover opacity-60 transition-all group-hover:scale-110 group-hover:opacity-40" alt="Video cover" />
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4">
-                                            <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/90 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform duration-500">
-                                                <svg className="w-6 h-6 md:w-8 md:h-8 ml-1" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M8 5v14l11-7z" />
-                                                </svg>
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                            <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-primary/90 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform">
+                                                <svg className="w-5 h-5 md:w-7 md:h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                             </div>
-                                            <span className="mt-2 md:mt-4 text-white font-heading font-black text-[8px] md:text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{t.studentCorner?.video?.watch || fb('Xem Video', 'Watch Video')}</span>
+                                            <span className="mt-2 text-white font-heading font-bold text-[8px] md:text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{t.studentCorner?.video?.watch || fb('Xem Video', 'Watch Video')}</span>
                                         </div>
                                     </a>
                                 ) : (
-                                    <img src={item.src} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life tiny" />
+                                    <img src={item.src} className="w-full h-full object-cover transition-transform group-hover:scale-110" alt="Student Life" />
                                 )}
                             </motion.div>
                         ))}
