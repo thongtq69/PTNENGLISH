@@ -151,8 +151,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             </h3>
                             <div className="space-y-4 text-sm md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
                                 <p className="text-xl leading-snug">
-                                    <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {storyData.p1 || t.home.about.story.p1} <br />
-                                    <span className="font-black text-accent border-b-2 border-primary/20">{storyData.teachers || t.home.about.story.teachers}</span>.
+                                    <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {storyData.p1 || t.home.about.story.p1}
                                 </p>
                                 <p>
                                     {storyData.p2 || t.home.about.story.p2}

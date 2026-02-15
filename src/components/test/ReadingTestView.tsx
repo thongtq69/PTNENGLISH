@@ -27,6 +27,7 @@ import {
   MatchingDropdown,
   SummaryWordList,
 } from "./questions";
+import { applyHighlightsToHtml, getSelectionCharacterOffset } from "@/lib/domUtils";
 
 interface TestSection {
   title: string;
@@ -36,12 +37,7 @@ interface TestSection {
   questionsCount: number;
 }
 
-interface Note {
-  id: string;
-  text: string;
-  selectedText: string;
-  timestamp: number;
-}
+
 
 interface ReadingTestViewProps {
   sections: TestSection[];
@@ -78,11 +74,10 @@ const PartNavBar = memo(function PartNavBar({
         <button
           onClick={() => activeSectionIdx > 0 && onSectionChange(activeSectionIdx - 1)}
           disabled={activeSectionIdx === 0}
-          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-            activeSectionIdx === 0
-              ? "text-slate-200 cursor-not-allowed"
-              : "text-slate-500 hover:bg-slate-100 hover:text-primary"
-          }`}
+          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === 0
+            ? "text-slate-200 cursor-not-allowed"
+            : "text-slate-500 hover:bg-slate-100 hover:text-primary"
+            }`}
         >
           <ChevronLeft size={18} />
         </button>
@@ -109,11 +104,10 @@ const PartNavBar = memo(function PartNavBar({
                     onClick={() => {
                       scrollRefs.current?.[q]?.scrollIntoView({ behavior: "smooth", block: "center" });
                     }}
-                    className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-md sm:rounded-lg flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold transition-all duration-200 ${
-                      isAnswered
-                        ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600 hover:shadow-md"
-                        : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
-                    }`}
+                    className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-md sm:rounded-lg flex items-center justify-center text-[10px] sm:text-xs md:text-sm font-bold transition-all duration-200 ${isAnswered
+                      ? "bg-emerald-500 text-white shadow-sm hover:bg-emerald-600 hover:shadow-md"
+                      : "bg-slate-100 text-slate-400 hover:bg-slate-200 hover:text-slate-600"
+                      }`}
                   >
                     {q}
                   </button>
@@ -127,11 +121,10 @@ const PartNavBar = memo(function PartNavBar({
         <button
           onClick={() => activeSectionIdx < sections.length - 1 && onSectionChange(activeSectionIdx + 1)}
           disabled={activeSectionIdx === sections.length - 1}
-          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-            activeSectionIdx === sections.length - 1
-              ? "text-slate-200 cursor-not-allowed"
-              : "text-slate-500 hover:bg-slate-100 hover:text-primary"
-          }`}
+          className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === sections.length - 1
+            ? "text-slate-200 cursor-not-allowed"
+            : "text-slate-500 hover:bg-slate-100 hover:text-primary"
+            }`}
         >
           <ChevronRight size={18} />
         </button>
@@ -150,6 +143,25 @@ const PartNavBar = memo(function PartNavBar({
    Main Component
    ───────────────────────────────────────────── */
 
+interface Highlight {
+  id: string;
+  start: number;
+  end: number;
+  text: string;
+  color: string;
+  type: "passage" | "question";
+}
+
+interface Note {
+  id: string;
+  text: string;
+  selectedText: string;
+  start?: number;
+  end?: number;
+  type?: "passage" | "question";
+  timestamp: number;
+}
+
 function ReadingTestViewInner({
   sections,
   activeSectionIdx,
@@ -157,16 +169,16 @@ function ReadingTestViewInner({
   answers,
   onAnswerChange,
 }: ReadingTestViewProps) {
-  const [highlights, setHighlights] = useState<Record<string, Array<{ text: string; color: string }>>>({});
+  const [highlights, setHighlights] = useState<Record<string, Highlight[]>>({});
   const [notes, setNotes] = useState<Record<string, Note[]>>({});
   const [showNoteInput, setShowNoteInput] = useState(false);
   const [pendingNoteText, setPendingNoteText] = useState("");
-  const [pendingSelectedText, setPendingSelectedText] = useState("");
+  const [pendingSelection, setPendingSelection] = useState<Highlight | null>(null);
   const [showNotesPanel, setShowNotesPanel] = useState(false);
 
   /* ── floating popup state ── */
   const [popupPos, setPopupPos] = useState<{ x: number; y: number } | null>(null);
-  const [popupText, setPopupText] = useState("");
+  const [popupSelection, setPopupSelection] = useState<Highlight | null>(null);
   const [popupIsHighlighted, setPopupIsHighlighted] = useState(false);
 
   const [mobileView, setMobileView] = useState<"passage" | "questions">("passage");
@@ -195,7 +207,7 @@ function ReadingTestViewInner({
   /* ── Floating popup on text selection (both passage + questions) ── */
   const closePopup = useCallback(() => {
     setPopupPos(null);
-    setPopupText("");
+    setPopupSelection(null);
     setPopupIsHighlighted(false);
   }, []);
 
@@ -206,8 +218,12 @@ function ReadingTestViewInner({
 
     const anchor = selection?.anchorNode;
     if (!anchor) return;
-    const isInPassage = passageRef.current?.contains(anchor);
-    const isInQuestions = questionsRef.current?.contains(anchor);
+
+    const passageEl = passageRef.current;
+    const questionsEl = questionsRef.current;
+
+    const isInPassage = passageEl?.contains(anchor);
+    const isInQuestions = questionsEl?.contains(anchor);
     if (!isInPassage && !isInQuestions) return;
 
     // Don't trigger if selection is inside an input/select/textarea
@@ -220,11 +236,25 @@ function ReadingTestViewInner({
     const x = Math.min(rect.left + rect.width / 2 - 80, window.innerWidth - 200);
     const y = rect.top - 52;
 
+    const container = isInPassage ? passageEl! : questionsEl!;
+    const offset = getSelectionCharacterOffset(container);
+    if (!offset) return;
+
+    const type = isInPassage ? "passage" : "question";
+    const highlight: Highlight = {
+      id: `${type}-${offset.start}-${offset.end}`,
+      start: offset.start,
+      end: offset.end,
+      text: offset.text,
+      color: "yellow",
+      type
+    };
+
     const existing = highlights[highlightKey] || [];
-    const isAlreadyHighlighted = existing.some((h) => h.text === text);
+    const isAlreadyHighlighted = existing.some((h) => h.id === highlight.id);
 
     setPopupPos({ x: Math.max(8, x), y: Math.max(8, y) });
-    setPopupText(text);
+    setPopupSelection(highlight);
     setPopupIsHighlighted(isAlreadyHighlighted);
   }, [highlightKey, highlights]);
 
@@ -250,37 +280,39 @@ function ReadingTestViewInner({
 
   /* Popup actions */
   const doHighlight = useCallback(() => {
-    if (!popupText) return;
+    if (!popupSelection) return;
     setHighlights((prev) => {
       const existing = prev[highlightKey] || [];
-      if (existing.some((h) => h.text === popupText)) return prev;
-      return { ...prev, [highlightKey]: [...existing, { text: popupText, color: "yellow" }] };
+      if (existing.some((h) => h.id === popupSelection.id)) return prev;
+      return { ...prev, [highlightKey]: [...existing, popupSelection] };
     });
     window.getSelection()?.removeAllRanges();
     closePopup();
-  }, [popupText, highlightKey, closePopup]);
+  }, [popupSelection, highlightKey, closePopup]);
 
   const doRemoveHighlight = useCallback(() => {
-    if (!popupText) return;
+    if (!popupSelection) return;
     setHighlights((prev) => {
       const existing = prev[highlightKey] || [];
-      return { ...prev, [highlightKey]: existing.filter((h) => h.text !== popupText) };
+      return { ...prev, [highlightKey]: existing.filter((h) => h.id !== popupSelection.id) };
     });
     setNotes((prev) => {
       const existing = prev[highlightKey] || [];
-      return { ...prev, [highlightKey]: existing.filter((n) => n.selectedText !== popupText) };
+      return { ...prev, [highlightKey]: existing.filter((n) => n.start !== popupSelection.start || n.type !== popupSelection.type) };
     });
     window.getSelection()?.removeAllRanges();
     closePopup();
-  }, [popupText, highlightKey, closePopup]);
+  }, [popupSelection, highlightKey, closePopup]);
 
   const doOpenNote = useCallback(() => {
-    if (!popupText) return;
-    setPendingSelectedText(popupText);
+    if (!popupSelection) return;
+    setPendingSelection(popupSelection);
     setShowNoteInput(true);
     window.getSelection()?.removeAllRanges();
     closePopup();
-  }, [popupText, closePopup]);
+  }, [popupSelection, closePopup]);
+
+
 
   /* Resizable splitter */
   const handleDragStart = useCallback((e: React.MouseEvent) => {
@@ -307,18 +339,28 @@ function ReadingTestViewInner({
 
   /* Notes */
   const saveNote = useCallback(() => {
-    if (!pendingNoteText.trim()) return;
-    const note: Note = { id: Date.now().toString(), text: pendingNoteText, selectedText: pendingSelectedText, timestamp: Date.now() };
+    if (!pendingNoteText.trim() || !pendingSelection) return;
+    const note: Note = {
+      id: Date.now().toString(),
+      text: pendingNoteText,
+      selectedText: pendingSelection.text,
+      start: pendingSelection.start,
+      end: pendingSelection.end,
+      type: pendingSelection.type,
+      timestamp: Date.now()
+    };
     setNotes((prev) => ({ ...prev, [highlightKey]: [...(prev[highlightKey] || []), note] }));
     setHighlights((prev) => {
       const existing = prev[highlightKey] || [];
-      if (existing.some((h) => h.text === pendingSelectedText)) return prev;
-      return { ...prev, [highlightKey]: [...existing, { text: pendingSelectedText, color: "blue" }] };
+      const noteHighlight = { ...pendingSelection, color: "blue" };
+      if (existing.some((h) => h.id === noteHighlight.id)) return prev;
+      return { ...prev, [highlightKey]: [...existing, noteHighlight] };
     });
     setShowNoteInput(false);
     setPendingNoteText("");
-    setPendingSelectedText("");
-  }, [pendingNoteText, pendingSelectedText, highlightKey]);
+    setPendingSelection(null);
+  }, [pendingNoteText, pendingSelection, highlightKey]);
+
 
   const removeNote = useCallback((noteId: string) => {
     setNotes((prev) => ({ ...prev, [highlightKey]: (prev[highlightKey] || []).filter((n) => n.id !== noteId) }));
@@ -330,16 +372,11 @@ function ReadingTestViewInner({
 
   const highlightedPassageHtml = useMemo(() => {
     const html = activeSection?.passage || "";
-    if (!html || currentHighlights.length === 0) return html;
-    let result = html;
-    currentHighlights.forEach(({ text, color }) => {
-      const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const regex = new RegExp(`(${escaped})`, "gi");
-      const cls = color === "blue" ? "hl-blue" : color === "green" ? "hl-green" : color === "pink" ? "hl-pink" : "hl-yellow";
-      result = result.replace(regex, `<mark class="${cls}">$1</mark>`);
-    });
-    return result;
+    if (!html) return html;
+    const passageHighlights = currentHighlights.filter(h => h.type === "passage");
+    return applyHighlightsToHtml(html, passageHighlights);
   }, [activeSection?.passage, currentHighlights]);
+
 
   /* Question ranges (memoized) */
   const { qStart, qEnd, answeredInPart, totalInPart } = useMemo(() => {
@@ -361,8 +398,15 @@ function ReadingTestViewInner({
       <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700">
         {parts.map((part, i) => {
           if (part.kind === "html") {
-            return <span key={i} dangerouslySetInnerHTML={{ __html: part.html || "" }} />;
+            const partHtml = part.html || "";
+            // Each HTML part in questions is small, we need highlights relative to the WHOLE questions container
+            // This is handled by applyHighlightsToHtml if we pass it the RIGHT part of the text
+            // But applyHighlightsToHtml works on a standalone HTML string.
+            // For now, let's just render it and we'll apply highlights to the container in a different way if needed.
+            // Actually, we can just apply highlights to this part if we know its offset.
+            return <span key={i} dangerouslySetInnerHTML={{ __html: partHtml }} />;
           }
+
           const q = part.question!;
           const val = answers[q.qIdx] || "";
 
@@ -453,6 +497,87 @@ function ReadingTestViewInner({
     );
   }, [activeSection?.content, answers, onAnswerChange]);
 
+  // Special effect to apply highlights to the questionsRef container
+  // Helper to find a Range based on textContent offsets
+  const createRangeFromOffsets = useCallback((container: HTMLElement, start: number, end: number) => {
+    const range = document.createRange();
+    let currentPos = 0;
+    let startNode: Node | null = null;
+    let startOffset = 0;
+    let endNode: Node | null = null;
+    let endOffset = 0;
+
+    const traverse = (node: Node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const len = node.textContent?.length || 0;
+        if (!startNode && currentPos + len >= start) {
+          startNode = node;
+          startOffset = start - currentPos;
+        }
+        if (!endNode && currentPos + len >= end) {
+          endNode = node;
+          endOffset = end - currentPos;
+        }
+        currentPos += len;
+      } else {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          traverse(node.childNodes[i]);
+          if (endNode) break;
+        }
+      }
+    };
+
+    if (container) traverse(container);
+
+    if (startNode && endNode) {
+      try {
+        range.setStart(startNode, startOffset);
+        range.setEnd(endNode, endOffset);
+        return range;
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  }, []);
+
+  // Effect to apply highlights to the questionsRef container using CSS Highlight API
+  useEffect(() => {
+    const el = questionsRef.current;
+    if (!el || !activeSection) return;
+
+    // Check for browser support
+    if (typeof CSS === "undefined" || !("highlights" in CSS)) {
+      console.warn("CSS Highlight API not supported in this browser.");
+      return;
+    }
+
+    // @ts-ignore
+    CSS.highlights.clear();
+
+    const questionHighlights = currentHighlights.filter(h => h.type === "question");
+
+    // Group ranges by color
+    const groups: Record<string, Range[]> = {};
+    questionHighlights.forEach(h => {
+      const range = createRangeFromOffsets(el, h.start, h.end);
+      if (range) {
+        if (!groups[h.color]) groups[h.color] = [];
+        groups[h.color].push(range);
+      }
+    });
+
+    Object.entries(groups).forEach(([color, ranges]) => {
+      // @ts-ignore
+      const highlight = new Highlight(...ranges);
+      // @ts-ignore
+      CSS.highlights.set(`hl-${color}`, highlight);
+    });
+  }, [currentHighlights, activeSection, createRangeFromOffsets]);
+
+
+
+
   /* ═══════════════════════════════════════════
      RENDER
      ═══════════════════════════════════════════ */
@@ -469,8 +594,9 @@ function ReadingTestViewInner({
               </div>
               <div className="bg-blue-50 rounded-xl p-3 mb-4 border border-blue-100">
                 <p className="text-[10px] font-bold text-blue-400 uppercase tracking-wider mb-1">Selected Text</p>
-                <p className="text-xs text-blue-700 italic leading-relaxed">&ldquo;{pendingSelectedText.slice(0, 120)}{pendingSelectedText.length > 120 ? "..." : ""}&rdquo;</p>
+                <p className="text-xs text-blue-700 italic leading-relaxed">&ldquo;{pendingSelection?.text.slice(0, 120)}{pendingSelection && pendingSelection.text.length > 120 ? "..." : ""}&rdquo;</p>
               </div>
+
               <textarea autoFocus rows={3} value={pendingNoteText} onChange={(e) => setPendingNoteText(e.target.value)} placeholder="Type your note here..." className="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-300 resize-none" onKeyDown={(e) => { if (e.key === "Enter" && e.metaKey) saveNote(); }} />
               <p className="text-[9px] text-slate-400 mt-1.5 mb-4">&#8984;+Enter to save</p>
               <div className="flex gap-3 justify-end">
@@ -482,9 +608,8 @@ function ReadingTestViewInner({
         )}
       </AnimatePresence>
 
-      {/* Floating Selection Popup */}
       <AnimatePresence>
-        {popupPos && popupText && (
+        {popupPos && popupSelection && (
           <div data-selection-popup>
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 4 }}
@@ -514,6 +639,7 @@ function ReadingTestViewInner({
           </div>
         )}
       </AnimatePresence>
+
 
       {/* Main content */}
       {isMobile ? (
@@ -774,7 +900,14 @@ function ReadingTestViewInner({
         .reading-passage ::-moz-selection { background-color: rgba(250, 204, 21, 0.4); color: inherit; }
         .select-text, .select-text * { user-select: text !important; -webkit-user-select: text !important; }
         .prose ::selection { background-color: rgba(59, 130, 246, 0.25); color: inherit; }
+
+        /* Custom highlights for questions */
+        ::highlight(hl-yellow) { background-color: #fef08a; color: #1e293b; }
+        ::highlight(hl-blue) { background-color: #bfdbfe; color: #1e293b; }
+        ::highlight(hl-green) { background-color: #bbf7d0; color: #1e293b; }
+        ::highlight(hl-pink) { background-color: #fbcfe8; color: #1e293b; }
       `}</style>
+
     </div>
   );
 }

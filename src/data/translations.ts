@@ -73,11 +73,11 @@ export const translations = {
                     title: "Câu chuyện của PTN",
                     subtitle: "Câu Chuyện Hình Thành",
                     p1: "bắt đầu từ những lớp học tâm huyết của ba người thầy:",
-                    teachers: "Phong – Trâm – Nhân",
+                    teachers: "",
                     p2: "Chúng tôi hiểu người học thực sự cần nền tảng vững chắc, sự dẫn dắt tận tâm và một lộ trình có ý nghĩa lâu dài thay vì những mẹo làm bài ngắn hạn.",
                     quote: "Thành công là sự tự tin khi học viên tự mình bước tiếp trên con đường học tập và cuộc sống.",
                     expBadge: "Năm Kinh Nghiệm",
-                    ptnAcronym: "là viết tắt của ba ngườisáng lập.",
+                    ptnAcronym: "là viết tắt của ba người sáng lập.",
                     ptnSpirit: "là tinh thần Partner To Navigate – đồng hành để định hướng."
                 },
                 differences: {
@@ -753,7 +753,7 @@ export const translations = {
                     title: "Our Story",
                     subtitle: "Our Story",
                     p1: "started from the passionate classes of three teachers:",
-                    teachers: "Phong – Tram – Nhan",
+                    teachers: "",
                     p2: "We understand that learners truly need a solid foundation, dedicated guidance, and a meaningful long-term journey rather than short-term test-taking tips.",
                     quote: "Success is the confidence when learners can continue on their own learning and life path.",
                     expBadge: "Years of Experience",
