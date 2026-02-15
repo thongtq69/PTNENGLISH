@@ -133,8 +133,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import AdModal from "@/components/AdModal";
 import ChatBox from "@/components/ChatBox";
-import dynamic from "next/dynamic";
-const TetEffects = dynamic(() => import("@/components/TetEffects"), { ssr: false });
+import TetEffects from "@/components/TetEffects";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 
