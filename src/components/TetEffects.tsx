@@ -95,9 +95,9 @@ const GallopingHorse = memo(function GallopingHorse() {
             fontSize: h.size,
             filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.2))",
           }}
-          initial={{ x: "-80px", opacity: 0 }}
+          initial={{ x: "100vw", opacity: 0 }}
           animate={{
-            x: "100vw",
+            x: "-80px",
             opacity: [0, 1, 1, 1, 0],
           }}
           transition={{ duration: h.speed, ease: "linear" }}
