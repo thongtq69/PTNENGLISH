@@ -64,9 +64,15 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     description: settings.site.description,
     icons: {
-      icon: "/favicon.png",
-      apple: "/apple-icon.png",
+      icon: [
+        { url: "/favicon.png", sizes: "32x32" },
+        { url: "/icon.png", sizes: "192x192" },
+      ],
+      apple: [
+        { url: "/apple-icon.png", sizes: "180x180" },
+      ],
     },
+    manifest: "/manifest.json",
     keywords: [
       "IELTS", "PTE", "Tiếng Anh giao tiếp", "PTN English", "Học tiếng anh", "Luyện thi IELTS",
       "trung tâm tiếng anh quận 1", "học IELTS TP.HCM", "luyện thi PTE", "Anh văn học thuật",
@@ -93,11 +99,20 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: settings.site.title,
       locale: "vi_VN",
       type: "website",
+      images: [
+        {
+          url: "/logo.png",
+          width: 800,
+          height: 800,
+          alt: "PTN English Logo",
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: settings.site.title,
       description: settings.site.description,
+      images: ["/logo.png"],
     },
     robots: {
       index: true,
