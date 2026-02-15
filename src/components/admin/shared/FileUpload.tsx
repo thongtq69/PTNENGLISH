@@ -61,31 +61,54 @@ export default function FileUpload({
         setUploading(true);
         if (onUploading) onUploading(true);
 
-        const formData = new FormData();
-        formData.append('file', file instanceof File ? file : new File([file], "image.jpg", { type: 'image/jpeg' }));
-        formData.append('folder', folder);
-
         try {
-            const res = await fetch('/api/upload', {
+            // 1. Get signature from our API
+            const timestamp = Math.round(new Date().getTime() / 1000);
+            const folderPath = `ptn_english/${folder}`;
+
+            const paramsToSign = {
+                timestamp,
+                folder: folderPath,
+            };
+
+            const signRes = await fetch('/api/upload/sign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paramsToSign }),
+            });
+
+            const { signature, error: signError } = await signRes.json();
+            if (signError) throw new Error(signError);
+
+            // 2. Upload directly to Cloudinary
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('api_key', '798193785297581'); // Built-in from env for client-side
+            formData.append('timestamp', timestamp.toString());
+            formData.append('signature', signature);
+            formData.append('folder', folderPath);
+
+            const cloudName = 'dtzegtrxb';
+            const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
                 method: 'POST',
                 body: formData,
             });
 
-            const data = await res.json();
-            if (data.url) {
-                onChange(data.url, { isCropped: isCroppedImage });
+            const uploadData = await uploadRes.json();
 
-                // Only automatically open cropper for original image upload (not for cropped thumbnail)
+            if (uploadData.secure_url) {
+                onChange(uploadData.secure_url, { isCropped: isCroppedImage });
+
                 if (mode === 'image' && !isCroppedImage) {
-                    setTempFileUrl(data.url);
+                    setTempFileUrl(uploadData.secure_url);
                     setIsCropping(true);
                 }
             } else {
-                alert(data.error || 'Lỗi khi tải tệp lên.');
+                throw new Error(uploadData.error?.message || 'Lỗi khi tải tệp lên Cloudinary.');
             }
-        } catch (error) {
+        } catch (error: any) {
             console.error('Upload error:', error);
-            alert('Lỗi kết nối máy chủ.');
+            alert(error.message || 'Lỗi kết nối máy chủ.');
         } finally {
             setUploading(false);
             if (onUploading) onUploading(false);
@@ -96,16 +119,16 @@ export default function FileUpload({
     const handleCropComplete = async (croppedImageUrl: string, position: { x: number; y: number }) => {
         setIsCropping(false);
         setTempFileUrl(null);
-        
+
         // Upload the cropped image to server
         try {
             // Convert data URL to blob
             const response = await fetch(croppedImageUrl);
             const blob = await response.blob();
-            
+
             // Upload the cropped image (pass true to indicate this is a cropped image)
             await uploadToServer(blob, true);
-            
+
             // Also pass the position for reference
             if (onPositionChange) {
                 onPositionChange(position);

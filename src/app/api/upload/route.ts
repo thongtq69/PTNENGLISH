@@ -1,18 +1,6 @@
 import { NextResponse } from 'next/server';
 import { uploadFile } from '@/lib/cloudinary';
 
-export const maxDuration = 60; // Tăng thời gian xử lý lên 60 giây
-export const dynamic = 'force-dynamic';
-
-// Cấu hình giới hạn body size cho API
-export const config = {
-    api: {
-        bodyParser: {
-            sizeLimit: '50mb', // Cho phép upload file lên tới 50mb
-        },
-    },
-};
-
 export async function POST(request: Request) {
     try {
         const formData = await request.formData();

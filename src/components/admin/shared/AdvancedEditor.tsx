@@ -48,23 +48,49 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
 
     const uploadImage = async (file: string | Blob): Promise<string | null> => {
         try {
-            const formData = new FormData();
+            // 1. Prepare blob
+            let blob: Blob;
             if (typeof file === 'string') {
                 const res = await fetch(file);
-                const blob = await res.blob();
-                formData.append('file', blob, 'word_image.png');
+                blob = await res.blob();
             } else {
-                formData.append('file', file);
+                blob = file;
             }
-            formData.append('folder', 'blog/content');
 
-            const res = await fetch('/api/upload', {
+            // 2. Get signature
+            const timestamp = Math.round(new Date().getTime() / 1000);
+            const folderPath = 'ptn_english/blog/content';
+
+            const paramsToSign = {
+                timestamp,
+                folder: folderPath,
+            };
+
+            const signRes = await fetch('/api/upload/sign', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paramsToSign }),
+            });
+
+            const { signature, error: signError } = await signRes.json();
+            if (signError) throw new Error(signError);
+
+            // 3. Upload direct to Cloudinary
+            const formData = new FormData();
+            formData.append('file', blob);
+            formData.append('api_key', '798193785297581');
+            formData.append('timestamp', timestamp.toString());
+            formData.append('signature', signature);
+            formData.append('folder', folderPath);
+
+            const cloudName = 'dtzegtrxb';
+            const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
                 method: 'POST',
                 body: formData,
             });
 
-            const data = await res.json();
-            return data.url || null;
+            const uploadData = await uploadRes.json();
+            return uploadData.secure_url || null;
         } catch (e) {
             console.error('Image upload failed:', e);
             return null;
