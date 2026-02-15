@@ -391,10 +391,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               >
                 {p.link ? (
                   <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                    <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                    <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain transition-all duration-500" />
                   </a>
                 ) : (
-                  <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain grayscale hover:grayscale-0 transition-all duration-500 opacity-70 hover:opacity-100" />
+                  <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain transition-all duration-500" />
                 )}
               </motion.div>
             ))}

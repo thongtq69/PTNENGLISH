@@ -133,6 +133,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import AdModal from "@/components/AdModal";
 import ChatBox from "@/components/ChatBox";
+import dynamic from "next/dynamic";
+const TetEffects = dynamic(() => import("@/components/TetEffects"), { ssr: false });
 
 import { LanguageProvider } from "@/context/LanguageContext";
 
@@ -262,6 +264,7 @@ export default function RootLayout({
       </head>
       <body className={`${playfair.variable} ${newsreader.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} ${caveat.variable} font-body antialiased`}>
         <LanguageProvider>
+          <TetEffects />
           {children}
           <AdModal />
           <ChatBox />
