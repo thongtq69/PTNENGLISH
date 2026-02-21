@@ -511,7 +511,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                     </div>
 
                                     {/* Pathway Elements Container */}
-                                    <div className="grid grid-cols-1 md:flex md:flex-row md:justify-between gap-6 md:gap-4 relative px-4">
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:flex md:flex-row md:justify-between gap-3 sm:gap-4 md:gap-4 relative px-0 md:px-4">
                                         {currentPathway.levels.map((level, i) => (
                                             <motion.div
                                                 key={level.id}
@@ -523,39 +523,39 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                                 onClick={() => setSelectedLevel(level)}
                                             >
                                                 {/* Level Header - Compact & Responsive */}
-                                                <div className="mb-2 md:mb-12 h-auto md:h-16 flex flex-col justify-end text-center">
-                                                    <div className="text-[10px] md:text-[0.65vw] lg:text-xs font-black text-slate-400 uppercase tracking-widest mb-1">CEFR {level.cefr}</div>
-                                                    <div className="text-slate-800 font-heading font-black text-sm md:text-[1vw] lg:text-lg leading-tight">
+                                                <div className="mb-1 md:mb-12 h-auto md:h-16 flex flex-col justify-end text-center">
+                                                    <div className="text-[8px] md:text-[0.65vw] lg:text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
+                                                    <div className="text-slate-800 font-heading font-black text-xs md:text-[1vw] lg:text-lg leading-tight">
                                                         {level.name}
                                                     </div>
                                                 </div>
 
                                                 {/* Milestone Node */}
-                                                <div className="relative mb-4 md:mb-10 z-10 flex items-center justify-center">
+                                                <div className="relative mb-2 md:mb-10 z-10 flex items-center justify-center">
                                                     <div className={`
-                                                        w-7 h-7 md:w-[4vw] md:h-[4vw] max-w-[64px] max-h-[64px] rounded-full bg-white border-[3px] md:border-[0.5vw] lg:border-8 border-slate-200 
+                                                        w-5 h-5 md:w-[4vw] md:h-[4vw] max-w-[64px] max-h-[64px] rounded-full bg-white border-2 md:border-[0.5vw] lg:border-8 border-slate-200 
                                                         flex items-center justify-center transition-all group-hover:border-accent group-hover:bg-accent group-hover:scale-110
-                                                        shadow-md md:shadow-lg
+                                                        shadow-sm md:shadow-lg
                                                     `}>
                                                         <div className="w-1 md:w-4 h-1 md:h-4 rounded-full bg-slate-200 md:bg-slate-400 group-hover:bg-white" />
                                                     </div>
-                                                    <div className="absolute -top-1 -right-1 bg-primary text-white text-[6px] md:text-[0.6vw] lg:text-[8px] font-bold px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <div className="absolute -top-0.5 -right-0.5 md:-top-1 md:-right-1 bg-primary text-white text-[5px] md:text-[0.6vw] lg:text-[8px] font-bold px-0.5 md:px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
                                                         L{i + 1}
                                                     </div>
                                                 </div>
 
-                                                {/* Summary Card - Square-ish Proportional Design */}
-                                                <div className="bg-white p-3 md:p-[1.5vw] rounded-2xl shadow-md lg:shadow-xl border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center aspect-square md:aspect-[1/1] flex flex-col justify-between items-center group-hover:ring-2 ring-primary/5">
-                                                    <div className="w-full flex flex-col items-center justify-center flex-grow py-2">
-                                                        <div className="bg-slate-50 text-[9px] md:text-[0.7vw] lg:text-xs font-black text-slate-500 px-2 py-1 md:px-[0.8vw] md:py-[0.4vw] rounded-lg mb-2 md:mb-[1vw] uppercase tracking-wider shrink-0 border border-slate-100">
+                                                {/* Summary Card */}
+                                                <div className="bg-white p-2.5 md:p-[1.5vw] rounded-xl md:rounded-2xl shadow-sm md:shadow-xl border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center md:aspect-[1/1] flex flex-col justify-between items-center group-hover:ring-2 ring-primary/5">
+                                                    <div className="w-full flex flex-col items-center justify-center flex-grow py-1 md:py-2">
+                                                        <div className="bg-slate-50 text-[7px] md:text-[0.7vw] lg:text-xs font-black text-slate-500 px-1.5 py-0.5 md:px-[0.8vw] md:py-[0.4vw] rounded-md md:rounded-lg mb-1.5 md:mb-[1vw] uppercase tracking-wider shrink-0 border border-slate-100">
                                                             {level.exit}
                                                         </div>
-                                                        <p className="text-[12px] md:text-[0.85vw] lg:text-base leading-relaxed text-slate-500 font-medium group-hover:text-slate-800 transition-colors line-clamp-3 md:line-clamp-4">
+                                                        <p className="text-[10px] md:text-[0.85vw] lg:text-base leading-snug md:leading-relaxed text-slate-500 font-medium group-hover:text-slate-800 transition-colors line-clamp-2 md:line-clamp-4">
                                                             {level.target}
                                                         </p>
                                                     </div>
-                                                    <div className="text-accent flex items-center justify-center gap-1 text-[8px] md:text-[0.65vw] lg:text-xs font-bold uppercase md:opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                                                        {content.levelModal?.badge || t.courses.levelModal.badge} <ArrowRight size={12} className="w-2 h-2 md:w-[0.8vw] md:h-[0.8vw]" />
+                                                    <div className="text-accent flex items-center justify-center gap-1 text-[7px] md:text-[0.65vw] lg:text-xs font-bold uppercase md:opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1 md:mt-0">
+                                                        {content.levelModal?.badge || t.courses.levelModal.badge} <ArrowRight size={10} className="w-2 h-2 md:w-[0.8vw] md:h-[0.8vw]" />
                                                     </div>
                                                 </div>
                                             </motion.div>
