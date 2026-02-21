@@ -105,3 +105,91 @@ h6 {
   max-width: 100% !important;
   height: auto !important;
 }
+
+/* ============================================
+   MOBILE TYPOGRAPHY OPTIMIZATION
+   Professional international standards:
+   - Body text: min 14px on mobile
+   - Secondary text: min 13px on mobile  
+   - Badges/labels: min 11px on mobile
+   Only applies to screens < 768px (md breakpoint)
+   Does NOT override Tailwind responsive prefixes (md:, lg:)
+   ============================================ */
+@media (max-width: 767px) {
+  /* Base body font size and iOS zoom prevention */
+  body {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Form inputs: prevent iOS zoom on focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* === PROSE CONTENT (Blog posts) - Most impactful === */
+  .prose {
+    font-size: 1rem !important;
+  }
+
+  .prose p {
+    font-size: 1rem !important;
+    line-height: 1.75 !important;
+  }
+
+  .prose h1 {
+    font-size: 1.625rem !important;
+  }
+
+  .prose h2 {
+    font-size: 1.375rem !important;
+  }
+
+  .prose h3 {
+    font-size: 1.125rem !important;
+  }
+
+  .prose li {
+    font-size: 1rem !important;
+  }
+
+  .prose blockquote {
+    font-size: 0.9375rem !important;
+  }
+
+  /* === SPECIFIC OVERRIDES for very tiny text patterns === */
+  /* Override text-[5px] to 10px minimum */
+  .text-\[5px\] {
+    font-size: 0.625rem !important;
+  }
+
+  /* Override text-[6px] to 10px minimum */
+  .text-\[6px\] {
+    font-size: 0.625rem !important;
+  }
+
+  /* Override text-[7px] to 11px minimum */
+  .text-\[7px\] {
+    font-size: 0.6875rem !important;
+  }
+
+  /* Override text-[8px] to 11px minimum */
+  .text-\[8px\] {
+    font-size: 0.6875rem !important;
+  }
+
+  /* Override text-[9px] to 11px minimum */
+  .text-\[9px\] {
+    font-size: 0.6875rem !important;
+  }
+
+  /* Override text-[10px] to 12px minimum */
+  .text-\[10px\] {
+    font-size: 0.75rem !important;
+  }
+
+  /* Override text-[11px] to 12px */
+  .text-\[11px\] {
+    font-size: 0.75rem !important;
+  }
+}

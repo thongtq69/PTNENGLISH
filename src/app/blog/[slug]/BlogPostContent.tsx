@@ -25,31 +25,31 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
     return (
         <>
             {/* Post Header */}
-            <section className="pt-40 pb-20 bg-slate-50 border-b border-slate-100">
+            <section className="pt-28 pb-12 md:pt-40 md:pb-20 bg-slate-50 border-b border-slate-100">
                 <div className="container mx-auto px-6 max-w-4xl">
-                    <Link href="/blog" className="inline-flex items-center text-slate-500 hover:text-primary mb-8 transition-colors group">
+                    <Link href="/blog" className="inline-flex items-center text-slate-500 hover:text-primary mb-6 md:mb-8 transition-colors group">
                         <ChevronLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
                         {blogPost?.backToBlog || "Quay lại Blog"}
                     </Link>
 
-                    <div className="inline-block px-4 py-1 rounded-full bg-primary text-white text-[10px] font-black uppercase tracking-widest mb-6 shadow-lg shadow-primary/20">
+                    <div className="inline-block px-4 py-1 rounded-full bg-primary text-white text-xs md:text-[10px] font-black uppercase tracking-widest mb-4 md:mb-6 shadow-lg shadow-primary/20">
                         {post.category}
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl font-heading font-black text-accent mb-8 leading-tight">
+                    <h1 className="text-2xl md:text-4xl lg:text-6xl font-heading font-black text-accent mb-6 md:mb-8 leading-tight">
                         {post.title}
                     </h1>
 
-                    <div className="flex flex-wrap items-center gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    <div className="flex flex-wrap items-center gap-4 md:gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
                         <div className="flex items-center gap-2">
                             <Calendar size={14} className="text-primary" />
                             {post.date}
                         </div>
-                        <div className="flex items-center gap-2 border-l border-slate-200 pl-6">
+                        <div className="flex items-center gap-2 border-l border-slate-200 pl-4 md:pl-6">
                             <Clock size={14} className="text-primary" />
                             {post.readTime || '5'} {blogPost?.readTime || "phút đọc"}
                         </div>
-                        <div className="flex items-center gap-2 border-l border-slate-200 pl-6">
+                        <div className="flex items-center gap-2 border-l border-slate-200 pl-4 md:pl-6">
                             <User size={14} className="text-primary" />
                             {post.author}
                         </div>

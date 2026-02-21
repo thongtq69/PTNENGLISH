@@ -57,7 +57,7 @@ export default function PromoPopup() {
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent flex flex-col justify-end p-8 md:p-12">
                                 <div className="text-white relative z-10">
-                                    <div className="inline-block px-3 py-1 bg-primary text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 rounded-none">
+                                    <div className="inline-block px-3 py-1 bg-primary text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 rounded-none">
                                         Admission 2025
                                     </div>
                                     <h4 className="text-2xl md:text-6xl font-heading font-black leading-none mb-3 md:mb-6 uppercase tracking-tighter">
@@ -98,8 +98,8 @@ export default function PromoPopup() {
                                         </div>
                                         <div>
                                             <h5 className="font-heading font-black text-accent text-xs md:text-lg uppercase tracking-tight mb-1">{item.title}</h5>
-                                            <p className="text-[8px] md:text-[11px] text-primary font-black uppercase mb-0.5 md:mb-1 tracking-[0.2em]">{item.detail}</p>
-                                            <p className="text-[9px] md:text-xs text-slate-400 font-bold font-mono">{item.schedule}</p>
+                                            <p className="text-[10px] md:text-[11px] text-primary font-black uppercase mb-0.5 md:mb-1 tracking-[0.2em]">{item.detail}</p>
+                                            <p className="text-[10px] md:text-xs text-slate-400 font-bold font-mono">{item.schedule}</p>
                                         </div>
                                         {/* Corner accent for active item feel */}
                                         <div className="absolute top-0 right-0 w-2 h-2 bg-primary opacity-0 group-hover:opacity-100"></div>
@@ -111,13 +111,13 @@ export default function PromoPopup() {
                                 <Link
                                     href="/contact"
                                     onClick={closePopup}
-                                    className="w-full bg-accent hover:bg-primary text-white py-4 md:py-6 font-black uppercase tracking-[0.4em] text-[10px] md:text-xs text-center shadow-2xl transition-all active:scale-95 rounded-none"
+                                    className="w-full bg-accent hover:bg-primary text-white py-4 md:py-6 font-black uppercase tracking-[0.4em] text-xs md:text-xs text-center shadow-2xl transition-all active:scale-95 rounded-none"
                                 >
                                     Đăng ký tư vấn ngay
                                 </Link>
                                 <div className="flex items-center justify-center gap-4 text-slate-300">
                                     <div className="h-px w-8 bg-slate-200"></div>
-                                    <p className="text-[10px] uppercase font-black tracking-widest text-slate-400">
+                                    <p className="text-[11px] uppercase font-black tracking-widest text-slate-400">
                                         Limited spots for 2025
                                     </p>
                                     <div className="h-px w-8 bg-slate-200"></div>

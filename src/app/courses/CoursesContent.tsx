@@ -316,7 +316,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                         <motion.div
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] mb-8"
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-slate-400 text-xs md:text-[10px] font-black uppercase tracking-[0.3em] mb-6 md:mb-8"
                         >
                             <Target size={14} className="text-primary" />
                             {content.hero?.badge || t.courses.hero.badge}
@@ -325,7 +325,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-white text-3xl md:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1] max-w-5xl mx-auto"
+                            className="text-white text-3xl md:text-6xl lg:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1] max-w-5xl mx-auto"
                         >
                             {(() => {
                                 const title = content.hero?.title || t.courses.hero.title;
@@ -365,7 +365,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             initial={{ opacity: 0, y: 30 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-xs md:text-2xl font-body leading-relaxed max-w-4xl mx-auto mb-8 md:mb-12 text-center whitespace-pre-line"
+                            className="text-slate-400 text-base md:text-2xl font-body leading-relaxed max-w-4xl mx-auto mb-8 md:mb-12 text-center whitespace-pre-line"
                         >
                             {content.hero?.subtitle || t.courses.hero.subtitle}
                         </motion.p>
@@ -397,7 +397,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                 <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">
                                     {content.targetAudience?.title || t.courses.targetAudience.title}
                                 </h2>
-                                <p className="text-slate-500 text-[10px] md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">
+                                <p className="text-slate-500 text-sm md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">
                                     {content.targetAudience?.subtitle || t.courses.targetAudience.subtitle}
                                 </p>
                             </div>
@@ -407,8 +407,8 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                     return (
                                         <div key={i} className="p-3 md:p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-primary/20 transition-all group">
                                             <CheckCircle2 size={18} className="text-primary mb-2 md:mb-4 opacity-50 group-hover:opacity-100 md:w-6 md:h-6" />
-                                            <h4 className="font-heading font-black text-slate-800 text-[10px] md:text-base mb-1">{group.title}</h4>
-                                            <p className="text-[8px] md:text-xs text-slate-400 font-bold uppercase tracking-wider">{group.sub}</p>
+                                            <h4 className="font-heading font-black text-slate-800 text-sm md:text-base mb-1">{group.title}</h4>
+                                <p className="text-xs md:text-xs text-slate-400 font-bold uppercase tracking-wider">{group.sub}</p>
                                         </div>
                                     );
                                 })}
@@ -442,7 +442,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                     <div key={i} className="flex justify-between items-center text-sm">
                                         <span className="text-slate-400 font-bold">{s.label}</span>
                                         <span className="text-white opacity-80">{s.time}</span>
-                                        <span className="text-primary font-black text-[10px] uppercase tracking-widest">{s.duration}</span>
+                                        <span className="text-primary font-black text-xs uppercase tracking-widest">{s.duration}</span>
                                     </div>
                                 ))}
                             </div>
@@ -524,7 +524,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                             >
                                                 {/* Level Header - Compact & Responsive */}
                                                 <div className="mb-1 md:mb-12 h-auto md:h-16 flex flex-col justify-end text-center">
-                                                    <div className="text-[8px] md:text-[0.65vw] lg:text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
+                                                    <div className="text-[9px] md:text-[0.65vw] lg:text-xs font-black text-slate-400 uppercase tracking-widest mb-0.5 md:mb-1">CEFR {level.cefr}</div>
                                                     <div className="text-slate-800 font-heading font-black text-xs md:text-[1vw] lg:text-lg leading-tight">
                                                         {level.name}
                                                     </div>
@@ -539,7 +539,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                                     `}>
                                                         <div className="w-1 md:w-4 h-1 md:h-4 rounded-full bg-slate-200 md:bg-slate-400 group-hover:bg-white" />
                                                     </div>
-                                                    <div className="absolute -top-0.5 -right-0.5 md:-top-1 md:-right-1 bg-primary text-white text-[5px] md:text-[0.6vw] lg:text-[8px] font-bold px-0.5 md:px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <div className="absolute -top-0.5 -right-0.5 md:-top-1 md:-right-1 bg-primary text-white text-[8px] md:text-[0.6vw] lg:text-[8px] font-bold px-0.5 md:px-1 rounded shadow-sm opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity">
                                                         L{i + 1}
                                                     </div>
                                                 </div>
@@ -547,14 +547,14 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                                 {/* Summary Card */}
                                                 <div className="bg-white p-2.5 md:p-[1.5vw] rounded-xl md:rounded-2xl shadow-sm md:shadow-xl border border-slate-100 w-full hover:shadow-2xl hover:border-accent/10 transition-all text-center md:aspect-[1/1] flex flex-col justify-between items-center group-hover:ring-2 ring-primary/5">
                                                     <div className="w-full flex flex-col items-center justify-center flex-grow py-1 md:py-2">
-                                                        <div className="bg-slate-50 text-[7px] md:text-[0.7vw] lg:text-xs font-black text-slate-500 px-1.5 py-0.5 md:px-[0.8vw] md:py-[0.4vw] rounded-md md:rounded-lg mb-1.5 md:mb-[1vw] uppercase tracking-wider shrink-0 border border-slate-100">
+                                                        <div className="bg-slate-50 text-[9px] md:text-[0.7vw] lg:text-xs font-black text-slate-500 px-1.5 py-0.5 md:px-[0.8vw] md:py-[0.4vw] rounded-md md:rounded-lg mb-1.5 md:mb-[1vw] uppercase tracking-wider shrink-0 border border-slate-100">
                                                             {level.exit}
                                                         </div>
-                                                        <p className="text-[10px] md:text-[0.85vw] lg:text-base leading-snug md:leading-relaxed text-slate-500 font-medium group-hover:text-slate-800 transition-colors line-clamp-2 md:line-clamp-4">
+                                                        <p className="text-xs md:text-[0.85vw] lg:text-base leading-snug md:leading-relaxed text-slate-500 font-medium group-hover:text-slate-800 transition-colors line-clamp-2 md:line-clamp-4">
                                                             {level.target}
                                                         </p>
                                                     </div>
-                                                    <div className="text-accent flex items-center justify-center gap-1 text-[7px] md:text-[0.65vw] lg:text-xs font-bold uppercase md:opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1 md:mt-0">
+                                                    <div className="text-accent flex items-center justify-center gap-1 text-[9px] md:text-[0.65vw] lg:text-xs font-bold uppercase md:opacity-0 group-hover:opacity-100 transition-opacity shrink-0 mt-1 md:mt-0">
                                                         {content.levelModal?.badge || t.courses.levelModal.badge} <ArrowRight size={10} className="w-2 h-2 md:w-[0.8vw] md:h-[0.8vw]" />
                                                     </div>
                                                 </div>
@@ -579,26 +579,26 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             <h2 className="text-xl md:text-6xl font-heading font-black text-accent leading-tight text-center lg:text-left">
                                 {(content.placement?.title || t.courses.placement.title).split(' ').slice(0, 4).join(' ')} <br /> <span className="text-primary">{(content.placement?.title || t.courses.placement.title).split(' ').slice(4).join(' ')}</span>
                             </h2>
-                            <p className="text-slate-500 text-[10px] md:text-lg leading-relaxed text-center lg:text-left mx-auto lg:mx-0">
+                            <p className="text-slate-500 text-sm md:text-lg leading-relaxed text-center lg:text-left mx-auto lg:mx-0">
                                 {content.placement?.desc || t.courses.placement.desc}
                             </p>
 
                             <div className="grid grid-cols-2 gap-4 md:gap-6">
                                 <div className="space-y-3 md:space-y-4">
                                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-accent text-white flex items-center justify-center font-black text-xs md:text-base">1</div>
-                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">
+                                    <h4 className="font-heading font-black text-slate-800 text-sm md:text-base">
                                         {content.placement?.step1?.title || t.courses.placement.step1.title}
                                     </h4>
-                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">
+                                    <p className="text-xs md:text-sm text-slate-400 leading-tight">
                                         {content.placement?.step1?.desc || t.courses.placement.step1.desc}
                                     </p>
                                 </div>
                                 <div className="space-y-3 md:space-y-4">
                                     <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary text-white flex items-center justify-center font-black text-xs md:text-base">2</div>
-                                    <h4 className="font-heading font-black text-slate-800 text-xs md:text-base">
+                                    <h4 className="font-heading font-black text-slate-800 text-sm md:text-base">
                                         {content.placement?.step2?.title || t.courses.placement.step2.title}
                                     </h4>
-                                    <p className="text-[10px] md:text-sm text-slate-400 leading-tight">
+                                    <p className="text-xs md:text-sm text-slate-400 leading-tight">
                                         {content.placement?.step2?.desc || t.courses.placement.step2.desc}
                                     </p>
                                 </div>
@@ -659,20 +659,20 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                         <X size={18} className="md:w-6 md:h-6" />
                                     </button>
 
-                                    <div className="text-[7px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-2 md:mb-4 opacity-70">
+                                    <div className="text-[10px] md:text-[10px] font-black uppercase tracking-[0.3em] mb-2 md:mb-4 opacity-70">
                                         {content.levelModal?.badge || t.courses.levelModal.badge}
                                     </div>
                                     <h3 className="text-2xl md:text-5xl font-heading font-black mb-3 md:mb-6 leading-tight">{selectedLevel.name}</h3>
 
                                     <div className="flex gap-2 md:gap-4 justify-center">
-                                        <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold border border-white/20 flex flex-col">
-                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">
+                                        <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold border border-white/20 flex flex-col">
+                                            <span className="opacity-60 text-[8px] md:text-[8px] uppercase">
                                                 {content.levelModal?.cefr || t.courses.levelModal.cefr}
                                             </span>
                                             {selectedLevel.cefr}
                                         </div>
-                                        <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[9px] md:text-xs font-bold border border-white/20 flex flex-col">
-                                            <span className="opacity-60 text-[6px] md:text-[8px] uppercase">
+                                        <div className="bg-white/10 backdrop-blur-md px-2.5 md:px-4 py-1 md:py-2 rounded-lg md:rounded-xl text-[10px] md:text-xs font-bold border border-white/20 flex flex-col">
+                                            <span className="opacity-60 text-[8px] md:text-[8px] uppercase">
                                                 {content.levelModal?.exit || t.courses.levelModal.exit}
                                             </span>
                                             {selectedLevel.exit}
@@ -703,19 +703,19 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                         {selectedLevel.benefits?.map((b: string, i: number) => (
                                             <div key={i} className="flex gap-2 md:gap-3 items-start p-2 md:p-3 bg-slate-50 rounded-lg md:rounded-xl">
                                                 <CheckCircle2 size={12} className="text-primary mt-0.5 shrink-0 md:w-4 md:h-4" />
-                                                <span className="text-[10px] md:text-sm text-slate-600 font-medium">{b}</span>
+                                                <span className="text-xs md:text-sm text-slate-600 font-medium">{b}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
                                 <div className="mt-8 md:mt-12 flex flex-col md:flex-row gap-2.5 md:gap-4">
-                                    <Link href="/contact#registration-form" className="w-full md:flex-1 bg-accent text-white py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-[9px] text-center hover:bg-black transition-all">
+                                    <Link href="/contact#registration-form" className="w-full md:flex-1 bg-accent text-white py-3.5 md:py-5 rounded-xl md:rounded-2xl font-black uppercase tracking-widest text-xs text-center hover:bg-black transition-all">
                                         {content.levelModal?.register || t.courses.levelModal.register}
                                     </Link>
                                     <button
                                         onClick={() => setSelectedLevel(null)}
-                                        className="w-full md:w-auto px-6 py-3.5 md:py-0 border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all text-[9px] uppercase tracking-widest"
+                                        className="w-full md:w-auto px-6 py-3.5 md:py-0 border border-slate-200 rounded-xl md:rounded-2xl font-bold text-slate-400 hover:bg-slate-50 transition-all text-xs uppercase tracking-widest"
                                     >
                                         {content.levelModal?.close || t.courses.levelModal.close}
                                     </button>

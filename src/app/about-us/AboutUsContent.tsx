@@ -113,7 +113,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             <Header />
 
             {/* Hero Section - Fixed overlap and adjusted padding */}
-            <section className="pt-48 pb-16 bg-slate-50 relative overflow-hidden">
+            <section className="pt-32 pb-12 md:pt-48 md:pb-16 bg-slate-50 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-primary/5 -skew-x-12 translate-x-1/2" />
                 <div className="container mx-auto px-6 relative z-10">
                     <motion.div
@@ -121,13 +121,13 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         animate={{ opacity: 1, y: 0 }}
                         className="max-w-4xl"
                     >
-                        <h1 className="text-primary font-heading font-bold text-sm uppercase tracking-[0.4em] mb-4">
+                        <h1 className="text-primary font-heading font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-4">
                             {t.home.about.hero.badge}
                         </h1>
                         <h2 className="text-2xl md:text-6xl font-heading font-medium text-accent mb-4 leading-tight">
                             {t.home.about.hero.title.split('\n')[0]} <br /> {t.home.about.hero.title.split('\n')[1]} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>
                         </h2>
-                        <p className="text-sm md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-2 md:border-l-4 border-primary pl-4 md:pl-6 py-0.5">
+                        <p className="text-base md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-2 md:border-l-4 border-primary pl-4 md:pl-6 py-0.5">
                             &ldquo;{t.home.about.hero.desc}&rdquo;
                         </p>
                     </motion.div>
@@ -135,9 +135,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* Story Section - Compacted */}
-            <section className="py-20">
+            <section className="py-12 md:py-20">
                 <div className="container mx-auto px-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
                         <motion.div
                             initial={{ opacity: 0, x: -50 }}
                             whileInView={{ opacity: 1, x: 0 }}
@@ -149,8 +149,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 {storyData.subtitle || t.home.about.story.subtitle}
                                 <span className="w-6 h-0.5 bg-primary lg:hidden" />
                             </h3>
-                            <div className="space-y-4 text-sm md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
-                                <p className="text-xl leading-snug">
+                            <div className="space-y-4 text-base md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
+                                <p className="text-lg md:text-xl leading-snug">
                                     <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {storyData.p1 || t.home.about.story.p1}
                                 </p>
                                 <p>
@@ -188,7 +188,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* Differences Hub Section - More Contrast, Compact */}
-            <section className="py-20 bg-slate-100 overflow-hidden relative">
+            <section className="py-12 md:py-20 bg-slate-100 overflow-hidden relative">
                 <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] border border-accent rounded-full" />
                 </div>
@@ -249,9 +249,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         whileHover={{ y: -3 }}
                                         className="p-4 md:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all group"
                                     >
-                                        <div className="text-[10px] font-black text-primary/40 group-hover:text-primary transition-colors mb-1">0{idx + 1}</div>
+                                        <div className="text-[11px] font-black text-primary/40 group-hover:text-primary transition-colors mb-1">0{idx + 1}</div>
                                         <h4 className="text-accent font-heading font-black mb-1 text-sm md:text-base uppercase tracking-tight">{val.title}</h4>
-                                        <p className="text-slate-600 text-[11px] md:text-[12px] leading-snug font-medium">{val.desc}</p>
+                                        <p className="text-slate-600 text-xs md:text-[12px] leading-snug font-medium">{val.desc}</p>
                                     </motion.div>
                                 ))}
                             </div>
@@ -262,7 +262,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
 
             {/* Teachers Section - Hierarchical Layout */}
-            <section id="teachers" className="py-24 bg-slate-50">
+            <section id="teachers" className="py-12 md:py-24 bg-slate-50">
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-[0.4em] mb-4">{t.home.about.teachers.badge}</h2>
@@ -292,19 +292,19 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                                     <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                                         <div className="w-12 h-1 bg-primary mb-6" />
-                                        <p className="text-primary text-[10px] font-black uppercase tracking-widest mb-3">{t.home.about.teachers.qualifications}</p>
+                                        <p className="text-primary text-xs md:text-[10px] font-black uppercase tracking-widest mb-3">{t.home.about.teachers.qualifications}</p>
                                         <p className="text-white text-sm leading-relaxed mb-6 font-medium whitespace-pre-line">{teacher.certs}</p>
-                                        <p className="text-white/70 text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line">{teacher.desc}</p>
+                                        <p className="text-white/70 text-sm md:text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line">{teacher.desc}</p>
                                     </div>
-                                    <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/10 text-white text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all shadow-xl">
+                                    <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/10 text-white text-[10px] md:text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all shadow-xl">
                                         {t.home.about.teachers.founderBadge}
                                     </div>
                                 </div>
                                 <div className="mt-4 md:mt-8 text-center group-hover:text-primary transition-colors">
-                                    <h4 className="font-heading font-bold text-sm md:text-2xl text-accent group-hover:text-primary transition-colors duration-300 line-clamp-1">{teacher.name}</h4>
+                                    <h4 className="font-heading font-bold text-base md:text-2xl text-accent group-hover:text-primary transition-colors duration-300 line-clamp-1">{teacher.name}</h4>
                                     <div className="flex items-center justify-center gap-2 md:gap-4 mt-1 md:mt-3 opacity-60">
                                         <span className="hidden md:block h-px w-8 bg-slate-400" />
-                                        <p className="text-[8px] md:text-[11px] text-accent font-black uppercase tracking-widest">{teacher.exp}</p>
+                                        <p className="text-[10px] md:text-[11px] text-accent font-black uppercase tracking-widest">{teacher.exp}</p>
                                         <span className="hidden md:block h-px w-8 bg-slate-400" />
                                     </div>
                                 </div>
@@ -370,7 +370,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     {POLICIES.map((p, idx) => (
                                         <div key={idx} className="flex items-center gap-2 p-2 rounded-xl bg-white border border-slate-200 hover:border-primary/30 cursor-pointer transition-all shadow-sm">
                                             {React.cloneElement(p.icon as React.ReactElement<any>, { className: "w-4 h-4 text-primary" })}
-                                            <span className="text-[10px] font-bold text-slate-700 whitespace-nowrap">{p.title}</span>
+                                            <span className="text-xs md:text-[10px] font-bold text-slate-700 whitespace-nowrap">{p.title}</span>
                                         </div>
                                     ))}
                                 </div>

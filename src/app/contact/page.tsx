@@ -42,21 +42,21 @@ export default function ContactPage() {
             <Header />
 
             {/* Hero Section */}
-            <section className="pt-48 pb-24 bg-white border-b border-slate-100 relative overflow-hidden text-center">
+            <section className="pt-32 pb-16 md:pt-48 md:pb-24 bg-white border-b border-slate-100 relative overflow-hidden text-center">
                 <div className="absolute top-0 right-0 w-1/4 h-full bg-accent/5 -skew-x-12 translate-x-1/2"></div>
                 <div className="container mx-auto px-6 max-w-4xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest mb-8">
+                        <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs md:text-[10px] font-bold uppercase tracking-widest mb-6 md:mb-8">
                             {t.contact.badge}
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-heading font-semibold text-accent mb-10 leading-tight">
+                        <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-semibold text-accent mb-6 md:mb-10 leading-tight">
                             {t.contact.title} <br />
                             {t.contact.subtitle}
                         </h1>
-                        <p className="text-slate-500 text-xl font-body leading-relaxed mb-12 mx-auto max-w-2xl">
+                        <p className="text-slate-500 text-base md:text-xl font-body leading-relaxed mb-8 md:mb-12 mx-auto max-w-2xl">
                             {t.contact.desc} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {t.contact.descHighlight}
                         </p>
                     </motion.div>
@@ -64,7 +64,7 @@ export default function ContactPage() {
             </section>
 
             {/* Contact Details Grid */}
-            <section className="py-24">
+            <section className="py-12 md:py-24">
                 <div className="container mx-auto px-6 max-w-5xl">
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-12 text-center mb-12 md:mb-24">
                         {[
@@ -83,8 +83,8 @@ export default function ContactPage() {
                                 <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-slate-50 flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
                                     {item.icon}
                                 </div>
-                                <h4 className="font-heading font-bold text-slate-400 text-[10px] md:text-xs uppercase tracking-[0.2em] mb-2 md:mb-3">{item.title}</h4>
-                                <p className="text-slate-900 font-heading font-bold text-sm md:text-lg leading-snug">{item.content}</p>
+                                <h4 className="font-heading font-bold text-slate-400 text-xs md:text-xs uppercase tracking-[0.2em] mb-2 md:mb-3">{item.title}</h4>
+                                <p className="text-slate-900 font-heading font-bold text-base md:text-lg leading-snug">{item.content}</p>
                             </motion.div>
                         ))}
                     </div>

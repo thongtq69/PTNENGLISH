@@ -58,20 +58,20 @@ export default function TeachersPage() {
             <Header />
 
             {/* Hero Section */}
-            <section className="pt-48 pb-32 bg-white border-b border-slate-100 text-center">
+            <section className="pt-32 pb-16 md:pt-48 md:pb-32 bg-white border-b border-slate-100 text-center">
                 <div className="container mx-auto px-6 max-w-4xl mx-auto">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-[10px] font-bold uppercase tracking-widest mb-8">
+                        <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-xs md:text-[10px] font-bold uppercase tracking-widest mb-6 md:mb-8">
                             Your World-Class Academic Partners
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-heading font-semibold mb-10 text-accent leading-tight">
+                        <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-semibold mb-6 md:mb-10 text-accent leading-tight">
                             Đội Ngũ Giảng Viên <br />
                             Tâm Huyết & Chuyên Môn
                         </h1>
-                        <p className="text-slate-500 text-xl font-body leading-relaxed mx-auto max-w-3xl">
+                        <p className="text-slate-500 text-base md:text-xl font-body leading-relaxed mx-auto max-w-3xl">
                             "Mọi sự thành công của học viên đều bắt đầu từ sự dẫn dắt của những người thầy đủ Tâm và đủ Tầm."
                         </p>
                     </motion.div>
@@ -79,9 +79,9 @@ export default function TeachersPage() {
             </section>
 
             {/* Teachers Grid */}
-            <section className="py-32">
+            <section className="py-16 md:py-32">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
                         {TEACHERS.map((teacher, idx) => (
                             <motion.div
                                 key={teacher.id}

@@ -308,7 +308,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <GraduationCap size={14} className="text-primary" />
                             {hero.subtitle}
                         </div>
-                        <h1 className="text-white text-4xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
+                        <h1 className="text-white text-3xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
                             {(() => {
                                 const title = t.studentCorner?.hero?.mainTitle || hero.title;
                                 if (title.includes('<br />') || title.includes('<br/>')) {
@@ -330,7 +330,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 );
                             })()}
                         </h1>
-                        <p className="text-slate-300 text-base md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
+                        <p className="text-slate-300 text-sm md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
                             {hero.description}
                         </p>
 
@@ -384,7 +384,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
             <section className="py-16 md:py-24 bg-slate-50 overflow-hidden">
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
-                        <h2 className="text-primary font-heading text-sm md:text-lg font-bold uppercase tracking-[0.3em] mb-3 md:mb-4">
+                        <h2 className="text-primary font-heading text-xs md:text-lg font-bold uppercase tracking-[0.3em] mb-3 md:mb-4">
                             {playground.headline}
                         </h2>
                         <h3 className="text-2xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
@@ -408,7 +408,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                             <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-primary/90 flex items-center justify-center text-white shadow-xl group-hover:scale-110 transition-transform">
                                                 <svg className="w-5 h-5 md:w-7 md:h-7 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                                             </div>
-                                            <span className="mt-2 text-white font-heading font-bold text-[8px] md:text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{t.studentCorner?.video?.watch || fb('Xem Video', 'Watch Video')}</span>
+                                            <span className="mt-2 text-white font-heading font-bold text-[10px] md:text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">{t.studentCorner?.video?.watch || fb('Xem Video', 'Watch Video')}</span>
                                         </div>
                                     </a>
                                 ) : (
@@ -418,8 +418,8 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                             <>
                                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent opacity-60 group-hover:opacity-30 transition-opacity" />
                                                 <div className="absolute bottom-2 left-2 md:bottom-5 md:left-5 text-white pr-2">
-                                                    {item.label && <span className="bg-primary px-1.5 py-0.5 md:px-3 md:py-1 text-[6px] md:text-[9px] font-black uppercase tracking-widest mb-1 inline-block">{item.label}</span>}
-                                                    {item.title && <h4 className="text-[10px] md:text-base lg:text-lg font-heading font-black leading-tight" dangerouslySetInnerHTML={{ __html: item.title }} />}
+                                                    {item.label && <span className="bg-primary px-1.5 py-0.5 md:px-3 md:py-1 text-[8px] md:text-[9px] font-black uppercase tracking-widest mb-1 inline-block">{item.label}</span>}
+                                                    {item.title && <h4 className="text-xs md:text-base lg:text-lg font-heading font-black leading-tight" dangerouslySetInnerHTML={{ __html: item.title }} />}
                                                 </div>
                                             </>
                                         )}
@@ -452,13 +452,13 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 <BookOpen size={16} className="text-primary md:w-8 md:h-8" />
                             </div>
 
-                            <h2 className="text-[10px] md:text-3xl font-heading font-black text-accent mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: lms.title }} />
+                            <h2 className="text-sm md:text-3xl font-heading font-black text-accent mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: lms.title }} />
 
                             <div className="space-y-6 mb-12">
-                                <p className="text-slate-600 font-body leading-relaxed text-[8px] md:text-lg" dangerouslySetInnerHTML={{ __html: lms.description }} />
+                                <p className="text-slate-600 font-body leading-relaxed text-xs md:text-lg" dangerouslySetInnerHTML={{ __html: lms.description }} />
                                 <ul className="space-y-2 md:space-y-4">
                                     {lms.items.map((item: string, idx: number) => (
-                                        <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-500 font-medium text-[7px] md:text-base">
+                                        <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-500 font-medium text-[10px] md:text-base">
                                             <div className="w-1 h-1 rounded-full bg-primary/50"></div>
                                             {item}
                                         </li>
@@ -470,7 +470,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 href={lms.buttonLink}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 bg-primary text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg shadow-lg shadow-primary/20 transition-all uppercase"
+                                className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 md:px-8 md:py-5 rounded-full font-bold text-xs md:text-lg shadow-lg shadow-primary/20 transition-all uppercase"
                             >
                                 {lms.buttonText}
                                 <ArrowRight size={10} className="md:w-5 md:h-5" />
@@ -490,13 +490,13 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 <ClipboardList size={16} className="text-white md:w-8 md:h-8" />
                             </div>
 
-                            <h2 className="text-[10px] md:text-3xl font-heading font-black text-white mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: mocktest.title }} />
+                            <h2 className="text-sm md:text-3xl font-heading font-black text-white mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: mocktest.title }} />
 
                             <div className="space-y-6 mb-12">
-                                <p className="text-slate-300 font-body leading-relaxed text-[8px] md:text-lg" dangerouslySetInnerHTML={{ __html: mocktest.description }} />
+                                <p className="text-slate-300 font-body leading-relaxed text-xs md:text-lg" dangerouslySetInnerHTML={{ __html: mocktest.description }} />
                                 <ul className="space-y-2 md:space-y-4">
                                     {mocktest.items.map((item: string, idx: number) => (
-                                        <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-400 font-medium text-[7px] md:text-base">
+                                        <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-400 font-medium text-[10px] md:text-base">
                                             <div className="w-1 h-1 rounded-full bg-primary/50"></div>
                                             {item}
                                         </li>
@@ -506,7 +506,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
                             <Link
                                 href={mocktest.buttonLink}
-                                className="inline-flex items-center gap-2 bg-white text-accent hover:bg-primary hover:text-white px-3 py-2 md:px-8 md:py-5 rounded-full font-bold text-[8px] md:text-lg transition-all uppercase"
+                                className="inline-flex items-center gap-2 bg-white text-accent hover:bg-primary hover:text-white px-4 py-2.5 md:px-8 md:py-5 rounded-full font-bold text-xs md:text-lg transition-all uppercase"
                             >
                                 {mocktest.buttonText}
                                 <ArrowRight size={10} className="md:w-5 md:h-5" />
@@ -531,7 +531,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
 
                         <div className="relative z-10 p-6 md:p-16">
                             <h3 className="text-xl md:text-5xl font-heading font-black text-white mb-4" dangerouslySetInnerHTML={{ __html: support.title }} />
-                            <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-xs md:text-lg">
+                            <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-sm md:text-lg">
                                 {support.description}
                             </p>
 
@@ -545,7 +545,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                     </div>
                                     <div className="text-left">
                                         <p className="font-bold text-sm">{t.studentCorner?.support?.supportCenter || fb('Trung tâm hỗ trợ', 'Support Center')}</p>
-                                        <p className="text-[8px] text-slate-500 uppercase">{t.studentCorner?.support?.sendRequest || fb('Gửi yêu cầu', 'Send Request')}</p>
+                                        <p className="text-[10px] text-slate-500 uppercase">{t.studentCorner?.support?.sendRequest || fb('Gửi yêu cầu', 'Send Request')}</p>
                                     </div>
                                 </Link>
 
@@ -558,7 +558,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                     </div>
                                     <div className="text-left">
                                         <p className="font-bold text-sm">{support.phone}</p>
-                                        <p className="text-[8px] text-slate-500 uppercase">{t.studentCorner?.support?.hotlineLabel || fb('Hotline hỗ trợ', 'Support Hotline')}</p>
+                                        <p className="text-[10px] text-slate-500 uppercase">{t.studentCorner?.support?.hotlineLabel || fb('Hotline hỗ trợ', 'Support Hotline')}</p>
                                     </div>
                                 </a>
                             </div>

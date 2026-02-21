@@ -88,7 +88,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         className="flex justify-center items-center gap-3 mb-6"
                     >
                         <Trophy className="text-primary animate-pulse" size={20} />
-                        <h2 className="text-primary font-heading font-black text-[10px] md:text-xs uppercase tracking-[0.5em]">{badge}</h2>
+                        <h2 className="text-primary font-heading font-black text-xs md:text-xs uppercase tracking-[0.5em]">{badge}</h2>
                         <Star className="text-primary animate-pulse" size={20} />
                     </motion.div>
 
@@ -145,7 +145,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                                         <div className="absolute inset-x-0 bottom-0 p-3 md:p-8 transform transition-transform duration-500 group-hover/card:-translate-y-2">
                                             <div className="flex items-center gap-1 md:gap-2">
                                                 <Award size={12} className="text-primary md:w-[18px] md:h-[18px]" />
-                                                <span className="text-primary font-black uppercase tracking-widest text-[8px] md:text-[10px] line-clamp-1">{item.title}</span>
+                                                <span className="text-primary font-black uppercase tracking-widest text-[10px] md:text-[10px] line-clamp-1">{item.title}</span>
                                             </div>
                                         </div>
 
@@ -155,9 +155,9 @@ export default function HallOfFame({ config }: { config?: any }) {
 
                                     {/* Decorative badge */}
                                     <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 w-8 h-8 md:w-14 md:h-14 bg-primary rounded-lg md:rounded-xl flex items-center justify-center text-white shadow-2xl rotate-12 group-hover/card:rotate-0 transition-all duration-500 border-2 border-slate-900 flex-col z-20">
-                                        <span className="text-[6px] md:text-[10px] font-black leading-none uppercase">STAR</span>
+                                        <span className="text-[7px] md:text-[10px] font-black leading-none uppercase">STAR</span>
                                         <Star size={8} fill="white" className="my-0.5 md:w-3 md:h-3" />
-                                        <span className="text-[5px] md:text-[8px] font-bold leading-none uppercase">PRO</span>
+                                        <span className="text-[6px] md:text-[8px] font-bold leading-none uppercase">PRO</span>
                                     </div>
                                 </motion.div>
                             ))}

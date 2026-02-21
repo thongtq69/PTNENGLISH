@@ -34,7 +34,7 @@ export default function Testimonials() {
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-primary font-heading font-bold text-[10px] md:text-sm uppercase tracking-[0.4em] mb-2 md:mb-4"
+                        className="text-primary font-heading font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-2 md:mb-4"
                     >
                         {t.home.testimonials.badge}
                     </motion.h2>

@@ -135,18 +135,18 @@ export default function BlogContent({ pageData }: { pageData: any }) {
 
 
                 {/* Hero Section */}
-                <section className="pt-48 pb-32 bg-white border-b border-slate-100 relative overflow-hidden">
+                <section className="pt-32 pb-16 md:pt-48 md:pb-32 bg-white border-b border-slate-100 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-1/4 h-full bg-secondary/5 -skew-x-12 translate-x-1/2"></div>
                     <div className="container mx-auto px-6 max-w-4xl">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                         >
-                            <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-[10px] font-bold uppercase tracking-widest mb-8">
+                            <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-xs md:text-[10px] font-bold uppercase tracking-widest mb-6 md:mb-8">
                                 {hero.subtitle}
                             </div>
-                            <h1 className="text-5xl md:text-7xl font-heading font-semibold text-accent mb-10 leading-tight" dangerouslySetInnerHTML={{ __html: hero.title }} />
-                            <p className="text-slate-500 text-xl font-body leading-relaxed mx-auto max-w-3xl">
+                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-semibold text-accent mb-6 md:mb-10 leading-tight" dangerouslySetInnerHTML={{ __html: hero.title }} />
+                            <p className="text-slate-500 text-base md:text-xl font-body leading-relaxed mx-auto max-w-3xl">
                                 {hero.description}
                             </p>
                         </motion.div>
@@ -181,7 +181,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                 </section>
 
                 {/* Blog Grid */}
-                <section className="py-32">
+                <section className="py-16 md:py-32">
                     <div className="container mx-auto px-6 max-w-7xl">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-16">
                             <AnimatePresence mode="popLayout">
@@ -211,13 +211,13 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                                 </div>
                                             )}
                                             <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors"></div>
-                                            <div className="absolute top-6 left-6 bg-accent text-white text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
+                                            <div className="absolute top-6 left-6 bg-accent text-white text-xs md:text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                                                 {post.category}
                                             </div>
                                         </div>
 
                                         <div className="p-6 md:p-10 flex-grow flex flex-col">
-                                            <div className="flex items-center justify-center space-x-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">
+                                            <div className="flex items-center justify-center space-x-4 text-xs md:text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">
                                                 <span className="flex items-center"><Calendar size={12} className="mr-2 text-primary" /> {post.date}</span>
                                                 <span className="text-slate-200">|</span>
                                                 <span className="flex items-center"><Clock size={12} className="mr-2 text-accent" /> {post.readTime || '5'} {t.blogPage.readTime}</span>
@@ -238,7 +238,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                                         <User size={16} />
                                                     </div>
                                                     <div>
-                                                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.blogPage.author}</p>
+                                                        <p className="text-xs md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.blogPage.author}</p>
                                                         <p className="text-xs font-bold text-slate-700">{post.author}</p>
                                                     </div>
                                                 </div>
@@ -268,11 +268,11 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                 </section>
 
                 {/* Newsletter CTA */}
-                <section className="py-32 bg-accent relative overflow-hidden text-center">
+                <section className="py-16 md:py-32 bg-accent relative overflow-hidden text-center">
                     <div className="absolute top-0 right-0 w-1/3 h-full bg-white/5 skew-x-12 translate-x-1/2"></div>
                     <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-                        <h2 className="text-white text-4xl md:text-5xl font-heading font-semibold mb-10 leading-tight" dangerouslySetInnerHTML={{ __html: newsletter.title }} />
-                        <p className="text-blue-100 mb-12 text-lg font-body leading-relaxed">
+                        <h2 className="text-white text-2xl md:text-4xl lg:text-5xl font-heading font-semibold mb-6 md:mb-10 leading-tight" dangerouslySetInnerHTML={{ __html: newsletter.title }} />
+                        <p className="text-blue-100 mb-8 md:mb-12 text-base md:text-lg font-body leading-relaxed">
                             {newsletter.description}
                         </p>
                         <div className="flex flex-col md:flex-row gap-6 justify-center">
