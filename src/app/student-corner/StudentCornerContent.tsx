@@ -482,7 +482,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             initial={{ opacity: 0, x: 30 }}
                             whileInView={{ opacity: 1, x: 0 }}
                             viewport={{ once: true }}
-                            className="group relative bg-accent rounded-[3rem] p-10 md:p-14 overflow-hidden shadow-2xl shadow-accent/20 hover:shadow-primary/10 transition-all duration-500"
+                            className="group relative bg-accent rounded-2xl md:rounded-[3rem] p-4 md:p-14 overflow-hidden shadow-2xl shadow-accent/20 hover:shadow-primary/10 transition-all duration-500"
                         >
                             <div className="absolute bottom-0 left-0 w-40 h-40 bg-white/5 rounded-tr-full -translate-x-10 translate-y-10 group-hover:-translate-x-5 group-hover:translate-y-5 transition-transform duration-700"></div>
 

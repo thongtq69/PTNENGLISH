@@ -110,7 +110,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           </motion.div>
 
 
-          <div className="flex flex-wrap justify-evenly gap-y-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
+          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
             {programs.map((prog: any, idx: number) => {
               // Auto-detect correct hash if link is just /courses
               let finalLink = prog.link || "/courses";
