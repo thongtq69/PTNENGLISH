@@ -71,7 +71,7 @@ export default function Footer() {
                             </div>
                         </div>
                     </div>
-                    <p className="text-slate-400 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed opacity-80">
+                    <p className="text-slate-400 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed opacity-80" style={{ fontSize: 'var(--fs-global-footerText)' }}>
                         {footerData.aboutText}
                     </p>
                     <div className="flex space-x-3">
@@ -95,7 +95,7 @@ export default function Footer() {
                     <ul className="grid grid-cols-2 lg:grid-cols-1 gap-1 md:gap-2">
                         {quickLinks.map((link) => (
                             <li key={link.name}>
-                                <a href={link.href} className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200">
+                                <a href={link.href} className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200" style={{ fontSize: 'var(--fs-global-footerLinks)' }}>
                                     {link.name}
                                 </a>
                             </li>
@@ -159,7 +159,7 @@ export default function Footer() {
 
 
             <div className="container mx-auto px-6 pt-4 md:pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 text-slate-500 text-[9px] md:text-xs">
-                <p>{footerData.copyright}</p>
+                <p style={{ fontSize: 'var(--fs-global-footerCopyright)' }}>{footerData.copyright}</p>
                 <div className="flex gap-4 md:gap-6 uppercase tracking-widest font-bold">
                     <a href="#" className="hover:text-primary">Terms</a>
                     <a href="#" className="hover:text-primary">Privacy</a>

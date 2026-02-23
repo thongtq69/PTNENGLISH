@@ -73,16 +73,16 @@ export default function Testimonials() {
 
                             <div className="flex-1 text-center md:text-left">
                                 <div className="mb-6">
-                                    <h4 className="font-heading font-bold text-2xl md:text-3xl text-accent mb-1">
+                                    <h4 className="font-heading font-bold text-2xl md:text-3xl text-accent mb-1" style={{ fontSize: 'var(--fs-global-testimonialName)' }}>
                                         {testimonials[index].name}
                                     </h4>
-                                    <p className="text-primary font-bold text-xs uppercase tracking-widest">
+                                    <p className="text-primary font-bold text-xs uppercase tracking-widest" style={{ fontSize: 'var(--fs-global-testimonialRole)' }}>
                                         {testimonials[index].sub}
                                     </p>
                                 </div>
 
                                 <div className="relative">
-                                    <p className="text-slate-600 font-serif text-base md:text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2">
+                                    <p className="text-slate-600 font-serif text-base md:text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2" style={{ fontSize: 'var(--fs-global-testimonialText)' }}>
                                         "{testimonials[index].text || testimonials[index].content}"
                                     </p>
                                     <button className="mt-4 text-primary font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all mx-auto md:mx-0 uppercase">

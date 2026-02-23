@@ -6,7 +6,7 @@ import { Type, CheckSquare, AlignLeft, Info } from 'lucide-react';
 interface RichTitleEditorProps {
     value: string;
     onChange: (newValue: string) => void;
-    label?: string;
+    label?: React.ReactNode;
     compact?: boolean;
 }
 

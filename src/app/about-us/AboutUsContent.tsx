@@ -124,10 +124,10 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         <h1 className="text-primary font-heading font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-4">
                             {t.home.about.hero.badge}
                         </h1>
-                        <h2 className="text-2xl md:text-6xl font-heading font-medium text-accent mb-4 leading-tight">
+                        <h2 className="text-2xl md:text-6xl font-heading font-medium text-accent mb-4 leading-tight" style={{ fontSize: 'var(--fs-aboutUs-heroTitle)' }}>
                             {t.home.about.hero.title.split('\n')[0]} <br /> {t.home.about.hero.title.split('\n')[1]} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span>
                         </h2>
-                        <p className="text-base md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-2 md:border-l-4 border-primary pl-4 md:pl-6 py-0.5">
+                        <p className="text-base md:text-xl text-slate-600 font-serif leading-relaxed max-w-2xl not-italic border-l-2 md:border-l-4 border-primary pl-4 md:pl-6 py-0.5" style={{ fontSize: 'var(--fs-aboutUs-heroSubtitle)' }}>
                             &ldquo;{t.home.about.hero.desc}&rdquo;
                         </p>
                     </motion.div>
@@ -144,7 +144,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                             viewport={{ once: true }}
                             className="flex flex-col h-full justify-center"
                         >
-                            <h3 className="text-lg md:text-3xl font-heading font-black text-accent mb-4 flex items-center justify-center lg:justify-start gap-4">
+                            <h3 className="text-lg md:text-3xl font-heading font-black text-accent mb-4 flex items-center justify-center lg:justify-start gap-4" style={{ fontSize: 'var(--fs-aboutUs-storySubtitle)' }}>
                                 <span className="w-6 h-0.5 bg-primary" />
                                 {storyData.subtitle || t.home.about.story.subtitle}
                                 <span className="w-6 h-0.5 bg-primary lg:hidden" />
@@ -195,11 +195,11 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                 <div className="container mx-auto px-6 relative z-10">
                     <div className="text-center max-w-3xl mx-auto mb-12">
-                        <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.3em] mb-4">{t.home.about.differences.badge}</h2>
-                        <h3 className="text-xl md:text-4xl font-heading font-extrabold mb-2 text-accent leading-tight">
+                        <h2 className="text-primary font-heading font-black text-sm uppercase tracking-[0.3em] mb-4" style={{ fontSize: 'var(--fs-aboutUs-differenceTitle)' }}>{t.home.about.differences.badge}</h2>
+                        <h3 className="text-xl md:text-4xl font-heading font-extrabold mb-2 text-accent leading-tight" style={{ fontSize: 'var(--fs-aboutUs-differenceTitle)' }}>
                             {t.home.about.differences.title} <span className="text-primary">PTN</span> <span className="text-accent">English</span>?
                         </h3>
-                        <p className="text-slate-600 font-body text-base">{t.home.about.differences.subtitle}</p>
+                        <p className="text-slate-600 font-body text-base" style={{ fontSize: 'var(--fs-aboutUs-differenceDesc)' }}>{t.home.about.differences.subtitle}</p>
                     </div>
 
                     <DifferencesHub differencesData={differencesData} />
@@ -215,7 +215,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         <div className="lg:col-span-12 xl:col-span-5 flex flex-col justify-center">
                             <div className="mb-8 lg:mb-0">
                                 <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">{t.home.about.philosophy.badge}</h2>
-                                <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">{t.home.about.philosophy.title}</h3>
+                                <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left" style={{ fontSize: 'var(--fs-aboutUs-philosophyTitle)' }}>{t.home.about.philosophy.title}</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-1 gap-4">
                                     {PHILOSOPHY.map((item, idx) => (
                                         <motion.div
@@ -229,8 +229,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                                 {React.cloneElement(item.icon as React.ReactElement<any>, { className: "w-5 h-5" })}
                                             </div>
                                             <div>
-                                                <h4 className="font-heading font-bold text-accent text-base mb-0.5">{item.title}</h4>
-                                                <p className="text-slate-600 text-[13px] leading-relaxed">{item.desc}</p>
+                                                <h4 className="font-heading font-bold text-accent text-base mb-0.5" style={{ fontSize: 'var(--fs-aboutUs-philosophyTitle)' }}>{item.title}</h4>
+                                                <p className="text-slate-600 text-[13px] leading-relaxed" style={{ fontSize: 'var(--fs-aboutUs-philosophyDesc)' }}>{item.desc}</p>
                                             </div>
                                         </motion.div>
                                     ))}
@@ -241,7 +241,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         {/* Right: Core Values */}
                         <div className="lg:col-span-12 xl:col-span-7 flex flex-col justify-center">
                             <h2 className="text-primary font-heading font-black text-xs uppercase tracking-[0.4em] mb-3 text-center lg:text-left">{t.home.about.values.badge}</h2>
-                            <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left">{t.home.about.values.title}</h3>
+                            <h3 className="text-2xl md:text-3xl font-heading font-black text-accent mb-6 italic text-center lg:text-left" style={{ fontSize: 'var(--fs-aboutUs-valueTitle)' }}>{t.home.about.values.title}</h3>
                             <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-2 gap-3">
                                 {VALUES.map((val, idx) => (
                                     <motion.div
@@ -250,8 +250,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         className="p-4 md:p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all group"
                                     >
                                         <div className="text-[11px] font-black text-primary/40 group-hover:text-primary transition-colors mb-1">0{idx + 1}</div>
-                                        <h4 className="text-accent font-heading font-black mb-1 text-sm md:text-base uppercase tracking-tight">{val.title}</h4>
-                                        <p className="text-slate-600 text-xs md:text-[12px] leading-snug font-medium">{val.desc}</p>
+                                        <h4 className="text-accent font-heading font-black mb-1 text-sm md:text-base uppercase tracking-tight" style={{ fontSize: 'var(--fs-aboutUs-valueTitle)' }}>{val.title}</h4>
+                                        <p className="text-slate-600 text-xs md:text-[12px] leading-snug font-medium" style={{ fontSize: 'var(--fs-aboutUs-valueDesc)' }}>{val.desc}</p>
                                     </motion.div>
                                 ))}
                             </div>
@@ -266,7 +266,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                 <div className="container mx-auto px-6">
                     <div className="text-center max-w-3xl mx-auto mb-16">
                         <h2 className="text-primary font-heading font-bold text-xs uppercase tracking-[0.4em] mb-4">{t.home.about.teachers.badge}</h2>
-                        <h3 className="text-xl md:text-5xl font-heading font-extrabold text-accent leading-tight">
+                        <h3 className="text-xl md:text-5xl font-heading font-extrabold text-accent leading-tight" style={{ fontSize: 'var(--fs-aboutUs-teacherName)' }}>
                             {t.home.about.teachers.title} <br /> {t.home.about.teachers.subtitle}
                         </h3>
                     </div>
@@ -301,10 +301,10 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     </div>
                                 </div>
                                 <div className="mt-4 md:mt-8 text-center group-hover:text-primary transition-colors">
-                                    <h4 className="font-heading font-bold text-base md:text-2xl text-accent group-hover:text-primary transition-colors duration-300 line-clamp-1">{teacher.name}</h4>
+                                    <h4 className="font-heading font-bold text-base md:text-2xl text-accent group-hover:text-primary transition-colors duration-300 line-clamp-1" style={{ fontSize: 'var(--fs-aboutUs-teacherName)' }}>{teacher.name}</h4>
                                     <div className="flex items-center justify-center gap-2 md:gap-4 mt-1 md:mt-3 opacity-60">
                                         <span className="hidden md:block h-px w-8 bg-slate-400" />
-                                        <p className="text-[10px] md:text-[11px] text-accent font-black uppercase tracking-widest">{teacher.exp}</p>
+                                        <p className="text-[10px] md:text-[11px] text-accent font-black uppercase tracking-widest" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{teacher.exp}</p>
                                         <span className="hidden md:block h-px w-8 bg-slate-400" />
                                     </div>
                                 </div>
@@ -345,8 +345,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                             </div>
                                         </div>
                                         <div className="mt-6 text-center">
-                                            <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors">{teacher.name}</h4>
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1 opacity-70 group-hover:opacity-100 transition-opacity">{teacher.exp}</p>
+                                            <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors" style={{ fontSize: 'var(--fs-aboutUs-teacherName)' }}>{teacher.name}</h4>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1 opacity-70 group-hover:opacity-100 transition-opacity" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{teacher.exp}</p>
                                         </div>
                                     </motion.div>
                                 ))}
@@ -362,7 +362,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                     <div className="bg-slate-100 rounded-[3rem] p-8 md:p-12 shadow-sm border border-slate-200">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                             <div>
-                                <h3 className="text-2xl font-heading font-bold text-accent mb-4">{t.home.about.policies.title} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span></h3>
+                                <h3 className="text-2xl font-heading font-bold text-accent mb-4" style={{ fontSize: 'var(--fs-aboutUs-policyTitle)' }}>{t.home.about.policies.title} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span></h3>
                                 <p className="text-slate-600 font-body mb-8 leading-relaxed text-base">
                                     {t.home.about.policies.subtitle}
                                 </p>

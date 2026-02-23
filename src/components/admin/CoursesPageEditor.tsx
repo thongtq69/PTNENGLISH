@@ -9,6 +9,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
 import FileUpload from './shared/FileUpload';
+import InlineFontSize from './shared/InlineFontSize';
+import { useFontSizeEditor } from '@/hooks/useFontSizeEditor';
 
 const TABS = [
     { id: 'hero', name: 'Hero Banner', icon: <Layout size={18} /> },
@@ -96,6 +98,7 @@ export default function CoursesPageEditor() {
     const [saving, setSaving] = useState(false);
     const [expandedPathway, setExpandedPathway] = useState<string | null>('ie');
     const [expandedLevel, setExpandedLevel] = useState<string | null>(null);
+    const fs = useFontSizeEditor('courses');
 
     useEffect(() => {
         setLoading(true);
@@ -212,6 +215,7 @@ export default function CoursesPageEditor() {
                         </button>
                     </div>
 
+                    {fs.saving && <span className="text-xs text-primary animate-pulse">💾 Font size đang lưu...</span>}
                     <button
                         onClick={handleSave}
                         disabled={saving}
@@ -274,7 +278,7 @@ export default function CoursesPageEditor() {
                                 </div>
                                 <div className="space-y-3 lg:col-span-2">
                                     <RichTitleEditor
-                                        label="Tiêu đề chính"
+                                        label={<span className="flex items-center gap-2">Tiêu đề chính <InlineFontSize value={fs.getFontSize('heroTitle')} onChange={(v) => fs.setFontSize('heroTitle', v)} defaultDesktop={fs.getDefault('heroTitle').desktop} defaultMobile={fs.getDefault('heroTitle').mobile} /></span>}
                                         value={data.hero.title}
                                         onChange={val => updateData('hero.title', val)}
                                     />
@@ -282,7 +286,7 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Mô tả ngắn</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Mô tả ngắn <InlineFontSize value={fs.getFontSize('heroSubtitle')} onChange={(v) => fs.setFontSize('heroSubtitle', v)} defaultDesktop={fs.getDefault('heroSubtitle').desktop} defaultMobile={fs.getDefault('heroSubtitle').mobile} /></label>
                                 <textarea
                                     rows={3}
                                     value={data.hero.subtitle}
@@ -294,7 +298,7 @@ export default function CoursesPageEditor() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Nút CTA 1 (Primary)</label>
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Nút CTA 1 (Primary) <InlineFontSize value={fs.getFontSize('heroCTA')} onChange={(v) => fs.setFontSize('heroCTA', v)} defaultDesktop={fs.getDefault('heroCTA').desktop} defaultMobile={fs.getDefault('heroCTA').mobile} /></label>
                                     <input
                                         value={data.hero.cta1}
                                         onChange={e => updateData('hero.cta1', e.target.value)}
@@ -329,14 +333,14 @@ export default function CoursesPageEditor() {
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 <div className="space-y-3">
                                     <RichTitleEditor
-                                        label="Tiêu đề section"
+                                        label={<span className="flex items-center gap-2">Tiêu đề section <InlineFontSize value={fs.getFontSize('sectionTitle')} onChange={(v) => fs.setFontSize('sectionTitle', v)} defaultDesktop={fs.getDefault('sectionTitle').desktop} defaultMobile={fs.getDefault('sectionTitle').mobile} /></span>}
                                         value={data.targetAudience.title}
                                         onChange={val => updateData('targetAudience.title', val)}
                                         compact
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Mô tả</label>
+                                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Mô tả <InlineFontSize value={fs.getFontSize('sectionSubtitle')} onChange={(v) => fs.setFontSize('sectionSubtitle', v)} defaultDesktop={fs.getDefault('sectionSubtitle').desktop} defaultMobile={fs.getDefault('sectionSubtitle').mobile} /></label>
                                     <input
                                         value={data.targetAudience.subtitle}
                                         onChange={e => updateData('targetAudience.subtitle', e.target.value)}
@@ -395,7 +399,7 @@ export default function CoursesPageEditor() {
 
                             <div className="space-y-3">
                                 <RichTitleEditor
-                                    label="Tiêu đề section"
+                                    label={<span className="flex items-center gap-2">Tiêu đề section <InlineFontSize value={fs.getFontSize('specTitle')} onChange={(v) => fs.setFontSize('specTitle', v)} defaultDesktop={fs.getDefault('specTitle').desktop} defaultMobile={fs.getDefault('specTitle').mobile} /> <InlineFontSize value={fs.getFontSize('specDesc')} onChange={(v) => fs.setFontSize('specDesc', v)} defaultDesktop={fs.getDefault('specDesc').desktop} defaultMobile={fs.getDefault('specDesc').mobile} /></span>}
                                     value={data.specs.title}
                                     onChange={val => updateData('specs.title', val)}
                                     compact
@@ -486,7 +490,7 @@ export default function CoursesPageEditor() {
 
                             <div className="space-y-3">
                                 <RichTitleEditor
-                                    label="Tiêu đề section"
+                                    label={<span className="flex items-center gap-2">Tiêu đề section <InlineFontSize value={fs.getFontSize('pathwayName')} onChange={(v) => fs.setFontSize('pathwayName', v)} defaultDesktop={fs.getDefault('pathwayName').desktop} defaultMobile={fs.getDefault('pathwayName').mobile} /> <InlineFontSize value={fs.getFontSize('pathwayDesc')} onChange={(v) => fs.setFontSize('pathwayDesc', v)} defaultDesktop={fs.getDefault('pathwayDesc').desktop} defaultMobile={fs.getDefault('pathwayDesc').mobile} /></span>}
                                     value={data.pathway.title}
                                     onChange={val => updateData('pathway.title', val)}
                                     compact
@@ -571,7 +575,7 @@ export default function CoursesPageEditor() {
                                 </div>
                                 <div>
                                     <h2 className="text-xl font-bold text-white">Chi tiết từng cấp độ</h2>
-                                    <p className="text-slate-500 text-sm">Foundation → Elite (6 cấp độ x 3 lộ trình)</p>
+                                    <p className="text-slate-500 text-sm flex items-center gap-2">Foundation → Elite (6 cấp độ x 3 lộ trình) <InlineFontSize value={fs.getFontSize('levelName')} onChange={(v) => fs.setFontSize('levelName', v)} defaultDesktop={fs.getDefault('levelName').desktop} defaultMobile={fs.getDefault('levelName').mobile} /> <InlineFontSize value={fs.getFontSize('levelDesc')} onChange={(v) => fs.setFontSize('levelDesc', v)} defaultDesktop={fs.getDefault('levelDesc').desktop} defaultMobile={fs.getDefault('levelDesc').mobile} /></p>
                                 </div>
                             </div>
 
@@ -766,7 +770,7 @@ export default function CoursesPageEditor() {
                                 </div>
                                 <div className="space-y-3">
                                     <RichTitleEditor
-                                        label="Tiêu đề"
+                                        label={<span className="flex items-center gap-2">Tiêu đề <InlineFontSize value={fs.getFontSize('placementTitle')} onChange={(v) => fs.setFontSize('placementTitle', v)} defaultDesktop={fs.getDefault('placementTitle').desktop} defaultMobile={fs.getDefault('placementTitle').mobile} /></span>}
                                         value={data.placement.title}
                                         onChange={val => updateData('placement.title', val)}
                                         compact
@@ -775,7 +779,7 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Mô tả</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Mô tả <InlineFontSize value={fs.getFontSize('placementDesc')} onChange={(v) => fs.setFontSize('placementDesc', v)} defaultDesktop={fs.getDefault('placementDesc').desktop} defaultMobile={fs.getDefault('placementDesc').mobile} /></label>
                                 <textarea
                                     rows={3}
                                     value={data.placement.desc}
@@ -846,7 +850,7 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Tiêu đề</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Tiêu đề <InlineFontSize value={fs.getFontSize('bottomCtaTitle')} onChange={(v) => fs.setFontSize('bottomCtaTitle', v)} defaultDesktop={fs.getDefault('bottomCtaTitle').desktop} defaultMobile={fs.getDefault('bottomCtaTitle').mobile} /></label>
                                 <input
                                     value={data.bottomCta.title}
                                     onChange={e => updateData('bottomCta.title', e.target.value)}
@@ -855,7 +859,7 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Mô tả</label>
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Mô tả <InlineFontSize value={fs.getFontSize('bottomCtaDesc')} onChange={(v) => fs.setFontSize('bottomCtaDesc', v)} defaultDesktop={fs.getDefault('bottomCtaDesc').desktop} defaultMobile={fs.getDefault('bottomCtaDesc').mobile} /></label>
                                 <textarea
                                     rows={3}
                                     value={data.bottomCta.desc}

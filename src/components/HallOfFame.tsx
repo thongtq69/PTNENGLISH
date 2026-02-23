@@ -88,7 +88,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         className="flex justify-center items-center gap-3 mb-6"
                     >
                         <Trophy className="text-primary animate-pulse" size={20} />
-                        <h2 className="text-primary font-heading font-black text-xs md:text-xs uppercase tracking-[0.5em]">{badge}</h2>
+                        <h2 className="text-primary font-heading font-black text-xs md:text-xs uppercase tracking-[0.5em]" style={{ fontSize: 'var(--fs-home-hallOfFameBadge)' }}>{badge}</h2>
                         <Star className="text-primary animate-pulse" size={20} />
                     </motion.div>
 
@@ -98,6 +98,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
                         className="text-3xl md:text-6xl font-heading font-black text-white mb-8 leading-tight uppercase tracking-tight"
+                        style={{ fontSize: 'var(--fs-home-hallOfFameTitle)' }}
                     >
                         {title} <span className="text-primary">{titleHighlight}</span> {titleEnd}
                     </motion.h3>
@@ -108,6 +109,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
                         className="text-slate-400 text-sm md:text-xl font-body max-w-4xl mx-auto whitespace-pre-line"
+                        style={{ fontSize: 'var(--fs-home-hallOfFameDesc)' }}
                     >
                         {description} <strong className="text-white">{descriptionHighlight}</strong> {descriptionEnd}
                     </motion.p>

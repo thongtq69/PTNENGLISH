@@ -97,7 +97,7 @@ export default function Header() {
             <header className={`fixed ${isScrolled ? "top-0" : "top-0 md:top-10"} left-0 right-0 z-[70] transition-all duration-300 ${isMenuOpen ? "bg-white py-2 md:py-4" : isScrolled ? "bg-white/95 backdrop-blur-md shadow-md py-2 md:py-4" : isTransparent ? "bg-transparent py-3 md:py-6" : "bg-white/70 backdrop-blur-sm py-2 md:py-6"}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center">
                     <Link href="/" className="flex flex-col group w-fit" onClick={() => setIsMenuOpen(false)}>
-                        <span className="text-xl md:text-2xl font-heading font-extrabold tracking-tight">
+                        <span className="text-xl md:text-2xl font-heading font-extrabold tracking-tight" style={{ fontSize: 'var(--fs-global-headerLogo)' }}>
                             <span className="text-primary uppercase">PTN</span>
                             <span className={`uppercase transition-colors ${isTransparent ? "text-white" : "text-[#1e293b]"} group-hover:text-primary`}> English</span>
                         </span>
@@ -118,6 +118,7 @@ export default function Header() {
                                 target={item.href.startsWith('http') ? "_blank" : undefined}
                                 rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
                                 className={`text-sm font-semibold uppercase tracking-wider transition-colors hover:text-primary ${isTransparent ? "text-white hover:text-white/70" : "text-accent"}`}
+                                style={{ fontSize: 'var(--fs-global-headerNav)' }}
                             >
                                 {item.name}
                             </Link>

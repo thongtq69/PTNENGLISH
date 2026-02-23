@@ -308,7 +308,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <GraduationCap size={14} className="text-primary" />
                             {hero.subtitle}
                         </div>
-                        <h1 className="text-white text-3xl md:text-7xl font-heading font-semibold mb-6 leading-tight">
+                        <h1 className="text-white text-3xl md:text-7xl font-heading font-semibold mb-6 leading-tight" style={{ fontSize: 'var(--fs-studentCorner-heroTitle)' }}>
                             {(() => {
                                 const title = t.studentCorner?.hero?.mainTitle || hero.title;
                                 if (title.includes('<br />') || title.includes('<br/>')) {
@@ -330,7 +330,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 );
                             })()}
                         </h1>
-                        <p className="text-slate-300 text-sm md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90">
+                        <p className="text-slate-300 text-sm md:text-xl font-body leading-relaxed max-w-2xl mx-auto opacity-90" style={{ fontSize: 'var(--fs-studentCorner-heroDesc)' }}>
                             {hero.description}
                         </p>
 
@@ -384,10 +384,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
             <section className="py-16 md:py-24 bg-slate-50 overflow-hidden">
                 <div className="container mx-auto px-4 md:px-6">
                     <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
-                        <h2 className="text-primary font-heading text-xs md:text-lg font-bold uppercase tracking-[0.3em] mb-3 md:mb-4">
+                        <h2 className="text-primary font-heading text-xs md:text-lg font-bold uppercase tracking-[0.3em] mb-3 md:mb-4" style={{ fontSize: 'var(--fs-studentCorner-playgroundHeadline)' }}>
                             {playground.headline}
                         </h2>
-                        <h3 className="text-2xl md:text-5xl font-heading font-black text-accent leading-tight" dangerouslySetInnerHTML={{ __html: playground.title }} />
+                        <h3 className="text-2xl md:text-5xl font-heading font-black text-accent leading-tight" style={{ fontSize: 'var(--fs-studentCorner-playgroundTitle)' }} dangerouslySetInnerHTML={{ __html: playground.title }} />
                     </div>
 
                     {/* All items in a uniform grid — 2 cols mobile, 3 cols tablet, 4 cols desktop */}
@@ -452,10 +452,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 <BookOpen size={16} className="text-primary md:w-8 md:h-8" />
                             </div>
 
-                            <h2 className="text-sm md:text-3xl font-heading font-black text-accent mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: lms.title }} />
+                            <h2 className="text-sm md:text-3xl font-heading font-black text-accent mb-2 md:mb-6" style={{ fontSize: 'var(--fs-studentCorner-lmsTitle)' }} dangerouslySetInnerHTML={{ __html: lms.title }} />
 
                             <div className="space-y-6 mb-12">
-                                <p className="text-slate-600 font-body leading-relaxed text-xs md:text-lg" dangerouslySetInnerHTML={{ __html: lms.description }} />
+                                <p className="text-slate-600 font-body leading-relaxed text-xs md:text-lg" style={{ fontSize: 'var(--fs-studentCorner-lmsDesc)' }} dangerouslySetInnerHTML={{ __html: lms.description }} />
                                 <ul className="space-y-2 md:space-y-4">
                                     {lms.items.map((item: string, idx: number) => (
                                         <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-500 font-medium text-[10px] md:text-base">
@@ -471,6 +471,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 md:px-8 md:py-5 rounded-full font-bold text-xs md:text-lg shadow-lg shadow-primary/20 transition-all uppercase"
+                                style={{ fontSize: 'var(--fs-studentCorner-lmsBtn)' }}
                             >
                                 {lms.buttonText}
                                 <ArrowRight size={10} className="md:w-5 md:h-5" />
@@ -490,10 +491,10 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                 <ClipboardList size={16} className="text-white md:w-8 md:h-8" />
                             </div>
 
-                            <h2 className="text-sm md:text-3xl font-heading font-black text-white mb-2 md:mb-6" dangerouslySetInnerHTML={{ __html: mocktest.title }} />
+                            <h2 className="text-sm md:text-3xl font-heading font-black text-white mb-2 md:mb-6" style={{ fontSize: 'var(--fs-studentCorner-mocktestTitle)' }} dangerouslySetInnerHTML={{ __html: mocktest.title }} />
 
                             <div className="space-y-6 mb-12">
-                                <p className="text-slate-300 font-body leading-relaxed text-xs md:text-lg" dangerouslySetInnerHTML={{ __html: mocktest.description }} />
+                                <p className="text-slate-300 font-body leading-relaxed text-xs md:text-lg" style={{ fontSize: 'var(--fs-studentCorner-mocktestDesc)' }} dangerouslySetInnerHTML={{ __html: mocktest.description }} />
                                 <ul className="space-y-2 md:space-y-4">
                                     {mocktest.items.map((item: string, idx: number) => (
                                         <li key={idx} className="flex items-center gap-2 md:gap-3 text-slate-400 font-medium text-[10px] md:text-base">
@@ -507,6 +508,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                             <Link
                                 href={mocktest.buttonLink}
                                 className="inline-flex items-center gap-2 bg-white text-accent hover:bg-primary hover:text-white px-4 py-2.5 md:px-8 md:py-5 rounded-full font-bold text-xs md:text-lg transition-all uppercase"
+                                style={{ fontSize: 'var(--fs-studentCorner-mocktestBtn)' }}
                             >
                                 {mocktest.buttonText}
                                 <ArrowRight size={10} className="md:w-5 md:h-5" />
@@ -530,8 +532,8 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>
 
                         <div className="relative z-10 p-6 md:p-16">
-                            <h3 className="text-xl md:text-5xl font-heading font-black text-white mb-4" dangerouslySetInnerHTML={{ __html: support.title }} />
-                            <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-sm md:text-lg">
+                            <h3 className="text-xl md:text-5xl font-heading font-black text-white mb-4" style={{ fontSize: 'var(--fs-studentCorner-supportTitle)' }} dangerouslySetInnerHTML={{ __html: support.title }} />
+                            <p className="text-slate-400 mb-8 max-w-2xl mx-auto text-sm md:text-lg" style={{ fontSize: 'var(--fs-studentCorner-supportDesc)' }}>
                                 {support.description}
                             </p>
 

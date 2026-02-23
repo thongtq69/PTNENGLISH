@@ -5,6 +5,8 @@ import { Save, Video, Type, Link as LinkIcon, AlertCircle, CheckCircle2, Plus, T
 import { motion } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
 import FileUpload from './shared/FileUpload';
+import InlineFontSize from './shared/InlineFontSize';
+import { useFontSizeEditor } from '@/hooks/useFontSizeEditor';
 
 export default function HomeEditor() {
     const [loading, setLoading] = useState(true);
@@ -12,6 +14,7 @@ export default function HomeEditor() {
     const [settings, setSettings] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+    const fs = useFontSizeEditor('home');
 
     useEffect(() => {
         fetch('/api/site-settings', { cache: 'no-store' })
@@ -96,6 +99,9 @@ export default function HomeEditor() {
                     {saving ? <div className="animate-spin rounded-full h-4 w-4 border-2 border-slate-500 border-t-transparent"></div> : <Save size={20} />}
                     {saving ? 'Saving...' : 'Save All Changes'}
                 </button>
+                {fs.saving && (
+                    <span className="text-[10px] text-primary font-bold animate-pulse ml-2">💾 Font size đang lưu...</span>
+                )}
             </div>
 
             {error && (
@@ -164,6 +170,15 @@ export default function HomeEditor() {
 
                     {/* Titles - Bilingual */}
                     <div className="space-y-10">
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Font Size: Tiêu đề Hero</span>
+                            <InlineFontSize
+                                value={fs.getFontSize('heroTitle')}
+                                onChange={(v) => fs.setFontSize('heroTitle', v)}
+                                defaultDesktop={fs.getDefault('heroTitle').desktop}
+                                defaultMobile={fs.getDefault('heroTitle').mobile}
+                            />
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                             <div className="space-y-4">
                                 <RichTitleEditor
@@ -185,6 +200,12 @@ export default function HomeEditor() {
                             <div className="space-y-4">
                                 <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
                                     Subheadline (VN)
+                                    <InlineFontSize
+                                        value={fs.getFontSize('heroSubtitle')}
+                                        onChange={(v) => fs.setFontSize('heroSubtitle', v)}
+                                        defaultDesktop={fs.getDefault('heroSubtitle').desktop}
+                                        defaultMobile={fs.getDefault('heroSubtitle').mobile}
+                                    />
                                 </label>
                                 <textarea
                                     rows={2}
@@ -211,7 +232,15 @@ export default function HomeEditor() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                         <div className="p-8 bg-white/[0.02] border border-white/5 rounded-[2rem] space-y-6">
                             <div className="flex items-center justify-between mb-2">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-primary">Primary Button</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                                    Primary Button
+                                    <InlineFontSize
+                                        value={fs.getFontSize('heroCTA')}
+                                        onChange={(v) => fs.setFontSize('heroCTA', v)}
+                                        defaultDesktop={fs.getDefault('heroCTA').desktop}
+                                        defaultMobile={fs.getDefault('heroCTA').mobile}
+                                    />
+                                </span>
                                 <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
                                     <LinkIcon size={16} className="text-white" />
                                 </div>
@@ -272,7 +301,15 @@ export default function HomeEditor() {
                 <div className="p-10 space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Section Badge
+                                <InlineFontSize
+                                    value={fs.getFontSize('introBadge')}
+                                    onChange={(v) => fs.setFontSize('introBadge', v)}
+                                    defaultDesktop={fs.getDefault('introBadge').desktop}
+                                    defaultMobile={fs.getDefault('introBadge').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.intro?.badge || ''}
                                 onChange={e => updateSection('intro', 'badge', e.target.value)}
@@ -290,7 +327,15 @@ export default function HomeEditor() {
                         </div>
                     </div>
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Description</label>
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            Description
+                            <InlineFontSize
+                                value={fs.getFontSize('introDesc')}
+                                onChange={(v) => fs.setFontSize('introDesc', v)}
+                                defaultDesktop={fs.getDefault('introDesc').desktop}
+                                defaultMobile={fs.getDefault('introDesc').mobile}
+                            />
+                        </label>
                         <textarea
                             rows={3}
                             value={settings.intro?.description || ''}
@@ -323,7 +368,15 @@ export default function HomeEditor() {
                 <div className="p-10 space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Section Badge
+                                <InlineFontSize
+                                    value={fs.getFontSize('campusBadge')}
+                                    onChange={(v) => fs.setFontSize('campusBadge', v)}
+                                    defaultDesktop={fs.getDefault('campusBadge').desktop}
+                                    defaultMobile={fs.getDefault('campusBadge').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.campus?.badge || ''}
                                 onChange={e => updateSection('campus', 'badge', e.target.value)}
@@ -340,6 +393,15 @@ export default function HomeEditor() {
                         </div>
                     </div>
                     <div className="space-y-4">
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Font Size: Campus Title</span>
+                            <InlineFontSize
+                                value={fs.getFontSize('campusTitle')}
+                                onChange={(v) => fs.setFontSize('campusTitle', v)}
+                                defaultDesktop={fs.getDefault('campusTitle').desktop}
+                                defaultMobile={fs.getDefault('campusTitle').mobile}
+                            />
+                        </div>
                         <RichTitleEditor
                             label="Section Title"
                             value={settings.campus?.title || ''}
@@ -348,7 +410,15 @@ export default function HomeEditor() {
                         />
                     </div>
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Description</label>
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            Description
+                            <InlineFontSize
+                                value={fs.getFontSize('campusDesc')}
+                                onChange={(v) => fs.setFontSize('campusDesc', v)}
+                                defaultDesktop={fs.getDefault('campusDesc').desktop}
+                                defaultMobile={fs.getDefault('campusDesc').mobile}
+                            />
+                        </label>
                         <textarea
                             rows={3}
                             value={settings.campus?.description || ''}
@@ -358,7 +428,15 @@ export default function HomeEditor() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">LMS Button Text</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                LMS Button Text
+                                <InlineFontSize
+                                    value={fs.getFontSize('campusBtn')}
+                                    onChange={(v) => fs.setFontSize('campusBtn', v)}
+                                    defaultDesktop={fs.getDefault('campusBtn').desktop}
+                                    defaultMobile={fs.getDefault('campusBtn').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.campus?.lmsBtn || ''}
                                 onChange={e => updateSection('campus', 'lmsBtn', e.target.value)}
@@ -391,7 +469,15 @@ export default function HomeEditor() {
                 <div className="p-10 space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Section Badge
+                                <InlineFontSize
+                                    value={fs.getFontSize('facultyBadge')}
+                                    onChange={(v) => fs.setFontSize('facultyBadge', v)}
+                                    defaultDesktop={fs.getDefault('facultyBadge').desktop}
+                                    defaultMobile={fs.getDefault('facultyBadge').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.faculty?.badge || ''}
                                 onChange={e => updateSection('faculty', 'badge', e.target.value)}
@@ -399,6 +485,15 @@ export default function HomeEditor() {
                             />
                         </div>
                         <div className="space-y-4">
+                            <div className="flex items-center gap-2 mb-1">
+                                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Font Size: Faculty Title</span>
+                                <InlineFontSize
+                                    value={fs.getFontSize('facultyTitle')}
+                                    onChange={(v) => fs.setFontSize('facultyTitle', v)}
+                                    defaultDesktop={fs.getDefault('facultyTitle').desktop}
+                                    defaultMobile={fs.getDefault('facultyTitle').mobile}
+                                />
+                            </div>
                             <RichTitleEditor
                                 label="Section Title"
                                 value={settings.faculty?.title || ''}
@@ -408,7 +503,15 @@ export default function HomeEditor() {
                         </div>
                     </div>
                     <div className="space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Description</label>
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            Description
+                            <InlineFontSize
+                                value={fs.getFontSize('facultyDesc')}
+                                onChange={(v) => fs.setFontSize('facultyDesc', v)}
+                                defaultDesktop={fs.getDefault('facultyDesc').desktop}
+                                defaultMobile={fs.getDefault('facultyDesc').mobile}
+                            />
+                        </label>
                         <textarea
                             rows={3}
                             value={settings.faculty?.description || ''}
@@ -417,7 +520,15 @@ export default function HomeEditor() {
                         />
                     </div>
                     <div className="w-1/2 space-y-4">
-                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Button Text</label>
+                        <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                            Button Text
+                            <InlineFontSize
+                                value={fs.getFontSize('facultyBtn')}
+                                onChange={(v) => fs.setFontSize('facultyBtn', v)}
+                                defaultDesktop={fs.getDefault('facultyBtn').desktop}
+                                defaultMobile={fs.getDefault('facultyBtn').mobile}
+                            />
+                        </label>
                         <input
                             value={settings.faculty?.btn || ''}
                             onChange={e => updateSection('faculty', 'btn', e.target.value)}
@@ -441,7 +552,15 @@ export default function HomeEditor() {
                 <div className="p-10 space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Section Badge
+                                <InlineFontSize
+                                    value={fs.getFontSize('blogBadge')}
+                                    onChange={(v) => fs.setFontSize('blogBadge', v)}
+                                    defaultDesktop={fs.getDefault('blogBadge').desktop}
+                                    defaultMobile={fs.getDefault('blogBadge').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.homeBlog?.badge || ''}
                                 onChange={e => updateSection('homeBlog', 'badge', e.target.value)}
@@ -449,7 +568,15 @@ export default function HomeEditor() {
                             />
                         </div>
                         <div className="space-y-4 md:col-span-2">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Title (supports & highlight)</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Section Title (supports &amp; highlight)
+                                <InlineFontSize
+                                    value={fs.getFontSize('blogTitle')}
+                                    onChange={(v) => fs.setFontSize('blogTitle', v)}
+                                    defaultDesktop={fs.getDefault('blogTitle').desktop}
+                                    defaultMobile={fs.getDefault('blogTitle').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.homeBlog?.title || ''}
                                 onChange={e => updateSection('homeBlog', 'title', e.target.value)}
@@ -483,7 +610,15 @@ export default function HomeEditor() {
                 <div className="p-10 space-y-8">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Section Badge</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Section Badge
+                                <InlineFontSize
+                                    value={fs.getFontSize('hallOfFameBadge')}
+                                    onChange={(v) => fs.setFontSize('hallOfFameBadge', v)}
+                                    defaultDesktop={fs.getDefault('hallOfFameBadge').desktop}
+                                    defaultMobile={fs.getDefault('hallOfFameBadge').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.hallOfFame?.badge || ''}
                                 onChange={e => updateSection('hallOfFame', 'badge', e.target.value)}
@@ -491,7 +626,15 @@ export default function HomeEditor() {
                             />
                         </div>
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Title Start</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Title Start
+                                <InlineFontSize
+                                    value={fs.getFontSize('hallOfFameTitle')}
+                                    onChange={(v) => fs.setFontSize('hallOfFameTitle', v)}
+                                    defaultDesktop={fs.getDefault('hallOfFameTitle').desktop}
+                                    defaultMobile={fs.getDefault('hallOfFameTitle').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.hallOfFame?.title || ''}
                                 onChange={e => updateSection('hallOfFame', 'title', e.target.value)}
@@ -517,7 +660,15 @@ export default function HomeEditor() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="space-y-4">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">Desc Start</label>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                                Desc Start
+                                <InlineFontSize
+                                    value={fs.getFontSize('hallOfFameDesc')}
+                                    onChange={(v) => fs.setFontSize('hallOfFameDesc', v)}
+                                    defaultDesktop={fs.getDefault('hallOfFameDesc').desktop}
+                                    defaultMobile={fs.getDefault('hallOfFameDesc').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.hallOfFame?.description || ''}
                                 onChange={e => updateSection('hallOfFame', 'description', e.target.value)}
@@ -553,7 +704,15 @@ export default function HomeEditor() {
                         </div>
                         <div>
                             <h2 className="text-xl font-black text-white">Training Programs</h2>
-                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Featured courses on landing page</p>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1 flex items-center gap-2">
+                                Featured courses on landing page
+                                <InlineFontSize
+                                    value={fs.getFontSize('programName')}
+                                    onChange={(v) => fs.setFontSize('programName', v)}
+                                    defaultDesktop={fs.getDefault('programName').desktop}
+                                    defaultMobile={fs.getDefault('programName').mobile}
+                                />
+                            </p>
                         </div>
                     </div>
                     <button
@@ -671,7 +830,15 @@ export default function HomeEditor() {
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="space-x-2 flex items-center bg-slate-950 border border-white/10 rounded-xl px-3 py-1.5 translate-y-0.5">
-                            <label className="text-[8px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Badge:</label>
+                            <label className="text-[8px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap flex items-center gap-1">
+                                Badge:
+                                <InlineFontSize
+                                    value={fs.getFontSize('partnersBadge')}
+                                    onChange={(v) => fs.setFontSize('partnersBadge', v)}
+                                    defaultDesktop={fs.getDefault('partnersBadge').desktop}
+                                    defaultMobile={fs.getDefault('partnersBadge').mobile}
+                                />
+                            </label>
                             <input
                                 value={settings.partnersSection?.badge || ''}
                                 onChange={e => updateSection('partnersSection', 'badge', e.target.value)}
@@ -760,7 +927,15 @@ export default function HomeEditor() {
                         />
                     </div>
                     <div className="space-y-4">
-                        <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 block">Philosophy Text (Vietnamse)</label>
+                        <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
+                            Philosophy Text (Vietnamse)
+                            <InlineFontSize
+                                value={fs.getFontSize('philosophyText')}
+                                onChange={(v) => fs.setFontSize('philosophyText', v)}
+                                defaultDesktop={fs.getDefault('philosophyText').desktop}
+                                defaultMobile={fs.getDefault('philosophyText').mobile}
+                            />
+                        </label>
                         <textarea
                             rows={4}
                             value={settings.philosophy || ''}

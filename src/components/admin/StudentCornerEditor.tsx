@@ -8,6 +8,8 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import RichTitleEditor from './shared/RichTitleEditor';
 import FileUpload from './shared/FileUpload';
+import InlineFontSize from './shared/InlineFontSize';
+import { useFontSizeEditor } from '@/hooks/useFontSizeEditor';
 
 const TABS = [
     { id: 'hero', name: 'Hero Header', icon: <Layout size={18} /> },
@@ -24,6 +26,7 @@ export default function StudentCornerEditor() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [activeTab, setActiveTab] = useState('hero');
+    const fs = useFontSizeEditor('studentCorner');
 
     useEffect(() => {
         fetch('/api/pages/student-corner')
@@ -133,14 +136,17 @@ export default function StudentCornerEditor() {
                     <h1 className="text-3xl font-heading font-black text-white">Student Corner Management</h1>
                     <p className="text-slate-500 mt-2">Manage tools, resources, and gallery for your students.</p>
                 </div>
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="bg-primary hover:bg-black text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/20"
-                >
-                    <Save size={18} />
-                    {saving ? "Saving..." : "Save Changes"}
-                </button>
+                <div className="flex items-center gap-4">
+                    {fs.saving && <span className="text-xs text-primary animate-pulse">💾 Font size đang lưu...</span>}
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="bg-primary hover:bg-black text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 transition-all shadow-xl shadow-primary/20"
+                    >
+                        <Save size={18} />
+                        {saving ? "Saving..." : "Save Changes"}
+                    </button>
+                </div>
             </div>
 
             {/* Tab Navigation */}
@@ -171,13 +177,13 @@ export default function StudentCornerEditor() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
                                     <RichTitleEditor
-                                        label="Main Title"
+                                        label={<span className="flex items-center gap-2">Main Title <InlineFontSize value={fs.getFontSize('heroTitle')} onChange={(v) => fs.setFontSize('heroTitle', v)} defaultDesktop={fs.getDefault('heroTitle').desktop} defaultMobile={fs.getDefault('heroTitle').mobile} /></span>}
                                         value={data.hero.title}
                                         onChange={val => setData({ ...data, hero: { ...data.hero, title: val } })}
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Subtitle Tag</label>
+                                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Subtitle Tag <InlineFontSize value={fs.getFontSize('heroSubtitle')} onChange={(v) => fs.setFontSize('heroSubtitle', v)} defaultDesktop={fs.getDefault('heroSubtitle').desktop} defaultMobile={fs.getDefault('heroSubtitle').mobile} /></label>
                                     <input
                                         value={data.hero.subtitle}
                                         onChange={e => setData({ ...data, hero: { ...data.hero, subtitle: e.target.value } })}
@@ -185,7 +191,7 @@ export default function StudentCornerEditor() {
                                     />
                                 </div>
                                 <div className="md:col-span-2 space-y-4">
-                                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Main Description</label>
+                                    <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Main Description <InlineFontSize value={fs.getFontSize('heroDesc')} onChange={(v) => fs.setFontSize('heroDesc', v)} defaultDesktop={fs.getDefault('heroDesc').desktop} defaultMobile={fs.getDefault('heroDesc').mobile} /></label>
                                     <textarea
                                         rows={3}
                                         value={data.hero.description}
@@ -203,7 +209,7 @@ export default function StudentCornerEditor() {
                             <div className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 shadow-2xl">
                                 <div className="grid grid-cols-2 gap-8">
                                     <div className="space-y-4">
-                                        <label className="text-xs font-black text-slate-500 uppercase tracking-widest">Section Headline</label>
+                                        <label className="text-xs font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">Section Headline <InlineFontSize value={fs.getFontSize('playgroundHeadline')} onChange={(v) => fs.setFontSize('playgroundHeadline', v)} defaultDesktop={fs.getDefault('playgroundHeadline').desktop} defaultMobile={fs.getDefault('playgroundHeadline').mobile} /></label>
                                         <input
                                             value={data.playground.headline}
                                             onChange={e => setData({ ...data, playground: { ...data.playground, headline: e.target.value } })}
@@ -212,7 +218,7 @@ export default function StudentCornerEditor() {
                                     </div>
                                     <div className="space-y-4">
                                         <RichTitleEditor
-                                            label="Main Title"
+                                            label={<span className="flex items-center gap-2">Main Title <InlineFontSize value={fs.getFontSize('playgroundTitle')} onChange={(v) => fs.setFontSize('playgroundTitle', v)} defaultDesktop={fs.getDefault('playgroundTitle').desktop} defaultMobile={fs.getDefault('playgroundTitle').mobile} /></span>}
                                             value={data.playground.title}
                                             onChange={val => setData({ ...data, playground: { ...data.playground, title: val } })}
                                         />
@@ -308,17 +314,17 @@ export default function StudentCornerEditor() {
                                 </div>
                                 <div className="space-y-4">
                                     <RichTitleEditor
-                                        label="Card Title"
+                                        label={<span className="flex items-center gap-2">Card Title <InlineFontSize value={fs.getFontSize('lmsTitle')} onChange={(v) => fs.setFontSize('lmsTitle', v)} defaultDesktop={fs.getDefault('lmsTitle').desktop} defaultMobile={fs.getDefault('lmsTitle').mobile} /></span>}
                                         value={data.lms.title}
                                         onChange={val => setData({ ...data, lms: { ...data.lms, title: val } })}
                                     />
 
-                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Description</label>
+                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">Description <InlineFontSize value={fs.getFontSize('lmsDesc')} onChange={(v) => fs.setFontSize('lmsDesc', v)} defaultDesktop={fs.getDefault('lmsDesc').desktop} defaultMobile={fs.getDefault('lmsDesc').mobile} /></label>
                                     <textarea value={data.lms.description} onChange={e => setData({ ...data, lms: { ...data.lms, description: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-slate-400 text-sm" rows={3} />
 
                                     <div className="flex gap-4">
                                         <div className="flex-1">
-                                            <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Button Text</label>
+                                            <label className="text-xs font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">Button Text <InlineFontSize value={fs.getFontSize('lmsBtn')} onChange={(v) => fs.setFontSize('lmsBtn', v)} defaultDesktop={fs.getDefault('lmsBtn').desktop} defaultMobile={fs.getDefault('lmsBtn').mobile} /></label>
                                             <input value={data.lms.buttonText} onChange={e => setData({ ...data, lms: { ...data.lms, buttonText: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-white text-xs" />
                                         </div>
                                         <div className="flex-1">
@@ -352,17 +358,17 @@ export default function StudentCornerEditor() {
                                 </div>
                                 <div className="space-y-4">
                                     <RichTitleEditor
-                                        label="Card Title"
+                                        label={<span className="flex items-center gap-2">Card Title <InlineFontSize value={fs.getFontSize('mocktestTitle')} onChange={(v) => fs.setFontSize('mocktestTitle', v)} defaultDesktop={fs.getDefault('mocktestTitle').desktop} defaultMobile={fs.getDefault('mocktestTitle').mobile} /></span>}
                                         value={data.mocktest.title}
                                         onChange={val => setData({ ...data, mocktest: { ...data.mocktest, title: val } })}
                                     />
 
-                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Description</label>
+                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">Description <InlineFontSize value={fs.getFontSize('mocktestDesc')} onChange={(v) => fs.setFontSize('mocktestDesc', v)} defaultDesktop={fs.getDefault('mocktestDesc').desktop} defaultMobile={fs.getDefault('mocktestDesc').mobile} /></label>
                                     <textarea value={data.mocktest.description} onChange={e => setData({ ...data, mocktest: { ...data.mocktest, description: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-slate-300 text-sm opacity-80" rows={3} />
 
                                     <div className="flex gap-4">
                                         <div className="flex-1">
-                                            <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Button Text</label>
+                                            <label className="text-xs font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">Button Text <InlineFontSize value={fs.getFontSize('mocktestBtn')} onChange={(v) => fs.setFontSize('mocktestBtn', v)} defaultDesktop={fs.getDefault('mocktestBtn').desktop} defaultMobile={fs.getDefault('mocktestBtn').mobile} /></label>
                                             <input value={data.mocktest.buttonText} onChange={e => setData({ ...data, mocktest: { ...data.mocktest, buttonText: e.target.value } })} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-2 text-white text-xs" />
                                         </div>
                                         <div className="flex-1">
@@ -396,13 +402,13 @@ export default function StudentCornerEditor() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="space-y-4">
                                     <RichTitleEditor
-                                        label="Section Heading"
+                                        label={<span className="flex items-center gap-2">Section Heading <InlineFontSize value={fs.getFontSize('supportTitle')} onChange={(v) => fs.setFontSize('supportTitle', v)} defaultDesktop={fs.getDefault('supportTitle').desktop} defaultMobile={fs.getDefault('supportTitle').mobile} /></span>}
                                         value={data.support.title}
                                         onChange={val => setData({ ...data, support: { ...data.support, title: val } })}
                                     />
                                 </div>
                                 <div className="space-y-4">
-                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest">Sub Info Text</label>
+                                    <label className="text-xs font-black text-slate-600 uppercase tracking-widest flex items-center gap-2">Sub Info Text <InlineFontSize value={fs.getFontSize('supportDesc')} onChange={(v) => fs.setFontSize('supportDesc', v)} defaultDesktop={fs.getDefault('supportDesc').desktop} defaultMobile={fs.getDefault('supportDesc').mobile} /></label>
                                     <input value={data.support.description} onChange={e => setData({ ...data, support: { ...data.support, description: e.target.value } })} className="w-full bg-slate-950 border border-white/10 rounded-2xl px-6 py-4 text-slate-400" />
                                 </div>
                                 <div className="space-y-4">

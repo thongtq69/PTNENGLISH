@@ -145,7 +145,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                             <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-xs md:text-[10px] font-bold uppercase tracking-widest mb-6 md:mb-8">
                                 {hero.subtitle}
                             </div>
-                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-semibold text-accent mb-6 md:mb-10 leading-tight" dangerouslySetInnerHTML={{ __html: hero.title }} />
+                            <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-semibold text-accent mb-6 md:mb-10 leading-tight" style={{ fontSize: 'var(--fs-blog-pageTitle)' }} dangerouslySetInnerHTML={{ __html: hero.title }} />
                             <p className="text-slate-500 text-base md:text-xl font-body leading-relaxed mx-auto max-w-3xl">
                                 {hero.description}
                             </p>
@@ -225,6 +225,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
 
                                             <h2
                                                 className="text-lg md:text-2xl font-heading font-bold text-accent mb-4 md:mb-6 leading-snug group-hover:text-primary transition-colors line-clamp-2"
+                                                style={{ fontSize: 'var(--fs-blog-postTitle)' }}
                                                 dangerouslySetInnerHTML={{ __html: post.title }}
                                             />
 

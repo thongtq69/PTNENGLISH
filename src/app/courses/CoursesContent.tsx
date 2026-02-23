@@ -326,6 +326,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
                             className="text-white text-3xl md:text-6xl lg:text-8xl font-heading font-semibold mb-4 md:mb-10 leading-[1.1] max-w-5xl mx-auto"
+                            style={{ fontSize: 'var(--fs-courses-heroTitle)' }}
                         >
                             {(() => {
                                 const title = content.hero?.title || t.courses.hero.title;
@@ -366,6 +367,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
                             className="text-slate-400 text-base md:text-2xl font-body leading-relaxed max-w-4xl mx-auto mb-8 md:mb-12 text-center whitespace-pre-line"
+                            style={{ fontSize: 'var(--fs-courses-heroSubtitle)' }}
                         >
                             {content.hero?.subtitle || t.courses.hero.subtitle}
                         </motion.p>
@@ -376,7 +378,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             transition={{ delay: 0.3 }}
                             className="flex flex-wrap justify-center gap-4"
                         >
-                            <Link href="/test" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1 uppercase">
+                            <Link href="/test" className="bg-primary hover:bg-black text-white px-10 py-5 rounded-full font-bold shadow-2xl shadow-primary/20 transition-all transform hover:-translate-y-1 uppercase" style={{ fontSize: 'var(--fs-courses-heroCTA)' }}>
                                 {content.hero?.cta1 || t.courses.hero.cta1}
                             </Link>
                             <a href="#pathway" className="bg-white/5 hover:bg-white/10 text-white border border-white/10 backdrop-blur-md px-10 py-5 rounded-full font-bold transition-all uppercase">
@@ -394,10 +396,10 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                         {/* Target Audience */}
                         <div className="space-y-10">
                             <div>
-                                <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left">
+                                <h2 className="text-accent font-heading text-xl md:text-4xl font-black mb-4 md:mb-6 text-center lg:text-left" style={{ fontSize: 'var(--fs-courses-sectionTitle)' }}>
                                     {content.targetAudience?.title || t.courses.targetAudience.title}
                                 </h2>
-                                <p className="text-slate-500 text-sm md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0">
+                                <p className="text-slate-500 text-sm md:text-lg max-w-lg mb-6 md:mb-8 text-center lg:text-left mx-auto lg:mx-0" style={{ fontSize: 'var(--fs-courses-sectionSubtitle)' }}>
                                     {content.targetAudience?.subtitle || t.courses.targetAudience.subtitle}
                                 </p>
                             </div>
@@ -456,7 +458,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                 <div className="container mx-auto px-6">
                     {/* Tab Navigation */}
                     <div className="flex flex-col items-center mb-12">
-                        <h2 className="text-accent font-heading text-3xl md:text-5xl font-black mb-8 text-center">
+                        <h2 className="text-accent font-heading text-3xl md:text-5xl font-black mb-8 text-center" style={{ fontSize: 'var(--fs-courses-pathwayName)' }}>
                             {content.pathway?.title || t.courses.pathway.title}
                         </h2>
                         <div className="bg-white p-2 rounded-[2.5rem] shadow-2xl border border-slate-100 flex flex-wrap justify-center gap-2">
@@ -491,7 +493,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                 <p className={`text-sm font-black uppercase tracking-[0.4em] mb-4 text-primary`}>
                                     {currentPathway.subtitle}
                                 </p>
-                                <p className="text-slate-500 text-lg leading-relaxed">
+                                <p className="text-slate-500 text-lg leading-relaxed" style={{ fontSize: 'var(--fs-courses-pathwayDesc)' }}>
                                     {currentPathway.description}
                                 </p>
                             </div>
@@ -576,10 +578,10 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                             <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
                                 <Trophy size={16} /> {content.placement?.badge || t.courses.placement.badge}
                             </div>
-                            <h2 className="text-xl md:text-6xl font-heading font-black text-accent leading-tight text-center lg:text-left">
+                            <h2 className="text-xl md:text-6xl font-heading font-black text-accent leading-tight text-center lg:text-left" style={{ fontSize: 'var(--fs-courses-placementTitle)' }}>
                                 {(content.placement?.title || t.courses.placement.title).split(' ').slice(0, 4).join(' ')} <br /> <span className="text-primary">{(content.placement?.title || t.courses.placement.title).split(' ').slice(4).join(' ')}</span>
                             </h2>
-                            <p className="text-slate-500 text-sm md:text-lg leading-relaxed text-center lg:text-left mx-auto lg:mx-0">
+                            <p className="text-slate-500 text-sm md:text-lg leading-relaxed text-center lg:text-left mx-auto lg:mx-0" style={{ fontSize: 'var(--fs-courses-placementDesc)' }}>
                                 {content.placement?.desc || t.courses.placement.desc}
                             </p>
 
@@ -730,10 +732,10 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
             <section className="py-20 bg-accent overflow-hidden relative text-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(199,0,43,0.1),transparent)]"></div>
                 <div className="container mx-auto px-6 relative z-10 max-w-4xl">
-                    <h2 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-8 leading-tight">
+                    <h2 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-8 leading-tight" style={{ fontSize: 'var(--fs-courses-bottomCtaTitle)' }}>
                         {content.bottomCta?.title || t.courses.bottomCta.title}
                     </h2>
-                    <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed font-body">
+                    <p className="text-slate-400 text-lg mb-10 max-w-2xl mx-auto leading-relaxed font-body" style={{ fontSize: 'var(--fs-courses-bottomCtaDesc)' }}>
                         {content.bottomCta?.desc || t.courses.bottomCta.desc}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-6">

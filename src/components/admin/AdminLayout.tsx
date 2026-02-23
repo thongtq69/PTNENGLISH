@@ -22,7 +22,8 @@ import {
     Heart,
     Megaphone,
     MessageCircle,
-    Loader2
+    Loader2,
+    Type
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AdminLogin from './AdminLogin';
@@ -52,6 +53,7 @@ const MENU_ITEMS = [
     {
         group: 'Settings', items: [
             { name: 'Global Settings', icon: <Settings size={20} />, href: '/admin/settings' },
+            { name: 'Font Sizes', icon: <Type size={20} />, href: '/admin/font-sizes' },
         ]
     }
 ];

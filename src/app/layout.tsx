@@ -136,6 +136,7 @@ import ChatBox from "@/components/ChatBox";
 import TetEffects from "@/components/TetEffects";
 
 import { LanguageProvider } from "@/context/LanguageContext";
+import { FontSizeProvider } from "@/context/FontSizeContext";
 
 // JSON-LD Structured Data for SEO
 const organizationJsonLd = {
@@ -263,10 +264,12 @@ export default function RootLayout({
       </head>
       <body className={`${playfair.variable} ${newsreader.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} ${caveat.variable} font-body antialiased`}>
         <LanguageProvider>
-          <TetEffects />
-          {children}
-          <AdModal />
-          <ChatBox />
+          <FontSizeProvider>
+            <TetEffects />
+            {children}
+            <AdModal />
+            <ChatBox />
+          </FontSizeProvider>
         </LanguageProvider>
       </body>
     </html>
