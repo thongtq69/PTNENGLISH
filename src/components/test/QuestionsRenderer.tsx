@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useLayoutEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { parseTag, type ParsedQuestion } from "@/lib/questionParser";
 import {
@@ -24,13 +24,6 @@ interface QuestionsRendererProps {
   isHighlighterActive?: boolean;
 }
 
-/**
- * Renders IELTS question content using a portal-based approach.
- *
- * 1. Replaces question tags with placeholder <span> elements in the HTML
- * 2. Renders the full HTML as one piece (preserving DOM structure)
- * 3. Uses React portals to mount interactive components into placeholders
- */
 export default function QuestionsRenderer({
   content,
   answers,
@@ -39,6 +32,7 @@ export default function QuestionsRenderer({
   className = "",
   isHighlighterActive = false,
 }: QuestionsRendererProps) {
+  /* ── Step 1: Replace tags with placeholder spans ── */
   const { placeholderHtml, parsedQuestions } = useMemo(() => {
     if (!content) return { placeholderHtml: "", parsedQuestions: [] as ParsedQuestion[] };
 
@@ -48,31 +42,36 @@ export default function QuestionsRenderer({
       const q = parseTag(match);
       if (!q) return match;
       questions.push(q);
-      return `<span data-q-placeholder="${q.qIdx}" data-q-type="${q.type}" style="display:inline-flex;vertical-align:middle"></span>`;
+      return `<span data-q-placeholder="${q.qIdx}" style="display:inline-flex;vertical-align:middle"></span>`;
     });
     return { placeholderHtml: html, parsedQuestions: questions };
   }, [content]);
 
+  /* ── Step 2: Set innerHTML manually and discover placeholders ── */
   const containerRef = useRef<HTMLDivElement>(null);
   const [portalTargets, setPortalTargets] = useState<Record<number, HTMLElement>>({});
+  const appliedHtmlRef = useRef("");
 
-  // After every render where the HTML changes, discover placeholders.
-  // useEffect fires after DOM commit — container is guaranteed to exist.
-  useEffect(() => {
+  useLayoutEffect(() => {
     const node = containerRef.current;
-    if (!node) {
-      setPortalTargets({});
-      return;
+    if (!node) return;
+
+    // Only set innerHTML if it changed (avoid destroying portal targets)
+    if (appliedHtmlRef.current !== placeholderHtml) {
+      node.innerHTML = placeholderHtml;
+      appliedHtmlRef.current = placeholderHtml;
+
+      // Discover placeholder spans only after HTML changes
+      const targets: Record<number, HTMLElement> = {};
+      node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
+        const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
+        if (qIdx > 0) {
+          targets[qIdx] = el;
+          if (scrollRefs) scrollRefs.current[qIdx] = el;
+        }
+      });
+      setPortalTargets(targets);
     }
-    const targets: Record<number, HTMLElement> = {};
-    node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
-      const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
-      if (qIdx > 0) {
-        targets[qIdx] = el;
-        if (scrollRefs) scrollRefs.current[qIdx] = el;
-      }
-    });
-    setPortalTargets(targets);
   }, [placeholderHtml, scrollRefs]);
 
   if (!content) {
@@ -83,7 +82,7 @@ export default function QuestionsRenderer({
     );
   }
 
-  // Build portals from the current targets
+  /* ── Step 3: Build portals ── */
   const portals = parsedQuestions
     .map((q) => {
       const target = portalTargets[q.qIdx];
@@ -124,10 +123,8 @@ export default function QuestionsRenderer({
     <div
       className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? "cursor-text" : ""} ${className}`}
     >
-      <div
-        ref={containerRef}
-        dangerouslySetInnerHTML={{ __html: placeholderHtml }}
-      />
+      {/* Container for HTML content — innerHTML set imperatively via useLayoutEffect */}
+      <div ref={containerRef} />
       {portals}
     </div>
   );

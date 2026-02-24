@@ -428,6 +428,31 @@ function ReadingTestViewInner({
     setPortalTargets(targets);
   }, [placeholderHtml, activeSectionIdx]);
 
+  // Fallback: retry after an animation frame if portals were not found
+  useEffect(() => {
+    const foundCount = Object.keys(portalTargets).length;
+    const expectedCount = parsedQuestions.length;
+    if (foundCount >= expectedCount || expectedCount === 0) return;
+    if (!questionsHtmlRef.current) return;
+
+    const raf = requestAnimationFrame(() => {
+      const node = questionsHtmlRef.current;
+      if (!node) return;
+      const targets: Record<number, HTMLElement> = {};
+      node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
+        const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
+        if (qIdx > 0) {
+          targets[qIdx] = el;
+          scrollRefs.current[qIdx] = el;
+        }
+      });
+      if (Object.keys(targets).length > foundCount) {
+        setPortalTargets(targets);
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [portalTargets, parsedQuestions.length]);
+
   // Build portals
   const questionPortals = parsedQuestions
     .map((q) => {

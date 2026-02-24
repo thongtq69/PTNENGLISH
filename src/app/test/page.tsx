@@ -13,17 +13,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ReadingTestView from "@/components/test/ReadingTestView";
+import WritingTestView from "@/components/test/WritingTestView";
 import QuestionsRenderer from "@/components/test/QuestionsRenderer";
-import dynamic from "next/dynamic";
-const ModernPDFViewer = dynamic(() => import("@/components/ModernPDFViewer"), {
-    ssr: false,
-    loading: () => (
-        <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mb-4"></div>
-            <p className="text-xs font-bold uppercase tracking-widest">Loading PDF Engine...</p>
-        </div>
-    )
-});
 import { Highlighter, Eraser } from "lucide-react";
 
 interface TestSection {
@@ -77,7 +68,6 @@ export default function TestPage() {
     }, []);
 
     // UI States
-    const [viewMode, setViewMode] = useState<"pdf" | "answers">("pdf");
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -87,7 +77,6 @@ export default function TestPage() {
         return () => window.removeEventListener("resize", checkMobile);
     }, []);
 
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
     const [currentTime, setCurrentTime] = useState(3600); // 60 minutes default
@@ -430,35 +419,30 @@ export default function TestPage() {
         if (currentSkill === 'listening') {
             return (
                 <div className="space-y-4">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={`listening-${activeSectionIdx}`}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 min-h-[50vh]"
-                        >
-                            {activeSection ? (
-                                <>
-                                    <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
-                                        <h4 className="text-base sm:text-lg md:text-xl font-heading font-black text-accent">{activeSection.title}</h4>
-                                    </div>
-                                    <QuestionsRenderer
-                                        content={getHighlightedContent(activeSection.content, currentSkill)}
-                                        answers={answers[currentSkill] as Record<number, string>}
-                                        onAnswerChange={(qIdx: number, val: string) => handleAnswerChange(currentSkill, qIdx, val)}
-                                        scrollRefs={scrollRefs}
-                                        isHighlighterActive={isHighlighterActive}
-                                    />
-                                </>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
-                                    <AlertCircle size={40} className="opacity-10" />
-                                    <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
+                    <div
+                        key={`listening-${activeSectionIdx}`}
+                        className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl shadow-sm border border-slate-100 min-h-[50vh]"
+                    >
+                        {activeSection ? (
+                            <>
+                                <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                                    <h4 className="text-base sm:text-lg md:text-xl font-heading font-black text-accent">{activeSection.title}</h4>
                                 </div>
-                            )}
-                        </motion.div>
-                    </AnimatePresence>
+                                <QuestionsRenderer
+                                    content={getHighlightedContent(activeSection.content, currentSkill)}
+                                    answers={answers[currentSkill] as Record<number, string>}
+                                    onAnswerChange={(qIdx: number, val: string) => handleAnswerChange(currentSkill, qIdx, val)}
+                                    scrollRefs={scrollRefs}
+                                    isHighlighterActive={isHighlighterActive}
+                                />
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
+                                <AlertCircle size={40} className="opacity-10" />
+                                <p className="text-xs font-bold uppercase tracking-widest">Section content missing</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             );
         }
@@ -1129,65 +1113,12 @@ export default function TestPage() {
                     </AnimatePresence>
                 </div>
             ) : (
-                /* ── WRITING & fallback: Split PDF/Answer view ── */
-                <div className="flex-1 flex overflow-hidden flex-col lg:flex-row">
-                    {/* PDF Block */}
-                    <div className={`transition-all duration-700 flex flex-col h-full overflow-hidden ${isMobile ? (viewMode === 'pdf' ? "w-full" : "hidden") : (isSidebarOpen ? "flex-1 min-w-0" : "w-0")}`}>
-                        <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shadow-sm z-10 shrink-0">
-                            <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
-                                <FileText size={12} /> Original PDF Exam
-                            </span>
-                            {!isMobile && <button onClick={() => setIsSidebarOpen(false)} className="text-slate-300 hover:text-accent"><Minimize2 size={14} /></button>}
-                        </div>
-                        <div className="flex-1 bg-slate-800 relative min-h-0 overflow-hidden">
-                            {(() => {
-                                const pdfUrl = selectedTest?.[currentSkill]?.pdf || '';
-                                if (!pdfUrl) {
-                                    return (
-                                        <div className="w-full h-full flex flex-col items-center justify-center text-slate-500 bg-slate-900 p-12 text-center">
-                                            <FileText size={64} className="mb-6 opacity-10" />
-                                            <p className="text-xs font-bold uppercase tracking-widest">PDF not available for this section.</p>
-                                        </div>
-                                    );
-                                }
-                                return <ModernPDFViewer url={pdfUrl} />;
-                            })()}
-                        </div>
-                    </div>
-
-                    {/* Answer Block */}
-                    <div className={`transition-all duration-700 flex flex-col bg-slate-50 h-full overflow-hidden ${isMobile ? (viewMode === 'answers' ? "w-full" : "hidden") : (!isSidebarOpen ? "w-full" : "flex-1 min-w-0 border-l border-slate-200")}`}>
-                        <div className="bg-white h-10 border-b border-slate-200 px-6 flex items-center justify-between shrink-0">
-                            <div className="flex items-center gap-6">
-                                {!isSidebarOpen && !isMobile && <button onClick={() => setIsSidebarOpen(true)} className="p-1 px-3 bg-slate-100 rounded-lg text-[9px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-white transition-all"><Maximize2 size={12} /> View PDF</button>}
-                                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 flex items-center gap-2">
-                                    <CheckCircle2 size={12} /> Active Response Area
-                                </span>
-                            </div>
-                        </div>
-                        <div className="flex-1 overflow-y-auto p-4 md:p-12 custom-scrollbar pb-32 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed opacity-[0.98]">
-                            {renderAnswerSheet()}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Mobile View Toggle (only for writing - reading & listening have their own views) */}
-            {isMobile && currentSkill === 'writing' && (
-                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[200] flex bg-slate-900/90 backdrop-blur-xl p-1.5 rounded-2xl border border-white/10 shadow-2xl">
-                    <button
-                        onClick={() => setViewMode('pdf')}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'pdf' ? 'bg-primary text-white shadow-lg' : 'text-slate-400'}`}
-                    >
-                        <FileText size={16} /> PDF
-                    </button>
-                    <button
-                        onClick={() => setViewMode('answers')}
-                        className={`flex items-center gap-2 px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === 'answers' ? 'bg-primary text-white shadow-lg' : 'text-slate-400'}`}
-                    >
-                        <PenTool size={16} /> Answers
-                    </button>
-                </div>
+                /* ── WRITING: Split HTML prompt / Response view ── */
+                <WritingTestView
+                    content={selectedTest?.writing?.content || ""}
+                    answers={answers.writing}
+                    onAnswerChange={(taskIdx, val) => handleAnswerChange("writing", taskIdx, val)}
+                />
             )}
 
             <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" />
