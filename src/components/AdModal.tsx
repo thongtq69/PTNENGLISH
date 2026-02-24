@@ -173,8 +173,10 @@ export default function AdModal() {
                                     const Icon = ICON_MAP[item.icon] || Check;
                                     // Auto-detect correct hash if link is just /courses
                                     let finalLink = item.link;
-                                    if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
-                                        const text = item.text.toLowerCase();
+                                    const text = item.text.toLowerCase();
+                                    if (text.includes('đăng ký thi ielts') || text.includes('ielts/ pte')) {
+                                        finalLink = '/contact?course=ielts#registration-form';
+                                    } else if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
                                         if (text.includes('ielts')) finalLink = '/courses#ie';
                                         else if (text.includes('teens')) finalLink = '/courses#eft';
                                         else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';

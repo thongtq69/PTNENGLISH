@@ -82,6 +82,12 @@ export default function AchievementManager() {
                         </button>
 
                         <div className="space-y-4">
+                            {/* Portrait preview */}
+                            {item.url && (
+                                <div className="w-full aspect-square rounded-2xl overflow-hidden bg-slate-950 border border-white/5 mb-4">
+                                    <img src={item.url} alt={item.title} className="w-full h-full object-cover" />
+                                </div>
+                            )}
                             <div>
                                 <label className="text-[10px] font-black text-slate-600 uppercase tracking-widest block mb-1">Badge Title (e.g. IELTS High Achiever)</label>
                                 <input value={item.title} onChange={e => updateItem(idx, 'title', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-primary font-black text-sm" />
@@ -92,6 +98,7 @@ export default function AchievementManager() {
                                     value={item.url}
                                     onChange={(url) => updateItem(idx, 'url', url)}
                                     folder="achievements"
+                                    aspect={1}
                                 />
                             </div>
                         </div>
