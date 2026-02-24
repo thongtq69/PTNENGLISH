@@ -239,60 +239,7 @@ const TetBanner = memo(function TetBanner() {
   );
 });
 
-// ── 📜 Câu đối — English text ──
-const CauDoi = memo(function CauDoi() {
-  return (
-    <>
-      {/* Left scroll */}
-      <div className="fixed left-0 top-24 z-[9997] pointer-events-none hidden lg:block">
-        <motion.div
-          initial={{ x: -60, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.6, type: "spring" }}
-        >
-          <div className="relative">
-            <div className="w-9 h-2 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-tr-sm shadow-md" />
-            <div className="bg-gradient-to-b from-red-700 to-red-800 px-1 py-4 shadow-xl border-r border-yellow-600/30 w-9">
-              <p className="text-yellow-300 text-[9px] font-bold tracking-[0.3em] leading-[2]" style={{ writingMode: "vertical-rl" }}>
-                SUCCEED
-              </p>
-            </div>
-            <div className="w-9 h-2 bg-gradient-to-t from-yellow-400 to-yellow-600 rounded-br-sm shadow-md" />
-            <motion.div
-              className="w-1.5 h-6 bg-gradient-to-b from-yellow-500 to-red-500 mx-auto rounded-b-full"
-              animate={{ rotate: [-3, 3, -3] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-          </div>
-        </motion.div>
-      </div>
 
-      {/* Right scroll */}
-      <div className="fixed right-0 top-24 z-[9997] pointer-events-none hidden lg:block">
-        <motion.div
-          initial={{ x: 60, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 1.8, duration: 0.6, type: "spring" }}
-        >
-          <div className="relative">
-            <div className="w-9 h-2 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-tl-sm shadow-md" />
-            <div className="bg-gradient-to-b from-red-700 to-red-800 px-1 py-4 shadow-xl border-l border-yellow-600/30 w-9">
-              <p className="text-yellow-300 text-[9px] font-bold tracking-[0.3em] leading-[2]" style={{ writingMode: "vertical-rl" }}>
-                PROSPER
-              </p>
-            </div>
-            <div className="w-9 h-2 bg-gradient-to-t from-yellow-400 to-yellow-600 rounded-bl-sm shadow-md" />
-            <motion.div
-              className="w-1.5 h-6 bg-gradient-to-b from-yellow-500 to-red-500 mx-auto rounded-b-full"
-              animate={{ rotate: [3, -3, 3] }}
-              transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
-            />
-          </div>
-        </motion.div>
-      </div>
-    </>
-  );
-});
 
 // ── Main Export ──
 export default function TetEffects() {
@@ -306,7 +253,7 @@ export default function TetEffects() {
       <FallingPetals />
       <GallopingHorse />
       <Fireworks />
-      <CauDoi />
+
     </>
   );
 }

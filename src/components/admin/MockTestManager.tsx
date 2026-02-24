@@ -240,7 +240,7 @@ export default function MockTestManager() {
                                                         folder={`tests/${activeSkill}`}
                                                     />
                                                 </div>
-                                                {activeSkill === 'listening' && (
+                                                {activeSkill === 'listening' && test.listening.sections[activeSectionIdx] && (
                                                     <div className="space-y-4">
                                                         <label className="text-[10px] font-black text-slate-500 uppercase">Section Audio</label>
                                                         <FileUpload
@@ -248,8 +248,10 @@ export default function MockTestManager() {
                                                             value={test.listening.sections[activeSectionIdx]?.audioUrl || ''}
                                                             onChange={url => {
                                                                 const updated = { ...test };
-                                                                updated.listening.sections[activeSectionIdx].audioUrl = url;
-                                                                updateTest(updated);
+                                                                if (updated.listening.sections[activeSectionIdx]) {
+                                                                    updated.listening.sections[activeSectionIdx].audioUrl = url;
+                                                                    updateTest(updated);
+                                                                }
                                                             }}
                                                             folder="tests/listening"
                                                         />

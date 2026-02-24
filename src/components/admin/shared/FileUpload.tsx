@@ -53,7 +53,22 @@ export default function FileUpload({
             return;
         }
 
-        // Upload the full original image first
+        if (mode === 'audio' && !file.type.startsWith('audio/')) {
+            alert('Vui lòng chọn tệp audio (mp3, wav, ogg...).');
+            return;
+        }
+
+        // Check file size (25MB limit for Cloudinary)
+        const maxSizeMB = 25;
+        const fileSizeMB = file.size / (1024 * 1024);
+        if (fileSizeMB > maxSizeMB) {
+            alert(`Tệp quá lớn (${fileSizeMB.toFixed(1)}MB). Giới hạn tối đa ${maxSizeMB}MB.`);
+            return;
+        }
+
+        console.log(`[FileUpload] Uploading file: ${file.name}, type: ${file.type}, size: ${fileSizeMB.toFixed(2)}MB, mode: ${mode}`);
+
+        // Upload the file
         uploadToServer(file);
     };
 
@@ -62,11 +77,16 @@ export default function FileUpload({
         if (onUploading) onUploading(true);
 
         try {
+            // Determine resource_type for Cloudinary
+            // Audio and video must use 'video' resource_type in Cloudinary
+            const isAudioOrVideo = mode === 'audio' || mode === 'video';
+            const resourceType = isAudioOrVideo ? 'video' : 'auto';
+
             // 1. Get signature from our API
             const timestamp = Math.round(new Date().getTime() / 1000);
             const folderPath = `ptn_english/${folder}`;
 
-            const paramsToSign = {
+            const paramsToSign: Record<string, any> = {
                 timestamp,
                 folder: folderPath,
             };
@@ -83,18 +103,24 @@ export default function FileUpload({
             // 2. Upload directly to Cloudinary
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('api_key', '798193785297581'); // Built-in from env for client-side
+            formData.append('api_key', '798193785297581');
             formData.append('timestamp', timestamp.toString());
             formData.append('signature', signature);
             formData.append('folder', folderPath);
 
             const cloudName = 'dtzegtrxb';
-            const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+            // Use the correct resource_type endpoint
+            const uploadUrl = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+            console.log(`[FileUpload] Uploading to Cloudinary: ${uploadUrl}`);
+
+            const uploadRes = await fetch(uploadUrl, {
                 method: 'POST',
                 body: formData,
             });
 
             const uploadData = await uploadRes.json();
+            console.log('[FileUpload] Cloudinary response:', uploadData);
 
             if (uploadData.secure_url) {
                 onChange(uploadData.secure_url, { isCropped: isCroppedImage });
@@ -104,10 +130,11 @@ export default function FileUpload({
                     setIsCropping(true);
                 }
             } else {
+                console.error('[FileUpload] Cloudinary error details:', JSON.stringify(uploadData));
                 throw new Error(uploadData.error?.message || 'Lỗi khi tải tệp lên Cloudinary.');
             }
         } catch (error: any) {
-            console.error('Upload error:', error);
+            console.error('[FileUpload] Upload error:', error);
             alert(error.message || 'Lỗi kết nối máy chủ.');
         } finally {
             setUploading(false);
