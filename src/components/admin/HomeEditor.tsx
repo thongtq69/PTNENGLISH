@@ -795,6 +795,7 @@ export default function HomeEditor() {
                                     setSettings({ ...settings, programs: newList });
                                 }}
                                 folder="home/programs"
+                                aspect={1}
                             />
                             <select
                                 value={prog.color}

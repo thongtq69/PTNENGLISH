@@ -268,6 +268,7 @@ export default function AboutEditor() {
                                             value={data.story.image || ''}
                                             onChange={(url) => setData({ ...data, story: { ...data.story, image: url } })}
                                             folder="about/story"
+                                            aspect={4 / 3}
                                         />
 
                                         <div className="p-8 bg-slate-950 border border-white/5 rounded-[2rem] space-y-6">
@@ -351,6 +352,7 @@ export default function AboutEditor() {
                                                         setData({ ...data, teachers: list });
                                                     }}
                                                     folder="teachers"
+                                                    aspect={3 / 4}
                                                 />
                                             </div>
                                             <div className="space-y-3">
