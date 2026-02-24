@@ -1036,13 +1036,12 @@ export default function TestPage() {
                                 <button
                                     onClick={() => toggleAudio(section.audioUrl)}
                                     disabled={listeningPhase === 'prep'}
-                                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${
-                                        listeningPhase === 'prep'
+                                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${listeningPhase === 'prep'
                                             ? 'bg-white/5 text-white/20 cursor-not-allowed'
                                             : isPlaying
                                                 ? 'bg-primary text-white shadow-md shadow-primary/30'
                                                 : 'bg-white/10 text-white hover:bg-white/20'
-                                    }`}
+                                        }`}
                                 >
                                     {isPlaying ? <Pause size={14} /> : <Play size={14} />}
                                 </button>
@@ -1116,6 +1115,7 @@ export default function TestPage() {
                 /* ── WRITING: Split HTML prompt / Response view ── */
                 <WritingTestView
                     content={selectedTest?.writing?.content || ""}
+                    backdropUrl={selectedTest?.writing?.pdf}
                     answers={answers.writing}
                     onAnswerChange={(taskIdx, val) => handleAnswerChange("writing", taskIdx, val)}
                 />

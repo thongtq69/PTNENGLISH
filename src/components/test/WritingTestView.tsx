@@ -36,12 +36,13 @@ interface Note {
 
 interface WritingTestViewProps {
   content: string; // HTML content for writing prompts (Task 1 + Task 2)
+  backdropUrl?: string; // Optional image/PDF backdrop (e.g. graph, diagram)
   answers: Record<number, string>; // { 1: "essay text...", 2: "essay text..." }
   onAnswerChange: (taskIdx: number, val: string) => void;
 }
 
 /* ───── Component ───── */
-function WritingTestViewInner({ content, answers, onAnswerChange }: WritingTestViewProps) {
+function WritingTestViewInner({ content, backdropUrl, answers, onAnswerChange }: WritingTestViewProps) {
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -229,12 +230,30 @@ function WritingTestViewInner({ content, answers, onAnswerChange }: WritingTestV
   /* ── Prompt content (reusable between mobile/desktop) ── */
   const promptContent = (
     <>
-      {highlightedPromptHtml ? (
-        <div
-          className="reading-passage select-text"
-          style={{ fontSize: `${fontSize}px`, lineHeight: "1.9" }}
-          dangerouslySetInnerHTML={{ __html: highlightedPromptHtml }}
-        />
+      {(content || backdropUrl) ? (
+        <div className="space-y-6">
+          {backdropUrl && (
+            <div className="mb-6 rounded-2xl overflow-hidden border border-slate-100 shadow-lg">
+              <img
+                src={backdropUrl}
+                alt="Writing Task Backdrop"
+                className="w-full h-auto object-contain bg-white"
+                onError={(e) => {
+                  // If it's a PDF, we could try an iframe or just show a link
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </div>
+          )}
+          {highlightedPromptHtml && (
+            <div
+              className="reading-passage select-text"
+              style={{ fontSize: `${fontSize}px`, lineHeight: "1.9" }}
+              dangerouslySetInnerHTML={{ __html: highlightedPromptHtml }}
+            />
+          )}
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center h-full text-slate-300 gap-4 py-20">
           <PenTool size={48} className="opacity-20" />
@@ -258,11 +277,10 @@ function WritingTestViewInner({ content, answers, onAnswerChange }: WritingTestV
               Task {idx}
             </label>
             <span
-              className={`text-[10px] font-bold tabular-nums px-2 py-0.5 rounded-full ${
-                wordCount(answers[idx] || "") >= (idx === 1 ? 150 : 250)
-                  ? "bg-emerald-100 text-emerald-700"
-                  : "bg-slate-100 text-slate-400"
-              }`}
+              className={`text-[10px] font-bold tabular-nums px-2 py-0.5 rounded-full ${wordCount(answers[idx] || "") >= (idx === 1 ? 150 : 250)
+                ? "bg-emerald-100 text-emerald-700"
+                : "bg-slate-100 text-slate-400"
+                }`}
             >
               {wordCount(answers[idx] || "")} words
               {idx === 1 ? " / min 150" : " / min 250"}
