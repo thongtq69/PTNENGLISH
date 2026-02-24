@@ -180,11 +180,12 @@ export default function MockTestManager() {
                                 <div className="flex items-center gap-4 pb-6">
                                     <button
                                         onClick={() => {
-                                            if (confirm("Delete this entire test set?")) {
+                                            if (confirm("WARNING: Delete this ENTIRE mock test set? This cannot be undone.")) {
                                                 setTests(tests.filter((_, i) => i !== activeIdx));
                                                 setActiveIdx(null);
                                             }
                                         }}
+                                        title="Delete entire test set"
                                         className="p-2 text-slate-600 hover:text-red-500 transition-colors"
                                     >
                                         <Trash2 size={18} />
@@ -213,13 +214,32 @@ export default function MockTestManager() {
                                             </div>
                                             <div className="flex-1 overflow-y-auto p-4 space-y-2">
                                                 {(test[activeSkill].sections || []).map((sec, sIdx) => (
-                                                    <button
-                                                        key={sIdx}
-                                                        onClick={() => setActiveSectionIdx(sIdx)}
-                                                        className={`w-full text-left p-4 rounded-xl text-[10px] font-bold transition-all border ${activeSectionIdx === sIdx ? 'bg-white/5 border-white/10 text-white' : 'border-transparent text-slate-600 hover:text-slate-400'}`}
-                                                    >
-                                                        {sIdx + 1}. {sec.title || 'Untitled Section'}
-                                                    </button>
+                                                    <div key={sIdx} className="group relative">
+                                                        <button
+                                                            onClick={() => setActiveSectionIdx(sIdx)}
+                                                            className={`w-full text-left p-4 pr-10 rounded-xl text-[10px] font-bold transition-all border ${activeSectionIdx === sIdx ? 'bg-white/5 border-white/10 text-white' : 'border-transparent text-slate-600 hover:text-slate-400'}`}
+                                                        >
+                                                            {sIdx + 1}. {sec.title || 'Untitled Section'}
+                                                        </button>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                if (confirm("Delete this section?")) {
+                                                                    const updated = { ...test };
+                                                                    const newSections = [...updated[activeSkill].sections];
+                                                                    newSections.splice(sIdx, 1);
+                                                                    updated[activeSkill].sections = newSections;
+                                                                    updateTest(updated);
+                                                                    if (activeSectionIdx >= newSections.length) {
+                                                                        setActiveSectionIdx(Math.max(0, newSections.length - 1));
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
+                                                        >
+                                                            <Trash2 size={12} />
+                                                        </button>
+                                                    </div>
                                                 ))}
                                             </div>
                                         </div>

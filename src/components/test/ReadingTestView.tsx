@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
+import { createPortal, flushSync } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Highlighter,
@@ -17,7 +18,7 @@ import {
   ChevronRight,
   Trash2,
 } from "lucide-react";
-import { parseContent } from "@/lib/questionParser";
+import { parseTag, type ParsedQuestion } from "@/lib/questionParser";
 import {
   FillBlank,
   MultipleChoice,
@@ -386,116 +387,96 @@ function ReadingTestViewInner({
     return { qStart: start, qEnd: end, answeredInPart: answered, totalInPart: end - start + 1 };
   }, [activeSectionIdx, answers]);
 
-  /* Parse questions (memoized) — supports all 14 IELTS question types */
-  const questionsContent = useMemo(() => {
-    const content = activeSection?.content;
-    if (!content) return <div className="text-slate-400 italic p-8 text-center text-sm">No questions available for this section.</div>;
+  /* Parse questions (memoized) — supports all 14 IELTS question types
+     Uses portal-based rendering: replace tags with placeholder <span> elements
+     in the HTML, render the full HTML as one piece, then mount React components
+     into those placeholders via createPortal. */
 
-    const parts = parseContent(content);
-    const setRef = (qIdx: number) => (el: HTMLElement | null) => { scrollRefs.current[qIdx] = el; };
+  const { placeholderHtml, parsedQuestions } = useMemo(() => {
+    const content = activeSection?.content;
+    if (!content) return { placeholderHtml: "", parsedQuestions: [] as ParsedQuestion[] };
+
+    const TAG_RE = /\[(MCM|MC|TFNG|YNNG|MH|MI|MF|MSE|SC|Q)(\d+)(?::([^\]]*))?\]/g;
+    const questions: ParsedQuestion[] = [];
+    const html = content.replace(TAG_RE, (match) => {
+      const q = parseTag(match);
+      if (!q) return match;
+      questions.push(q);
+      return `<span data-q-placeholder="${q.qIdx}" data-q-type="${q.type}"></span>`;
+    });
+    return { placeholderHtml: html, parsedQuestions: questions };
+  }, [activeSection?.content]);
+
+  const [portalTargets, setPortalTargets] = useState<Record<number, HTMLElement>>({});
+
+  // Callback ref: fires synchronously when the container div mounts.
+  // flushSync ensures the portal targets are available before paint.
+  const questionsHtmlCallbackRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (!node) {
+        setPortalTargets({});
+        return;
+      }
+      const targets: Record<number, HTMLElement> = {};
+      node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
+        const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
+        if (qIdx > 0) {
+          targets[qIdx] = el;
+          scrollRefs.current[qIdx] = el;
+        }
+      });
+      flushSync(() => setPortalTargets(targets));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [placeholderHtml],
+  );
+
+  // Build portals
+  const questionPortals = parsedQuestions
+    .map((q) => {
+      const target = portalTargets[q.qIdx];
+      if (!target) return null;
+
+      const val = answers[q.qIdx] || "";
+      let component: React.ReactNode;
+
+      switch (q.type) {
+        case "mc":
+          component = <MultipleChoice qIdx={q.qIdx} options={q.options || ["A", "B", "C", "D"]} value={val} onChange={onAnswerChange} />;
+          break;
+        case "mcm":
+          component = <MultipleChoiceMulti qIdx={q.qIdx} options={q.options || ["A", "B", "C", "D", "E"]} maxSelect={q.maxSelect || 2} value={val} onChange={onAnswerChange} />;
+          break;
+        case "tfng":
+          component = <TrueFalseNG qIdx={q.qIdx} value={val} onChange={onAnswerChange} />;
+          break;
+        case "ynng":
+          component = <YesNoNG qIdx={q.qIdx} value={val} onChange={onAnswerChange} />;
+          break;
+        case "mh": case "mi": case "mf": case "mse":
+          component = <MatchingDropdown qIdx={q.qIdx} variant={q.type} options={q.options || []} value={val} onChange={onAnswerChange} />;
+          break;
+        case "sc":
+          component = <SummaryWordList qIdx={q.qIdx} options={q.options || []} value={val} onChange={onAnswerChange} />;
+          break;
+        case "fill": default:
+          component = <FillBlank qIdx={q.qIdx} value={val} onChange={onAnswerChange} />;
+          break;
+      }
+
+      return createPortal(component, target, `q-portal-${q.qIdx}`);
+    })
+    .filter(Boolean);
+
+  const questionsContent = useMemo(() => {
+    if (!activeSection?.content) return <div className="text-slate-400 italic p-8 text-center text-sm">No questions available for this section.</div>;
 
     return (
       <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700">
-        {parts.map((part, i) => {
-          if (part.kind === "html") {
-            const partHtml = part.html || "";
-            // Each HTML part in questions is small, we need highlights relative to the WHOLE questions container
-            // This is handled by applyHighlightsToHtml if we pass it the RIGHT part of the text
-            // But applyHighlightsToHtml works on a standalone HTML string.
-            // For now, let's just render it and we'll apply highlights to the container in a different way if needed.
-            // Actually, we can just apply highlights to this part if we know its offset.
-            return <span key={i} dangerouslySetInnerHTML={{ __html: partHtml }} />;
-          }
-
-          const q = part.question!;
-          const val = answers[q.qIdx] || "";
-
-          switch (q.type) {
-            case "mc":
-              return (
-                <MultipleChoice
-                  key={i}
-                  qIdx={q.qIdx}
-                  options={q.options || ["A", "B", "C", "D"]}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-            case "mcm":
-              return (
-                <MultipleChoiceMulti
-                  key={i}
-                  qIdx={q.qIdx}
-                  options={q.options || ["A", "B", "C", "D", "E"]}
-                  maxSelect={q.maxSelect || 2}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-            case "tfng":
-              return (
-                <TrueFalseNG
-                  key={i}
-                  qIdx={q.qIdx}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-            case "ynng":
-              return (
-                <YesNoNG
-                  key={i}
-                  qIdx={q.qIdx}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-            case "mh":
-            case "mi":
-            case "mf":
-            case "mse":
-              return (
-                <MatchingDropdown
-                  key={i}
-                  qIdx={q.qIdx}
-                  variant={q.type}
-                  options={q.options || []}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-            case "sc":
-              return (
-                <SummaryWordList
-                  key={i}
-                  qIdx={q.qIdx}
-                  options={q.options || []}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-            case "fill":
-            default:
-              return (
-                <FillBlank
-                  key={i}
-                  qIdx={q.qIdx}
-                  value={val}
-                  onChange={onAnswerChange}
-                  inputRef={setRef(q.qIdx)}
-                />
-              );
-          }
-        })}
+        <div ref={questionsHtmlCallbackRef} dangerouslySetInnerHTML={{ __html: placeholderHtml }} />
       </div>
     );
-  }, [activeSection?.content, answers, onAnswerChange]);
+  }, [activeSection?.content, placeholderHtml, questionsHtmlCallbackRef]);
 
   // Special effect to apply highlights to the questionsRef container
   // Helper to find a Range based on textContent offsets
@@ -696,7 +677,7 @@ function ReadingTestViewInner({
                       <div className="px-4 py-3 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                         <h4 className="text-sm font-heading font-black text-accent leading-tight">{activeSection.title}</h4>
                       </div>
-                      <div className="p-4">{questionsContent}</div>
+                      <div className="p-4">{questionsContent}{questionPortals}</div>
                       {/* Prev / Next */}
                       <div className="px-4 py-3 border-t border-slate-100 flex items-center justify-between">
                         <button onClick={() => activeSectionIdx > 0 && onSectionChange(activeSectionIdx - 1)} disabled={activeSectionIdx === 0} className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${activeSectionIdx === 0 ? "text-slate-300 cursor-not-allowed" : "text-slate-600 hover:bg-slate-100"}`}>
@@ -833,7 +814,7 @@ function ReadingTestViewInner({
                       <div className="px-4 py-3 md:px-6 md:py-4 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white">
                         <h4 className="text-sm md:text-base font-heading font-black text-accent leading-tight">{activeSection.title}</h4>
                       </div>
-                      <div className="p-4 md:p-6 select-text">{questionsContent}</div>
+                      <div className="p-4 md:p-6 select-text">{questionsContent}{questionPortals}</div>
                       {/* Prev / Next part navigation */}
                       <div className="px-4 md:px-6 py-3 border-t border-slate-100 flex items-center justify-between">
                         <button

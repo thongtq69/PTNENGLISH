@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import ReadingTestView from "@/components/test/ReadingTestView";
+import QuestionsRenderer from "@/components/test/QuestionsRenderer";
 import { parseContent } from "@/lib/questionParser";
 import {
     FillBlank,
@@ -385,8 +386,8 @@ export default function TestPage() {
         }
     };
 
-    const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
-        if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
+    const getHighlightedContent = (content: string, skill: "listening" | "reading" | "writing") => {
+        if (!content) return content;
 
         // Apply highlights from state
         let highlightedContent = content;
@@ -398,6 +399,23 @@ export default function TestPage() {
                 highlightedContent = highlightedContent.replace(regex, '<mark class="highlight-yellow">$1</mark>');
             });
         }
+        return highlightedContent;
+    };
+
+    /**
+     * Old-style inline rendering for listening sections.
+     * Uses parseContent to split HTML at question tags, then renders
+     * HTML fragments + React question components inline.
+     *
+     * FIX: Uses <div style="display:contents"> instead of <span> for
+     * HTML parts so block-level elements (<table>, <p>, etc.) are
+     * not broken by browser HTML-nesting rules.
+     */
+    const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
+        if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
+
+        // Apply highlights
+        const highlightedContent = getHighlightedContent(content, skill);
 
         const parts = parseContent(highlightedContent);
         const setRef = (qIdx: number) => (el: HTMLElement | null) => { scrollRefs.current[qIdx] = el; };
@@ -407,7 +425,11 @@ export default function TestPage() {
             <div className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? 'cursor-text' : ''}`}>
                 {parts.map((part, i) => {
                     if (part.kind === "html") {
-                        return <span key={i} dangerouslySetInnerHTML={{ __html: part.html || "" }} />;
+                        /* Use display:contents so the wrapper div is invisible
+                           to layout — block elements like <table>, <p>, <div>
+                           inside will render normally without being forced into
+                           an inline context (which caused line-break issues). */
+                        return <div key={i} style={{ display: 'contents' }} dangerouslySetInnerHTML={{ __html: part.html || "" }} />;
                     }
                     const q = part.question!;
                     const val = answers[skill][q.qIdx] || "";
@@ -528,7 +550,13 @@ export default function TestPage() {
                                 <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                                     <h4 className="text-base sm:text-lg md:text-xl font-heading font-black text-accent">{activeSection.title}</h4>
                                 </div>
-                                {parseContentWithInputs(activeSection.content, currentSkill)}
+                                <QuestionsRenderer
+                                    content={getHighlightedContent(activeSection.content, currentSkill)}
+                                    answers={answers[currentSkill] as Record<number, string>}
+                                    onAnswerChange={handleReadingAnswerChange}
+                                    scrollRefs={scrollRefs}
+                                    isHighlighterActive={isHighlighterActive}
+                                />
                             </>
                         ) : (
                             <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
