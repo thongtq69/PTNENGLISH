@@ -214,6 +214,19 @@
   --font-newsreader: var(--font-newsreader);
 }
 
+/* ============================================
+   REACT-EASY-CROP: White overlay instead of black
+   ============================================ */
+.reactEasyCrop_Container {
+  background-color: #ffffff !important;
+}
+
+.reactEasyCrop_CropArea {
+  border: 2px solid #cbd5e1 !important;
+  box-shadow: 0 0 0 9999px rgba(255, 255, 255, 0.7) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
 html,
 body {
   max-width: 100vw;

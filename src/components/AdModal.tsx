@@ -171,11 +171,15 @@ export default function AdModal() {
                             <div className="space-y-3 md:space-y-4 mb-6 md:mb-12">
                                 {ad.items.map((item, i) => {
                                     const Icon = ICON_MAP[item.icon] || Check;
-                                    // Auto-detect correct hash if link is just /courses
                                     let finalLink = item.link;
                                     const text = item.text.toLowerCase();
-                                    if (text.includes('đăng ký thi ielts') || text.includes('ielts/ pte')) {
-                                        finalLink = '/contact?course=ielts#registration-form';
+
+                                    // Smart auto-routing based on admin input
+                                    if (finalLink === '#' || finalLink === '') {
+                                        if (text.includes('ielts') || text.includes('pte')) finalLink = '/contact?course=ielts#registration-form';
+                                        else if (text.includes('teens') || text.includes('thiếu niên') || text.includes('eft')) finalLink = '/contact?course=eft#registration-form';
+                                        else if (text.includes('general') || text.includes('giao tiếp') || text.includes('tổng quát')) finalLink = '/contact?course=ge#registration-form';
+                                        else finalLink = '/contact#registration-form';
                                     } else if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
                                         if (text.includes('ielts')) finalLink = '/courses#ie';
                                         else if (text.includes('teens')) finalLink = '/courses#eft';

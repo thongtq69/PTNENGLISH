@@ -11,27 +11,36 @@ import { useSearchParams } from "next/navigation";
 function ContactFormPageContent() {
     const { t } = useLanguage();
     const [submitted, setSubmitted] = useState(false);
-    const [initialCourse, setInitialCourse] = useState<string>("");
     const searchParams = useSearchParams();
 
-    // Initialize the default course selection once language is loaded or from URL
+    // We store the raw key: 'ielts', 'eft', 'ge', or 'undecided'
+    const [initialCourse, setInitialCourse] = useState<string>("undecided");
+
+    // Initialize course selection exactly according to the URL
     useEffect(() => {
         const courseParam = searchParams.get('course');
-        if (courseParam === 'ielts') setInitialCourse(t.contact.form.options.ielts);
-        else if (courseParam === 'eft') setInitialCourse(t.contact.form.options.eft);
-        else if (courseParam === 'ge') setInitialCourse(t.contact.form.options.general);
-        else setInitialCourse(t.contact.form.options.undecided);
-    }, [t.contact.form.options, searchParams]);
+        if (courseParam && ['ielts', 'eft', 'ge', 'undecided'].includes(courseParam)) {
+            setInitialCourse(courseParam);
+        }
+    }, [searchParams]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+
+        const selectedKey = formData.get("course") as string;
+        let finalCourseText = selectedKey;
+        if (selectedKey === 'ielts') finalCourseText = t.contact.form.options.ielts;
+        else if (selectedKey === 'eft') finalCourseText = t.contact.form.options.eft;
+        else if (selectedKey === 'ge') finalCourseText = t.contact.form.options.general;
+        else if (selectedKey === 'undecided') finalCourseText = t.contact.form.options.undecided;
+
         const data = {
             type: "Consultation",
             name: formData.get("name"),
             phone: formData.get("phone"),
             email: formData.get("email"),
-            course: formData.get("course"),
+            course: finalCourseText,
         };
 
         try {
@@ -147,10 +156,10 @@ function ContactFormPageContent() {
                                             onChange={(e) => setInitialCourse(e.target.value)}
                                             className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all appearance-none text-slate-700"
                                         >
-                                            <option value={t.contact.form.options.eft}>{t.contact.form.options.eft}</option>
-                                            <option value={t.contact.form.options.ielts}>{t.contact.form.options.ielts}</option>
-                                            <option value={t.contact.form.options.general}>{t.contact.form.options.general}</option>
-                                            <option value={t.contact.form.options.undecided}>{t.contact.form.options.undecided}</option>
+                                            <option value="eft">{t.contact.form.options.eft}</option>
+                                            <option value="ielts">{t.contact.form.options.ielts}</option>
+                                            <option value="ge">{t.contact.form.options.general}</option>
+                                            <option value="undecided">{t.contact.form.options.undecided}</option>
                                         </select>
                                     </div>
                                     <motion.button

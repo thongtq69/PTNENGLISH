@@ -58,6 +58,10 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
         canvas.width = pixelCrop.width;
         canvas.height = pixelCrop.height;
 
+        // Fill with white background (instead of black/transparent)
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
         // Apply rotation if needed
         if (rotation !== 0) {
             ctx.translate(canvas.width / 2, canvas.height / 2);
@@ -116,7 +120,7 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                     </button>
                 </div>
 
-                <div className="relative flex-1 bg-slate-950">
+                <div className="relative flex-1 bg-white">
                     <Cropper
                         image={image}
                         crop={crop}
@@ -128,6 +132,11 @@ export default function ImageCropper({ image, onCropComplete, onCancel, aspect =
                         onZoomChange={onZoomChange}
                         minZoom={0.1}
                         restrictPosition={false}
+                        style={{
+                            containerStyle: { backgroundColor: '#ffffff' },
+                            mediaStyle: {},
+                            cropAreaStyle: { border: '2px solid #e2e8f0' }
+                        }}
                     />
                 </div>
 
