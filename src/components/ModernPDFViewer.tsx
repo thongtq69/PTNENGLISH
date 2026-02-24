@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import 'react-pdf/dist/Page/TextLayer.css';
@@ -18,34 +18,17 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
     const [scale, setScale] = useState(1.2);
     const [loading, setLoading] = useState(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [triedFallback, setTriedFallback] = useState(false);
 
-    // Fix Cloudinary PDF URLs: PDFs uploaded as "image" resource_type
-    // return 401. Change /image/upload/ to /raw/upload/ for .pdf files.
-    // Also try the reverse: /raw/upload/ → /image/upload/ as fallback.
-    const fixedUrl = (() => {
+    // For Cloudinary PDF URLs, use our server-side proxy which handles
+    // signed URLs and resource_type detection. This bypasses ACL/401 issues.
+    const resolvedUrl = (() => {
         if (!url) return url;
-        if (url.match(/cloudinary\.com\/.*\/image\/upload\/.*\.pdf$/i)) {
-            return url.replace('/image/upload/', '/raw/upload/');
+        // If it's a Cloudinary PDF, route through our proxy
+        if (url.match(/cloudinary\.com\/.*\.pdf$/i)) {
+            return `/api/pdf-proxy?url=${encodeURIComponent(url)}`;
         }
         return url;
     })();
-
-    // If the first URL fails, try the alternate Cloudinary resource_type
-    const fallbackUrl = (() => {
-        if (!url) return '';
-        if (fixedUrl !== url) return url; // fixedUrl was transformed, fallback to original
-        // Try the opposite transform
-        if (url.match(/cloudinary\.com\/.*\/raw\/upload\/.*\.pdf$/i)) {
-            return url.replace('/raw/upload/', '/image/upload/');
-        }
-        if (url.match(/cloudinary\.com\/.*\/image\/upload\/.*\.pdf$/i)) {
-            return url.replace('/image/upload/', '/raw/upload/');
-        }
-        return '';
-    })();
-
-    const activeUrl = (triedFallback && fallbackUrl) ? fallbackUrl : fixedUrl;
 
     // We'll use this to group and render pages
     const containerRef = useRef<HTMLDivElement>(null);
@@ -58,11 +41,6 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
 
     function onDocumentLoadError(error: Error) {
         console.error("PDF Load Error:", error);
-        // If we haven't tried the fallback URL yet and one exists, try it
-        if (!triedFallback && fallbackUrl) {
-            setTriedFallback(true);
-            return; // Will re-render with fallbackUrl
-        }
         setLoading(false);
         setErrorMsg(error.message);
     }
@@ -111,34 +89,32 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
                 className="flex-1 overflow-y-auto bg-slate-900 scroll-smooth custom-scrollbar"
             >
                 <div className="flex flex-col items-center py-12 gap-8 min-h-full">
-                    {activeUrl.match(/\.(jpeg|jpg|gif|png|webp)/i) ? (
+                    {url.match(/\.(jpeg|jpg|gif|png|webp)/i) ? (
                         <div className="relative group max-w-full px-4">
                             <img
-                                src={activeUrl}
+                                src={url}
                                 alt="Test Material"
                                 className="shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-sm border border-white/5 max-w-full h-auto"
                                 style={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}
                             />
                         </div>
-                    ) : activeUrl.match(/\.(doc|docx)/i) ? (
+                    ) : url.match(/\.(doc|docx)/i) ? (
                         <div className="w-full max-w-5xl h-[80vh] px-4">
                             <iframe
-                                src={`https://docs.google.com/gview?url=${encodeURIComponent(activeUrl.startsWith('http') ? activeUrl : `${window.location.origin}${activeUrl}`)}&embedded=true`}
+                                src={`https://docs.google.com/gview?url=${encodeURIComponent(url.startsWith('http') ? url : `${window.location.origin}${url}`)}&embedded=true`}
                                 className="w-full h-full rounded-2xl shadow-2xl border border-white/10"
                                 title="Word Document Viewer"
                             />
                         </div>
                     ) : (
                         <Document
-                            file={activeUrl.startsWith('http') ? activeUrl : `${window.location.origin}${activeUrl}`}
+                            file={resolvedUrl.startsWith('http') || resolvedUrl.startsWith('/') ? resolvedUrl : `${window.location.origin}${resolvedUrl}`}
                             onLoadSuccess={onDocumentLoadSuccess}
                             onLoadError={onDocumentLoadError}
                             loading={
                                 <div className="flex flex-col items-center justify-center p-20 text-slate-400 gap-4">
                                     <Loader2 className="animate-spin text-primary" size={40} />
-                                    <span className="text-[10px] font-black uppercase tracking-widest">
-                                        {triedFallback ? 'Trying alternate URL...' : 'Initializing Engine...'}
-                                    </span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">Initializing Engine...</span>
                                 </div>
                             }
                             error={
@@ -154,7 +130,7 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
                                             Error: {errorMsg}
                                         </p>
                                     )}
-                                    <p className="text-[9px] font-medium normal-case opacity-40 text-center select-all">Resource: {activeUrl}</p>
+                                    <p className="text-[9px] font-medium normal-case opacity-40 text-center select-all">Resource: {url}</p>
                                     <button onClick={() => window.location.reload()} className="mt-4 px-8 py-3 bg-primary text-white rounded-2xl text-[10px] font-black uppercase shadow-2xl shadow-primary/30 active:scale-95 transition-all">Retry Connection</button>
                                 </div>
                             }
