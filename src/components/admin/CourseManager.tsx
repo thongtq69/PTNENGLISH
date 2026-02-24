@@ -235,7 +235,7 @@ export default function CourseManager() {
 
                     <button
                         onClick={() => {
-                            const newCourse = { _id: Date.now().toString(), name: 'New Course Title', level: 'Target 6.5+', goal: 'IELTS', duration: '12 weeks', price: 'Contact', description: 'Enter description...', path: ['Step 1', 'Step 2', 'Step 3'], tag: 'NEW' };
+                            const newCourse = { _id: Date.now().toString(), name: 'New Course Title', level: 'Target 6.5+', goal: 'IELTS', duration: '12 weeks', price: 'Contact', description: 'Enter description...', path: ['Step 1', 'Step 2', 'Step 3'], tag: 'COMING SOON' };
                             setCourses([...courses, newCourse]);
                             setExpandedId(newCourse._id);
                         }}

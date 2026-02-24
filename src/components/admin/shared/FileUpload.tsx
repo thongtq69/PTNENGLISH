@@ -81,8 +81,12 @@ export default function FileUpload({
         try {
             // Determine resource_type for Cloudinary
             // Audio and video must use 'video' resource_type in Cloudinary
+            // PDF and Word files must use 'raw' to be directly accessible
             const isAudioOrVideo = mode === 'audio' || mode === 'video';
-            const resourceType = isAudioOrVideo ? 'video' : 'auto';
+            const isPdfOrDoc = (file instanceof File && /\.(pdf|doc|docx)$/i.test(file.name))
+                || (file instanceof File && (file.type === 'application/pdf' || file.type === 'application/msword' || file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'))
+                || mode === 'pdf' || mode === 'word';
+            const resourceType = isAudioOrVideo ? 'video' : isPdfOrDoc ? 'raw' : 'auto';
 
             // 1. Get signature from our API
             const timestamp = Math.round(new Date().getTime() / 1000);

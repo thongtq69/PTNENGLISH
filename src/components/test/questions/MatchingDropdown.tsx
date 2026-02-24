@@ -42,14 +42,13 @@ export const MatchingDropdown = memo(function MatchingDropdown({
   return (
     <span
       ref={inputRef}
-      className="inline-flex items-center bg-white border-2 border-slate-200 focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/10 rounded-xl shadow-sm overflow-hidden h-10 mx-1 my-1 align-middle"
+      className="inline-flex items-center bg-white border border-slate-200 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10 rounded-lg shadow-sm overflow-hidden h-7 mx-1 align-middle translate-y-[-1px]"
     >
       <div
-        className={`w-9 h-full flex items-center justify-center text-[10px] font-black border-r ${
-          value
+        className={`w-7 h-full flex items-center justify-center text-[10px] font-black border-r ${value
             ? "bg-emerald-500 text-white border-emerald-500"
             : "bg-slate-50 text-slate-400 border-slate-200"
-        }`}
+          }`}
       >
         {qIdx}
       </div>
@@ -57,7 +56,7 @@ export const MatchingDropdown = memo(function MatchingDropdown({
         <select
           value={value}
           onChange={(e) => onChange(qIdx, e.target.value)}
-          className="appearance-none bg-transparent outline-none pl-3 pr-8 py-2 text-sm font-bold text-slate-800 w-full cursor-pointer h-full"
+          className="appearance-none bg-transparent outline-none pl-2 pr-6 py-0 text-[13px] font-bold text-slate-800 w-full cursor-pointer h-full"
         >
           <option value="">— {label} —</option>
           {options.map((opt) => (

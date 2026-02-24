@@ -134,7 +134,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                       <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                       {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
-                        <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[10px] md:text-[10px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-widest z-20">New</div>
+                        <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[10px] md:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest z-20">Coming Soon</div>
                       )}
                       <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent flex items-end justify-center min-h-[50%]">
                         <p className="text-white font-heading font-black text-xs md:text-[15px] leading-tight uppercase tracking-tight text-center w-full pb-1 md:pb-2" style={{ fontSize: 'var(--fs-home-programName)' }}>{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>

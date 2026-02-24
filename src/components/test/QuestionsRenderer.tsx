@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useCallback, useMemo } from "react";
-import { createPortal, flushSync } from "react-dom";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { parseTag, type ParsedQuestion } from "@/lib/questionParser";
 import {
   FillBlank,
@@ -30,9 +30,6 @@ interface QuestionsRendererProps {
  * 1. Replaces question tags with placeholder <span> elements in the HTML
  * 2. Renders the full HTML as one piece (preserving DOM structure)
  * 3. Uses React portals to mount interactive components into placeholders
- *
- * Uses a callback ref to find placeholder elements immediately when the
- * DOM is committed, ensuring portals mount on the very first paint.
  */
 export default function QuestionsRenderer({
   content,
@@ -51,36 +48,32 @@ export default function QuestionsRenderer({
       const q = parseTag(match);
       if (!q) return match;
       questions.push(q);
-      return `<span data-q-placeholder="${q.qIdx}" data-q-type="${q.type}"></span>`;
+      return `<span data-q-placeholder="${q.qIdx}" data-q-type="${q.type}" style="display:inline-flex;vertical-align:middle"></span>`;
     });
     return { placeholderHtml: html, parsedQuestions: questions };
   }, [content]);
 
+  const containerRef = useRef<HTMLDivElement>(null);
   const [portalTargets, setPortalTargets] = useState<Record<number, HTMLElement>>({});
 
-  // Callback ref: fires synchronously when the div mounts/unmounts.
-  // This lets us discover placeholder elements immediately.
-  const containerCallbackRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (!node) {
-        setPortalTargets({});
-        return;
+  // After every render where the HTML changes, discover placeholders.
+  // useEffect fires after DOM commit — container is guaranteed to exist.
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) {
+      setPortalTargets({});
+      return;
+    }
+    const targets: Record<number, HTMLElement> = {};
+    node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
+      const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
+      if (qIdx > 0) {
+        targets[qIdx] = el;
+        if (scrollRefs) scrollRefs.current[qIdx] = el;
       }
-      const targets: Record<number, HTMLElement> = {};
-      node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
-        const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
-        if (qIdx > 0) {
-          targets[qIdx] = el;
-          if (scrollRefs) scrollRefs.current[qIdx] = el;
-        }
-      });
-      // flushSync ensures the state update + re-render happen before the
-      // browser paints, so the user never sees empty placeholder spans.
-      flushSync(() => setPortalTargets(targets));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [placeholderHtml, scrollRefs],
-  );
+    });
+    setPortalTargets(targets);
+  }, [placeholderHtml, scrollRefs]);
 
   if (!content) {
     return (
@@ -132,7 +125,7 @@ export default function QuestionsRenderer({
       className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? "cursor-text" : ""} ${className}`}
     >
       <div
-        ref={containerCallbackRef}
+        ref={containerRef}
         dangerouslySetInnerHTML={{ __html: placeholderHtml }}
       />
       {portals}

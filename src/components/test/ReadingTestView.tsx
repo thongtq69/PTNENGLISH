@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
-import { createPortal, flushSync } from "react-dom";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Highlighter,
@@ -402,34 +402,31 @@ function ReadingTestViewInner({
       const q = parseTag(match);
       if (!q) return match;
       questions.push(q);
-      return `<span data-q-placeholder="${q.qIdx}" data-q-type="${q.type}"></span>`;
+      return `<span data-q-placeholder="${q.qIdx}" data-q-type="${q.type}" style="display:inline-flex;vertical-align:middle"></span>`;
     });
     return { placeholderHtml: html, parsedQuestions: questions };
   }, [activeSection?.content]);
 
   const [portalTargets, setPortalTargets] = useState<Record<number, HTMLElement>>({});
+  const questionsHtmlRef = useRef<HTMLDivElement>(null);
 
-  // Callback ref: fires synchronously when the container div mounts.
-  // flushSync ensures the portal targets are available before paint.
-  const questionsHtmlCallbackRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (!node) {
-        setPortalTargets({});
-        return;
+  // After every render where the HTML changes, discover placeholders
+  useEffect(() => {
+    const node = questionsHtmlRef.current;
+    if (!node) {
+      setPortalTargets({});
+      return;
+    }
+    const targets: Record<number, HTMLElement> = {};
+    node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
+      const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
+      if (qIdx > 0) {
+        targets[qIdx] = el;
+        scrollRefs.current[qIdx] = el;
       }
-      const targets: Record<number, HTMLElement> = {};
-      node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
-        const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
-        if (qIdx > 0) {
-          targets[qIdx] = el;
-          scrollRefs.current[qIdx] = el;
-        }
-      });
-      flushSync(() => setPortalTargets(targets));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [placeholderHtml],
-  );
+    });
+    setPortalTargets(targets);
+  }, [placeholderHtml, activeSectionIdx]);
 
   // Build portals
   const questionPortals = parsedQuestions
@@ -473,10 +470,10 @@ function ReadingTestViewInner({
 
     return (
       <div className="prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700">
-        <div ref={questionsHtmlCallbackRef} dangerouslySetInnerHTML={{ __html: placeholderHtml }} />
+        <div ref={questionsHtmlRef} dangerouslySetInnerHTML={{ __html: placeholderHtml }} />
       </div>
     );
-  }, [activeSection?.content, placeholderHtml, questionsHtmlCallbackRef]);
+  }, [activeSection?.content, placeholderHtml]);
 
   // Special effect to apply highlights to the questionsRef container
   // Helper to find a Range based on textContent offsets

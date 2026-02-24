@@ -14,16 +14,6 @@ import {
 import Link from "next/link";
 import ReadingTestView from "@/components/test/ReadingTestView";
 import QuestionsRenderer from "@/components/test/QuestionsRenderer";
-import { parseContent } from "@/lib/questionParser";
-import {
-    FillBlank,
-    MultipleChoice,
-    MultipleChoiceMulti,
-    TrueFalseNG,
-    YesNoNG,
-    MatchingDropdown,
-    SummaryWordList,
-} from "@/components/test/questions";
 import dynamic from "next/dynamic";
 const ModernPDFViewer = dynamic(() => import("@/components/ModernPDFViewer"), {
     ssr: false,
@@ -402,60 +392,6 @@ export default function TestPage() {
         return highlightedContent;
     };
 
-    /**
-     * Old-style inline rendering for listening sections.
-     * Uses parseContent to split HTML at question tags, then renders
-     * HTML fragments + React question components inline.
-     *
-     * FIX: Uses <div style="display:contents"> instead of <span> for
-     * HTML parts so block-level elements (<table>, <p>, etc.) are
-     * not broken by browser HTML-nesting rules.
-     */
-    const parseContentWithInputs = (content: string, skill: "listening" | "reading" | "writing") => {
-        if (!content) return <div className="text-slate-400 italic">No interactive content provided for this section.</div>;
-
-        // Apply highlights
-        const highlightedContent = getHighlightedContent(content, skill);
-
-        const parts = parseContent(highlightedContent);
-        const setRef = (qIdx: number) => (el: HTMLElement | null) => { scrollRefs.current[qIdx] = el; };
-        const handleChange = (qIdx: number, val: string) => handleAnswerChange(skill, qIdx, val);
-
-        return (
-            <div className={`prose prose-slate max-w-none dark:prose-invert font-body leading-relaxed text-slate-700 ${isHighlighterActive ? 'cursor-text' : ''}`}>
-                {parts.map((part, i) => {
-                    if (part.kind === "html") {
-                        /* Use display:contents so the wrapper div is invisible
-                           to layout — block elements like <table>, <p>, <div>
-                           inside will render normally without being forced into
-                           an inline context (which caused line-break issues). */
-                        return <div key={i} style={{ display: 'contents' }} dangerouslySetInnerHTML={{ __html: part.html || "" }} />;
-                    }
-                    const q = part.question!;
-                    const val = answers[skill][q.qIdx] || "";
-
-                    switch (q.type) {
-                        case "mc":
-                            return <MultipleChoice key={i} qIdx={q.qIdx} options={q.options || ["A","B","C","D"]} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                        case "mcm":
-                            return <MultipleChoiceMulti key={i} qIdx={q.qIdx} options={q.options || ["A","B","C","D","E"]} maxSelect={q.maxSelect || 2} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                        case "tfng":
-                            return <TrueFalseNG key={i} qIdx={q.qIdx} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                        case "ynng":
-                            return <YesNoNG key={i} qIdx={q.qIdx} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                        case "mh": case "mi": case "mf": case "mse":
-                            return <MatchingDropdown key={i} qIdx={q.qIdx} variant={q.type} options={q.options || []} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                        case "sc":
-                            return <SummaryWordList key={i} qIdx={q.qIdx} options={q.options || []} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                        case "fill":
-                        default:
-                            return <FillBlank key={i} qIdx={q.qIdx} value={val} onChange={handleChange} inputRef={setRef(q.qIdx)} />;
-                    }
-                })}
-            </div>
-        );
-    };
-
     const renderAnswerSheet = () => {
         if (!selectedTest) return null;
 
@@ -507,7 +443,13 @@ export default function TestPage() {
                                     <div className="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
                                         <h4 className="text-base sm:text-lg md:text-xl font-heading font-black text-accent">{activeSection.title}</h4>
                                     </div>
-                                    {parseContentWithInputs(activeSection.content, currentSkill)}
+                                    <QuestionsRenderer
+                                        content={getHighlightedContent(activeSection.content, currentSkill)}
+                                        answers={answers[currentSkill] as Record<number, string>}
+                                        onAnswerChange={(qIdx: number, val: string) => handleAnswerChange(currentSkill, qIdx, val)}
+                                        scrollRefs={scrollRefs}
+                                        isHighlighterActive={isHighlighterActive}
+                                    />
                                 </>
                             ) : (
                                 <div className="flex flex-col items-center justify-center py-16 text-slate-300 gap-3">
