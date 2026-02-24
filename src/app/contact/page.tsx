@@ -13,13 +13,13 @@ function ContactFormPageContent() {
     const [submitted, setSubmitted] = useState(false);
     const searchParams = useSearchParams();
 
-    // We store the raw key: 'ielts', 'eft', 'ge', or 'undecided'
+    // We store the raw key: 'ielts', 'eft', 'ge', 'exam', or 'undecided'
     const [initialCourse, setInitialCourse] = useState<string>("undecided");
 
     // Initialize course selection exactly according to the URL
     useEffect(() => {
         const courseParam = searchParams.get('course');
-        if (courseParam && ['ielts', 'eft', 'ge', 'undecided'].includes(courseParam)) {
+        if (courseParam && ['ielts', 'eft', 'ge', 'exam', 'undecided'].includes(courseParam)) {
             setInitialCourse(courseParam);
         }
     }, [searchParams]);
@@ -33,6 +33,7 @@ function ContactFormPageContent() {
         if (selectedKey === 'ielts') finalCourseText = t.contact.form.options.ielts;
         else if (selectedKey === 'eft') finalCourseText = t.contact.form.options.eft;
         else if (selectedKey === 'ge') finalCourseText = t.contact.form.options.general;
+        else if (selectedKey === 'exam') finalCourseText = t.contact.form.options.exam;
         else if (selectedKey === 'undecided') finalCourseText = t.contact.form.options.undecided;
 
         const data = {
@@ -159,6 +160,7 @@ function ContactFormPageContent() {
                                             <option value="eft">{t.contact.form.options.eft}</option>
                                             <option value="ielts">{t.contact.form.options.ielts}</option>
                                             <option value="ge">{t.contact.form.options.general}</option>
+                                            <option value="exam">{t.contact.form.options.exam}</option>
                                             <option value="undecided">{t.contact.form.options.undecided}</option>
                                         </select>
                                     </div>

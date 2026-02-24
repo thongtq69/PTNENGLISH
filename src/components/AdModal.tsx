@@ -176,7 +176,8 @@ export default function AdModal() {
 
                                     // Smart auto-routing based on admin input
                                     if (finalLink === '#' || finalLink === '') {
-                                        if (text.includes('ielts') || text.includes('pte')) finalLink = '/contact?course=ielts#registration-form';
+                                        if (text.includes('đăng ký thi') || text.includes('exam')) finalLink = '/contact?course=exam#registration-form';
+                                        else if (text.includes('ielts') || text.includes('pte')) finalLink = '/contact?course=ielts#registration-form';
                                         else if (text.includes('teens') || text.includes('thiếu niên') || text.includes('eft')) finalLink = '/contact?course=eft#registration-form';
                                         else if (text.includes('general') || text.includes('giao tiếp') || text.includes('tổng quát')) finalLink = '/contact?course=ge#registration-form';
                                         else finalLink = '/contact#registration-form';

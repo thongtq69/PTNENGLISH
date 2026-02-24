@@ -607,6 +607,7 @@ export const translations = {
                     eft: "Tiếng Anh Học thuật cho Thiếu niên (EfT)",
                     ielts: "Luyện thi IELTS Chuyên sâu",
                     general: "Tiếng Anh Giao tiếp Tổng quát",
+                    exam: "Đăng ký thi IELTS / PTE",
                     undecided: "Cần tư vấn chưa xác định"
                 },
                 submit: "Gửi Yêu Cầu Chuyên Gia",
@@ -1292,6 +1293,7 @@ export const translations = {
                     eft: "Academic English for Teens (EfT)",
                     ielts: "IELTS Preparation Expert",
                     general: "General English Communication",
+                    exam: "IELTS / PTE Exam Registration",
                     undecided: "Need consultation - undecided"
                 },
                 submit: "Send Request to Experts",
