@@ -16,6 +16,7 @@ interface FileUploadProps {
     accept?: string;
     mode?: 'image' | 'pdf' | 'video' | 'audio' | 'word' | 'all';
     aspect?: number;
+    noCrop?: boolean;
 }
 
 export default function FileUpload({
@@ -29,7 +30,8 @@ export default function FileUpload({
     compact = false,
     accept = "image/*",
     mode = 'image',
-    aspect
+    aspect,
+    noCrop = false
 }: FileUploadProps) {
     const [uploading, setUploading] = useState(false);
     const [isCropping, setIsCropping] = useState(false);
@@ -125,7 +127,7 @@ export default function FileUpload({
             if (uploadData.secure_url) {
                 onChange(uploadData.secure_url, { isCropped: isCroppedImage });
 
-                if (mode === 'image' && !isCroppedImage) {
+                if (mode === 'image' && !isCroppedImage && !noCrop) {
                     setTempFileUrl(uploadData.secure_url);
                     setIsCropping(true);
                 }

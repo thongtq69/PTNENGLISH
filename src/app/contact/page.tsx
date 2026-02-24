@@ -1,15 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useLanguage } from "@/context/LanguageContext";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Send, CheckCircle2 } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-export default function ContactPage() {
+function ContactFormPageContent() {
     const { t } = useLanguage();
     const [submitted, setSubmitted] = useState(false);
+    const [initialCourse, setInitialCourse] = useState<string>("");
+    const searchParams = useSearchParams();
+
+    // Initialize the default course selection once language is loaded or from URL
+    useEffect(() => {
+        const courseParam = searchParams.get('course');
+        if (courseParam === 'ielts') setInitialCourse(t.contact.form.options.ielts);
+        else if (courseParam === 'eft') setInitialCourse(t.contact.form.options.eft);
+        else if (courseParam === 'ge') setInitialCourse(t.contact.form.options.general);
+        else setInitialCourse(t.contact.form.options.undecided);
+    }, [t.contact.form.options, searchParams]);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -129,11 +141,16 @@ export default function ContactPage() {
                                     </div>
                                     <div className="space-y-3">
                                         <label className="text-xs font-bold text-slate-400 uppercase ml-4 tracking-widest" style={{ fontSize: 'var(--fs-contact-formLabel)' }}>{t.contact.form.course}</label>
-                                        <select name="course" className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all appearance-none text-slate-700">
-                                            <option>{t.contact.form.options.eft}</option>
-                                            <option>{t.contact.form.options.ielts}</option>
-                                            <option>{t.contact.form.options.general}</option>
-                                            <option>{t.contact.form.options.undecided}</option>
+                                        <select
+                                            name="course"
+                                            value={initialCourse}
+                                            onChange={(e) => setInitialCourse(e.target.value)}
+                                            className="w-full px-8 py-5 rounded-[2rem] bg-slate-50 border border-slate-100 focus:ring-4 focus:ring-accent/10 outline-none transition-all appearance-none text-slate-700"
+                                        >
+                                            <option value={t.contact.form.options.eft}>{t.contact.form.options.eft}</option>
+                                            <option value={t.contact.form.options.ielts}>{t.contact.form.options.ielts}</option>
+                                            <option value={t.contact.form.options.general}>{t.contact.form.options.general}</option>
+                                            <option value={t.contact.form.options.undecided}>{t.contact.form.options.undecided}</option>
                                         </select>
                                     </div>
                                     <motion.button
@@ -152,5 +169,13 @@ export default function ContactPage() {
 
             <Footer />
         </main>
+    );
+}
+
+export default function ContactPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center">Loading...</div>}>
+            <ContactFormPageContent />
+        </Suspense>
     );
 }

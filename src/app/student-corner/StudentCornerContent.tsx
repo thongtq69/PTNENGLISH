@@ -267,12 +267,12 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
                                                     boxShadow: idx % 2 === 0 ? "10px 15px 30px rgba(0,0,0,0.4)" : "-10px 15px 30px rgba(0,0,0,0.4)"
                                                 }}
                                             >
-                                                {/* The Image (Up by Admin) - Removed aspect-square to show full image */}
-                                                <div className="w-full h-auto overflow-hidden bg-slate-100 relative border border-slate-100">
+                                                {/* The Image (Up by Admin) */}
+                                                <div className="w-full overflow-hidden bg-white relative">
                                                     <img
                                                         src={note.image}
                                                         alt={`Student Message ${note.id}`}
-                                                        className="w-full h-auto object-contain transition-transform duration-700 group-hover:scale-105"
+                                                        className="w-full h-auto block transition-transform duration-700 group-hover:scale-105"
                                                     />
                                                     {/* Image Gloss Overlay */}
                                                     <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-white/15 opacity-0 group-hover:opacity-100 transition-opacity" />

@@ -475,6 +475,7 @@ export default function StudentCornerEditor() {
                                                     setData({ ...data, messages: { ...data.messages, notes: list } });
                                                 }}
                                                 folder="student-messages"
+                                                noCrop
                                             />
 
                                             <div className="grid grid-cols-2 gap-3">
