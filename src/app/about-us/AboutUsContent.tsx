@@ -121,7 +121,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                         animate={{ opacity: 1, y: 0 }}
                         className="max-w-4xl"
                     >
-                        <h1 className="text-primary font-heading font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-4">
+                        <h1 className="text-primary font-heading font-bold text-xs md:text-sm uppercase tracking-[0.4em] mb-4" style={{ fontSize: 'var(--fs-aboutUs-heroHighlight)' }}>
                             {t.home.about.hero.badge}
                         </h1>
                         <h2 className="text-2xl md:text-6xl font-heading font-medium text-accent mb-4 leading-tight" style={{ fontSize: 'var(--fs-aboutUs-heroTitle)' }}>
@@ -149,18 +149,24 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 {storyData.subtitle || t.home.about.story.subtitle}
                                 <span className="w-6 h-0.5 bg-primary lg:hidden" />
                             </h3>
-                            <div className="space-y-4 text-base md:text-lg text-slate-700 font-body leading-relaxed text-center lg:text-left">
-                                <p className="text-lg md:text-xl leading-snug">
+                            <div className="space-y-4 text-slate-700 font-body leading-relaxed text-center lg:text-left" style={{ fontSize: 'var(--fs-aboutUs-storyText)' }}>
+                                <p className="leading-relaxed">
                                     <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {storyData.p1 || t.home.about.story.p1}
                                 </p>
+
+                                {(storyData.teachers || t.home.about.story.teachers) && (
+                                    <p className="text-primary font-black italic text-lg md:text-xl" style={{ fontSize: 'var(--fs-aboutUs-storyTeachers)' }}>
+                                        {storyData.teachers || t.home.about.story.teachers}
+                                    </p>
+                                )}
+
                                 <p>
                                     {storyData.p2 || t.home.about.story.p2}
                                 </p>
-                                <div className="bg-primary/5 p-8 border-l-[6px] border-primary rounded-r-2xl text-base shadow-sm">
-                                    <p className="mb-3"><strong>PTN</strong> {storyData.ptnAcronym || t.home.about.story.ptnAcronym}</p>
+                                <div className="bg-primary/5 p-8 border-l-[6px] border-primary rounded-r-2xl shadow-sm">
                                     <p><strong>PTN</strong> {storyData.ptnSpirit || t.home.about.story.ptnSpirit}</p>
                                 </div>
-                                <p className="text-accent font-medium italic">
+                                <p className="text-accent font-medium italic" style={{ fontSize: 'var(--fs-aboutUs-storyQuote)' }}>
                                     &ldquo;{storyData.quote || t.home.about.story.quote}&rdquo;
                                 </p>
                             </div>
@@ -292,9 +298,9 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
                                     <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                                         <div className="w-12 h-1 bg-primary mb-6" />
-                                        <p className="text-primary text-xs md:text-[10px] font-black uppercase tracking-widest mb-3">{t.home.about.teachers.qualifications}</p>
-                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium whitespace-pre-line">{teacher.certs}</p>
-                                        <p className="text-white/70 text-sm md:text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line">{teacher.desc}</p>
+                                        <p className="text-primary text-xs md:text-[10px] font-black uppercase tracking-widest mb-3" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{t.home.about.teachers.qualifications}</p>
+                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-teacherCerts)' }}>{teacher.certs}</p>
+                                        <p className="text-white/70 text-sm md:text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-teacherDesc)' }}>{teacher.desc}</p>
                                     </div>
                                     <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/10 text-white text-[10px] md:text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all shadow-xl">
                                         {t.home.about.teachers.founderBadge}
@@ -339,7 +345,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                                             />
                                             <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-accent/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-3 whitespace-pre-line">
+                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-3 whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-teacherCerts)' }}>
                                                     {teacher.certs}
                                                 </p>
                                             </div>
@@ -476,7 +482,7 @@ function DifferencesHub({ differencesData }: { differencesData: DifferenceItem[]
                                     <h4 className="text-xl font-heading font-black mb-4 text-accent leading-tight max-w-[300px]">
                                         {differencesData.find(d => d.id === hovered)?.fullTitle}
                                     </h4>
-                                    <p className="text-slate-500 font-body text-[13px] leading-relaxed max-w-[340px] whitespace-pre-line text-left px-6">
+                                    <p className="text-slate-500 font-body text-[13px] leading-relaxed max-w-[340px] whitespace-pre-line text-left px-6" style={{ fontSize: 'var(--fs-aboutUs-differenceDesc)' }}>
                                         {differencesData.find(d => d.id === hovered)?.desc}
                                     </p>
                                     <div className="mt-8 flex gap-1.5">
@@ -609,7 +615,7 @@ function DifferencesHub({ differencesData }: { differencesData: DifferenceItem[]
                                         </h4>
                                     </div>
                                     <h5 className="text-[11px] font-bold text-primary mb-2 uppercase tracking-widest leading-none">{activeItem?.fullTitle}</h5>
-                                    <p className="text-slate-600 font-body text-xs md:text-sm leading-[1.6] whitespace-pre-line">
+                                    <p className="text-slate-600 font-body text-xs md:text-sm leading-[1.6] whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-differenceDesc)' }}>
                                         {activeItem?.desc}
                                     </p>
                                 </motion.div>
