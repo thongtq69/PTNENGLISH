@@ -58,9 +58,9 @@ export const translations = {
                 title: "Tôn vinh",
                 titleHighlight: "thành tích",
                 titleEnd: "rực rỡ",
-                description: "Hành trình chinh phục đỉnh cao ngôn ngữ của những chiến binh",
+                description: "Hành trình chạm đến mục tiêu của học viên",
                 descriptionHighlight: "PTN English",
-                descriptionEnd: "tài năng."
+                descriptionEnd: "."
             },
             about: {
                 hero: {

@@ -11,7 +11,7 @@ import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 import { AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
 
-export default function StudentCornerContent({ pageData }: { pageData: any }) {
+export default function StudentCornerContent({ pageData, siteSettings }: { pageData: any; siteSettings?: any }) {
     const { t, language } = useLanguage();
     const [isMobile, setIsMobile] = React.useState(false);
 
@@ -432,7 +432,7 @@ export default function StudentCornerContent({ pageData }: { pageData: any }) {
             </section>
 
             {/* Hall Of Fame Section */}
-            <HallOfFame />
+            <HallOfFame config={siteSettings?.hallOfFame} />
 
             {/* Main Tools Section */}
             <section className="py-24 bg-white">
