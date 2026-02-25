@@ -294,25 +294,29 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     <img
                                         src={teacher.image}
                                         alt={teacher.name}
-                                        className="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-110"
+                                        className="w-full h-full object-cover transition-all duration-700 scale-100 group-hover:scale-105"
                                     />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent opacity-0 group-hover:opacity-95 transition-all duration-500" />
+                                    {/* Desktop Hover Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 md:group-hover:opacity-100 transition-all duration-500" />
 
-                                    <div className="absolute inset-x-0 bottom-0 p-8 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                                        <div className="w-12 h-1 bg-primary mb-6" />
-                                        <p className="text-primary text-xs md:text-[10px] font-black uppercase tracking-widest mb-3" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{t.home.about.teachers.qualifications}</p>
-                                        <p className="text-white text-sm leading-relaxed mb-6 font-medium whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-teacherCerts)' }}>{teacher.certs}</p>
-                                        <p className="text-white/70 text-sm md:text-xs leading-relaxed italic border-l-2 border-primary/50 pl-4 whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-teacherDesc)' }}>{teacher.desc}</p>
+                                    {/* Central Button Hint */}
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all duration-500 scale-95 group-hover:scale-100 pointer-events-none">
+                                        <div className="hidden md:flex bg-white/20 backdrop-blur-md border border-white/30 text-white px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest items-center gap-2 shadow-xl">
+                                            <span>Xem chi tiết</span>
+                                            <ArrowRight size={16} />
+                                        </div>
                                     </div>
-                                    <div className="absolute top-6 right-6 px-4 py-1.5 rounded-full bg-slate-900/60 backdrop-blur-md border border-white/10 text-white text-[10px] md:text-[9px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-all shadow-xl">
-                                        {t.home.about.teachers.founderBadge}
+
+                                    {/* Mobile Tap Indicator */}
+                                    <div className="md:hidden absolute bottom-3 right-3 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-accent shadow-sm border border-white/40 opacity-70">
+                                        <ArrowRight size={14} />
                                     </div>
                                 </div>
                                 <div className="mt-4 md:mt-8 text-center group-hover:text-primary transition-colors">
                                     <h4 className="font-heading font-bold text-base md:text-2xl text-accent group-hover:text-primary transition-colors duration-300 line-clamp-1" style={{ fontSize: 'var(--fs-aboutUs-teacherName)' }}>{teacher.name}</h4>
-                                    <div className="flex items-center justify-center gap-2 md:gap-4 mt-1 md:mt-3 opacity-60">
+                                    <div className="flex items-center justify-center gap-2 md:gap-4 mt-1 md:mt-3 opacity-80">
                                         <span className="hidden md:block h-px w-8 bg-slate-400" />
-                                        <p className="text-[10px] md:text-[11px] text-accent font-black uppercase tracking-widest" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{teacher.exp}</p>
+                                        <p className="text-[10px] md:text-[11px] text-accent font-black uppercase tracking-widest line-clamp-3 md:line-clamp-none" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{teacher.exp}</p>
                                         <span className="hidden md:block h-px w-8 bg-slate-400" />
                                     </div>
                                 </div>
@@ -341,21 +345,31 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         className="group w-[46%] md:w-[260px] lg:w-[280px] cursor-pointer"
                                         onClick={() => setSelectedTeacher({ ...teacher, isFounder: false })}
                                     >
-                                        <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500">
+                                        <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500 group-hover:shadow-2xl">
                                             <img
                                                 src={teacher.image}
                                                 alt={teacher.name}
-                                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                                className="w-full h-full object-cover transition-transform duration-700 scale-100 group-hover:scale-105"
                                             />
-                                            <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-accent/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <p className="text-white text-[10px] font-bold leading-tight line-clamp-3 whitespace-pre-line" style={{ fontSize: 'var(--fs-aboutUs-teacherCerts)' }}>
-                                                    {teacher.certs}
-                                                </p>
+                                            {/* Desktop Hover Overlay */}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 md:group-hover:opacity-100 transition-all duration-500" />
+
+                                            {/* Central Button Hint */}
+                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all duration-500 scale-95 group-hover:scale-100 pointer-events-none">
+                                                <div className="hidden md:flex bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest items-center gap-2 shadow-xl">
+                                                    <span>Xem chi tiết</span>
+                                                    <ArrowRight size={14} />
+                                                </div>
+                                            </div>
+
+                                            {/* Mobile Tap Indicator */}
+                                            <div className="md:hidden absolute bottom-3 right-3 bg-white/80 backdrop-blur-sm p-1.5 rounded-full text-accent shadow-sm border border-white/40 opacity-70">
+                                                <ArrowRight size={14} />
                                             </div>
                                         </div>
                                         <div className="mt-6 text-center">
-                                            <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors" style={{ fontSize: 'var(--fs-aboutUs-teacherName)' }}>{teacher.name}</h4>
-                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1 opacity-70 group-hover:opacity-100 transition-opacity" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{teacher.exp}</p>
+                                            <h4 className="font-heading font-bold text-lg text-accent group-hover:text-primary transition-colors line-clamp-1" style={{ fontSize: 'var(--fs-aboutUs-teacherName)' }}>{teacher.name}</h4>
+                                            <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1 opacity-70 group-hover:opacity-100 transition-opacity line-clamp-2 md:line-clamp-none" style={{ fontSize: 'var(--fs-aboutUs-teacherExp)' }}>{teacher.exp}</p>
                                         </div>
                                     </motion.div>
                                 ))}
