@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Users, Compass, ShieldCheck, FileText, Lock, UserCheck, GraduationCap, Heart, MessageSquare, Laptop, Globe, ClipboardCheck, ArrowRight } from "lucide-react";
+import { BookOpen, Users, Compass, ShieldCheck, FileText, Lock, UserCheck, GraduationCap, Heart, MessageSquare, Laptop, Globe, ClipboardCheck, ArrowRight, X } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
@@ -33,6 +33,7 @@ const DIFFERENCE_ICONS = [
 
 export default function AboutUsContent({ pageData }: { pageData: any }) {
     const { t, language } = useLanguage();
+    const [selectedTeacher, setSelectedTeacher] = useState<any>(null);
 
     const sections = pageData?.sections || [];
 
@@ -286,7 +287,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="group w-[45%] md:w-[320px] lg:w-[380px]"
+                                className="group w-[45%] md:w-[320px] lg:w-[380px] cursor-pointer"
+                                onClick={() => setSelectedTeacher({ ...teacher, isFounder: true })}
                             >
                                 <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100">
                                     <img
@@ -336,7 +338,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: true }}
-                                        className="group w-[46%] md:w-[260px] lg:w-[280px]"
+                                        className="group w-[46%] md:w-[260px] lg:w-[280px] cursor-pointer"
+                                        onClick={() => setSelectedTeacher({ ...teacher, isFounder: false })}
                                     >
                                         <div className="relative aspect-[3/4] rounded-[2rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500">
                                             <img
@@ -393,6 +396,95 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
             </section>
 
             <Footer />
+
+            {/* Teacher Details Modal */}
+            <AnimatePresence>
+                {selectedTeacher && (
+                    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            onClick={() => setSelectedTeacher(null)}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="relative w-full max-w-5xl bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh]"
+                        >
+                            <button
+                                onClick={() => setSelectedTeacher(null)}
+                                className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-slate-100 hover:bg-slate-200 rounded-full flex items-center justify-center transition-colors z-20"
+                            >
+                                <X size={20} className="text-slate-600" />
+                            </button>
+
+                            {/* Left: Image */}
+                            <div className="w-full md:w-5/12 h-[45vh] md:h-auto relative bg-slate-100 shrink-0">
+                                <img
+                                    src={selectedTeacher.image}
+                                    alt={selectedTeacher.name}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/50 to-transparent flex items-end p-6 md:hidden">
+                                    <h3 className="text-2xl font-heading font-black text-white">{selectedTeacher.name}</h3>
+                                </div>
+                            </div>
+
+                            {/* Right: Content */}
+                            <div className="w-full md:w-7/12 p-8 md:p-12 lg:p-16 flex flex-col overflow-y-auto bg-slate-50 relative">
+                                {/* Optional: Decorative background overlay similar to screenshot */}
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2" />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="w-8 h-1 bg-primary shrink-0" />
+                                        <div className="inline-block px-4 py-1.5 bg-slate-600 rounded-full text-white text-[10px] md:text-xs font-bold uppercase tracking-widest">
+                                            {selectedTeacher.isFounder ? t.home.about.teachers.founderBadge : t.home.about.teachers.facultyTitle}
+                                        </div>
+                                    </div>
+
+                                    <h3 className="hidden md:block text-3xl md:text-4xl font-heading font-black text-accent mb-2">
+                                        {selectedTeacher.name}
+                                    </h3>
+
+                                    <p className="text-primary font-bold uppercase tracking-widest text-xs md:text-sm mb-8">
+                                        {selectedTeacher.exp}
+                                    </p>
+
+                                    <div className="space-y-8">
+                                        <div>
+                                            <h4 className="text-accent font-heading font-bold text-lg mb-4 uppercase tracking-[0.1em]">
+                                                Trình độ chuyên môn
+                                            </h4>
+                                            <div className="text-slate-600 leading-relaxed font-body whitespace-pre-line text-sm md:text-base">
+                                                {selectedTeacher.certs}
+                                            </div>
+                                        </div>
+
+                                        {selectedTeacher.desc && (
+                                            <div className="pt-6 border-t border-slate-200">
+                                                <div className="relative border-l-2 border-primary/40 pl-6 py-2">
+                                                    <div className="text-slate-600 italic leading-relaxed font-body whitespace-pre-line text-sm md:text-base">
+                                                        {selectedTeacher.desc.split('\n').map((line: string, i: number) => (
+                                                            <div key={i} className="flex gap-2 mb-2 last:mb-0">
+                                                                <span className="text-primary/50 shrink-0">❖</span>
+                                                                <span>{line}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </main >
     );
 }
