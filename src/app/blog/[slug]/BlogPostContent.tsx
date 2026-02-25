@@ -81,7 +81,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
             </article>
 
             {/* Newsletter CTA */}
-            <section className="py-20 bg-slate-900 overflow-hidden relative">
+            <section className="py-20 bg-accent overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
                 <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
                     <h3 className="text-2xl md:text-4xl font-heading font-black text-white mb-6">

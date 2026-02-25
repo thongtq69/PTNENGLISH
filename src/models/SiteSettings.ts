@@ -81,7 +81,13 @@ const SiteSettingsSchema = new Schema({
     },
     footer: {
         aboutText: String,
-        copyright: String
+        copyright: String,
+        companyName: String,
+        taxCode: String,
+        licenseDate: String,
+        licensePlace: String,
+        centerName: String,
+        centerDecision: String
     }
 }, { timestamps: true });
 

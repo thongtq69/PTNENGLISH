@@ -154,6 +154,44 @@ export default function SiteSettingsManager() {
                         </div>
                     </div>
                 </section>
+
+                {/* Footer Legal */}
+                <section className="bg-slate-900 border border-white/5 rounded-[2.5rem] p-10 space-y-8 lg:col-span-2">
+                    <h2 className="text-xl font-black text-white flex items-center gap-3">
+                        <Save size={20} className="text-primary" />
+                        Footer Legal & Company Info
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="space-y-2 lg:col-span-3">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Copyright Text</label>
+                            <input value={settings.footer.copyright} onChange={e => updateNested('footer', 'copyright', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="@ Copyright 2026 PTNelc. All rights reserved." />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Company Full Name</label>
+                            <input value={settings.footer.companyName} onChange={e => updateNested('footer', 'companyName', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="Công ty TNHH Giáo Dục PTNelc" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Business License / Tax Code</label>
+                            <input value={settings.footer.taxCode} onChange={e => updateNested('footer', 'taxCode', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="0318773989" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">License Date</label>
+                            <input value={settings.footer.licenseDate} onChange={e => updateNested('footer', 'licenseDate', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="06/12/2024" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">License Issuing Place</label>
+                            <input value={settings.footer.licensePlace} onChange={e => updateNested('footer', 'licensePlace', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="SKHĐT TPHCM" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Center Name</label>
+                            <input value={settings.footer.centerName} onChange={e => updateNested('footer', 'centerName', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="Trung tâm Ngoại Ngữ Phú Tài Năng - PTN English" />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">Establishment Decision</label>
+                            <input value={settings.footer.centerDecision} onChange={e => updateNested('footer', 'centerDecision', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" placeholder="1700/QĐ-SGDĐT ngày 19/6/2025" />
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );

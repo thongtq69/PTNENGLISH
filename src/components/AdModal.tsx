@@ -90,7 +90,7 @@ export default function AdModal() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={closeAd}
-                        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+                        className="absolute inset-0 bg-accent/80 backdrop-blur-sm"
                     />
 
                     <motion.div
@@ -102,7 +102,7 @@ export default function AdModal() {
                         {/* Close Button */}
                         <button
                             onClick={closeAd}
-                            className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-slate-900/5 md:bg-slate-900 text-slate-900 md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
+                            className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-accent/5 md:bg-accent text-accent md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
                         >
                             <X size={20} className="md:w-6 md:h-6" />
                         </button>
@@ -116,9 +116,9 @@ export default function AdModal() {
                                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                 />
                             ) : (
-                                <div className="absolute inset-0 bg-slate-900" />
+                                <div className="absolute inset-0 bg-accent" />
                             )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/40 to-transparent" />
 
                             <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end text-left">
                                 <motion.span

@@ -72,7 +72,7 @@ export default function HallOfFame({ config }: { config?: any }) {
     }
 
     return (
-        <section className="py-12 md:py-24 bg-slate-950 overflow-hidden relative min-h-[700px]">
+        <section className="py-12 md:py-24 bg-accent overflow-hidden relative min-h-[700px]">
             {/* Ambient Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
@@ -133,7 +133,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                                     }}
                                     className="basis-[48%] md:basis-auto md:w-1/3 group/card relative"
                                 >
-                                    <div className="bg-slate-900/50 backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-500 shadow-2xl relative">
+                                    <div className="bg-white/10 backdrop-blur-xl rounded-[1.5rem] md:rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-primary/50 transition-all duration-500 shadow-2xl relative">
                                         <div className="relative aspect-square">
                                             <img
                                                 src={item.url}

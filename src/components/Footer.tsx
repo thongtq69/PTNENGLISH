@@ -54,7 +54,7 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="bg-slate-900 text-white pt-6 md:pt-12 pb-3 md:pb-6">
+        <footer className="bg-accent text-white pt-6 md:pt-12 pb-3 md:pb-6">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-10">
                 <div>
                     <div className="mb-3 md:mb-4">
@@ -168,21 +168,21 @@ export default function Footer() {
             <div className="container mx-auto px-6 pt-8 md:pt-10 border-t border-slate-800 flex flex-col items-center gap-6 text-slate-500 text-center">
                 <div className="max-w-5xl space-y-3">
                     <p className="text-[10px] md:text-xs font-bold text-slate-400">
-                        @ Copyright 2026 PTNelc. All rights reserved.
+                        {settings?.footer?.copyright || "@ Copyright 2026 PTNelc. All rights reserved."}
                     </p>
                     <div className="text-[9px] md:text-[11px] leading-relaxed flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1 opacity-60">
-                        <span>Công ty TNHH Giáo Dục PTNelc</span>
+                        <span>{settings?.footer?.companyName || "Công ty TNHH Giáo Dục PTNelc"}</span>
                         <span className="hidden md:inline text-slate-700">|</span>
-                        <span>Giấy chứng nhận doanh nghiệp số: 0318773989</span>
+                        <span>Giấy chứng nhận doanh nghiệp số: {settings?.footer?.taxCode || "0318773989"}</span>
                         <span className="hidden md:inline text-slate-700">|</span>
-                        <span>Ngày cấp: 06/12/2024</span>
+                        <span>Ngày cấp: {settings?.footer?.licenseDate || "06/12/2024"}</span>
                         <span className="hidden md:inline text-slate-700">|</span>
-                        <span>Nơi cấp: SKHĐT TPHCM</span>
+                        <span>Nơi cấp: {settings?.footer?.licensePlace || "SKHĐT TPHCM"}</span>
                     </div>
                     <div className="text-[9px] md:text-[11px] leading-relaxed opacity-60 flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1">
-                        <span className="font-bold text-slate-400">Trung tâm Ngoại Ngữ Phú Tài Năng - PTN English</span>
+                        <span className="font-bold text-slate-400">{settings?.footer?.centerName || "Trung tâm Ngoại Ngữ Phú Tài Năng - PTN English"}</span>
                         <span className="hidden md:inline text-slate-700">|</span>
-                        <span>Quyết định thành lập số: 1700/QĐ-SGDĐT ngày 19/6/2025</span>
+                        <span>Quyết định thành lập số: {settings?.footer?.centerDecision || "1700/QĐ-SGDĐT ngày 19/6/2025"}</span>
                     </div>
                 </div>
 

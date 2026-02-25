@@ -526,7 +526,7 @@ export default function StudentCornerContent({ pageData, siteSettings }: { pageD
                         initial={{ opacity: 0, y: 30 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="bg-slate-900 rounded-[3rem] p-12 md:p-16 text-center max-w-5xl mx-auto relative overflow-hidden"
+                        className="bg-accent rounded-[3rem] p-12 md:p-16 text-center max-w-5xl mx-auto relative overflow-hidden"
                     >
                         <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-primary/5 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2"></div>

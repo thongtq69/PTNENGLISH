@@ -127,7 +127,7 @@ export default function Testimonials() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="absolute inset-0 bg-slate-900/80 backdrop-blur-sm"
+                            className="absolute inset-0 bg-accent/80 backdrop-blur-sm"
                             onClick={() => setSelectedTestimonial(null)}
                         />
                         <motion.div
@@ -165,7 +165,7 @@ export default function Testimonials() {
                             <div className="mt-14 pt-8 border-t border-slate-50 text-center">
                                 <button
                                     onClick={() => setSelectedTestimonial(null)}
-                                    className="bg-slate-900 text-white px-10 py-4 rounded-full font-bold hover:bg-primary transition-all uppercase"
+                                    className="bg-accent text-white px-10 py-4 rounded-full font-bold hover:bg-primary transition-all uppercase"
                                 >
                                     {t.home.testimonials.closeBtn}
                                 </button>

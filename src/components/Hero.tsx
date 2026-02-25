@@ -23,7 +23,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
         }
     }, [initialData]);
 
-    if (!settings) return <div className="h-screen bg-slate-900" />;
+    if (!settings) return <div className="h-screen bg-accent" />;
 
     // Use DB value only if it contains HTML formatting from RichTitleEditor
     // Otherwise fallback to translations.ts which has the correct formatting
@@ -41,7 +41,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
     const displaySecondaryText = language === "en" ? t.home.hero.secondaryCTA : settings.secondaryCTA.text;
 
     return (
-        <section className="relative w-full aspect-video min-h-[280px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-slate-950">
+        <section className="relative w-full aspect-video min-h-[280px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-accent">
             {/* Video Background */}
             <video
                 key={settings.videoUrl}
@@ -55,7 +55,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
             </video>
 
             {/* Overlay */}
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-slate-900/30 via-slate-900/5 to-transparent"></div>
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-accent/30 via-accent/5 to-transparent"></div>
 
             {/* Content */}
             <div className="container mx-auto px-4 relative z-10 text-center">

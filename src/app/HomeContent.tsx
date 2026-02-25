@@ -54,7 +54,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <Hero initialData={homeHero} />
 
       {/* Philosophy Section - Compact & Dark */}
-      <section className="py-2 md:py-12 bg-slate-900 border-y border-white/5">
+      <section className="py-2 md:py-12 bg-accent border-y border-white/5">
         <div className="container mx-auto px-6 text-center max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -247,7 +247,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Faculty Highlight */}
-      <section className="py-8 md:py-20 bg-slate-900 relative overflow-hidden text-center">
+      <section className="py-8 md:py-20 bg-accent relative overflow-hidden text-center">
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
           <h2 className="text-primary font-heading font-bold text-xs md:text-lg uppercase tracking-widest mb-1 md:mb-4" style={{ fontSize: 'var(--fs-home-facultyBadge)' }}>{faculty.badge}</h2>

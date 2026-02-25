@@ -72,7 +72,7 @@ export default function Header() {
     return (
         <>
             {/* Top Bar */}
-            <div className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 border-b border-white/10 ${isScrolled || isMenuOpen ? "hidden" : "bg-slate-900/80 backdrop-blur-md hidden md:block"}`}>
+            <div className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 border-b border-white/10 ${isScrolled || isMenuOpen ? "hidden" : "bg-accent/80 backdrop-blur-md hidden md:block"}`}>
                 <div className="container mx-auto px-6 h-10 flex justify-between items-center text-[10px] uppercase font-bold tracking-widest text-slate-100">
                     <div className="flex items-center space-x-6">
                         <a href={`tel:${contactData.phone || "0902508290"}`} className="flex items-center hover:text-white transition-colors">

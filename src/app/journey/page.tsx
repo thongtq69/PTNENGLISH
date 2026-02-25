@@ -74,7 +74,7 @@ export default function JourneyPage() {
                         <div className="inline-block px-4 py-1.5 rounded-full bg-accent text-white text-[10px] font-bold uppercase tracking-widest mb-8">
                             {t.journey.hero.badge}
                         </div>
-                        <h1 
+                        <h1
                             className="text-5xl md:text-7xl font-heading font-semibold text-accent mb-10 leading-tight"
                             dangerouslySetInnerHTML={{ __html: t.journey.hero.title }}
                         />
@@ -122,7 +122,7 @@ export default function JourneyPage() {
             </section>
 
             {/* Success Wall - Centered Layout */}
-            <section className="py-32 bg-slate-900 overflow-hidden relative text-center">
+            <section className="py-32 bg-accent overflow-hidden relative text-center">
                 <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(199,0,43,0.1),transparent)]"></div>
                 <div className="container mx-auto px-6 relative z-10">
                     <h2 className="text-primary font-heading font-bold text-lg uppercase tracking-[0.3em] mb-16 underline decoration-white/20 decoration-2 underline-offset-8">
