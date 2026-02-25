@@ -5,7 +5,8 @@ const ScheduleSchema = new Schema({
     title: String,
     time: String,
     date: String,
-    link: String
+    link: String,
+    imageUrl: String
 }, { timestamps: true });
 
 export default mongoose.models.Schedule || mongoose.model('Schedule', ScheduleSchema);

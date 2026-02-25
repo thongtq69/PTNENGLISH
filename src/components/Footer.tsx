@@ -48,6 +48,7 @@ export default function Footer() {
         { name: t.nav.courses, href: "/courses" },
         { name: t.nav.studentCorner, href: "/student-corner" },
         { name: t.nav.blog, href: "/blog" },
+        { name: t.nav.lms, href: "https://lms.ptelc.edu.vn/", target: "_blank" },
         { name: t.home.campus.testBtn, href: "/test" },
         { name: t.topbar.contact, href: "/contact" }
     ];
@@ -95,7 +96,13 @@ export default function Footer() {
                     <ul className="grid grid-cols-2 lg:grid-cols-1 gap-1 md:gap-2">
                         {quickLinks.map((link) => (
                             <li key={link.name}>
-                                <a href={link.href} className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200" style={{ fontSize: 'var(--fs-global-footerLinks)' }}>
+                                <a
+                                    href={link.href}
+                                    target={link.target}
+                                    rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
+                                    className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200"
+                                    style={{ fontSize: 'var(--fs-global-footerLinks)' }}
+                                >
                                     {link.name}
                                 </a>
                             </li>
@@ -158,11 +165,30 @@ export default function Footer() {
             )}
 
 
-            <div className="container mx-auto px-6 pt-4 md:pt-6 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 text-slate-500 text-[9px] md:text-xs">
-                <p style={{ fontSize: 'var(--fs-global-footerCopyright)' }}>{footerData.copyright}</p>
-                <div className="flex gap-4 md:gap-6 uppercase tracking-widest font-bold">
-                    <a href="#" className="hover:text-primary">Terms</a>
-                    <a href="#" className="hover:text-primary">Privacy</a>
+            <div className="container mx-auto px-6 pt-8 md:pt-10 border-t border-slate-800 flex flex-col items-center gap-6 text-slate-500 text-center">
+                <div className="max-w-5xl space-y-3">
+                    <p className="text-[10px] md:text-xs font-bold text-slate-400">
+                        @ Copyright 2026 PTNelc. All rights reserved.
+                    </p>
+                    <div className="text-[9px] md:text-[11px] leading-relaxed flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1 opacity-60">
+                        <span>Công ty TNHH Giáo Dục PTNelc</span>
+                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span>Giấy chứng nhận doanh nghiệp số: 0318773989</span>
+                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span>Ngày cấp: 06/12/2024</span>
+                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span>Nơi cấp: SKHĐT TPHCM</span>
+                    </div>
+                    <div className="text-[9px] md:text-[11px] leading-relaxed opacity-60 flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1">
+                        <span className="font-bold text-slate-400">Trung tâm Ngoại Ngữ Phú Tài Năng - PTN English</span>
+                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span>Quyết định thành lập số: 1700/QĐ-SGDĐT ngày 19/6/2025</span>
+                    </div>
+                </div>
+
+                <div className="flex gap-8 uppercase tracking-[0.2em] font-black text-[9px] md:text-[10px]">
+                    <a href="#" className="hover:text-primary transition-colors">Terms</a>
+                    <a href="#" className="hover:text-primary transition-colors">Privacy</a>
                 </div>
             </div>
         </footer>

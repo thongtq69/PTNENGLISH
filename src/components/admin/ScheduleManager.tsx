@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Plus, Trash2, Calendar, Clock, Link as LinkIcon, Save, Search, BookOpen, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Plus, Trash2, Calendar, Clock, Link as LinkIcon, Save, Search, BookOpen, AlertCircle, CheckCircle2, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import FileUpload from './shared/FileUpload';
 
 export default function ScheduleManager() {
     const [schedules, setSchedules] = useState<any[]>([]);
@@ -55,7 +56,8 @@ export default function ScheduleManager() {
             title: 'Khai giảng mới',
             time: '18:00 - 20:00',
             date: 'Thứ 2 - 4 - 6',
-            link: '#'
+            link: '#',
+            imageUrl: ''
         };
         setSchedules([...schedules, newSched]);
     };
@@ -121,8 +123,16 @@ export default function ScheduleManager() {
                         layout
                         className="bg-slate-900 border border-white/5 p-8 rounded-[2rem] flex flex-col lg:flex-row gap-8 items-start lg:items-center group"
                     >
-                        <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
-                            <Calendar size={28} />
+                        <div className="flex flex-col gap-4 items-center shrink-0">
+                            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                                <Calendar size={28} />
+                            </div>
+                            <FileUpload
+                                compact
+                                value={sched.imageUrl}
+                                onChange={(url) => updateSchedule(idx, 'imageUrl', url)}
+                                label="Flyer"
+                            />
                         </div>
 
                         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
