@@ -621,7 +621,7 @@ function ReadingTestViewInner({
               className="fixed z-[250] pointer-events-auto"
               style={{ left: popupPos.x, top: popupPos.y }}
             >
-              <div className="bg-slate-900 rounded-xl shadow-2xl shadow-black/30 flex items-center gap-0.5 p-1 border border-white/10">
+              <div className="bg-accent rounded-xl shadow-2xl shadow-black/30 flex items-center gap-0.5 p-1 border border-white/10">
                 {popupIsHighlighted ? (
                   <button onClick={doRemoveHighlight} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">
                     <Trash2 size={14} /><span className="text-[10px] font-bold">Remove</span>

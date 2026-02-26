@@ -6,8 +6,6 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Underline from '@tiptap/extension-underline';
-import { Color } from '@tiptap/extension-color';
-import { TextStyle } from '@tiptap/extension-text-style';
 import { Table } from '@tiptap/extension-table';
 import { TableRow } from '@tiptap/extension-table-row';
 import { TableCell } from '@tiptap/extension-table-cell';
@@ -114,8 +112,6 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
                     class: 'rounded-3xl shadow-xl my-8 max-w-full h-auto mx-auto border-4 border-white/5 block',
                 },
             }),
-            TextStyle,
-            Color,
             Table.configure({
                 resizable: true,
             }),
@@ -135,14 +131,38 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
             attributes: {
                 class: 'prose prose-invert prose-slate max-w-none focus:outline-none min-h-[400px] p-10 font-body leading-relaxed',
             },
+            transformPastedHTML: (html) => {
+                // Remove all style and class attributes from pasted content to avoid dark text issues from Word
+                // but keep src for images and href for links. Also remove lang and other messy Word attributes.
+                return html
+                    .replace(/\sstyle=['"][^'"]*['"]/gi, '')
+                    .replace(/\sclass=['"][^'"]*['"]/gi, '')
+                    .replace(/\slang=['"][^'"]*['"]/gi, '')
+                    .replace(/<span[^>]*>/gi, '')
+                    .replace(/<\/span>/gi, '')
+                    .replace(/<font[^>]*>/gi, '')
+                    .replace(/<\/font>/gi, '');
+            },
             handlePaste: (view, event) => {
                 if (!event.clipboardData) return false;
 
-                const html = event.clipboardData.getData('text/html');
-                const dataUriRegex = /src="data:image\/[^;]+;base64,[^"]+"/g;
-                const matches = html.match(dataUriRegex);
+                let html = event.clipboardData.getData('text/html');
+                if (html) {
+                    // Clean HTML before processing images
+                    html = html
+                        .replace(/\sstyle=['"][^'"]*['"]/gi, '')
+                        .replace(/\sclass=['"][^'"]*['"]/gi, '')
+                        .replace(/\slang=['"][^'"]*['"]/gi, '')
+                        .replace(/<span[^>]*>/gi, '')
+                        .replace(/<\/span>/gi, '')
+                        .replace(/<font[^>]*>/gi, '')
+                        .replace(/<\/font>/gi, '');
+                }
 
-                if (matches && matches.length > 0) {
+                const dataUriRegex = /src="data:image\/[^;]+;base64,[^"]+"/g;
+                const matches = html ? html.match(dataUriRegex) : null;
+
+                if (html && matches && matches.length > 0) {
                     setIsUploading(true);
                     setUploadProgress({ total: matches.length, current: 0 });
 

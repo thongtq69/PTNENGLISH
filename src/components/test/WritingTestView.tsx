@@ -346,7 +346,7 @@ function WritingTestViewInner({ content, backdropUrl, answers, onAnswerChange }:
       <AnimatePresence>
         {popupPos && (
           <div className="fixed z-[150]" style={{ left: popupPos.x, top: popupPos.y }} data-selection-popup>
-            <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }} className="bg-slate-800 rounded-xl shadow-2xl border border-white/10 flex items-center gap-0.5 px-1 py-0.5">
+            <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 6 }} className="bg-accent rounded-xl shadow-2xl border border-white/10 flex items-center gap-0.5 px-1 py-0.5">
               {popupIsHighlighted ? (
                 <button onClick={doRemoveHighlight} className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">
                   <Trash2 size={14} /><span className="text-[10px] font-bold">Remove</span>

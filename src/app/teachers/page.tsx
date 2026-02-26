@@ -139,7 +139,7 @@ export default function TeachersPage() {
             </section>
 
             {/* Recruitment CTA */}
-            <section className="py-32 bg-slate-900 overflow-hidden relative text-center">
+            <section className="py-32 bg-accent overflow-hidden relative text-center">
                 <div className="absolute top-0 right-0 w-1/4 h-full bg-secondary/20 -skew-x-12 translate-x-1/2"></div>
                 <div className="container mx-auto px-6 relative z-10 max-w-4xl">
                     <h2 className="text-white text-3xl md:text-5xl font-heading font-semibold mb-10 leading-tight">Trở thành "Navigation Partner" tiếp theo?</h2>

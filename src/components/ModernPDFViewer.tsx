@@ -46,9 +46,9 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
     }
 
     return (
-        <div className="flex flex-col h-full bg-slate-900 overflow-hidden">
+        <div className="flex flex-col h-full bg-accent overflow-hidden">
             {/* PDF Toolbar */}
-            <div className="bg-slate-950/80 backdrop-blur-md border-b border-white/10 p-4 flex items-center justify-between z-20 shadow-xl">
+            <div className="bg-accent/80 backdrop-blur-md border-b border-white/10 p-4 flex items-center justify-between z-20 shadow-xl">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-xl border border-white/10">
                         <FileText size={14} className="text-primary" />
@@ -86,7 +86,7 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
             {/* PDF Render Area - Scrollable */}
             <div
                 ref={containerRef}
-                className="flex-1 overflow-y-auto bg-slate-900 scroll-smooth custom-scrollbar"
+                className="flex-1 overflow-y-auto bg-accent scroll-smooth custom-scrollbar"
             >
                 <div className="flex flex-col items-center py-12 gap-8 min-h-full">
                     {url.match(/\.(jpeg|jpg|gif|png|webp)/i) ? (
@@ -118,7 +118,7 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
                                 </div>
                             }
                             error={
-                                <div className="flex flex-col items-center justify-center p-12 text-slate-400 gap-4 bg-slate-950 rounded-[3rem] border border-white/5 max-w-md mx-auto my-20">
+                                <div className="flex flex-col items-center justify-center p-12 text-slate-400 gap-4 bg-accent rounded-[3rem] border border-white/5 max-w-md mx-auto my-20">
                                     <AlertTriangle className="text-primary" size={48} />
                                     <p className="text-sm font-bold uppercase tracking-widest text-center">PDF not found</p>
                                     <p className="text-xs text-slate-500 text-center leading-relaxed max-w-sm">
@@ -147,7 +147,7 @@ export default function ModernPDFViewer({ url }: ModernPDFViewerProps) {
                                         loading={
                                             <div
                                                 style={{ width: 600 * scale, height: 840 * scale }}
-                                                className="bg-slate-800 animate-pulse rounded-sm flex items-center justify-center"
+                                                className="bg-accent/40 animate-pulse rounded-sm flex items-center justify-center"
                                             >
                                                 <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Loading P{i + 1}...</span>
                                             </div>

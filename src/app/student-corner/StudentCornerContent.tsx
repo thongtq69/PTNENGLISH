@@ -197,13 +197,13 @@ export default function StudentCornerContent({ pageData, siteSettings }: { pageD
                             <>
                                 <button
                                     onClick={prevSlide}
-                                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-slate-900/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
+                                    className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-accent/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
                                 >
                                     <ChevronLeft size={24} />
                                 </button>
                                 <button
                                     onClick={nextSlide}
-                                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-slate-900/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
+                                    className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 z-30 p-3 md:p-4 rounded-full bg-accent/90 text-white shadow-[0_10px_30px_rgba(0,0,0,0.5)] border border-white/20 transition-all hover:bg-primary hover:scale-110 active:scale-95 group/btn"
                                 >
                                     <ChevronRight size={24} />
                                 </button>
@@ -348,7 +348,7 @@ export default function StudentCornerContent({ pageData, siteSettings }: { pageD
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/95 backdrop-blur-md p-4 md:p-10"
+                            className="fixed inset-0 z-[100] flex items-center justify-center bg-accent/95 backdrop-blur-md p-4 md:p-10"
                         >
                             <motion.button
                                 initial={{ opacity: 0, scale: 0.8 }}

@@ -76,16 +76,16 @@ export default function Footer() {
                         {footerData.aboutText}
                     </p>
                     <div className="flex space-x-3">
-                        <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Facebook size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Instagram size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <Youtube size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
                             <TikTokIcon size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
                     </div>
@@ -165,7 +165,7 @@ export default function Footer() {
             )}
 
 
-            <div className="container mx-auto px-6 pt-8 md:pt-10 border-t border-slate-800 flex flex-col items-center gap-6 text-slate-500 text-center">
+            <div className="container mx-auto px-6 pt-8 md:pt-10 border-t border-white/10 flex flex-col items-center gap-6 text-slate-500 text-center">
                 <div className="max-w-5xl space-y-3">
                     <p className="text-[10px] md:text-xs font-bold text-slate-400">
                         {settings?.footer?.copyright || "@ Copyright 2026 PTNelc. All rights reserved."}

@@ -210,7 +210,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                                     <ImageIcon size={48} />
                                                 </div>
                                             )}
-                                            <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-transparent transition-colors"></div>
+                                            <div className="absolute inset-0 bg-accent/20 group-hover:bg-transparent transition-colors"></div>
                                             <div className="absolute top-6 left-6 bg-accent text-white text-xs md:text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
                                                 {post.category}
                                             </div>
