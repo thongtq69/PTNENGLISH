@@ -123,6 +123,14 @@ export default function SiteSettingsManager() {
                                 <input value={settings.contact.address} onChange={e => updateNested('contact', 'address', e.target.value)} className="bg-transparent border-none outline-none text-white text-sm w-full" />
                             </div>
                         </div>
+                        <div>
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Google Maps Embed URL</label>
+                            <div className="flex items-center gap-3 bg-slate-950 border border-white/5 rounded-xl px-4 py-3">
+                                <Globe size={14} className="text-slate-600" />
+                                <input value={settings.contact.mapsUrl || ''} onChange={e => updateNested('contact', 'mapsUrl', e.target.value)} className="bg-transparent border-none outline-none text-white text-sm w-full" placeholder="https://www.google.com/maps/embed?pb=..." />
+                            </div>
+                            <p className="text-[9px] text-slate-500 mt-2 italic">Copy link từ phần "Nhúng bản đồ" trên Google Maps.</p>
+                        </div>
                     </div>
                 </section>
 

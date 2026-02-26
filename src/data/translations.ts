@@ -78,7 +78,7 @@ export const translations = {
                     quote: "Thành công là sự tự tin khi học viên tự mình bước tiếp trên con đường học tập và cuộc sống.",
                     expBadge: "Năm Kinh Nghiệm",
                     ptnAcronym: "là viết tắt của ba người sáng lập.",
-                    ptnSpirit: "là tinh thần Partner To Navigate – đồng hành để định hướng."
+                    ptnSpirit: "là tinh thần Partner To Navigate – đồng hành để vững bước."
                 },
                 differences: {
                     badge: "The PTN Difference",
