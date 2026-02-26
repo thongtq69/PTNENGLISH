@@ -316,6 +316,7 @@ h6 {
    Does NOT override Tailwind responsive prefixes (md:, lg:)
    ============================================ */
 @media (max-width: 767px) {
+
   /* Base body font size and iOS zoom prevention */
   body {
     font-size: 16px;
@@ -323,7 +324,9 @@ h6 {
   }
 
   /* Form inputs: prevent iOS zoom on focus */
-  input, select, textarea {
+  input,
+  select,
+  textarea {
     font-size: 16px !important;
   }
 
@@ -392,4 +395,31 @@ h6 {
   .text-\[11px\] {
     font-size: 0.75rem !important;
   }
+}
+
+/* ============================================
+   PARTNERS MARQUEE ANIMATION
+   ============================================ */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.logo-container {
+  @apply flex items-center justify-center transition-all duration-500 hover:scale-110 px-6 md:px-10;
 }

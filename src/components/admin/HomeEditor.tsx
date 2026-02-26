@@ -861,7 +861,7 @@ export default function HomeEditor() {
 
                 <div className="p-10 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
                     {(settings.partners || []).map((p: any, idx: number) => (
-                        <div key={idx} className="bg-white/5 border border-white/5 rounded-3xl p-6 group relative aspect-square flex flex-col items-center justify-center">
+                        <div key={idx} className="bg-white/5 border border-white/5 rounded-2xl p-4 group relative flex flex-col items-center">
                             <button
                                 onClick={() => {
                                     const filtered = settings.partners.filter((_: any, i: number) => i !== idx);
@@ -871,6 +871,15 @@ export default function HomeEditor() {
                             >
                                 <Trash2 size={12} />
                             </button>
+
+                            <div className="w-full h-16 bg-white rounded-xl mb-4 flex items-center justify-center p-2 overflow-hidden border border-white/5">
+                                {p.logo ? (
+                                    <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain transition-all" />
+                                ) : (
+                                    <ImageIcon size={20} className="text-slate-200" />
+                                )}
+                            </div>
+
                             <input
                                 value={p.name}
                                 onChange={(e) => {
@@ -888,20 +897,22 @@ export default function HomeEditor() {
                                     newList[idx].link = e.target.value;
                                     setSettings({ ...settings, partners: newList });
                                 }}
-                                className="w-full bg-transparent border-none outline-none text-[8px] text-center text-slate-600 focus:text-primary transition-colors mb-3"
-                                placeholder="Link (http...)"
+                                className="w-full bg-transparent border-none outline-none text-[8px] text-center text-slate-600 focus:text-primary transition-colors mb-4"
+                                placeholder="Link..."
                             />
-                            <FileUpload
-                                label="Logo"
-                                compact
-                                value={p.logo}
-                                onChange={(url) => {
-                                    const newList = [...settings.partners];
-                                    newList[idx].logo = url;
-                                    setSettings({ ...settings, partners: newList });
-                                }}
-                                folder="home/partners"
-                            />
+                            <div className="w-full">
+                                <FileUpload
+                                    label="Logo"
+                                    compact
+                                    value={p.logo}
+                                    onChange={(url) => {
+                                        const newList = [...settings.partners];
+                                        newList[idx].logo = url;
+                                        setSettings({ ...settings, partners: newList });
+                                    }}
+                                    folder="home/partners"
+                                />
+                            </div>
                         </div>
                     ))}
                 </div>

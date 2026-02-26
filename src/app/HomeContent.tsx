@@ -379,29 +379,33 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         </div>
       </section>
 
-      <section className="py-8 md:py-12 bg-white border-y border-slate-100">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-slate-400 font-bold uppercase text-[10px] md:text-[10px] tracking-[0.3em] mb-4 md:mb-8" style={{ fontSize: 'var(--fs-home-partnersBadge)' }}>
+      <section className="py-12 md:py-16 bg-white/10 backdrop-blur-sm border-y border-white/5 overflow-hidden">
+        <div className="container mx-auto px-6 text-center mb-8 md:mb-12">
+          <p className="text-slate-400 font-bold uppercase text-[10px] md:text-[10px] tracking-[0.3em]" style={{ fontSize: 'var(--fs-home-partnersBadge)' }}>
             {siteSettings?.partnersSection?.badge || t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí"}
           </p>
+        </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:flex md:flex-wrap md:justify-center items-center gap-4 md:gap-16">
-            {partners.map((p: any, idx: number) => (
-              <motion.div
-                key={idx}
-                whileHover={{ scale: 1.05 }}
-                className="flex flex-col items-center group"
-              >
-                {p.link ? (
-                  <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
-                    <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain transition-all duration-500" />
-                  </a>
-                ) : (
-                  <img src={p.logo} alt={p.name} className="h-6 md:h-16 w-auto object-contain transition-all duration-500" />
-                )}
-              </motion.div>
+        <div className="relative flex overflow-x-hidden">
+          <div className="animate-marquee flex items-center">
+            {[...partners, ...partners, ...partners].map((p: any, idx: number) => (
+              <div key={idx} className="logo-container w-[160px] md:w-[240px] shrink-0">
+                <div className="bg-white/90 rounded-xl p-2 md:p-3 shadow-sm flex items-center justify-center w-full h-12 md:h-16">
+                  {p.link ? (
+                    <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full h-full">
+                      <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />
+                    </a>
+                  ) : (
+                    <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />
+                  )}
+                </div>
+              </div>
             ))}
           </div>
+
+          {/* Gradient Overlays for smooth edges - subtle and matching background */}
+          <div className="absolute inset-y-0 left-0 w-12 md:w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-12 md:w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
         </div>
       </section>
 
