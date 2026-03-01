@@ -23,6 +23,7 @@ export default function ChatBox() {
     const [hasPrompted, setHasPrompted] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
     const [leads, setLeads] = useState({ name: "", phone: "" });
+    const [isLeadSubmitted, setIsLeadSubmitted] = useState(false);
     const [sessionId, setSessionId] = useState("");
     const [config, setConfig] = useState<any>(null);
     const [inputText, setInputText] = useState("");
@@ -45,7 +46,10 @@ export default function ChatBox() {
         setSessionId(sId);
 
         const savedLeads = localStorage.getItem("ptn_chat_leads");
-        if (savedLeads) setLeads(JSON.parse(savedLeads));
+        if (savedLeads) {
+            setLeads(JSON.parse(savedLeads));
+            setIsLeadSubmitted(true);
+        }
     }, []);
 
     // Fetch messages from DB
@@ -149,15 +153,25 @@ export default function ChatBox() {
         e.preventDefault();
         if (!leads.name || !leads.phone) return;
         localStorage.setItem("ptn_chat_leads", JSON.stringify(leads));
+        setIsLeadSubmitted(true); // Hide the form right away
+
+        const successText = language === 'vi' ? "Cảm ơn bạn! Chúng tôi đã ghi nhận thông tin và sẽ liên hệ sớm nhất." : "Thank you! We have received your information and will contact you soon.";
+        const botMsg: Message = { id: Date.now().toString(), text: successText, sender: "bot", timestamp: new Date() };
+
+        // Optimistic UI update
+        setMessages(prev => [...prev, botMsg]);
 
         try {
             await fetch("/api/chat-sessions", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ sessionId, name: leads.name, phone: leads.phone })
+                body: JSON.stringify({
+                    sessionId,
+                    name: leads.name,
+                    phone: leads.phone,
+                    message: botMsg
+                })
             });
-            const successText = language === 'vi' ? "Cảm ơn bạn! Chúng tôi đã ghi nhận thông tin." : "Thank you! We received your info.";
-            sendMessage(successText); // Trigger a user msg saying thanks to hide form or just reload.
         } catch (e) { }
     };
 
@@ -170,9 +184,8 @@ export default function ChatBox() {
     if (isHiddenPath) return null;
 
     // Do we need to ask for leads?
-    // If they have typed at least 1 user message, and we don't have lead info, we should prompt OR admin prompt.
-    // Let's just ask inline if leads.name is empty and they have sent messages.
-    const needsLeads = messages.some(m => m.sender === "user") && (!leads.name || !leads.phone);
+    // If they have typed at least 1 user message, and we haven't successfully submitted the lead form yet.
+    const needsLeads = messages.some(m => m.sender === "user") && !isLeadSubmitted;
 
     return (
         <div className="fixed bottom-4 right-4 z-[9999] font-sans text-sm">
