@@ -7,83 +7,90 @@ export async function GET() {
         const client = getAnalyticsClient();
         const propertyId = getPropertyId();
 
-        // Realtime report
-        const [realtimeResponse] = await client.runRealtimeReport({
+        // 1. Total active users (no dimensions)
+        const [totalResponse] = await client.runRealtimeReport({
             property: `properties/${propertyId}`,
             metrics: [{ name: "activeUsers" }],
-            dimensions: [
-                { name: "country" },
-            ],
         });
 
-        // Realtime by page
-        const [realtimePageResponse] = await client.runRealtimeReport({
-            property: `properties/${propertyId}`,
-            metrics: [{ name: "activeUsers" }],
-            dimensions: [{ name: "unifiedScreenName" }],
-            orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
-            limit: 10,
-        });
+        const totalActiveUsers = parseInt(
+            totalResponse.rows?.[0]?.metricValues?.[0]?.value || "0"
+        );
 
-        // Realtime by device
-        const [realtimeDeviceResponse] = await client.runRealtimeReport({
-            property: `properties/${propertyId}`,
-            metrics: [{ name: "activeUsers" }],
-            dimensions: [{ name: "deviceCategory" }],
-        });
-
-        // Realtime by source
-        const [realtimeSourceResponse] = await client.runRealtimeReport({
-            property: `properties/${propertyId}`,
-            metrics: [{ name: "activeUsers" }],
-            dimensions: [{ name: "firstUserSource" }],
-            orderBys: [{ metric: { metricName: "activeUsers" }, desc: true }],
-            limit: 8,
-        });
-
-        // Parse total active users
-        let totalActiveUsers = 0;
-        const byCountry: { country: string; users: number }[] = [];
-        realtimeResponse.rows?.forEach((row) => {
-            const users = parseInt(row.metricValues?.[0]?.value || "0");
-            totalActiveUsers += users;
-            byCountry.push({
+        // 2. Active users by country
+        let byCountry: { country: string; users: number }[] = [];
+        try {
+            const [countryResponse] = await client.runRealtimeReport({
+                property: `properties/${propertyId}`,
+                metrics: [{ name: "activeUsers" }],
+                dimensions: [{ name: "country" }],
+            });
+            byCountry = (countryResponse.rows || []).map((row) => ({
                 country: row.dimensionValues?.[0]?.value || "Unknown",
-                users,
-            });
-        });
-
-        // Parse by page
-        const byPage: { page: string; users: number }[] = [];
-        realtimePageResponse.rows?.forEach((row) => {
-            byPage.push({
-                page: row.dimensionValues?.[0]?.value || "Unknown",
                 users: parseInt(row.metricValues?.[0]?.value || "0"),
-            });
-        });
+            })).sort((a, b) => b.users - a.users);
+        } catch (e) {
+            console.error("Country breakdown error:", e);
+        }
 
-        // Parse by device
-        const byDevice: { device: string; users: number }[] = [];
-        realtimeDeviceResponse.rows?.forEach((row) => {
-            byDevice.push({
+        // 3. Active users by page title
+        let byPage: { page: string; users: number }[] = [];
+        try {
+            const [pageResponse] = await client.runRealtimeReport({
+                property: `properties/${propertyId}`,
+                metrics: [{ name: "activeUsers" }],
+                dimensions: [{ name: "unifiedScreenName" }],
+            });
+            byPage = (pageResponse.rows || [])
+                .map((row) => ({
+                    page: row.dimensionValues?.[0]?.value || "Unknown",
+                    users: parseInt(row.metricValues?.[0]?.value || "0"),
+                }))
+                .sort((a, b) => b.users - a.users)
+                .slice(0, 10);
+        } catch (e) {
+            console.error("Page breakdown error:", e);
+        }
+
+        // 4. Active users by device
+        let byDevice: { device: string; users: number }[] = [];
+        try {
+            const [deviceResponse] = await client.runRealtimeReport({
+                property: `properties/${propertyId}`,
+                metrics: [{ name: "activeUsers" }],
+                dimensions: [{ name: "deviceCategory" }],
+            });
+            byDevice = (deviceResponse.rows || []).map((row) => ({
                 device: row.dimensionValues?.[0]?.value || "Unknown",
                 users: parseInt(row.metricValues?.[0]?.value || "0"),
-            });
-        });
+            })).sort((a, b) => b.users - a.users);
+        } catch (e) {
+            console.error("Device breakdown error:", e);
+        }
 
-        // Parse by source
-        const bySource: { source: string; users: number }[] = [];
-        realtimeSourceResponse.rows?.forEach((row) => {
-            bySource.push({
-                source: row.dimensionValues?.[0]?.value || "(direct)",
-                users: parseInt(row.metricValues?.[0]?.value || "0"),
+        // 5. Active users by traffic source
+        let bySource: { source: string; users: number }[] = [];
+        try {
+            const [sourceResponse] = await client.runRealtimeReport({
+                property: `properties/${propertyId}`,
+                metrics: [{ name: "activeUsers" }],
+                dimensions: [{ name: "firstUserSource" }],
             });
-        });
+            bySource = (sourceResponse.rows || [])
+                .map((row) => ({
+                    source: row.dimensionValues?.[0]?.value || "(direct)",
+                    users: parseInt(row.metricValues?.[0]?.value || "0"),
+                }))
+                .sort((a, b) => b.users - a.users)
+                .slice(0, 8);
+        } catch (e) {
+            console.error("Source breakdown error:", e);
+        }
 
         return NextResponse.json({
             realtime: {
                 activeUsers: totalActiveUsers,
-                byCountry: byCountry.sort((a, b) => b.users - a.users),
+                byCountry,
                 byPage,
                 byDevice,
                 bySource,
