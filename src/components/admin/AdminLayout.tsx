@@ -67,6 +67,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
     useEffect(() => {
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+            setCollapsed(true);
+        }
+    }, []);
+
+    useEffect(() => {
         const checkAuth = async () => {
             try {
                 const response = await fetch('/api/admin/login');
@@ -104,10 +110,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
 
     return (
-        <div className="flex min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-primary/30">
+        <div className="flex min-h-screen bg-slate-950 text-slate-200 font-sans selection:bg-primary/30 relative">
+            {/* Mobile Backdrop */}
+            {!collapsed && (
+                <div
+                    className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 md:hidden"
+                    onClick={() => setCollapsed(true)}
+                ></div>
+            )}
+
             {/* Sidebar */}
             <aside
-                className={`bg-slate-900 border-r border-white/5 transition-all duration-300 flex flex-col sticky top-0 h-screen z-50 ${collapsed ? 'w-20' : 'w-72'}`}
+                className={`bg-slate-900 border-r border-white/5 transition-all duration-300 flex flex-col fixed md:sticky top-0 h-screen z-50 ${collapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-[280px] md:w-72'}`}
             >
                 {/* Logo */}
                 <div className="p-6 flex items-center gap-4 border-b border-white/5 h-24">
@@ -140,6 +154,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                                     <Link
                                         key={item.name}
                                         href={item.href}
+                                        onClick={() => {
+                                            if (typeof window !== 'undefined' && window.innerWidth < 768) {
+                                                setCollapsed(true);
+                                            }
+                                        }}
                                         className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all relative group ${isActive
                                             ? 'bg-primary text-white shadow-lg shadow-primary/20'
                                             : 'text-slate-400 hover:bg-white/5 hover:text-white'
@@ -185,12 +204,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <main className="flex-1 flex flex-col min-w-0 bg-slate-950/50">
                 {/* Header */}
                 <header className="h-24 sticky top-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/5 px-8 flex items-center justify-between">
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4">
                         <button
                             onClick={() => setCollapsed(!collapsed)}
                             className="p-2 rounded-lg bg-white/5 text-slate-400 hover:text-white transition-colors"
                         >
-                            <ChevronRight className={`transition-transform duration-300 ${collapsed ? '' : 'rotate-180'}`} size={20} />
+                            <ChevronRight className={`transition-transform duration-300 md:block hidden ${collapsed ? '' : 'rotate-180'}`} size={20} />
+                            <ChevronRight className={`transition-transform duration-300 md:hidden ${collapsed ? '' : 'rotate-180'}`} size={20} />
                         </button>
                         <div className="relative hidden md:block">
                             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
@@ -202,8 +222,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-wider border border-emerald-500/20">
+                    <div className="flex items-center gap-4">
+                        <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-wider border border-emerald-500/20">
                             <CheckCircle2 size={12} />
                             Database Online
                         </div>
@@ -226,7 +246,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 </header>
 
                 {/* Dynamic Content */}
-                <div className="p-8 pb-32">
+                <div className="p-4 md:p-8 pb-32 max-w-[100vw] overflow-x-hidden relative">
                     {children}
                 </div>
             </main>

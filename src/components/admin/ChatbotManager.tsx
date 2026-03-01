@@ -5,7 +5,7 @@ import {
     MessageCircle, Users, Calendar, Phone, User,
     Trash2, ExternalLink, CheckCircle2, AlertCircle,
     Search, Filter, Download, Settings, Save, Plus,
-    Image as ImageIcon, Send, Clock
+    Image as ImageIcon, Send, Clock, ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FileUpload from './shared/FileUpload';
@@ -180,9 +180,9 @@ export default function ChatbotManager() {
 
             <AnimatePresence mode="wait">
                 {activeTab === 'chat' ? (
-                    <motion.div key="chat" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-[70vh] flex gap-6">
+                    <motion.div key="chat" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-[70vh] flex md:flex-row flex-col gap-6">
                         {/* Sidebar: Session List */}
-                        <div className="w-1/3 bg-slate-900 border border-white/10 rounded-3xl overflow-hidden flex flex-col">
+                        <div className={`w-full md:w-1/3 bg-slate-900 border border-white/10 rounded-3xl overflow-hidden flex-col ${activeSession ? 'hidden md:flex' : 'flex'} h-full`}>
                             <div className="p-5 border-b border-white/10">
                                 <h3 className="text-white font-bold flex items-center gap-2"><MessageCircle size={18} /> Chat Sessions</h3>
                             </div>
@@ -228,7 +228,7 @@ export default function ChatbotManager() {
                         </div>
 
                         {/* Main Chat Area */}
-                        <div className="flex-1 bg-slate-900 border border-white/10 rounded-3xl overflow-hidden flex flex-col">
+                        <div className={`flex-1 bg-slate-900 border border-white/10 rounded-3xl overflow-hidden flex-col ${!activeSession ? 'hidden md:flex' : 'flex'} h-full`}>
                             {activeSession ? (() => {
                                 const current = sessions.find(s => s.sessionId === activeSession);
                                 if (!current) return null;
@@ -237,6 +237,9 @@ export default function ChatbotManager() {
                                         {/* Header */}
                                         <div className="p-5 border-b border-white/10 flex justify-between items-center bg-slate-950">
                                             <div className="flex items-center gap-3">
+                                                <button onClick={() => setActiveSession(null)} className="md:hidden p-2 bg-white/5 rounded-xl text-slate-400 hover:text-white mr-2">
+                                                    <ChevronRight className="rotate-180" size={20} />
+                                                </button>
                                                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary"><User size={20} /></div>
                                                 <div>
                                                     <h3 className="text-white font-bold">{current.name || "Khách ẩn danh"}</h3>
