@@ -1,9 +1,15 @@
 export const dynamic = "force-dynamic";
 import { NextResponse } from "next/server";
-import { getAnalyticsClient, getPropertyId } from "@/lib/analytics";
+import { getAnalyticsClient, getPropertyId, getCached, setCache } from "@/lib/analytics";
+
+const CACHE_KEY = "analytics_overview";
+const CACHE_TTL = 300000; // 5 minutes
 
 export async function GET() {
     try {
+        const cached = getCached(CACHE_KEY);
+        if (cached) return NextResponse.json(cached);
+
         const client = getAnalyticsClient();
         const propertyId = getPropertyId();
 
@@ -220,45 +226,47 @@ export async function GET() {
                 metrics: parseMetrics(row),
             }));
 
-        return NextResponse.json({
+        const result = {
             today, yesterday, monthly, weeklyChart,
-            topPages: mapRows(topPagesRes.rows, 2).map(r => ({
+            topPages: mapRows(topPagesRes.rows || [], 2).map(r => ({
                 path: r.dims[0], title: r.dims[1], views: r.metrics[0], users: r.metrics[1],
                 avgDuration: r.metrics[2], bounceRate: r.metrics[3],
             })),
-            sources: mapRows(sourcesRes.rows, 1).map(r => ({
+            sources: mapRows(sourcesRes.rows || [], 1).map(r => ({
                 channel: r.dims[0], sessions: r.metrics[0], users: r.metrics[1],
                 newUsers: r.metrics[2], bounceRate: r.metrics[3],
             })),
-            sourceMedium: mapRows(sourceMediumRes.rows, 2).map(r => ({
+            sourceMedium: mapRows(sourceMediumRes.rows || [], 2).map(r => ({
                 source: r.dims[0], medium: r.dims[1], sessions: r.metrics[0], users: r.metrics[1],
             })),
-            devices: mapRows(devicesRes.rows, 1).map(r => ({
+            devices: mapRows(devicesRes.rows || [], 1).map(r => ({
                 device: r.dims[0], users: r.metrics[0], sessions: r.metrics[1],
             })),
-            browsers: mapRows(browserRes.rows, 1).map(r => ({
+            browsers: mapRows(browserRes.rows || [], 1).map(r => ({
                 browser: r.dims[0], users: r.metrics[0],
             })),
-            countries: mapRows(countryRes.rows, 1).map(r => ({
+            countries: mapRows(countryRes.rows || [], 1).map(r => ({
                 country: r.dims[0], users: r.metrics[0], sessions: r.metrics[1],
             })),
-            cities: mapRows(cityRes.rows, 1).map(r => ({
+            cities: mapRows(cityRes.rows || [], 1).map(r => ({
                 city: r.dims[0], users: r.metrics[0], sessions: r.metrics[1],
             })),
-            events: mapRows(eventsRes.rows, 1).map(r => ({
+            events: mapRows(eventsRes.rows || [], 1).map(r => ({
                 name: r.dims[0], count: r.metrics[0], perUser: r.metrics[1],
             })),
-            newVsReturn: mapRows(newVsReturnRes.rows, 1).map(r => ({
+            newVsReturn: mapRows(newVsReturnRes.rows || [], 1).map(r => ({
                 type: r.dims[0], users: r.metrics[0], sessions: r.metrics[1],
             })),
-            os: mapRows(osRes.rows, 1).map(r => ({
+            os: mapRows(osRes.rows || [], 1).map(r => ({
                 os: r.dims[0], users: r.metrics[0],
             })),
-            screens: mapRows(screenRes.rows, 1).map(r => ({
+            screens: mapRows(screenRes.rows || [], 1).map(r => ({
                 resolution: r.dims[0], users: r.metrics[0],
             })),
             timestamp: new Date().toISOString(),
-        });
+        };
+        setCache(CACHE_KEY, result, CACHE_TTL);
+        return NextResponse.json(result);
     } catch (error: any) {
         console.error("Analytics Overview Error:", error.message);
         return NextResponse.json({ error: error.message }, { status: 500 });

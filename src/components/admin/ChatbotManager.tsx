@@ -5,14 +5,17 @@ import {
     MessageCircle, Users, Calendar, Phone, User,
     Trash2, ExternalLink, CheckCircle2, AlertCircle,
     Search, Filter, Download, Settings, Save, Plus,
-    Image as ImageIcon
+    Image as ImageIcon, Send, Clock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FileUpload from './shared/FileUpload';
 
 export default function ChatbotManager() {
-    const [activeTab, setActiveTab] = useState<'leads' | 'settings'>('leads');
+    const [activeTab, setActiveTab] = useState<'chat' | 'leads' | 'settings'>('chat');
     const [leads, setLeads] = useState<any[]>([]);
+    const [sessions, setSessions] = useState<any[]>([]);
+    const [activeSession, setActiveSession] = useState<string | null>(null);
+    const [adminInput, setAdminInput] = useState("");
     const [config, setConfig] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -24,21 +27,53 @@ export default function ChatbotManager() {
     }, []);
 
     const fetchData = async () => {
-        setLoading(true);
         try {
-            const [leadsRes, configRes] = await Promise.all([
+            const [leadsRes, configRes, chatRes] = await Promise.all([
                 fetch('/api/chatbot-leads'),
-                fetch('/api/chatbot-config')
+                fetch('/api/chatbot-config'),
+                fetch('/api/chat-sessions')
             ]);
             const leadsData = await leadsRes.json();
             const configData = await configRes.json();
+            const chatData = await chatRes.json();
             setLeads(Array.isArray(leadsData) ? leadsData : []);
             setConfig(configData);
+            setSessions(Array.isArray(chatData) ? chatData : []);
         } catch (err) {
             console.error(err);
         } finally {
             setLoading(false);
         }
+    };
+
+    // Polling for live chat sessions
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (activeTab === 'chat') {
+            interval = setInterval(async () => {
+                const res = await fetch('/api/chat-sessions');
+                if (res.ok) setSessions(await res.json());
+            }, 3000);
+        }
+        return () => clearInterval(interval);
+    }, [activeTab]);
+
+    const sendAdminMessage = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!adminInput.trim() || !activeSession) return;
+        const msg = adminInput;
+        setAdminInput("");
+        try {
+            await fetch("/api/chat-sessions", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    sessionId: activeSession,
+                    message: { id: Date.now().toString(), text: msg, sender: "admin", timestamp: new Date() }
+                })
+            });
+            fetchData();
+        } catch (err) { console.error(err); }
     };
 
     const handleSaveConfig = async () => {
@@ -121,16 +156,22 @@ export default function ChatbotManager() {
                     <p className="text-slate-400 mt-2">Manage lead inquiries and chatbox content.</p>
                 </div>
 
-                <div className="flex bg-slate-900 p-1 rounded-2xl border border-white/5">
+                <div className="flex bg-slate-900 p-1 rounded-2xl border border-white/5 overflow-x-auto custom-scrollbar">
+                    <button
+                        onClick={() => setActiveTab('chat')}
+                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'chat' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                    >
+                        <MessageCircle size={16} /> Live Chat
+                    </button>
                     <button
                         onClick={() => setActiveTab('leads')}
-                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === 'leads' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'leads' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
                     >
-                        <Users size={16} /> Leads
+                        <Users size={16} /> Old Leads
                     </button>
                     <button
                         onClick={() => setActiveTab('settings')}
-                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === 'settings' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                        className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'settings' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-white'}`}
                     >
                         <Settings size={16} /> Settings
                     </button>
@@ -138,7 +179,115 @@ export default function ChatbotManager() {
             </div>
 
             <AnimatePresence mode="wait">
-                {activeTab === 'leads' ? (
+                {activeTab === 'chat' ? (
+                    <motion.div key="chat" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="h-[70vh] flex gap-6">
+                        {/* Sidebar: Session List */}
+                        <div className="w-1/3 bg-slate-900 border border-white/10 rounded-3xl overflow-hidden flex flex-col">
+                            <div className="p-5 border-b border-white/10">
+                                <h3 className="text-white font-bold flex items-center gap-2"><MessageCircle size={18} /> Chat Sessions</h3>
+                            </div>
+                            <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
+                                {sessions.length === 0 ? (
+                                    <div className="text-slate-500 text-center py-10 text-sm">No active sessions</div>
+                                ) : (
+                                    sessions.map(s => {
+                                        const lastMsg = s.messages?.[s.messages.length - 1];
+                                        return (
+                                            <button
+                                                key={s.sessionId}
+                                                onClick={async () => {
+                                                    setActiveSession(s.sessionId);
+                                                    if (s.unreadAdmin > 0) {
+                                                        // Update locally instantly
+                                                        setSessions(prev => prev.map(x => x.sessionId === s.sessionId ? { ...x, unreadAdmin: 0 } : x));
+                                                        // Update on server
+                                                        try {
+                                                            await fetch('/api/chat-sessions', {
+                                                                method: 'PUT',
+                                                                headers: { 'Content-Type': 'application/json' },
+                                                                body: JSON.stringify({ sessionId: s.sessionId, action: 'readAdmin' })
+                                                            });
+                                                        } catch (e) { }
+                                                    }
+                                                }}
+                                                className={`w-full text-left p-4 rounded-2xl transition-all border ${activeSession === s.sessionId ? 'bg-primary/20 border-primary/50 text-white' : 'bg-slate-950 border-white/5 text-slate-400 hover:bg-slate-800 hover:text-white'}`}
+                                            >
+                                                <div className="flex justify-between items-start mb-1">
+                                                    <span className="font-bold text-sm truncate">{s.name || s.phone || "Khách ẩn danh"}</span>
+                                                    {lastMsg && <span className="text-[10px] text-slate-500 shrink-0"><Clock size={10} className="inline mr-1" />{new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <p className="text-xs truncate max-w-[80%]">{lastMsg ? lastMsg.text : "Chưa có tin nhắn"}</p>
+                                                    {s.unreadAdmin > 0 && <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold">{s.unreadAdmin}</span>}
+                                                </div>
+                                            </button>
+                                        );
+                                    })
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Main Chat Area */}
+                        <div className="flex-1 bg-slate-900 border border-white/10 rounded-3xl overflow-hidden flex flex-col">
+                            {activeSession ? (() => {
+                                const current = sessions.find(s => s.sessionId === activeSession);
+                                if (!current) return null;
+                                return (
+                                    <>
+                                        {/* Header */}
+                                        <div className="p-5 border-b border-white/10 flex justify-between items-center bg-slate-950">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary"><User size={20} /></div>
+                                                <div>
+                                                    <h3 className="text-white font-bold">{current.name || "Khách ẩn danh"}</h3>
+                                                    <p className="text-xs text-slate-400">{current.phone ? current.phone : "Chưa cung cấp SĐT"}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {/* Messages */}
+                                        <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                                            {current.messages?.map((m: any, idx: number) => {
+                                                const isAdmin = m.sender === 'admin' || m.sender === 'bot';
+                                                return (
+                                                    <div key={idx} className={`flex ${isAdmin ? 'justify-end' : 'justify-start'}`}>
+                                                        <div className={`max-w-[70%] p-4 rounded-3xl ${isAdmin ? 'bg-primary text-white rounded-tr-sm' : 'bg-slate-800 border border-white/10 text-slate-200 rounded-tl-sm'}`}>
+                                                            <p className="text-sm">{m.text}</p>
+                                                            <p className={`text-[10px] mt-2 opacity-50 ${isAdmin ? 'text-right' : 'text-left'}`}>
+                                                                {m.sender === 'bot' && "(Auto Bot) "}
+                                                                {new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                        {/* Input */}
+                                        <div className="p-4 border-t border-white/10 bg-slate-950">
+                                            <form onSubmit={sendAdminMessage} className="flex gap-2 relative">
+                                                <input
+                                                    type="text"
+                                                    value={adminInput}
+                                                    onChange={e => setAdminInput(e.target.value)}
+                                                    placeholder="Reply to user..."
+                                                    className="flex-1 bg-slate-900 border border-white/10 rounded-xl px-5 py-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                                />
+                                                <button type="submit" disabled={!adminInput.trim()} className="bg-primary text-white px-6 rounded-xl hover:bg-primary/80 disabled:opacity-50 transition-all">
+                                                    <Send size={20} />
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </>
+                                );
+                            })() : (
+                                <div className="flex-1 flex flex-col items-center justify-center text-slate-500">
+                                    <MessageCircle size={60} className="mb-4 opacity-20" />
+                                    <h3 className="text-xl font-bold text-white mb-2">Select a Conversation</h3>
+                                    <p>Choose a session from the list to start chatting</p>
+                                </div>
+                            )}
+                        </div>
+                    </motion.div>
+                ) : activeTab === 'leads' ? (
                     <motion.div
                         key="leads"
                         initial={{ opacity: 0, y: 20 }}

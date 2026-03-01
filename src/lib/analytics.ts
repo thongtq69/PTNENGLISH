@@ -28,3 +28,16 @@ export function getPropertyId() {
     }
     return propertyId;
 }
+
+// ── In-memory cache to avoid exceeding GA4 API quota ──
+const cache: Record<string, { data: any; expiry: number }> = {};
+
+export function getCached(key: string): any | null {
+    const entry = cache[key];
+    if (entry && Date.now() < entry.expiry) return entry.data;
+    return null;
+}
+
+export function setCache(key: string, data: any, ttlMs: number) {
+    cache[key] = { data, expiry: Date.now() + ttlMs };
+}
