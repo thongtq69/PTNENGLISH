@@ -23,7 +23,8 @@ import {
     Megaphone,
     MessageCircle,
     Loader2,
-    Type
+    Type,
+    BarChart3
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AdminLogin from './AdminLogin';
@@ -32,6 +33,7 @@ const MENU_ITEMS = [
     {
         group: 'Dashboard', items: [
             { name: 'Overview', icon: <LayoutDashboard size={20} />, href: '/admin' },
+            { name: 'Analytics', icon: <BarChart3 size={20} />, href: '/admin/analytics' },
             { name: 'Inbox / Issues', icon: <MessageSquare size={20} />, href: '/admin/issues', badge: 0 },
             { name: 'Chatbot Leads', icon: <MessageCircle size={20} />, href: '/admin/chatbot' },
         ]

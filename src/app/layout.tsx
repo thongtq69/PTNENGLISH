@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Crimson_Text, Lora, Newsreader, Caveat } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const newsreader = Newsreader({
@@ -253,6 +254,19 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <head>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-MRCJM6N7DN"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-MRCJM6N7DN');
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

@@ -18,6 +18,7 @@ import {
     MessageCircle
 } from 'lucide-react';
 import Link from 'next/link';
+import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 
 export default async function AdminDashboard() {
     await dbConnect();
@@ -92,6 +93,9 @@ export default async function AdminDashboard() {
                     </Link>
                 ))}
             </div>
+
+            {/* Analytics Dashboard */}
+            <AnalyticsDashboard />
 
             {/* Recent Activity & Quick Links */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
