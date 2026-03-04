@@ -134,7 +134,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import AdModal from "@/components/AdModal";
 import ChatBox from "@/components/ChatBox";
-import TetEffects from "@/components/TetEffects";
 
 import { LanguageProvider } from "@/context/LanguageContext";
 import { FontSizeProvider } from "@/context/FontSizeContext";
@@ -279,7 +278,6 @@ export default function RootLayout({
       <body className={`${playfair.variable} ${newsreader.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} ${caveat.variable} font-body antialiased`}>
         <LanguageProvider>
           <FontSizeProvider>
-            <TetEffects />
             {children}
             <AdModal />
             <ChatBox />
