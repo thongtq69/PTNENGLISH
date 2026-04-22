@@ -1254,6 +1254,7 @@ export default function TestPage() {
                     padding: 0.9rem 1.1rem !important;
                     line-height: 1.65 !important;
                     margin-bottom: 0.5rem !important;
+                    border-color: #94a3b8 !important;
                 }
                 .prose .flow-chart > p[style*="font-size: 1.5rem"] {
                     color: #94a3b8;

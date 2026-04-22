@@ -169,7 +169,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Compact Study & Mock Test Section */}
-      <section className="py-6 md:py-12 bg-[#1E0A3C] relative overflow-hidden">
+      <section className="py-6 md:py-12 bg-[#584E83] relative overflow-hidden">
         {/* Subtle Background Glows */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute top-1/2 left-1/4 w-32 h-32 md:w-96 md:h-96 bg-primary rounded-full blur-[80px] md:blur-[150px]"></div>

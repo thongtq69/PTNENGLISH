@@ -72,7 +72,7 @@ export default function HallOfFame({ config }: { config?: any }) {
     }
 
     return (
-        <section className="py-8 md:py-14 bg-accent overflow-hidden relative">
+        <section className="py-8 md:py-14 bg-[#584E83] overflow-hidden relative">
             {/* Ambient Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
