@@ -316,7 +316,7 @@ export default function AdsManager() {
                                     <Megaphone size={40} />
                                 </div>
                                 <h3 className="text-xl font-heading font-black text-slate-500">Select a campaign to manage</h3>
-                                <p className="text-xs text-slate-600 mt-2 uppercase tracking-widest">Only one active campaign can be live at a time</p>
+                                <p className="text-xs text-slate-600 mt-2 uppercase tracking-widest">Multiple campaigns can be live at once — users rotate through them</p>
                             </div>
                         )}
                     </AnimatePresence>

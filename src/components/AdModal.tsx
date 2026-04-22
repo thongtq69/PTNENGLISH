@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, Calendar, MessageSquare, Clock,
-    BookOpen, Check, ChevronRight
+    BookOpen, Check, ChevronRight, ChevronLeft, Sparkles
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -37,205 +37,308 @@ const ICON_MAP: Record<string, any> = {
     Check: Check
 };
 
+type ViewState = 'hidden' | 'open' | 'minimized';
+
+const DISMISS_KEY = 'ptn_ad_dismissed';
+const VIEW_STATE_KEY = 'ptn_ad_view_state';
+
 export default function AdModal() {
     const pathname = usePathname();
-    const [ad, setAd] = useState<Advertisement | null>(null);
-    const [isOpen, setIsOpen] = useState(false);
+    const [ads, setAds] = useState<Advertisement[]>([]);
+    const [currentIdx, setCurrentIdx] = useState(0);
+    const [viewState, setViewState] = useState<ViewState>('hidden');
 
     useEffect(() => {
-        // Global session check - if any ad was closed, don't show anything
-        if (sessionStorage.getItem('ptn_global_ad_dismissed')) return;
+        if (sessionStorage.getItem(DISMISS_KEY)) return;
 
-        const fetchAd = async () => {
+        const fetchAds = async () => {
             try {
                 const res = await fetch('/api/advertisements/active');
                 const data = await res.json();
+                const list: Advertisement[] = Array.isArray(data) ? data : (data ? [data] : []);
+                const valid = list.filter(a => a && a.isActive);
 
-                if (data && data.isActive) {
-                    const sessionKey = `ptn_ad_shown_${data._id}`;
-                    // Extra security check for the specific ad ID
-                    if (sessionStorage.getItem(sessionKey)) return;
+                if (valid.length === 0) return;
 
-                    setAd(data);
-                    // Show after 2 seconds
+                setAds(valid);
+
+                const saved = sessionStorage.getItem(VIEW_STATE_KEY);
+                if (saved === 'minimized') {
+                    setViewState('minimized');
+                } else {
                     setTimeout(() => {
-                        // Final check before opening - double safety
-                        if (sessionStorage.getItem('ptn_global_ad_dismissed')) return;
-                        setIsOpen(true);
+                        if (sessionStorage.getItem(DISMISS_KEY)) return;
+                        setViewState('open');
                     }, 2000);
                 }
             } catch (e) {
-                console.error("Ad fetch error", e);
+                console.error('Ad fetch error', e);
             }
         };
-        fetchAd();
-    }, []); // Only run ONCE on initial site load
+        fetchAds();
+    }, []);
 
-    const closeAd = () => {
-        setIsOpen(false);
-        sessionStorage.setItem('ptn_global_ad_dismissed', 'true');
-        if (ad?._id) {
-            sessionStorage.setItem(`ptn_ad_shown_${ad._id}`, 'true');
-        }
+    const minimize = () => {
+        setViewState('minimized');
+        sessionStorage.setItem(VIEW_STATE_KEY, 'minimized');
     };
 
-    if (!ad || !pathname || pathname.startsWith('/admin')) return null;
+    const reopen = () => {
+        setViewState('open');
+        sessionStorage.setItem(VIEW_STATE_KEY, 'open');
+    };
+
+    const dismiss = () => {
+        setViewState('hidden');
+        sessionStorage.setItem(DISMISS_KEY, 'true');
+        sessionStorage.removeItem(VIEW_STATE_KEY);
+    };
+
+    if (ads.length === 0 || !pathname || pathname.startsWith('/admin')) return null;
+
+    const ad = ads[currentIdx];
+    const total = ads.length;
+    const next = () => setCurrentIdx(i => (i + 1) % total);
+    const prev = () => setCurrentIdx(i => (i - 1 + total) % total);
 
     return (
-        <AnimatePresence>
-            {isOpen && (
-                <div className="fixed inset-0 z-[999] flex items-end justify-center md:items-center p-0 md:p-10">
+        <>
+            {/* Minimized floating widget */}
+            <AnimatePresence>
+                {viewState === 'minimized' && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={closeAd}
-                        className="absolute inset-0 bg-accent/80 backdrop-blur-sm"
-                    />
-
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                        initial={{ opacity: 0, scale: 0.5, y: 40 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                        className="relative w-full sm:w-[90%] max-w-5xl bg-white rounded-[2rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[85vh] md:h-[650px] border border-slate-200 md:border-white/10"
+                        exit={{ opacity: 0, scale: 0.5, y: 40 }}
+                        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                        className="fixed bottom-6 left-6 z-[998]"
                     >
-                        {/* Close Button */}
                         <button
-                            onClick={closeAd}
-                            className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-accent/5 md:bg-accent text-accent md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
+                            onClick={dismiss}
+                            aria-label="Dismiss"
+                            className="absolute -top-1 -right-1 z-10 w-7 h-7 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
                         >
-                            <X size={20} className="md:w-6 md:h-6" />
+                            <X size={14} />
                         </button>
-
-                        {/* Left Side: Image & Branding (Shown on top for mobile) */}
-                        <div className="flex h-[180px] md:h-auto md:w-[45%] relative overflow-hidden group shrink-0">
+                        <button
+                            onClick={reopen}
+                            aria-label="Xem khuyến mãi"
+                            className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95"
+                        >
                             {ad.leftImage ? (
-                                <img
-                                    src={ad.leftImage}
-                                    alt="Promo"
-                                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                                />
+                                <img src={ad.leftImage} alt={ad.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover" />
                             ) : (
-                                <div className="absolute inset-0 bg-accent" />
+                                <Sparkles size={40} className="absolute inset-0 m-auto text-white" />
                             )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/40 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/20 to-transparent" />
+                            <span className="relative text-white text-[9px] font-black uppercase tracking-widest pb-2">
+                                Khuyến Mãi
+                            </span>
+                        </button>
+                        {total > 1 && (
+                            <span className="absolute -top-1 -left-1 bg-primary text-white text-[10px] font-black min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center shadow-md border-2 border-white">
+                                {total}
+                            </span>
+                        )}
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-                            <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end text-left">
-                                <motion.span
-                                    initial={{ x: -20, opacity: 0 }}
-                                    animate={{ x: 0, opacity: 1 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="bg-primary text-white text-[10px] font-black px-4 py-2 rounded-none w-fit mb-6 tracking-[0.3em]"
-                                >
-                                    {ad.leftLabel}
-                                </motion.span>
+            {/* Full modal */}
+            <AnimatePresence>
+                {viewState === 'open' && (
+                    <div className="fixed inset-0 z-[999] flex items-end justify-center md:items-center p-0 md:p-10">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={minimize}
+                            className="absolute inset-0 bg-accent/80 backdrop-blur-sm"
+                        />
 
+                        <motion.div
+                            key={ad._id}
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            className="relative w-full sm:w-[90%] max-w-5xl bg-white rounded-[2rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[85vh] md:h-[650px] border border-slate-200 md:border-white/10"
+                        >
+                            {/* Close/Minimize Button */}
+                            <button
+                                onClick={minimize}
+                                aria-label="Thu nhỏ"
+                                className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-accent/5 md:bg-accent text-accent md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
+                            >
+                                <X size={20} className="md:w-6 md:h-6" />
+                            </button>
+
+                            {/* Ad counter */}
+                            {total > 1 && (
+                                <div className="absolute top-4 left-4 md:top-6 md:left-6 z-50 bg-black/60 text-white text-[10px] font-black px-3 py-1.5 rounded-full tracking-widest">
+                                    {currentIdx + 1} / {total}
+                                </div>
+                            )}
+
+                            {/* Left Side: Image & Branding */}
+                            <div className="flex h-[180px] md:h-auto md:w-[45%] relative overflow-hidden group shrink-0">
+                                {ad.leftImage ? (
+                                    <img
+                                        src={ad.leftImage}
+                                        alt="Promo"
+                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 bg-accent" />
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/40 to-transparent" />
+
+                                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end text-left">
+                                    <motion.span
+                                        initial={{ x: -20, opacity: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0.3 }}
+                                        className="bg-primary text-white text-[10px] font-black px-4 py-2 rounded-none w-fit mb-6 tracking-[0.3em]"
+                                    >
+                                        {ad.leftLabel}
+                                    </motion.span>
+
+                                    <motion.div
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.4 }}
+                                    >
+                                        <h2 className="text-2xl md:text-5xl font-heading font-black text-white leading-tight mb-4 md:mb-8 uppercase">
+                                            <span className="block mb-1 md:mb-2">{ad.leftHeading.split(' ').slice(0, 2).join(' ')}</span>
+                                            <span className="inline-block bg-primary px-3 py-1 md:px-4 md:py-2 text-xl md:text-5xl rounded-none">
+                                                {ad.leftHeading.split(' ').slice(2).join(' ')}
+                                            </span>
+                                        </h2>
+                                        <p className="text-slate-300 text-[10px] md:text-sm font-medium leading-relaxed max-w-xs border-l-2 border-primary pl-4">
+                                            {ad.leftSubheading}
+                                        </p>
+                                    </motion.div>
+                                </div>
+                            </div>
+
+                            {/* Right Side: Content & Features */}
+                            <div className="flex-1 bg-white p-5 md:p-16 flex flex-col overflow-y-auto custom-scrollbar h-full text-left">
                                 <motion.div
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: 0.4 }}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.5 }}
+                                    className="mb-6 md:mb-12 shrink-0"
                                 >
-                                    <h2 className="text-2xl md:text-5xl font-heading font-black text-white leading-tight mb-4 md:mb-8 uppercase">
-                                        <span className="block mb-1 md:mb-2">{ad.leftHeading.split(' ').slice(0, 2).join(' ')}</span>
-                                        <span className="inline-block bg-primary px-3 py-1 md:px-4 md:py-2 text-xl md:text-5xl rounded-none">
-                                            {ad.leftHeading.split(' ').slice(2).join(' ')}
-                                        </span>
-                                    </h2>
-                                    <p className="text-slate-300 text-[10px] md:text-sm font-medium leading-relaxed max-w-xs border-l-2 border-primary pl-4">
-                                        {ad.leftSubheading}
+                                    <h3 className="text-2xl md:text-5xl font-heading font-black text-slate-900 leading-tight mb-2 md:mb-4 tracking-tighter">
+                                        {ad.rightTitle}
+                                    </h3>
+                                    <p className="text-slate-400 text-[10px] md:text-sm font-bold uppercase tracking-widest leading-none mb-4">
+                                        {ad.rightSubtitle}
+                                    </p>
+                                    <div className="w-12 md:w-20 h-1 bg-slate-100 rounded-none mb-4 md:mb-6" />
+                                    <p className="text-primary font-serif italic text-sm md:text-lg leading-none">
+                                        {ad.rightSlogan}
                                     </p>
                                 </motion.div>
-                            </div>
-                        </div>
 
-                        {/* Right Side: Content & Features */}
-                        <div className="flex-1 bg-white p-5 md:p-16 flex flex-col overflow-y-auto custom-scrollbar h-full text-left">
-                            <motion.div
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.5 }}
-                                className="mb-6 md:mb-12 shrink-0"
-                            >
-                                <h3 className="text-2xl md:text-5xl font-heading font-black text-slate-900 leading-tight mb-2 md:mb-4 tracking-tighter">
-                                    {ad.rightTitle}
-                                </h3>
-                                <p className="text-slate-400 text-[10px] md:text-sm font-bold uppercase tracking-widest leading-none mb-4">
-                                    {ad.rightSubtitle}
-                                </p>
-                                <div className="w-12 md:w-20 h-1 bg-slate-100 rounded-none mb-4 md:mb-6" />
-                                <p className="text-primary font-serif italic text-sm md:text-lg leading-none">
-                                    {ad.rightSlogan}
-                                </p>
-                            </motion.div>
+                                <div className="space-y-3 md:space-y-4 mb-6 md:mb-12">
+                                    {ad.items.map((item, i) => {
+                                        const Icon = ICON_MAP[item.icon] || Check;
+                                        let finalLink = item.link;
+                                        const text = item.text.toLowerCase();
 
-                            <div className="space-y-3 md:space-y-4 mb-6 md:mb-12">
-                                {ad.items.map((item, i) => {
-                                    const Icon = ICON_MAP[item.icon] || Check;
-                                    let finalLink = item.link;
-                                    const text = item.text.toLowerCase();
+                                        if (finalLink === '#' || finalLink === '') {
+                                            if (text.includes('đăng ký thi') || text.includes('exam')) finalLink = '/contact?course=exam#registration-form';
+                                            else if (text.includes('ielts') || text.includes('pte')) finalLink = '/contact?course=ielts#registration-form';
+                                            else if (text.includes('teens') || text.includes('thiếu niên') || text.includes('eft')) finalLink = '/contact?course=eft#registration-form';
+                                            else if (text.includes('general') || text.includes('giao tiếp') || text.includes('tổng quát')) finalLink = '/contact?course=ge#registration-form';
+                                            else finalLink = '/contact#registration-form';
+                                        } else if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
+                                            if (text.includes('ielts')) finalLink = '/courses#ie';
+                                            else if (text.includes('teens')) finalLink = '/courses#eft';
+                                            else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';
+                                        }
 
-                                    // Smart auto-routing based on admin input
-                                    if (finalLink === '#' || finalLink === '') {
-                                        if (text.includes('đăng ký thi') || text.includes('exam')) finalLink = '/contact?course=exam#registration-form';
-                                        else if (text.includes('ielts') || text.includes('pte')) finalLink = '/contact?course=ielts#registration-form';
-                                        else if (text.includes('teens') || text.includes('thiếu niên') || text.includes('eft')) finalLink = '/contact?course=eft#registration-form';
-                                        else if (text.includes('general') || text.includes('giao tiếp') || text.includes('tổng quát')) finalLink = '/contact?course=ge#registration-form';
-                                        else finalLink = '/contact#registration-form';
-                                    } else if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
-                                        if (text.includes('ielts')) finalLink = '/courses#ie';
-                                        else if (text.includes('teens')) finalLink = '/courses#eft';
-                                        else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';
-                                    }
-
-                                    return (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ opacity: 0, y: 10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: 0.6 + (i * 0.1) }}
-                                        >
-                                            <Link
-                                                href={finalLink}
-                                                onClick={closeAd}
-                                                className="group flex items-center justify-between p-4 md:p-6 bg-slate-50 hover:bg-primary rounded-xl md:rounded-none transition-all hover:scale-[1.02] border border-slate-100"
+                                        return (
+                                            <motion.div
+                                                key={i}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.6 + (i * 0.1) }}
                                             >
-                                                <div className="flex items-center gap-4 md:gap-6">
-                                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-none bg-white shadow-sm flex items-center justify-center text-primary group-hover:text-primary transition-colors">
-                                                        <Icon size={20} className="md:w-6 md:h-6" />
+                                                <Link
+                                                    href={finalLink}
+                                                    onClick={minimize}
+                                                    className="group flex items-center justify-between p-4 md:p-6 bg-slate-50 hover:bg-primary rounded-xl md:rounded-none transition-all hover:scale-[1.02] border border-slate-100"
+                                                >
+                                                    <div className="flex items-center gap-4 md:gap-6">
+                                                        <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-none bg-white shadow-sm flex items-center justify-center text-primary group-hover:text-primary transition-colors">
+                                                            <Icon size={20} className="md:w-6 md:h-6" />
+                                                        </div>
+                                                        <span className="font-heading font-black text-slate-700 group-hover:text-white uppercase tracking-tight text-sm md:text-lg">
+                                                            {item.text}
+                                                        </span>
                                                     </div>
-                                                    <span className="font-heading font-black text-slate-700 group-hover:text-white uppercase tracking-tight text-sm md:text-lg">
-                                                        {item.text}
-                                                    </span>
-                                                </div>
-                                                <ChevronRight size={18} className="text-slate-300 group-hover:text-white transition-colors" />
-                                            </Link>
-                                        </motion.div>
-                                    );
-                                })}
-                            </div>
+                                                    <ChevronRight size={18} className="text-slate-300 group-hover:text-white transition-colors" />
+                                                </Link>
+                                            </motion.div>
+                                        );
+                                    })}
+                                </div>
 
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1 }}
-                                className="py-4 md:py-12 text-center"
-                            >
-                                <button
-                                    onClick={closeAd}
-                                    className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors underline underline-offset-8"
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 1 }}
+                                    className="py-4 md:py-12 text-center"
                                 >
-                                    Maybe later
+                                    <button
+                                        onClick={minimize}
+                                        className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors underline underline-offset-8"
+                                    >
+                                        Maybe later
+                                    </button>
+                                </motion.div>
+                            </div>
+                        </motion.div>
+
+                        {/* Carousel navigation */}
+                        {total > 1 && (
+                            <>
+                                <button
+                                    onClick={prev}
+                                    aria-label="Quảng cáo trước"
+                                    className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-50 bg-white/95 hover:bg-primary hover:text-white text-accent p-2.5 md:p-3 rounded-full shadow-xl transition-all active:scale-95"
+                                >
+                                    <ChevronLeft size={22} />
                                 </button>
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                    <style jsx>{`
-                        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
-                        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-                    `}</style>
-                </div>
-            )}
-        </AnimatePresence>
+                                <button
+                                    onClick={next}
+                                    aria-label="Quảng cáo tiếp theo"
+                                    className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-50 bg-white/95 hover:bg-primary hover:text-white text-accent p-2.5 md:p-3 rounded-full shadow-xl transition-all active:scale-95"
+                                >
+                                    <ChevronRight size={22} />
+                                </button>
+                                <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-2 bg-black/40 backdrop-blur px-4 py-2 rounded-full">
+                                    {ads.map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setCurrentIdx(i)}
+                                            aria-label={`Quảng cáo ${i + 1}`}
+                                            className={`h-2 rounded-full transition-all ${i === currentIdx ? 'w-8 bg-primary' : 'w-2 bg-white/70 hover:bg-white'}`}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        )}
+
+                        <style jsx>{`
+                            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+                            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+                            .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+                        `}</style>
+                    </div>
+                )}
+            </AnimatePresence>
+        </>
     );
 }

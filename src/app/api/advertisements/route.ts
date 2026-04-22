@@ -25,11 +25,6 @@ export async function POST(request: Request) {
             ad = await Advertisement.create(data);
         }
 
-        // If this ad is active, deactivate others
-        if (data.isActive) {
-            await Advertisement.updateMany({ _id: { $ne: ad._id } }, { isActive: false });
-        }
-
         return NextResponse.json(ad);
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });

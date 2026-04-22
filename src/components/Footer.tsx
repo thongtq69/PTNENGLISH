@@ -58,19 +58,11 @@ export default function Footer() {
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-10">
                 <div>
                     <div className="mb-3 md:mb-4">
-                        <div className="flex flex-col w-fit">
-                            <span className="text-lg md:text-xl font-heading font-extrabold tracking-tight uppercase">
-                                <span className="text-primary">PTN</span>
-                                <span className="text-white"> ENGLISH</span>
-                            </span>
-                            <div className="flex justify-between w-full mt-0.5 text-[#095e7c]">
-                                {"PARTNER TO NAVIGATE".split("").map((char, index) => (
-                                    <span key={index} className="text-[6px] md:text-[8px] font-bold uppercase leading-none tracking-[0.05em] md:tracking-[0.1em]">
-                                        {char === " " ? "\u00A0" : char}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
+                        <img
+                            src="/desktop-main-logo.svg"
+                            alt="PTN English — Partner To Navigate"
+                            className="!h-9 md:!h-10 !w-auto"
+                        />
                     </div>
                     <p className="text-slate-400 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed opacity-80" style={{ fontSize: 'var(--fs-global-footerText)' }}>
                         {footerData.aboutText}

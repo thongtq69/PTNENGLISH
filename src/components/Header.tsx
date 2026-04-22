@@ -96,18 +96,12 @@ export default function Header() {
 
             <header className={`fixed ${isScrolled ? "top-0" : "top-0 md:top-10"} left-0 right-0 z-[70] transition-all duration-300 ${isMenuOpen ? "bg-white py-2 md:py-4" : isScrolled ? "bg-white/95 backdrop-blur-md shadow-md py-2 md:py-4" : isTransparent ? "bg-transparent py-3 md:py-6" : "bg-white/70 backdrop-blur-sm py-2 md:py-6"}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center">
-                    <Link href="/" className="flex flex-col group w-fit" onClick={() => setIsMenuOpen(false)}>
-                        <span className="text-xl md:text-2xl font-heading font-extrabold tracking-tight" style={{ fontSize: 'var(--fs-global-headerLogo)' }}>
-                            <span className="text-primary uppercase">PTN</span>
-                            <span className={`uppercase transition-colors ${isTransparent ? "text-white" : "text-[#1e293b]"} group-hover:text-primary`}> English</span>
-                        </span>
-                        <div className={`flex justify-between w-full mt-0.5 transition-colors ${isTransparent ? "text-white/70" : "text-[#095e7c]"}`}>
-                            {"PARTNER TO NAVIGATE".split("").map((char, index) => (
-                                <span key={index} className="text-[7px] md:text-[9px] font-bold uppercase leading-none tracking-[0.05em] md:tracking-[0.1em]">
-                                    {char === " " ? "\u00A0" : char}
-                                </span>
-                            ))}
-                        </div>
+                    <Link href="/" className="flex items-center group shrink-0" onClick={() => setIsMenuOpen(false)}>
+                        <img
+                            src="/desktop-main-logo.svg"
+                            alt="PTN English — Partner To Navigate"
+                            className="!h-8 md:!h-10 !w-auto transition duration-300"
+                        />
                     </Link>
 
                     <nav className="hidden md:flex items-center space-x-8">

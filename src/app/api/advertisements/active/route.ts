@@ -6,8 +6,8 @@ import Advertisement from '@/models/Advertisement';
 export async function GET() {
     try {
         await dbConnect();
-        const activeAd = await Advertisement.findOne({ isActive: true });
-        return NextResponse.json(activeAd);
+        const activeAds = await Advertisement.find({ isActive: true }).sort({ createdAt: -1 });
+        return NextResponse.json(activeAds);
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }
