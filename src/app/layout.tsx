@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Crimson_Text, Lora, Newsreader, Caveat } from "next/font/google";
+import { Inter, Lora, Newsreader, Caveat, Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -9,22 +9,22 @@ const newsreader = Newsreader({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const playfair = Playfair_Display({
+const lora = Lora({
   variable: "--font-heading",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700"],
 });
 
-const lora = Lora({
+const loraSerif = Lora({
   variable: "--font-serif",
   subsets: ["latin", "vietnamese"],
   weight: ["400", "500", "600", "700"],
 });
 
-const crimsonText = Crimson_Text({
-  weight: ["400", "600", "700"],
+const poppins = Poppins({
   variable: "--font-body",
-  subsets: ["latin", "vietnamese"],
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const inter = Inter({
@@ -135,8 +135,22 @@ export async function generateMetadata(): Promise<Metadata> {
 import AdModal from "@/components/AdModal";
 import ChatBox from "@/components/ChatBox";
 
+import { cookies, headers } from "next/headers";
 import { LanguageProvider } from "@/context/LanguageContext";
 import { FontSizeProvider } from "@/context/FontSizeContext";
+import type { Language } from "@/data/translations";
+
+const resolveInitialLanguage = async (): Promise<Language> => {
+  const cookieStore = await cookies();
+  const fromCookie = cookieStore.get("ptn_lang")?.value;
+  if (fromCookie === "vi" || fromCookie === "en") return fromCookie;
+
+  const headerStore = await headers();
+  const acceptLanguage = headerStore.get("accept-language") ?? "";
+  // Only auto-detect English; everything else (and no header) defaults to vi.
+  if (/\ben(?:-|;|,|$)/i.test(acceptLanguage)) return "en";
+  return "vi";
+};
 
 // JSON-LD Structured Data for SEO
 const organizationJsonLd = {
@@ -245,13 +259,14 @@ const websiteJsonLd = {
   }
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const initialLanguage = await resolveInitialLanguage();
   return (
-    <html lang="vi">
+    <html lang={initialLanguage}>
       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-MRCJM6N7DN"
@@ -275,8 +290,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className={`${playfair.variable} ${newsreader.variable} ${crimsonText.variable} ${inter.variable} ${lora.variable} ${caveat.variable} font-body antialiased`}>
-        <LanguageProvider>
+      <body className={`${lora.variable} ${loraSerif.variable} ${poppins.variable} ${newsreader.variable} ${inter.variable} ${caveat.variable} font-body antialiased`}>
+        <LanguageProvider initialLanguage={initialLanguage}>
           <FontSizeProvider>
             {children}
             <AdModal />

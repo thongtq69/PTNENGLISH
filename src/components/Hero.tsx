@@ -41,7 +41,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
     const displaySecondaryText = language === "en" ? t.home.hero.secondaryCTA : settings.secondaryCTA.text;
 
     return (
-        <section className="relative w-full aspect-video min-h-[280px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-accent">
+        <section className="relative w-full h-[85svh] min-h-[560px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-accent">
             {/* Video Background */}
             <video
                 key={settings.videoUrl}
@@ -67,10 +67,10 @@ export default function Hero({ initialData }: { initialData?: any }) {
                         {displaySubtitle}
                     </p>
                     <div className="flex flex-row justify-center gap-3 md:gap-6 animate-fade-in-up delay-200">
-                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-black text-white px-5 py-3 md:px-10 md:py-5 rounded-full font-bold text-xs md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-primary/30 flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
+                        <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-black text-white px-5 py-3 md:px-10 md:py-5 rounded-full font-heading font-semibold text-xs md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-primary/30 flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none md:min-w-[340px] uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
                             {displayPrimaryText}
                         </Link>
-                        <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-5 py-3 md:px-10 md:py-5 rounded-full font-bold text-xs md:text-lg transition-all flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
+                        <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-5 py-3 md:px-10 md:py-5 rounded-full font-heading font-semibold text-xs md:text-lg transition-all flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none md:min-w-[340px] uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
                             {displaySecondaryText}
                         </Link>
                     </div>

@@ -40,7 +40,7 @@
   --fs-home-blogBadge: 14px;
   --fs-home-blogTitle: 60px;
   --fs-home-blogPostTitle: 48px;
-  --fs-home-partnersBadge: 10px;
+  --fs-home-partnersBadge: 28px;
   --fs-aboutUs-heroTitle: 48px;
   --fs-aboutUs-heroSubtitle: 20px;
   --fs-aboutUs-heroHighlight: 18px;
@@ -132,7 +132,7 @@
     --fs-home-blogBadge: 10px;
     --fs-home-blogTitle: 20px;
     --fs-home-blogPostTitle: 18px;
-    --fs-home-partnersBadge: 10px;
+    --fs-home-partnersBadge: 13px;
     --fs-aboutUs-heroTitle: 28px;
     --fs-aboutUs-heroSubtitle: 14px;
     --fs-aboutUs-heroHighlight: 14px;
@@ -236,7 +236,7 @@ body {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-body), serif;
+  font-family: var(--font-body), sans-serif;
   position: relative;
 }
 

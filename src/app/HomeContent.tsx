@@ -78,7 +78,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
       {/* Introduction Section */}
       <section className="py-8 md:py-16 bg-white">
-        <div className="container mx-auto px-6 text-center max-w-5xl">
+        <div className="container mx-auto px-6 text-center max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -111,7 +111,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           </motion.div>
 
 
-          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-8">
+          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-6 lg:gap-8 md:px-4">
             {programs.map((prog: any, idx: number) => {
               // Auto-detect correct hash if link is just /courses
               let finalLink = prog.link || "/courses";
@@ -131,8 +131,22 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     viewport={{ once: true }}
                     className="group cursor-pointer h-full"
                   >
-                    <div className="relative aspect-square rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
-                      <img src={prog.image} alt={prog.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                    <div className="relative aspect-[9/16] rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                      <img
+                        src={prog.image}
+                        alt={prog.name}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          if (target.dataset.fallback) return;
+                          target.dataset.fallback = "1";
+                          target.src =
+                            "data:image/svg+xml;utf8," +
+                            encodeURIComponent(
+                              `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 360 640'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0%' stop-color='#1E0A3C'/><stop offset='100%' stop-color='#2B1555'/></linearGradient></defs><rect width='360' height='640' fill='url(#g)'/><g fill='rgba(255,255,255,0.25)' font-family='Georgia, serif' font-size='28' text-anchor='middle'><text x='180' y='320'>PTN ENGLISH</text></g></svg>`
+                            );
+                        }}
+                      />
                       {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
                         <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[10px] md:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest z-20">Coming Soon</div>
                       )}
@@ -154,13 +168,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         </div>
       </section>
 
-      {/* Hall Of Fame - Student Success - Moved higher as requested */}
-      <HallOfFame config={siteSettings?.hallOfFame} />
-
-
-
       {/* Compact Study & Mock Test Section */}
-      <section className="py-6 md:py-12 bg-accent relative overflow-hidden">
+      <section className="py-6 md:py-12 bg-[#1E0A3C] relative overflow-hidden">
         {/* Subtle Background Glows */}
         <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
           <div className="absolute top-1/2 left-1/4 w-32 h-32 md:w-96 md:h-96 bg-primary rounded-full blur-[80px] md:blur-[150px]"></div>
@@ -247,14 +256,14 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       </section>
 
       {/* Faculty Highlight */}
-      <section className="py-8 md:py-20 bg-accent relative overflow-hidden text-center">
-        <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/20 -skew-x-12 translate-x-1/2"></div>
+      <section className="py-8 md:py-20 bg-white relative overflow-hidden text-center">
+        <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/10 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
           <h2 className="text-primary font-heading font-bold text-xs md:text-lg uppercase tracking-widest mb-1 md:mb-4" style={{ fontSize: 'var(--fs-home-facultyBadge)' }}>{faculty.badge}</h2>
-          <h3 className="text-lg md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-white"
+          <h3 className="text-lg md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-accent"
             style={{ fontSize: 'var(--fs-home-facultyTitle)' }}
             dangerouslySetInnerHTML={{ __html: faculty.title || "" }} />
-          <p className="text-slate-200 text-sm md:text-lg mb-4 md:mb-8 leading-relaxed font-body whitespace-pre-line" style={{ fontSize: 'var(--fs-home-facultyDesc)' }}>
+          <p className="text-slate-600 text-sm md:text-lg mb-4 md:mb-8 leading-relaxed font-body whitespace-pre-line" style={{ fontSize: 'var(--fs-home-facultyDesc)' }}>
             {faculty.description || faculty.desc}
           </p>
           <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-xs md:text-base transition-all transform hover:scale-105 inline-block uppercase" style={{ fontSize: 'var(--fs-home-facultyBtn)' }}>
@@ -263,6 +272,9 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         </div>
       </section>
 
+
+      {/* Hall Of Fame - Student Success */}
+      <HallOfFame config={siteSettings?.hallOfFame} />
 
       {/* Testimonials */}
       <Testimonials />
@@ -381,7 +393,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
       <section className="py-12 md:py-16 bg-white/10 backdrop-blur-sm border-y border-white/5 overflow-hidden">
         <div className="container mx-auto px-6 text-center mb-8 md:mb-12">
-          <p className="text-slate-400 font-bold uppercase text-[10px] md:text-[10px] tracking-[0.3em]" style={{ fontSize: 'var(--fs-home-partnersBadge)' }}>
+          <p className="font-heading font-bold uppercase tracking-[0.3em]" style={{ fontSize: 'var(--fs-home-partnersBadge)', color: '#1E0A3C' }}>
             {siteSettings?.partnersSection?.badge || t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí"}
           </p>
         </div>
@@ -389,8 +401,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         <div className="relative flex overflow-x-hidden">
           <div className="animate-marquee flex items-center">
             {[...partners, ...partners, ...partners].map((p: any, idx: number) => (
-              <div key={idx} className="logo-container w-[160px] md:w-[240px] shrink-0">
-                <div className="bg-white/90 rounded-xl p-2 md:p-3 shadow-sm flex items-center justify-center w-full h-12 md:h-16">
+              <div key={idx} className="logo-container w-[200px] md:w-[300px] shrink-0 px-2 md:px-3">
+                <div className="bg-white rounded-xl p-4 md:p-6 shadow-md ring-1 ring-slate-100 flex items-center justify-center w-full h-20 md:h-28">
                   {p.link ? (
                     <a href={p.link} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-full h-full">
                       <img src={p.logo} alt={p.name} className="max-h-full max-w-full object-contain" />

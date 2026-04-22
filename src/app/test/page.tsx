@@ -9,7 +9,7 @@ import {
     BookOpen, Headphones, PenTool, Clock,
     AlertCircle, ChevronRight, Play,
     Pause, FileText, Maximize2, Minimize2,
-    CheckCircle2, ChevronLeft, Volume2, RefreshCw
+    CheckCircle2, ChevronLeft, RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 import ReadingTestView from "@/components/test/ReadingTestView";
@@ -209,25 +209,7 @@ export default function TestPage() {
         return () => { if (prepTimerRef.current) clearInterval(prepTimerRef.current); };
     }, [activeSectionIdx, currentSkill, step]);
 
-    // Audio progress tracking
-    useEffect(() => {
-        const audio = audioRef.current;
-        if (!audio) return;
-        const onTimeUpdate = () => setAudioProgress(audio.currentTime);
-        const onDurationChange = () => setAudioDuration(audio.duration || 0);
-        const onEnded = () => {
-            setIsPlaying(false);
-            setListeningPhase("done");
-        };
-        audio.addEventListener('timeupdate', onTimeUpdate);
-        audio.addEventListener('durationchange', onDurationChange);
-        audio.addEventListener('ended', onEnded);
-        return () => {
-            audio.removeEventListener('timeupdate', onTimeUpdate);
-            audio.removeEventListener('durationchange', onDurationChange);
-            audio.removeEventListener('ended', onEnded);
-        };
-    }, []);
+    // Audio progress tracking handled via React event props on <audio> below
 
     const handleSubmit = () => {
         if (confirm(t.test.testing.confirmSubmit)) {
@@ -958,40 +940,85 @@ export default function TestPage() {
                 </div>
             </div>
 
-            {/* Question Tracker Bar — compact, only for listening */}
+            {/* Listening Control Bar — unified audio + question tracker */}
             {currentSkill === 'listening' && selectedTest && (() => {
                 const skillData = selectedTest[currentSkill];
                 const sections = skillData?.sections || [];
+                const section = selectedTest.listening?.sections?.[activeSectionIdx];
+                const hasAudio = !!section?.audioUrl;
+                const pct = audioDuration > 0 ? (audioProgress / audioDuration) * 100 : 0;
                 return (
-                    <div className="bg-white/95 backdrop-blur-sm border-b border-slate-200 shrink-0">
-                        <div className="flex items-center justify-center gap-1 sm:gap-1.5 md:gap-2 px-2 py-1.5 sm:py-2 overflow-x-auto no-scrollbar">
+                    <div className="bg-white border-b border-slate-200 shrink-0 relative">
+                        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 py-1.5 overflow-x-auto no-scrollbar">
+                            {/* Play button */}
+                            {hasAudio && (
+                                <button
+                                    onClick={() => toggleAudio(section.audioUrl)}
+                                    disabled={listeningPhase === 'prep'}
+                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 transition-all ${listeningPhase === 'prep'
+                                        ? 'bg-slate-100 text-slate-300 cursor-not-allowed'
+                                        : isPlaying
+                                            ? 'bg-primary text-white shadow-md shadow-primary/30'
+                                            : 'bg-slate-900 text-white hover:bg-slate-700'
+                                        }`}
+                                    aria-label={isPlaying ? 'Pause' : 'Play'}
+                                >
+                                    {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+                                </button>
+                            )}
+
+                            {/* Time display — always visible */}
+                            {hasAudio && (
+                                <span className="text-[11px] sm:text-xs font-mono font-bold text-slate-700 tabular-nums shrink-0 px-1">
+                                    {formatTime(Math.floor(audioProgress))} / {formatTime(Math.floor(audioDuration))}
+                                </span>
+                            )}
+
+                            {hasAudio && <div className="h-6 w-px bg-slate-200 shrink-0" />}
+
+                            {/* All section pills — click to switch */}
+                            <div className="flex items-center gap-1 shrink-0">
+                                {sections.map((_, idx) => {
+                                    const isActive = idx === activeSectionIdx;
+                                    return (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setActiveSectionIdx(idx)}
+                                            className={`px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider shrink-0 transition-all ${isActive
+                                                ? "bg-primary text-white shadow-sm"
+                                                : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
+                                                }`}
+                                        >
+                                            Section {idx + 1}
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <div className="h-6 w-px bg-slate-200 shrink-0" />
+
                             {/* Prev */}
                             <button
                                 onClick={() => activeSectionIdx > 0 && setActiveSectionIdx(activeSectionIdx - 1)}
                                 disabled={activeSectionIdx === 0}
-                                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === 0 ? "text-slate-200 cursor-not-allowed" : "text-slate-500 hover:bg-slate-100 hover:text-primary"}`}
+                                className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === 0 ? "text-slate-200 cursor-not-allowed" : "text-slate-500 hover:bg-slate-100 hover:text-primary"}`}
                             >
-                                <ChevronLeft size={14} />
+                                <ChevronLeft size={15} />
                             </button>
 
-                            {/* Section pill */}
-                            <button className="flex items-center px-2.5 sm:px-3 py-1 rounded-full bg-primary text-white text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider shrink-0 shadow-sm">
-                                Section {activeSectionIdx + 1}
-                            </button>
-
-                            {/* Question numbers */}
+                            {/* Question numbers for active section */}
                             {(() => {
                                 const s = activeSectionIdx * 10 + 1;
                                 const e = (activeSectionIdx + 1) * 10;
                                 return (
-                                    <div className="flex items-center gap-[2px] sm:gap-1">
+                                    <div className="flex items-center gap-1">
                                         {Array.from({ length: e - s + 1 }, (__, i) => s + i).map(q => {
                                             const isAnswered = !!answers[currentSkill][q];
                                             return (
                                                 <button
                                                     key={q}
                                                     onClick={() => scrollToQuestion(q)}
-                                                    className={`w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-md flex items-center justify-center text-[9px] sm:text-[10px] md:text-xs font-bold transition-all ${isAnswered ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-400 hover:bg-slate-200"}`}
+                                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center text-[11px] sm:text-xs font-bold transition-all ${isAnswered ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800"}`}
                                                 >
                                                     {q}
                                                 </button>
@@ -1005,11 +1032,21 @@ export default function TestPage() {
                             <button
                                 onClick={() => activeSectionIdx < sections.length - 1 && setActiveSectionIdx(activeSectionIdx + 1)}
                                 disabled={activeSectionIdx === sections.length - 1}
-                                className={`w-6 h-6 sm:w-7 sm:h-7 rounded-md flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === sections.length - 1 ? "text-slate-200 cursor-not-allowed" : "text-slate-500 hover:bg-slate-100 hover:text-primary"}`}
+                                className={`w-7 h-7 rounded-md flex items-center justify-center shrink-0 transition-all ${activeSectionIdx === sections.length - 1 ? "text-slate-200 cursor-not-allowed" : "text-slate-500 hover:bg-slate-100 hover:text-primary"}`}
                             >
-                                <ChevronRight size={14} />
+                                <ChevronRight size={15} />
                             </button>
                         </div>
+
+                        {/* Progress bar — more prominent */}
+                        {hasAudio && (
+                            <div className="h-1 bg-slate-100">
+                                <div
+                                    className="h-full bg-gradient-to-r from-primary to-red-500 transition-all duration-300"
+                                    style={{ width: `${pct}%` }}
+                                />
+                            </div>
+                        )}
                     </div>
                 );
             })()}
@@ -1026,49 +1063,9 @@ export default function TestPage() {
             ) : currentSkill === 'listening' && selectedTest ? (
                 /* ── LISTENING: Full-width single page with audio player ── */
                 <div className="flex-1 flex flex-col overflow-hidden relative">
-                    {/* Audio Player Bar — slim */}
-                    {(() => {
-                        const section = selectedTest.listening?.sections?.[activeSectionIdx];
-                        if (!section?.audioUrl) return null;
-                        const pct = audioDuration > 0 ? (audioProgress / audioDuration) * 100 : 0;
-                        return (
-                            <div className="bg-slate-900 shrink-0 px-3 sm:px-4 py-1.5 sm:py-2 flex items-center gap-2 sm:gap-3 border-b border-white/5">
-                                <button
-                                    onClick={() => toggleAudio(section.audioUrl)}
-                                    disabled={listeningPhase === 'prep'}
-                                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex items-center justify-center shrink-0 transition-all ${listeningPhase === 'prep'
-                                        ? 'bg-white/5 text-white/20 cursor-not-allowed'
-                                        : isPlaying
-                                            ? 'bg-primary text-white shadow-md shadow-primary/30'
-                                            : 'bg-white/10 text-white hover:bg-white/20'
-                                        }`}
-                                >
-                                    {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-                                </button>
-
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between mb-0.5">
-                                        <span className="text-[8px] sm:text-[9px] font-bold text-white/50 uppercase tracking-wider truncate">{section.title}</span>
-                                        <span className="text-[8px] sm:text-[9px] font-mono text-white/30 tabular-nums shrink-0 ml-2">
-                                            {formatTime(Math.floor(audioProgress))} / {formatTime(Math.floor(audioDuration))}
-                                        </span>
-                                    </div>
-                                    <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-gradient-to-r from-primary to-red-400 rounded-full transition-all duration-300"
-                                            style={{ width: `${pct}%` }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <Volume2 size={12} className="text-white/20 shrink-0 hidden sm:block" />
-                            </div>
-                        );
-                    })()}
-
-                    {/* Listening Content — Full width, max content space */}
+                    {/* Listening Content — wider layout */}
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
-                        <div className="max-w-4xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 pb-24">
+                        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 pb-24">
                             {renderAnswerSheet()}
                         </div>
                     </div>
@@ -1121,7 +1118,14 @@ export default function TestPage() {
                 />
             )}
 
-            <audio ref={audioRef} onEnded={() => setIsPlaying(false)} className="hidden" />
+            <audio
+                ref={audioRef}
+                onTimeUpdate={(e) => setAudioProgress(e.currentTarget.currentTime)}
+                onDurationChange={(e) => setAudioDuration(Number.isFinite(e.currentTarget.duration) ? e.currentTarget.duration : 0)}
+                onLoadedMetadata={(e) => setAudioDuration(Number.isFinite(e.currentTarget.duration) ? e.currentTarget.duration : 0)}
+                onEnded={() => { setIsPlaying(false); setListeningPhase("done"); }}
+                className="hidden"
+            />
 
             <style jsx global>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
@@ -1147,13 +1151,60 @@ export default function TestPage() {
                     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
                 }
                 
+                /* Test Content — stronger readability */
+                .prose { color: #0f172a; font-size: 1rem; }
+                .prose p, .prose li { color: #0f172a; font-weight: 500; line-height: 1.7; }
+                .prose strong { color: #0f172a; font-weight: 800; }
+
+                /* Headings */
+                .prose h3 { font-family: var(--font-heading); font-weight: 900; color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: -0.02em; }
+                .prose h4 { color: #0f172a; font-weight: 800; margin-top: 1.25rem; margin-bottom: 0.75rem; }
+                .prose p { margin-top: 0.5rem; margin-bottom: 0.85rem; }
+
+                /* Lists — restore bullet markers + tighter spacing */
+                .prose ul { list-style-type: disc; padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+                .prose ol { list-style-type: decimal; padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+                .prose ul > li, .prose ol > li { display: list-item; margin: 0.25rem 0; padding-left: 0.25rem; }
+                .prose ul > li::marker { color: #C7002B; }
+                .prose ol > li::marker { color: #C7002B; font-weight: 800; }
+
+                /* Flow-chart (IELTS Listening Part 2) — only containers with ⬇ arrow <p> children */
+                .prose div:has(> p[style*="font-size: 1.5rem"]) {
+                    display: grid !important;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 0.75rem !important;
+                    padding: 1rem !important;
+                    align-items: stretch;
+                }
+                .prose div:has(> p[style*="font-size: 1.5rem"]) > p {
+                    margin: 0 !important;
+                    padding: 1rem !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 72px;
+                    background: white !important;
+                    border: 1px solid #e2e8f0 !important;
+                    border-radius: 10px !important;
+                    text-align: center;
+                    line-height: 1.5;
+                }
+                .prose div:has(> p[style*="font-size: 1.5rem"]) > p[style*="font-size: 1.5rem"] {
+                    display: none !important;
+                }
+                @media (max-width: 640px) {
+                    .prose div:has(> p[style*="font-size: 1.5rem"]) {
+                        grid-template-columns: 1fr;
+                    }
+                }
+
                 /* Test Content Table Styling */
-                .prose table { border-collapse: collapse; width: 100%; margin: 2rem 0; border: 1.5px solid #e2e8f0; border-radius: 0.75rem; overflow: hidden; }
-                .prose th, .prose td { border: 1px solid #e2e8f0; padding: 1rem 1.5rem !important; vertical-align: top; }
-                .prose th { background-color: #f8fafc; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; color: #475569; }
+                .prose table { border-collapse: collapse; width: 100%; margin: 1.5rem 0; border: 1.5px solid #cbd5e1; border-radius: 0.75rem; overflow: hidden; table-layout: auto; }
+                .prose th, .prose td { border: 1px solid #e2e8f0; padding: 0.85rem 1rem !important; vertical-align: middle; color: #0f172a; font-weight: 500; line-height: 1.55; }
+                .prose th { background-color: #f1f5f9; font-weight: 800; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.1em; color: #1e293b; text-align: center; }
                 .prose tr:nth-child(even) { background-color: #fbfcfe; }
-                .prose h3 { font-family: var(--font-heading); font-weight: 900; color: #0f172a; margin-top: 3rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: -0.02em; }
-                .prose p { margin-bottom: 1.5rem; line-height: 1.8; }
+                /* Keep inline question inputs glued to their cue word so ")" or "." doesn't orphan on a new line */
+                .prose td span[data-q-placeholder] { white-space: nowrap; }
             `}</style>
         </main>
     );

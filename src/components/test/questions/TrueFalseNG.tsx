@@ -44,7 +44,7 @@ export const TrueFalseNG = memo(function TrueFalseNG({ qIdx, value, onChange, in
                 : "bg-white border-slate-200 text-slate-400 hover:border-slate-300 hover:bg-slate-50"
             }`}
           >
-            {opt === "NOT GIVEN" ? "NG" : opt.charAt(0)}
+            {opt}
           </button>
         );
       })}

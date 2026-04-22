@@ -87,10 +87,15 @@ export default function ChatBox() {
         const timer = setTimeout(() => {
             setIsVisible(true);
             const openTimer = setTimeout(() => {
-                if (!hasPrompted && config) {
-                    setIsOpen(true);
-                    setHasPrompted(true);
-                }
+                if (hasPrompted || !config) return;
+                const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+                // On mobile, never auto-open — it covers the hero. User must tap the floating button.
+                if (isMobile) return;
+                // On desktop, still wait if the AdModal is currently open so popups don't stack.
+                const adState = typeof sessionStorage !== "undefined" ? sessionStorage.getItem("ptn_ad_view_state") : null;
+                if (adState === "open") return;
+                setIsOpen(true);
+                setHasPrompted(true);
             }, 3000);
             return () => clearTimeout(openTimer);
         }, 5000);
@@ -188,14 +193,14 @@ export default function ChatBox() {
     const needsLeads = messages.some(m => m.sender === "user") && !isLeadSubmitted;
 
     return (
-        <div className="fixed bottom-4 right-4 z-[9999] font-sans text-sm">
+        <div className="fixed bottom-4 right-4 left-4 sm:left-auto z-[9999] font-sans text-sm flex justify-end">
             <AnimatePresence>
                 {isOpen && config && (
                     <motion.div
                         initial={{ opacity: 0, y: 30, scale: 0.9, transformOrigin: "bottom right" }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 30, scale: 0.9 }}
-                        className="w-[350px] overflow-hidden rounded-[2rem] border border-white/20 bg-white/80 shadow-2xl shadow-indigo-200/50 backdrop-blur-2xl md:w-[380px]"
+                        className="w-full max-w-[360px] sm:w-[350px] md:w-[380px] overflow-hidden rounded-[2rem] border border-white/20 bg-white/80 shadow-2xl shadow-indigo-200/50 backdrop-blur-2xl"
                     >
                         {/* Header */}
                         <div className="bg-gradient-to-r from-secondary to-indigo-900 p-5 text-white">

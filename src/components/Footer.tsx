@@ -54,7 +54,7 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="bg-accent text-white pt-6 md:pt-12 pb-3 md:pb-6">
+        <footer className="bg-white text-slate-700 pt-6 md:pt-12 pb-3 md:pb-6 border-t border-slate-200">
             <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-4 md:mb-10">
                 <div>
                     <div className="mb-3 md:mb-4">
@@ -64,27 +64,27 @@ export default function Footer() {
                             className="!h-9 md:!h-10 !w-auto"
                         />
                     </div>
-                    <p className="text-slate-400 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed opacity-80" style={{ fontSize: 'var(--fs-global-footerText)' }}>
+                    <p className="font-body font-normal text-sm md:text-base mb-4 md:mb-6 leading-relaxed" style={{ fontSize: 'var(--fs-global-footerText)', color: '#1E0A3C' }}>
                         {footerData.aboutText}
                     </p>
                     <div className="flex space-x-3">
-                        <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.facebook || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110">
                             <Facebook size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.instagram || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110">
                             <Instagram size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.youtube || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110">
                             <Youtube size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
-                        <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all hover:scale-110">
+                        <a href={contactData.tiktok || "#"} target="_blank" rel="noopener noreferrer" className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-slate-100 text-slate-700 flex items-center justify-center hover:bg-primary hover:text-white transition-all hover:scale-110">
                             <TikTokIcon size={12} className="md:w-3.5 md:h-3.5" />
                         </a>
                     </div>
                 </div>
 
                 <div className="hidden sm:block">
-                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.quickLinks}</h4>
+                    <h4 className="font-heading font-bold text-[13px] md:text-lg mb-3 md:mb-4 text-primary uppercase tracking-[0.2em] border-l-2 border-primary pl-3" style={{ WebkitTextStroke: '0.5px currentColor' }}>{t.footer.quickLinks}</h4>
                     <ul className="grid grid-cols-2 lg:grid-cols-1 gap-1 md:gap-2">
                         {quickLinks.map((link) => (
                             <li key={link.name}>
@@ -92,8 +92,8 @@ export default function Footer() {
                                     href={link.href}
                                     target={link.target}
                                     rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
-                                    className="text-slate-400 text-[11px] md:text-sm hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200"
-                                    style={{ fontSize: 'var(--fs-global-footerLinks)' }}
+                                    className="font-body font-normal text-[13px] md:text-base hover:text-primary transition-colors inline-block hover:translate-x-0.5 duration-200"
+                                    style={{ fontSize: 'var(--fs-global-footerLinks)', color: '#1E0A3C' }}
                                 >
                                     {link.name}
                                 </a>
@@ -103,7 +103,7 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.courses}</h4>
+                    <h4 className="font-heading font-bold text-[13px] md:text-lg mb-3 md:mb-4 text-primary uppercase tracking-[0.2em] border-l-2 border-primary pl-3" style={{ WebkitTextStroke: '0.5px currentColor' }}>{t.footer.courses}</h4>
                     <ul className="grid grid-cols-1 gap-1 md:gap-2">
                         {[
                             { name: t.courses?.pathway?.ie?.name || (language === "en" ? "IELTS Preparation (IE)" : "Luyện thi IELTS (IE)"), href: "/courses#ie" },
@@ -111,7 +111,7 @@ export default function Footer() {
                             { name: t.courses?.pathway?.ge?.name || (language === "en" ? "General English (GE)" : "Tiếng Anh Giao tiếp (GE)"), href: "/courses#ge" }
                         ].map((course) => (
                             <li key={course.name}>
-                                <a href={course.href} className="text-slate-400 text-[11px] md:text-[13px] hover:text-primary transition-colors">
+                                <a href={course.href} className="font-body font-normal text-[13px] md:text-base hover:text-primary transition-colors" style={{ color: '#1E0A3C' }}>
                                     {course.name}
                                 </a>
                             </li>
@@ -120,18 +120,18 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-[10px] md:text-sm font-black mb-3 md:mb-4 text-white uppercase tracking-[0.2em] border-l-2 border-primary pl-3">{t.footer.contact}</h4>
-                    <div className="space-y-2 text-slate-400 text-[11px] md:text-sm">
+                    <h4 className="font-heading font-bold text-[13px] md:text-lg mb-3 md:mb-4 text-primary uppercase tracking-[0.2em] border-l-2 border-primary pl-3" style={{ WebkitTextStroke: '0.5px currentColor' }}>{t.footer.contact}</h4>
+                    <div className="font-body font-normal space-y-2 text-[13px] md:text-base" style={{ color: '#1E0A3C' }}>
                         <p className="flex items-start">
-                            <MapPin className="mr-2 text-primary shrink-0" size={14} />
+                            <MapPin className="mr-2 text-primary shrink-0" size={16} />
                             {contactData.address}
                         </p>
                         <p className="flex items-center">
-                            <Phone className="mr-2 text-primary shrink-0" size={14} />
+                            <Phone className="mr-2 text-primary shrink-0" size={16} />
                             {contactData.phone}
                         </p>
                         <p className="flex items-center">
-                            <Mail className="mr-2 text-primary shrink-0" size={14} />
+                            <Mail className="mr-2 text-primary shrink-0" size={16} />
                             {contactData.email}
                         </p>
                     </div>
@@ -141,7 +141,7 @@ export default function Footer() {
             {/* Google Maps Section */}
             {contactData.mapsUrl && (
                 <div className="container mx-auto px-6 mb-4">
-                    <div className="w-full h-32 md:h-40 rounded-xl overflow-hidden border border-slate-700/50">
+                    <div className="w-full h-32 md:h-40 rounded-xl overflow-hidden border border-slate-200">
                         <iframe
                             src={contactData.mapsUrl}
                             width="100%"
@@ -157,28 +157,28 @@ export default function Footer() {
             )}
 
 
-            <div className="container mx-auto px-6 pt-8 md:pt-10 border-t border-white/10 flex flex-col items-center gap-6 text-slate-500 text-center">
+            <div className="container mx-auto px-6 pt-8 md:pt-10 border-t border-slate-200 flex flex-col items-center gap-6 text-slate-600 text-center">
                 <div className="max-w-5xl space-y-3">
-                    <p className="text-[10px] md:text-xs font-bold text-slate-400">
+                    <p className="text-[10px] md:text-xs font-bold text-slate-700">
                         {settings?.footer?.copyright || "@ Copyright 2026 PTNelc. All rights reserved."}
                     </p>
-                    <div className="text-[9px] md:text-[11px] leading-relaxed flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1 opacity-60">
+                    <div className="text-[9px] md:text-[11px] leading-relaxed flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1 text-slate-600">
                         <span>{settings?.footer?.companyName || "Công ty TNHH Giáo Dục PTNelc"}</span>
-                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span className="hidden md:inline text-slate-300">|</span>
                         <span>Giấy chứng nhận doanh nghiệp số: {settings?.footer?.taxCode || "0318773989"}</span>
-                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span className="hidden md:inline text-slate-300">|</span>
                         <span>Ngày cấp: {settings?.footer?.licenseDate || "06/12/2024"}</span>
-                        <span className="hidden md:inline text-slate-700">|</span>
+                        <span className="hidden md:inline text-slate-300">|</span>
                         <span>Nơi cấp: {settings?.footer?.licensePlace || "SKHĐT TPHCM"}</span>
                     </div>
-                    <div className="text-[9px] md:text-[11px] leading-relaxed opacity-60 flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1">
-                        <span className="font-bold text-slate-400">{settings?.footer?.centerName || "Trung tâm Ngoại Ngữ Phú Tài Năng - PTN English"}</span>
-                        <span className="hidden md:inline text-slate-700">|</span>
+                    <div className="text-[9px] md:text-[11px] leading-relaxed text-slate-600 flex flex-col md:flex-row flex-wrap justify-center gap-x-4 gap-y-1">
+                        <span className="font-bold text-slate-700">{settings?.footer?.centerName || "Trung tâm Ngoại Ngữ Phú Tài Năng - PTN English"}</span>
+                        <span className="hidden md:inline text-slate-300">|</span>
                         <span>Quyết định thành lập số: {settings?.footer?.centerDecision || "1700/QĐ-SGDĐT ngày 19/6/2025"}</span>
                     </div>
                 </div>
 
-                <div className="flex gap-8 uppercase tracking-[0.2em] font-black text-[9px] md:text-[10px]">
+                <div className="flex gap-8 uppercase tracking-[0.2em] font-black text-[9px] md:text-[10px] text-slate-700">
                     <a href="#" className="hover:text-primary transition-colors">Terms</a>
                     <a href="#" className="hover:text-primary transition-colors">Privacy</a>
                 </div>

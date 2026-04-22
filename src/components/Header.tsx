@@ -4,8 +4,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Facebook, Instagram, Youtube, Phone, Mail, Globe } from "lucide-react";
+import { Facebook, Instagram, Youtube, Phone, Mail } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 // TikTok icon is missing from some Lucide versions, adding a custom SVG
 const TikTokIcon = ({ size = 20 }: { size?: number }) => (
@@ -21,7 +22,7 @@ const TikTokIcon = ({ size = 20 }: { size?: number }) => (
 );
 
 export default function Header() {
-    const { language, setLanguage, t } = useLanguage();
+    const { t } = useLanguage();
     const pathname = usePathname();
     const [settings, setSettings] = useState<any>(null);
 
@@ -94,7 +95,7 @@ export default function Header() {
                 </div>
             </div>
 
-            <header className={`fixed ${isScrolled ? "top-0" : "top-0 lg:top-10"} left-0 right-0 z-[70] transition-all duration-300 ${isMenuOpen ? "bg-white py-2 md:py-4" : isScrolled ? "bg-white/95 backdrop-blur-md shadow-md py-2 md:py-4" : isTransparent ? "bg-transparent py-3 md:py-6" : "bg-white/70 backdrop-blur-sm py-2 md:py-6"}`}>
+            <header className={`fixed ${isScrolled ? "top-0" : "top-0 lg:top-10"} left-0 right-0 z-[70] transition-all duration-300 ${isMenuOpen ? "bg-white py-2 md:py-4" : isScrolled ? "bg-white shadow-md py-2 md:py-4" : isTransparent ? "bg-transparent py-3 md:py-6" : "bg-white shadow-sm py-2 md:py-6"}`}>
                 <div className="container mx-auto px-6 flex justify-between items-center gap-4">
                     <Link href="/" className="flex items-center group shrink-0" onClick={() => setIsMenuOpen(false)}>
                         <img
@@ -111,7 +112,7 @@ export default function Header() {
                                 href={item.href}
                                 target={item.href.startsWith('http') ? "_blank" : undefined}
                                 rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
-                                className={`text-sm font-semibold uppercase tracking-wider transition-colors hover:text-primary whitespace-nowrap ${isTransparent ? "text-white hover:text-white/70" : "text-accent"}`}
+                                className={`text-sm font-heading font-semibold uppercase tracking-wider transition-colors hover:text-primary whitespace-nowrap ${isTransparent ? "text-white hover:text-white/70" : "text-accent"}`}
                                 style={{ fontSize: 'var(--fs-global-headerNav)' }}
                             >
                                 {item.name}
@@ -124,46 +125,12 @@ export default function Header() {
                             {t.nav.register}
                         </Link>
 
-                        {!isAdmin && (
-                            <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all ${isTransparent ? "border-white/20 bg-white/5" : "border-slate-200 bg-slate-50"}`}>
-                                <Globe size={14} className={isTransparent ? "text-white/60" : "text-slate-400"} />
-                                <div className="flex items-center gap-1.5 text-[10px] font-black tracking-tighter">
-                                    <button
-                                        onClick={() => setLanguage("vi")}
-                                        className={`transition-all ${language === "vi" ? "text-primary scale-110" : isTransparent ? "text-white/40 hover:text-white" : "text-slate-400 hover:text-slate-600"}`}
-                                    >
-                                        VI
-                                    </button>
-                                    <span className={isTransparent ? "text-white/10" : "text-slate-200"}>|</span>
-                                    <button
-                                        onClick={() => setLanguage("en")}
-                                        className={`transition-all ${language === "en" ? "text-primary scale-110" : isTransparent ? "text-white/40 hover:text-white" : "text-slate-400 hover:text-slate-600"}`}
-                                    >
-                                        EN
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+                        {!isAdmin && <LanguageSwitcher isTransparent={isTransparent} />}
                     </nav>
 
                     {/* Mobile Menu Button */}
                     <div className="flex items-center gap-4 lg:hidden">
-                        {!isAdmin && (
-                            <div className="flex items-center gap-2 bg-slate-100 rounded-lg px-2 py-1">
-                                <button
-                                    onClick={() => setLanguage("vi")}
-                                    className={`text-[10px] font-black transition-all ${language === "vi" ? "text-primary" : "text-slate-400"}`}
-                                >
-                                    VI
-                                </button>
-                                <button
-                                    onClick={() => setLanguage("en")}
-                                    className={`text-[10px] font-black transition-all ${language === "en" ? "text-primary" : "text-slate-400"}`}
-                                >
-                                    EN
-                                </button>
-                            </div>
-                        )}
+                        {!isAdmin && <LanguageSwitcher variant="mobile" />}
                         <button
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             className={`transition-colors ${isTransparent ? "text-white" : "text-accent"} hover:text-primary`}
