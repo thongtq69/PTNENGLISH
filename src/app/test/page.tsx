@@ -940,13 +940,24 @@ export default function TestPage() {
                 </div>
             </div>
 
-            {/* Listening Control Bar — unified audio + question tracker */}
-            {currentSkill === 'listening' && selectedTest && (() => {
+            {/* Control Bar — audio (listening only) + section pills + question numbers */}
+            {(currentSkill === 'listening' || currentSkill === 'reading') && selectedTest && (() => {
                 const skillData = selectedTest[currentSkill];
                 const sections = skillData?.sections || [];
-                const section = selectedTest.listening?.sections?.[activeSectionIdx];
-                const hasAudio = !!section?.audioUrl;
+                const section = currentSkill === 'listening' ? selectedTest.listening?.sections?.[activeSectionIdx] : null;
+                const hasAudio = currentSkill === 'listening' && !!section?.audioUrl;
                 const pct = audioDuration > 0 ? (audioProgress / audioDuration) * 100 : 0;
+                const sectionLabel = currentSkill === 'reading' ? 'Passage' : 'Section';
+                // Reading: passages use fixed ranges 1-13, 14-26, 27-40
+                const getQRange = (idx: number): [number, number] => {
+                    if (currentSkill === 'reading') {
+                        if (idx === 0) return [1, 13];
+                        if (idx === 1) return [14, 26];
+                        return [27, 40];
+                    }
+                    return [idx * 10 + 1, (idx + 1) * 10];
+                };
+                const [qStart, qEnd] = getQRange(activeSectionIdx);
                 return (
                     <div className="bg-white border-b border-slate-200 shrink-0 relative">
                         <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 px-2 sm:px-3 md:px-4 py-1.5 overflow-x-auto no-scrollbar">
@@ -989,7 +1000,7 @@ export default function TestPage() {
                                                 : "bg-slate-100 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
                                                 }`}
                                         >
-                                            Section {idx + 1}
+                                            {sectionLabel} {idx + 1}
                                         </button>
                                     );
                                 })}
@@ -1007,26 +1018,20 @@ export default function TestPage() {
                             </button>
 
                             {/* Question numbers for active section */}
-                            {(() => {
-                                const s = activeSectionIdx * 10 + 1;
-                                const e = (activeSectionIdx + 1) * 10;
-                                return (
-                                    <div className="flex items-center gap-1">
-                                        {Array.from({ length: e - s + 1 }, (__, i) => s + i).map(q => {
-                                            const isAnswered = !!answers[currentSkill][q];
-                                            return (
-                                                <button
-                                                    key={q}
-                                                    onClick={() => scrollToQuestion(q)}
-                                                    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center text-[11px] sm:text-xs font-bold transition-all ${isAnswered ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800"}`}
-                                                >
-                                                    {q}
-                                                </button>
-                                            );
-                                        })}
-                                    </div>
-                                );
-                            })()}
+                            <div className="flex items-center gap-1">
+                                {Array.from({ length: qEnd - qStart + 1 }, (__, i) => qStart + i).map(q => {
+                                    const isAnswered = !!answers[currentSkill][q];
+                                    return (
+                                        <button
+                                            key={q}
+                                            onClick={() => scrollToQuestion(q)}
+                                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-md flex items-center justify-center text-[11px] sm:text-xs font-bold transition-all ${isAnswered ? "bg-emerald-500 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-800"}`}
+                                        >
+                                            {q}
+                                        </button>
+                                    );
+                                })}
+                            </div>
 
                             {/* Next */}
                             <button
@@ -1170,35 +1175,73 @@ export default function TestPage() {
 
                 /* Matching/flow-chart layout — options table floats as left sidebar */
                 .prose table.options-box {
-                    float: left;
-                    width: 280px;
-                    margin: 0 1.5rem 1.25rem 0;
-                    display: block;
+                    float: left !important;
+                    width: 32% !important;
+                    min-width: 260px;
+                    max-width: 420px;
+                    margin: 0 1.75rem 1.25rem 0 !important;
                     border: 1.5px solid #cbd5e1 !important;
                     border-radius: 12px !important;
                     overflow: hidden;
                     background: #f8fafc !important;
                     table-layout: auto;
+                    border-collapse: separate !important;
+                    border-spacing: 0 !important;
                 }
-                .prose table.options-box tbody { display: block; }
-                .prose table.options-box tr { display: block; background: transparent !important; }
-                .prose table.options-box td {
-                    display: block;
+                .prose table.options-box tr { background: transparent !important; }
+                .prose table.options-box td,
+                .prose table.options-box th {
                     padding: 0.7rem 1rem !important;
                     border: none !important;
                     border-bottom: 1px solid #e2e8f0 !important;
                     text-align: left !important;
-                    line-height: 1.9 !important;
+                    line-height: 1.7 !important;
                     background: transparent !important;
                     color: #0f172a !important;
                     font-weight: 500 !important;
+                    vertical-align: top !important;
+                    letter-spacing: 0 !important;
+                    text-transform: none !important;
+                    font-size: inherit !important;
                 }
-                .prose table.options-box tr:last-child td { border-bottom: none !important; }
-                .prose table.options-box td strong {
+                .prose table.options-box tr:last-child td,
+                .prose table.options-box tr:last-child th {
+                    border-bottom: none !important;
+                }
+                .prose table.options-box th {
+                    font-weight: 800 !important;
+                    color: #C7002B !important;
+                    width: 2.25rem;
+                    text-align: center !important;
+                    padding-right: 0.5rem !important;
+                }
+                .prose table.options-box strong {
                     display: inline-block;
                     min-width: 1.4rem;
                     color: #C7002B;
                     font-weight: 800;
+                }
+                /* Multi-option cell: each <span.option-line> on its own row */
+                .prose table.options-box .option-line {
+                    display: block;
+                    padding: 0.35rem 0;
+                    line-height: 1.5;
+                }
+                .prose table.options-box .option-line strong {
+                    margin-right: 0.4rem;
+                }
+                /* When a cell is split into option-lines, the td already provides
+                   vertical rhythm via the spans — remove row borders/padding so
+                   multiple <tr> cells flow as one continuous list. */
+                .prose table.options-box td:has(.option-line) {
+                    padding: 0.25rem 1rem !important;
+                    border-bottom: none !important;
+                }
+                .prose table.options-box tr:first-child td:has(.option-line) {
+                    padding-top: 0.75rem !important;
+                }
+                .prose table.options-box tr:last-child td:has(.option-line) {
+                    padding-bottom: 0.75rem !important;
                 }
 
                 /* Flow-chart wrapping around the floated options box */
@@ -1217,6 +1260,10 @@ export default function TestPage() {
                     margin: 0.25rem 0 !important;
                     line-height: 1;
                 }
+
+                /* When options-box floats left, the sibling h4 + p questions flow next to it.
+                   Tighten top margin so first heading doesn't leave a gap. */
+                .prose table.options-box + h4 { margin-top: 0 !important; }
 
                 /* Clear floats so subsequent question groups don't overlap the sidebar */
                 .prose hr, .prose h3 { clear: both; }

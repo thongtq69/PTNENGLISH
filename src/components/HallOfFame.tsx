@@ -72,7 +72,7 @@ export default function HallOfFame({ config }: { config?: any }) {
     }
 
     return (
-        <section className="py-12 md:py-24 bg-accent overflow-hidden relative min-h-[700px]">
+        <section className="py-8 md:py-14 bg-accent overflow-hidden relative">
             {/* Ambient Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px]"></div>
@@ -80,12 +80,12 @@ export default function HallOfFame({ config }: { config?: any }) {
             </div>
 
             <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center max-w-6xl mx-auto mb-16 md:mb-20">
+                <div className="text-center max-w-6xl mx-auto mb-8 md:mb-12">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="flex justify-center items-center gap-3 mb-6"
+                        className="flex justify-center items-center gap-3 mb-3"
                     >
                         <Trophy className="text-white animate-pulse" size={20} />
                         <h2 className="text-white font-heading font-black text-xs md:text-xs uppercase tracking-[0.5em]" style={{ fontSize: 'var(--fs-home-hallOfFameBadge)' }}>{badge}</h2>
@@ -97,7 +97,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-3xl md:text-6xl font-heading font-black text-white mb-8 leading-tight uppercase tracking-tight md:whitespace-nowrap"
+                        className="text-3xl md:text-6xl font-heading font-black text-white mb-4 leading-tight uppercase tracking-tight md:whitespace-nowrap"
                         style={{ fontSize: 'var(--fs-home-hallOfFameTitle)' }}
                     >
                         {title}{" "}
@@ -188,7 +188,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                 </div>
 
                 {/* Pagination Dots */}
-                <div className="flex justify-center gap-3 mt-16">
+                <div className="flex justify-center gap-3 mt-8 md:mt-10">
                     {achievements.map((_: any, i: number) => (
                         <button
                             key={i}

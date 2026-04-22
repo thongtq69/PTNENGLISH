@@ -62,7 +62,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             viewport={{ once: true }}
             className="px-4 flex flex-col items-center"
           >
-            <p className="text-sm md:text-xl font-serif text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5 whitespace-pre-line" style={{ fontSize: 'var(--fs-home-philosophyText)' }}>
+            <p className="text-sm md:text-xl font-body text-slate-300 leading-relaxed not-italic font-medium text-center md:text-left md:border-l-2 md:border-primary/50 md:pl-6 py-0.5 whitespace-pre-line" style={{ fontSize: 'var(--fs-home-philosophyText)' }}>
               {philosophy}
             </p>
             <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>

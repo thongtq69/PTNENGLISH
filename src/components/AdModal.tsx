@@ -135,7 +135,7 @@ export default function AdModal() {
                             className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95"
                         >
                             {ad.leftImage ? (
-                                <img src={ad.leftImage} alt={ad.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover" />
+                                <img src={ad.leftImage} alt={ad.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover object-top" />
                             ) : (
                                 <Sparkles size={40} className="absolute inset-0 m-auto text-white" />
                             )}
@@ -170,7 +170,7 @@ export default function AdModal() {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative w-full sm:w-[90%] max-w-5xl bg-white rounded-[2rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[85vh] md:h-[650px] border border-slate-200 md:border-white/10"
+                            className="relative w-full sm:w-[90%] max-w-5xl bg-white rounded-[2rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[90vh] md:h-[min(90vh,720px)] border border-slate-200 md:border-white/10"
                         >
                             {/* Close/Advance Button */}
                             <button
@@ -188,45 +188,35 @@ export default function AdModal() {
                                 </div>
                             )}
 
-                            {/* Left Side: Image & Branding */}
-                            <div className="flex h-[180px] md:h-auto md:w-[45%] relative overflow-hidden group shrink-0">
+                            {/* Left Side: 9:16 poster — displayed in full, never cropped */}
+                            <div className="relative bg-accent shrink-0 mx-auto my-4 md:my-0 md:mx-0 aspect-[9/16] w-[min(55vw,260px)] md:w-auto md:h-full overflow-hidden">
                                 {ad.leftImage ? (
                                     <img
                                         src={ad.leftImage}
-                                        alt="Promo"
-                                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                                        alt={ad.leftLabel || ad.leftHeading || 'Promotion'}
+                                        className="absolute inset-0 w-full h-full object-contain"
                                     />
                                 ) : (
-                                    <div className="absolute inset-0 bg-accent" />
+                                    <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
+                                        <div className="text-white">
+                                            {ad.leftLabel && (
+                                                <span className="inline-block bg-primary text-white text-[10px] font-black px-3 py-1.5 mb-4 tracking-[0.3em]">
+                                                    {ad.leftLabel}
+                                                </span>
+                                            )}
+                                            {ad.leftHeading && (
+                                                <h2 className="text-2xl md:text-4xl font-heading font-black leading-tight mb-4 uppercase">
+                                                    {ad.leftHeading}
+                                                </h2>
+                                            )}
+                                            {ad.leftSubheading && (
+                                                <p className="text-slate-300 text-xs md:text-sm font-medium leading-relaxed max-w-xs mx-auto border-l-2 border-primary pl-4 text-left">
+                                                    {ad.leftSubheading}
+                                                </p>
+                                            )}
+                                        </div>
+                                    </div>
                                 )}
-                                <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/40 to-transparent" />
-
-                                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-end text-left">
-                                    <motion.span
-                                        initial={{ x: -20, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{ delay: 0.3 }}
-                                        className="bg-primary text-white text-[10px] font-black px-4 py-2 rounded-none w-fit mb-6 tracking-[0.3em]"
-                                    >
-                                        {ad.leftLabel}
-                                    </motion.span>
-
-                                    <motion.div
-                                        initial={{ y: 20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.4 }}
-                                    >
-                                        <h2 className="text-2xl md:text-5xl font-heading font-black text-white leading-tight mb-4 md:mb-8 uppercase">
-                                            <span className="block mb-1 md:mb-2">{ad.leftHeading.split(' ').slice(0, 2).join(' ')}</span>
-                                            <span className="inline-block bg-primary px-3 py-1 md:px-4 md:py-2 text-xl md:text-5xl rounded-none">
-                                                {ad.leftHeading.split(' ').slice(2).join(' ')}
-                                            </span>
-                                        </h2>
-                                        <p className="text-slate-300 text-[10px] md:text-sm font-medium leading-relaxed max-w-xs border-l-2 border-primary pl-4">
-                                            {ad.leftSubheading}
-                                        </p>
-                                    </motion.div>
-                                </div>
                             </div>
 
                             {/* Right Side: Content & Features */}

@@ -240,7 +240,7 @@ export default function AdsManager() {
                                             </h4>
                                             <FileUpload
                                                 mode="image"
-                                                label="Hero Image (Left Side)"
+                                                label="Hero Image (Left Side) — tỉ lệ 9:16 (poster dọc)"
                                                 value={activeAd.leftImage}
                                                 onChange={url => {
                                                     const newList = [...ads];
@@ -248,6 +248,7 @@ export default function AdsManager() {
                                                     setAds(newList);
                                                 }}
                                                 folder="ads"
+                                                aspect={9 / 16}
                                             />
                                         </div>
                                     </div>

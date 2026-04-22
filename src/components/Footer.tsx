@@ -40,7 +40,7 @@ export default function Footer() {
         phone: "0902 508 290",
         email: "info@ptelc.edu.vn",
         address: language === "en" ? "146 Bis Nguyen Van Thu, Da Kao Ward, District 1, HCMC" : "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
-        mapsUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.4225417961395!2d106.69176567461865!3d10.780506059028596!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f385570472f%3A0x2a3c3e387c5a2d8b!2s146%20Bis%20Nguy%E1%BB%85n%20V%C4%83n%20Th%E1%BB%A7%2C%20%C4%90a%20Kao%2C%20Qu%E1%BA%ADn%201%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh%2C%20Vi%E1%BB%87t%20Nam!5e0!3m2!1svi!2s!4v1700000000000!5m2!1svi!2s"
+        mapsUrl: "https://maps.google.com/maps?q=146%20Bis%20Nguy%E1%BB%85n%20V%C4%83n%20Th%E1%BB%A7%2C%20%C4%90a%20Kao%2C%20Qu%E1%BA%ADn%201%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh&hl=vi&z=17&output=embed"
     };
 
     const quickLinks = [

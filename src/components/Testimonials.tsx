@@ -82,7 +82,7 @@ export default function Testimonials() {
                                 </div>
 
                                 <div className="relative">
-                                    <p className="text-slate-600 font-serif text-base md:text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2" style={{ fontSize: 'var(--fs-global-testimonialText)' }}>
+                                    <p className="text-slate-600 font-body text-base md:text-lg leading-relaxed italic line-clamp-3 md:line-clamp-2" style={{ fontSize: 'var(--fs-global-testimonialText)' }}>
                                         "{testimonials[index].text || testimonials[index].content}"
                                     </p>
                                     <button className="mt-4 text-primary font-bold text-sm flex items-center gap-2 hover:gap-3 transition-all mx-auto md:mx-0 uppercase">
@@ -157,7 +157,7 @@ export default function Testimonials() {
 
                             <div className="relative">
                                 <Quote className="text-primary/10 absolute -top-10 -left-6" size={80} />
-                                <p className="text-slate-600 font-serif text-xl leading-relaxed italic relative z-10 text-center">
+                                <p className="text-slate-600 font-body text-xl leading-relaxed italic relative z-10 text-center">
                                     "{selectedTestimonial.text || selectedTestimonial.content}"
                                 </p>
                             </div>

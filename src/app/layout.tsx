@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Lora, Newsreader, Caveat, Poppins } from "next/font/google";
+import { Inter, Lora, Newsreader, Caveat, Be_Vietnam_Pro } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -21,10 +21,11 @@ const loraSerif = Lora({
   weight: ["400", "500", "600", "700"],
 });
 
-const poppins = Poppins({
+const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-body",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin", "latin-ext", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 const inter = Inter({
@@ -290,7 +291,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className={`${lora.variable} ${loraSerif.variable} ${poppins.variable} ${newsreader.variable} ${inter.variable} ${caveat.variable} font-body antialiased`}>
+      <body className={`${lora.variable} ${loraSerif.variable} ${beVietnamPro.variable} ${newsreader.variable} ${inter.variable} ${caveat.variable} font-body antialiased`}>
         <LanguageProvider initialLanguage={initialLanguage}>
           <FontSizeProvider>
             {children}
