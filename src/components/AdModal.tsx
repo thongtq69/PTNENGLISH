@@ -132,15 +132,15 @@ export default function AdModal() {
                         <button
                             onClick={reopen}
                             aria-label="Xem khuyến mãi"
-                            className="relative w-24 h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-primary to-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95"
+                            className="relative w-20 md:w-24 aspect-[9/16] rounded-2xl bg-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95 ring-2 ring-white/40"
                         >
                             {ad.leftImage ? (
-                                <img src={ad.leftImage} alt={ad.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover object-top" />
+                                <img src={ad.leftImage} alt={ad.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover" />
                             ) : (
                                 <Sparkles size={40} className="absolute inset-0 m-auto text-white" />
                             )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-accent/90 via-accent/20 to-transparent" />
-                            <span className="relative text-white text-[9px] font-black uppercase tracking-widest pb-2">
+                            <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-accent/95 to-transparent" />
+                            <span className="relative text-white text-[9px] font-black uppercase tracking-widest pb-1.5">
                                 Khuyến Mãi
                             </span>
                         </button>

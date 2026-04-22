@@ -1242,9 +1242,9 @@ export default function TestPage() {
                     color: #C7002B;
                     font-weight: 800;
                 }
-                /* Multi-option cell: each <span.option-line> on its own row */
+                /* Multi-option cell: option-lines arranged in a 2-column grid
+                   to fill the box horizontally instead of a tall narrow list. */
                 .prose table.options-box .option-line {
-                    display: block;
                     padding: 0.35rem 0;
                     line-height: 1.5;
                 }
@@ -1257,6 +1257,10 @@ export default function TestPage() {
                 .prose table.options-box td:has(.option-line) {
                     padding: 0.25rem 1rem !important;
                     border-bottom: none !important;
+                    display: grid;
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    column-gap: 1.5rem;
+                    row-gap: 0.15rem;
                 }
                 .prose table.options-box tr:first-child td:has(.option-line) {
                     padding-top: 0.75rem !important;

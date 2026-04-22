@@ -57,11 +57,13 @@ interface CoursesData {
         ie: { name: string; subtitle: string; desc: string };
         eft: { name: string; subtitle: string; desc: string };
         ge: { name: string; subtitle: string; desc: string };
+        [key: string]: any;
     };
     levels: {
         ie: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
         eft: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
         ge: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
+        [key: string]: Record<string, { name: string; cefr: string; exit: string; target: string; benefits: string[]; fullDesc: string }>;
     };
     placement: {
         badge: string;
@@ -483,8 +485,8 @@ export default function CoursesPageEditor() {
                                     <Layers size={20} />
                                 </div>
                                 <div>
-                                    <h2 className="text-xl font-bold text-white">3 Lộ trình học chính</h2>
-                                    <p className="text-slate-500 text-sm">IELTS, English for Teens, General English</p>
+                                    <h2 className="text-xl font-bold text-white">Lộ trình học</h2>
+                                    <p className="text-slate-500 text-sm">IELTS, English for Teens, General English & các lộ trình tuỳ chỉnh</p>
                                 </div>
                             </div>
 
@@ -498,11 +500,30 @@ export default function CoursesPageEditor() {
                             </div>
 
                             <div className="mt-8 space-y-4">
-                                {[
-                                    { key: 'ie', name: 'IELTS Preparation', color: 'from-red-500 to-orange-500' },
-                                    { key: 'eft', name: 'English for Teens', color: 'from-blue-500 to-purple-500' },
-                                    { key: 'ge', name: 'General English', color: 'from-green-500 to-teal-500' },
-                                ].map(pathway => (
+                                {(() => {
+                                    const CORE = [
+                                        { key: 'ie', name: 'IELTS Preparation', color: 'from-red-500 to-orange-500' },
+                                        { key: 'eft', name: 'English for Teens', color: 'from-blue-500 to-purple-500' },
+                                        { key: 'ge', name: 'General English', color: 'from-green-500 to-teal-500' },
+                                    ];
+                                    const CORE_KEYS = new Set(['title', 'ie', 'eft', 'ge']);
+                                    const COLOR_PALETTE = [
+                                        'from-pink-500 to-rose-500',
+                                        'from-yellow-500 to-amber-500',
+                                        'from-cyan-500 to-sky-500',
+                                        'from-indigo-500 to-violet-500',
+                                        'from-fuchsia-500 to-pink-500',
+                                        'from-emerald-500 to-lime-500',
+                                    ];
+                                    const customKeys = Object.keys(data.pathway).filter(k => !CORE_KEYS.has(k));
+                                    const custom = customKeys.map((k, i) => ({
+                                        key: k,
+                                        name: (data.pathway[k] as any)?.name || k.toUpperCase(),
+                                        color: COLOR_PALETTE[i % COLOR_PALETTE.length],
+                                        custom: true,
+                                    }));
+                                    return [...CORE, ...custom];
+                                })().map((pathway: any) => (
                                     <div key={pathway.key} className="bg-white/[0.02] rounded-2xl border border-white/5 overflow-hidden">
                                         <div
                                             onClick={() => setExpandedPathway(expandedPathway === pathway.key ? null : pathway.key)}
@@ -510,14 +531,33 @@ export default function CoursesPageEditor() {
                                         >
                                             <div className="flex items-center gap-4">
                                                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${pathway.color} flex items-center justify-center text-white font-black`}>
-                                                    {pathway.key.toUpperCase()}
+                                                    {pathway.key.toUpperCase().slice(0, 3)}
                                                 </div>
                                                 <div>
                                                     <h3 className="text-white font-bold">{pathway.name}</h3>
                                                     <p className="text-slate-500 text-sm">{data.pathway[pathway.key as keyof typeof data.pathway] && typeof data.pathway[pathway.key as keyof typeof data.pathway] === 'object' ? (data.pathway[pathway.key as keyof typeof data.pathway] as { name: string }).name : ''}</p>
                                                 </div>
                                             </div>
-                                            {expandedPathway === pathway.key ? <ChevronUp className="text-slate-400" /> : <ChevronDown className="text-slate-400" />}
+                                            <div className="flex items-center gap-2">
+                                                {pathway.custom && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (!confirm(`Xoá lộ trình "${pathway.name}"?`)) return;
+                                                            const newData = JSON.parse(JSON.stringify(data));
+                                                            delete newData.pathway[pathway.key];
+                                                            if (newData.levels) delete newData.levels[pathway.key];
+                                                            setData(newData);
+                                                            if (expandedPathway === pathway.key) setExpandedPathway(null);
+                                                        }}
+                                                        className="p-2 rounded-lg hover:bg-red-500/10 text-red-400"
+                                                        title="Xoá lộ trình"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                )}
+                                                {expandedPathway === pathway.key ? <ChevronUp className="text-slate-400" /> : <ChevronDown className="text-slate-400" />}
+                                            </div>
                                         </div>
 
                                         <AnimatePresence>
@@ -562,6 +602,29 @@ export default function CoursesPageEditor() {
                                         </AnimatePresence>
                                     </div>
                                 ))}
+
+                                <button
+                                    onClick={() => {
+                                        const rawKey = prompt("Nhập mã lộ trình (chữ thường, không dấu, ví dụ: pte, business):");
+                                        if (!rawKey) return;
+                                        const key = rawKey.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+                                        if (!key) return alert("Mã không hợp lệ");
+                                        if (['title', 'ie', 'eft', 'ge'].includes(key) || data.pathway[key]) {
+                                            return alert(`Mã "${key}" đã tồn tại. Vui lòng chọn mã khác.`);
+                                        }
+                                        const name = prompt("Tên lộ trình (ví dụ: PTE Academic):") || key.toUpperCase();
+                                        const newData = JSON.parse(JSON.stringify(data));
+                                        newData.pathway[key] = { name, subtitle: '', desc: '' };
+                                        if (!newData.levels) newData.levels = {} as any;
+                                        newData.levels[key] = {};
+                                        setData(newData);
+                                        setExpandedPathway(key);
+                                    }}
+                                    className="w-full py-4 rounded-2xl border-2 border-dashed border-white/10 text-slate-400 hover:text-white hover:border-primary/50 hover:bg-white/[0.02] transition-all flex items-center justify-center gap-2 font-bold"
+                                >
+                                    <Plus size={18} />
+                                    Thêm lộ trình học
+                                </button>
                             </div>
                         </div>
                     )}
@@ -597,19 +660,20 @@ export default function CoursesPageEditor() {
                             </div>
 
                             {/* Pathway Selector */}
-                            <div className="flex gap-2 mb-6">
-                                {['ie', 'eft', 'ge'].map(p => (
-                                    <button
-                                        key={p}
-                                        onClick={() => setExpandedPathway(p)}
-                                        className={`px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-widest transition-all ${expandedPathway === p ? 'bg-primary text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'
-                                            }`}
-                                    >
-                                        {p === 'ie' && 'IELTS'}
-                                        {p === 'eft' && 'EfT'}
-                                        {p === 'ge' && 'General'}
-                                    </button>
-                                ))}
+                            <div className="flex gap-2 mb-6 flex-wrap">
+                                {Object.keys(data.pathway).filter(k => k !== 'title').map(p => {
+                                    const labelMap: Record<string, string> = { ie: 'IELTS', eft: 'EfT', ge: 'General' };
+                                    const label = labelMap[p] || (data.pathway[p] as any)?.name || p.toUpperCase();
+                                    return (
+                                        <button
+                                            key={p}
+                                            onClick={() => setExpandedPathway(p)}
+                                            className={`px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-widest transition-all ${expandedPathway === p ? 'bg-primary text-white' : 'bg-white/5 text-slate-400 hover:bg-white/10'}`}
+                                        >
+                                            {label}
+                                        </button>
+                                    );
+                                })}
                             </div>
 
                             {/* Levels for selected pathway */}
