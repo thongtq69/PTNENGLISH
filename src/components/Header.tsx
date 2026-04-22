@@ -72,7 +72,7 @@ export default function Header() {
     return (
         <>
             {/* Top Bar */}
-            <div className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 border-b border-white/10 ${isScrolled || isMenuOpen ? "hidden" : "bg-accent/80 backdrop-blur-md hidden md:block"}`}>
+            <div className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-300 border-b border-white/10 ${isScrolled || isMenuOpen ? "hidden" : "bg-accent/80 backdrop-blur-md hidden lg:block"}`}>
                 <div className="container mx-auto px-6 h-10 flex justify-between items-center text-[10px] uppercase font-bold tracking-widest text-slate-100">
                     <div className="flex items-center space-x-6">
                         <a href={`tel:${contactData.phone || "0902508290"}`} className="flex items-center hover:text-white transition-colors">
@@ -94,8 +94,8 @@ export default function Header() {
                 </div>
             </div>
 
-            <header className={`fixed ${isScrolled ? "top-0" : "top-0 md:top-10"} left-0 right-0 z-[70] transition-all duration-300 ${isMenuOpen ? "bg-white py-2 md:py-4" : isScrolled ? "bg-white/95 backdrop-blur-md shadow-md py-2 md:py-4" : isTransparent ? "bg-transparent py-3 md:py-6" : "bg-white/70 backdrop-blur-sm py-2 md:py-6"}`}>
-                <div className="container mx-auto px-6 flex justify-between items-center">
+            <header className={`fixed ${isScrolled ? "top-0" : "top-0 lg:top-10"} left-0 right-0 z-[70] transition-all duration-300 ${isMenuOpen ? "bg-white py-2 md:py-4" : isScrolled ? "bg-white/95 backdrop-blur-md shadow-md py-2 md:py-4" : isTransparent ? "bg-transparent py-3 md:py-6" : "bg-white/70 backdrop-blur-sm py-2 md:py-6"}`}>
+                <div className="container mx-auto px-6 flex justify-between items-center gap-4">
                     <Link href="/" className="flex items-center group shrink-0" onClick={() => setIsMenuOpen(false)}>
                         <img
                             src="/desktop-main-logo.svg"
@@ -104,14 +104,14 @@ export default function Header() {
                         />
                     </Link>
 
-                    <nav className="hidden md:flex items-center space-x-8">
+                    <nav className="hidden lg:flex items-center gap-x-4 xl:gap-x-6 2xl:gap-x-8">
                         {navigation.map((item) => (
                             <Link
                                 key={item.name}
                                 href={item.href}
                                 target={item.href.startsWith('http') ? "_blank" : undefined}
                                 rel={item.href.startsWith('http') ? "noopener noreferrer" : undefined}
-                                className={`text-sm font-semibold uppercase tracking-wider transition-colors hover:text-primary ${isTransparent ? "text-white hover:text-white/70" : "text-accent"}`}
+                                className={`text-sm font-semibold uppercase tracking-wider transition-colors hover:text-primary whitespace-nowrap ${isTransparent ? "text-white hover:text-white/70" : "text-accent"}`}
                                 style={{ fontSize: 'var(--fs-global-headerNav)' }}
                             >
                                 {item.name}
@@ -119,7 +119,7 @@ export default function Header() {
                         ))}
                         <Link
                             href="/contact#registration-form"
-                            className="bg-primary hover:bg-black text-white px-6 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20 uppercase"
+                            className="bg-primary hover:bg-black text-white px-6 py-2.5 rounded-full font-bold transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-primary/20 uppercase whitespace-nowrap"
                         >
                             {t.nav.register}
                         </Link>
@@ -147,7 +147,7 @@ export default function Header() {
                     </nav>
 
                     {/* Mobile Menu Button */}
-                    <div className="flex items-center gap-4 md:hidden">
+                    <div className="flex items-center gap-4 lg:hidden">
                         {!isAdmin && (
                             <div className="flex items-center gap-2 bg-slate-100 rounded-lg px-2 py-1">
                                 <button
@@ -193,7 +193,7 @@ export default function Header() {
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: "100%" }}
                         transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                        className="fixed inset-0 z-[65] bg-white flex flex-col pt-32 pb-10 px-6 md:hidden"
+                        className="fixed inset-0 z-[65] bg-white flex flex-col pt-32 pb-10 px-6 lg:hidden"
                     >
                         <div className="flex-1 flex flex-col gap-8 text-center justify-center">
                             {navigation.map((item, idx) => (

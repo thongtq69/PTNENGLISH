@@ -101,6 +101,15 @@ export default function AdModal() {
     const next = () => setCurrentIdx(i => (i + 1) % total);
     const prev = () => setCurrentIdx(i => (i - 1 + total) % total);
 
+    // Close behavior: advance to next ad if more remain, otherwise minimize.
+    const closeOrAdvance = () => {
+        if (currentIdx < total - 1) {
+            setCurrentIdx(currentIdx + 1);
+        } else {
+            minimize();
+        }
+    };
+
     return (
         <>
             {/* Minimized floating widget */}
@@ -152,7 +161,7 @@ export default function AdModal() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onClick={minimize}
+                            onClick={closeOrAdvance}
                             className="absolute inset-0 bg-accent/80 backdrop-blur-sm"
                         />
 
@@ -163,10 +172,10 @@ export default function AdModal() {
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
                             className="relative w-full sm:w-[90%] max-w-5xl bg-white rounded-[2rem] md:rounded-none overflow-hidden shadow-2xl flex flex-col md:flex-row max-h-[85vh] md:h-[650px] border border-slate-200 md:border-white/10"
                         >
-                            {/* Close/Minimize Button */}
+                            {/* Close/Advance Button */}
                             <button
-                                onClick={minimize}
-                                aria-label="Thu nhỏ"
+                                onClick={closeOrAdvance}
+                                aria-label={currentIdx < total - 1 ? 'Quảng cáo tiếp theo' : 'Thu nhỏ'}
                                 className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-accent/5 md:bg-accent text-accent md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
                             >
                                 <X size={20} className="md:w-6 md:h-6" />
@@ -292,7 +301,7 @@ export default function AdModal() {
                                     className="py-4 md:py-12 text-center"
                                 >
                                     <button
-                                        onClick={minimize}
+                                        onClick={closeOrAdvance}
                                         className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors underline underline-offset-8"
                                     >
                                         Maybe later
