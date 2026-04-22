@@ -240,11 +240,14 @@ body {
   position: relative;
 }
 
-img,
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 video,
 iframe {
   max-width: 100%;
-  height: auto;
 }
 
 

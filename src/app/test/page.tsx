@@ -1065,7 +1065,7 @@ export default function TestPage() {
                 <div className="flex-1 flex flex-col overflow-hidden relative">
                     {/* Listening Content — wider layout */}
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
-                        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-8 py-4 sm:py-6 pb-24">
+                        <div className="w-full mx-auto px-3 sm:px-6 md:px-10 lg:px-16 py-4 sm:py-6 pb-24">
                             {renderAnswerSheet()}
                         </div>
                     </div>
@@ -1168,33 +1168,14 @@ export default function TestPage() {
                 .prose ul > li::marker { color: #C7002B; }
                 .prose ol > li::marker { color: #C7002B; font-weight: 800; }
 
-                /* Flow-chart (IELTS Listening Part 2) — only containers with ⬇ arrow <p> children */
-                .prose div:has(> p[style*="font-size: 1.5rem"]) {
-                    display: grid !important;
-                    grid-template-columns: repeat(2, minmax(0, 1fr));
-                    gap: 0.75rem !important;
-                    padding: 1rem !important;
-                    align-items: stretch;
-                }
-                .prose div:has(> p[style*="font-size: 1.5rem"]) > p {
-                    margin: 0 !important;
-                    padding: 1rem !important;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    min-height: 72px;
-                    background: white !important;
-                    border: 1px solid #e2e8f0 !important;
-                    border-radius: 10px !important;
-                    text-align: center;
-                    line-height: 1.5;
-                }
-                .prose div:has(> p[style*="font-size: 1.5rem"]) > p[style*="font-size: 1.5rem"] {
-                    display: none !important;
-                }
-                @media (max-width: 640px) {
-                    .prose div:has(> p[style*="font-size: 1.5rem"]) {
-                        grid-template-columns: 1fr;
+                /* Matching layout — stack options above questions on narrow screens */
+                @media (max-width: 900px) {
+                    .prose > div[style*="display: flex"][style*="align-items: flex-start"] {
+                        flex-direction: column !important;
+                    }
+                    .prose > div[style*="display: flex"][style*="align-items: flex-start"] > div[style*="flex: 0 0"] {
+                        flex: 0 0 auto !important;
+                        width: 100% !important;
                     }
                 }
 

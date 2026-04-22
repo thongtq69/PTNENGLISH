@@ -68,7 +68,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             <div className="w-12 h-px bg-primary/40 mt-4 md:hidden"></div>
             <div className="mt-3 md:mt-4 flex justify-center items-center gap-3">
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
-              <span className="text-primary font-bold uppercase tracking-[0.2em] text-[11px] md:text-[9px]" style={{ fontSize: 'var(--fs-home-philosophyLabel)' }}>{philosophyTitle}</span>
+              <span className="text-primary font-heading font-bold uppercase tracking-[0.2em] text-[11px] md:text-[9px]" style={{ fontSize: 'var(--fs-home-philosophyLabel)' }}>{philosophyTitle}</span>
               <div className="h-px w-4 md:w-8 bg-primary/30"></div>
             </div>
 
@@ -123,7 +123,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               }
 
               return (
-                <Link key={idx} href={finalLink} className="w-[28%] md:w-auto">
+                <Link key={idx} href={finalLink} className="w-[46%] md:w-auto">
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
@@ -148,7 +148,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                         }}
                       />
                       {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
-                        <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[10px] md:text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest z-20">Coming Soon</div>
+                        <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[7px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 rounded-full uppercase tracking-wider md:tracking-widest z-20 whitespace-nowrap">Coming Soon</div>
                       )}
                       <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent flex items-end justify-center min-h-[50%]">
                         <p className="text-white font-heading font-black text-xs md:text-[15px] leading-tight uppercase tracking-tight text-center w-full pb-1 md:pb-2" style={{ fontSize: 'var(--fs-home-programName)' }}>{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
@@ -183,11 +183,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               {/* Consolidated Info - Centered */}
               <div className="max-w-3xl">
                 <div className="flex items-center justify-center gap-3 mb-4">
-                  <div className="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-[11px] font-black uppercase tracking-widest leading-none" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>
+                  <div className="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-[11px] font-heading font-black uppercase tracking-widest leading-none" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>
                     {campus.badge}
                   </div>
                   <div className="h-px w-12 bg-white/20"></div>
-                  <span className="text-white/40 text-[11px] font-bold uppercase tracking-widest" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>{campus.system}</span>
+                  <span className="text-white/40 text-[11px] font-heading font-bold uppercase tracking-widest" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>{campus.system}</span>
                 </div>
 
                 <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white" style={{ fontSize: 'var(--fs-home-campusTitle)' }}>
@@ -229,7 +229,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     <BookOpen size={20} className="md:w-6 md:h-6 group-hover:rotate-12 transition-transform" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
+                    <p className="text-[9px] md:text-[9px] font-heading font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
                     <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase" style={{ fontSize: 'var(--fs-home-campusBtn)' }}>{campus.lmsBtn}</p>
                   </div>
                 </motion.a>
@@ -244,7 +244,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     <ExternalLink size={20} className="md:w-6 md:h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] md:text-[9px] font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
+                    <p className="text-[9px] md:text-[9px] font-heading font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
                     <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase" style={{ fontSize: 'var(--fs-home-campusBtn)' }}>{campus.testBtn}</p>
                   </div>
                 </motion.a>
@@ -266,7 +266,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           <p className="text-slate-600 text-sm md:text-lg mb-4 md:mb-8 leading-relaxed font-body whitespace-pre-line" style={{ fontSize: 'var(--fs-home-facultyDesc)' }}>
             {faculty.description || faculty.desc}
           </p>
-          <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-bold text-xs md:text-base transition-all transform hover:scale-105 inline-block uppercase" style={{ fontSize: 'var(--fs-home-facultyBtn)' }}>
+          <Link href="/about-us" className="bg-primary hover:bg-black text-white px-5 py-2.5 md:px-8 md:py-4 rounded-full font-heading font-bold text-xs md:text-base transition-all transform hover:scale-105 inline-block uppercase" style={{ fontSize: 'var(--fs-home-facultyBtn)' }}>
             {faculty.btn}
           </Link>
         </div>

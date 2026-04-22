@@ -41,25 +41,27 @@ export default function Hero({ initialData }: { initialData?: any }) {
     const displaySecondaryText = language === "en" ? t.home.hero.secondaryCTA : settings.secondaryCTA.text;
 
     return (
-        <section className="relative w-full h-[85svh] min-h-[560px] md:h-screen md:min-h-0 overflow-hidden flex items-center justify-center bg-accent">
-            {/* Video Background */}
-            <video
-                key={settings.videoUrl}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="absolute top-0 left-0 w-full h-full object-cover md:scale-105"
-            >
-                <source src={settings.videoUrl} type="video/mp4" />
-            </video>
+        <section className="relative w-full bg-accent md:h-screen md:min-h-[620px] md:overflow-hidden md:flex md:items-center md:justify-center">
+            {/* Mobile-only spacer so fixed header sits above the video */}
+            <div className="h-16 md:hidden" aria-hidden="true" />
 
-            {/* Overlay */}
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-accent/30 via-accent/5 to-transparent"></div>
+            {/* Video — in-flow 16:9 on mobile (full video visible, no cropping), absolute cover on desktop */}
+            <div className="relative w-full aspect-video md:absolute md:inset-0 md:aspect-auto overflow-hidden bg-accent">
+                <video
+                    key={settings.videoUrl}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover md:scale-105"
+                >
+                    <source src={settings.videoUrl} type="video/mp4" />
+                </video>
+            </div>
 
-            {/* Content */}
-            <div className="container mx-auto px-4 relative z-10 text-center">
-                <div className="max-w-4xl mx-auto pt-12 md:pt-24 text-center px-4">
+            {/* Content — below the video on mobile, overlay-centered on desktop */}
+            <div className="container mx-auto px-4 relative z-10 text-center py-8 md:py-0">
+                <div className="max-w-4xl mx-auto md:pt-24 text-center px-4">
                     <h1 className="text-white text-2xl md:text-6xl font-heading font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-4xl mx-auto" style={{ fontSize: 'var(--fs-home-heroTitle)' }}>
                         <span dangerouslySetInnerHTML={{ __html: displayTitle }} />
                     </h1>
@@ -77,8 +79,8 @@ export default function Hero({ initialData }: { initialData?: any }) {
                 </div>
             </div>
 
-            {/* Scroll indicator */}
-            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            {/* Scroll indicator — desktop only (doesn't fit the stacked mobile layout) */}
+            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
                 <svg className="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
                 </svg>
