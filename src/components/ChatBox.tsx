@@ -82,20 +82,33 @@ export default function ChatBox() {
         return () => clearInterval(interval);
     }, [isOpen, sessionId, config]);
 
-    // Initial UI popup delay
+    // Initial UI popup delay — auto-opens exactly once per session.
     useEffect(() => {
+        const alreadyPrompted = typeof sessionStorage !== "undefined" && sessionStorage.getItem("ptn_chat_prompted") === "1";
+        if (alreadyPrompted) {
+            setHasPrompted(true);
+            setIsVisible(true);
+            return;
+        }
+
         const timer = setTimeout(() => {
             setIsVisible(true);
             const openTimer = setTimeout(() => {
                 if (hasPrompted || !config) return;
+                if (typeof sessionStorage !== "undefined" && sessionStorage.getItem("ptn_chat_prompted") === "1") return;
                 const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
                 // On mobile, never auto-open — it covers the hero. User must tap the floating button.
-                if (isMobile) return;
+                if (isMobile) {
+                    sessionStorage.setItem("ptn_chat_prompted", "1");
+                    setHasPrompted(true);
+                    return;
+                }
                 // On desktop, still wait if the AdModal is currently open so popups don't stack.
                 const adState = typeof sessionStorage !== "undefined" ? sessionStorage.getItem("ptn_ad_view_state") : null;
                 if (adState === "open") return;
                 setIsOpen(true);
                 setHasPrompted(true);
+                sessionStorage.setItem("ptn_chat_prompted", "1");
             }, 3000);
             return () => clearTimeout(openTimer);
         }, 5000);

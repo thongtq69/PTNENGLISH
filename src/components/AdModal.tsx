@@ -110,12 +110,22 @@ export default function AdModal() {
         }
     };
 
+    const openAt = (idx: number) => {
+        setCurrentIdx(idx);
+        reopen();
+    };
+
+    // Show up to 2 minimized banners symmetrically (left + right) when there are 2+ ads.
+    const leftAd = ads[0];
+    const rightAd = total >= 2 ? ads[1] : null;
+
     return (
         <>
-            {/* Minimized floating widget */}
+            {/* Minimized floating widgets — symmetric left + right when 2+ ads */}
             <AnimatePresence>
-                {viewState === 'minimized' && (
+                {viewState === 'minimized' && leftAd && (
                     <motion.div
+                        key="left-banner"
                         initial={{ opacity: 0, scale: 0.5, y: 40 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.5, y: 40 }}
@@ -125,30 +135,59 @@ export default function AdModal() {
                         <button
                             onClick={dismiss}
                             aria-label="Dismiss"
-                            className="absolute -top-1 -right-1 z-10 w-7 h-7 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
+                            className="absolute -top-2 -right-2 z-10 w-7 h-7 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
                         >
                             <X size={14} />
                         </button>
                         <button
-                            onClick={reopen}
+                            onClick={() => openAt(0)}
                             aria-label="Xem khuyến mãi"
-                            className="relative w-20 md:w-24 aspect-[9/16] rounded-2xl bg-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95 ring-2 ring-white/40"
+                            className="relative w-28 md:w-36 aspect-[9/16] rounded-2xl bg-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95 ring-2 ring-white/40"
                         >
-                            {ad.leftImage ? (
-                                <img src={ad.leftImage} alt={ad.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover" />
+                            {leftAd.leftImage ? (
+                                <img src={leftAd.leftImage} alt={leftAd.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover" />
                             ) : (
                                 <Sparkles size={40} className="absolute inset-0 m-auto text-white" />
                             )}
                             <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-accent/95 to-transparent" />
-                            <span className="relative text-white text-[9px] font-black uppercase tracking-widest pb-1.5">
+                            <span className="relative text-white text-[10px] font-black uppercase tracking-widest pb-1.5">
                                 Khuyến Mãi
                             </span>
                         </button>
-                        {total > 1 && (
-                            <span className="absolute -top-1 -left-1 bg-primary text-white text-[10px] font-black min-w-[20px] h-5 px-1 rounded-full flex items-center justify-center shadow-md border-2 border-white">
-                                {total}
+                    </motion.div>
+                )}
+
+                {viewState === 'minimized' && rightAd && (
+                    <motion.div
+                        key="right-banner"
+                        initial={{ opacity: 0, scale: 0.5, y: 40 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.5, y: 40 }}
+                        transition={{ type: 'spring', stiffness: 260, damping: 20, delay: 0.08 }}
+                        className="fixed bottom-6 right-6 z-[998]"
+                    >
+                        <button
+                            onClick={dismiss}
+                            aria-label="Dismiss"
+                            className="absolute -top-2 -left-2 z-10 w-7 h-7 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
+                        >
+                            <X size={14} />
+                        </button>
+                        <button
+                            onClick={() => openAt(1)}
+                            aria-label="Xem khuyến mãi"
+                            className="relative w-28 md:w-36 aspect-[9/16] rounded-2xl bg-accent shadow-2xl shadow-primary/40 overflow-hidden flex items-end justify-center hover:scale-105 transition-transform active:scale-95 ring-2 ring-white/40"
+                        >
+                            {rightAd.leftImage ? (
+                                <img src={rightAd.leftImage} alt={rightAd.leftLabel || 'Khuyến mãi'} className="absolute inset-0 w-full h-full object-cover" />
+                            ) : (
+                                <Sparkles size={40} className="absolute inset-0 m-auto text-white" />
+                            )}
+                            <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-accent/95 to-transparent" />
+                            <span className="relative text-white text-[10px] font-black uppercase tracking-widest pb-1.5">
+                                Khuyến Mãi
                             </span>
-                        )}
+                        </button>
                     </motion.div>
                 )}
             </AnimatePresence>

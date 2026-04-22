@@ -1281,10 +1281,21 @@ export default function TestPage() {
                     margin-bottom: 0.5rem !important;
                     border-color: #94a3b8 !important;
                 }
+                /* Hide explicit arrow paragraphs (⬇ / ↓) — spacing between
+                   flow boxes already conveys the flow visually, matching the
+                   cleaner Set 02 layout. */
                 .prose .flow-chart > p[style*="font-size: 1.5rem"] {
-                    color: #94a3b8;
-                    margin: 0.25rem 0 !important;
-                    line-height: 1;
+                    display: none !important;
+                }
+
+                /* Some tests put the flow-chart title (<h4 class="text-center">)
+                   as a sibling BEFORE the .flow-chart div instead of inside it.
+                   Pull them together visually so both layouts look the same. */
+                .prose h4.text-center + .flow-chart {
+                    margin-top: 0.35rem !important;
+                }
+                .prose h4.text-center:has(+ .flow-chart) {
+                    margin-bottom: 0.35rem !important;
                 }
 
                 /* When options-box floats left, the sibling h4 + p questions flow next to it.
