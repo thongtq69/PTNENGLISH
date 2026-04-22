@@ -43,7 +43,7 @@ export default function Testimonials() {
                         whileInView={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
                         viewport={{ once: true }}
-                        className="text-xl md:text-5xl font-heading font-semibold text-accent"
+                        className="text-xl md:text-5xl font-body font-semibold text-accent"
                     >
                         {t.home.testimonials.title}
                     </motion.h3>

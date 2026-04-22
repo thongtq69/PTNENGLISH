@@ -62,7 +62,7 @@ export default function Hero({ initialData }: { initialData?: any }) {
             {/* Content — below the video on mobile, overlay-centered on desktop */}
             <div className="container mx-auto px-4 relative z-10 text-center py-8 md:py-0">
                 <div className="max-w-4xl mx-auto md:pt-24 text-center px-4">
-                    <h1 className="text-white text-2xl md:text-6xl font-heading font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-4xl mx-auto" style={{ fontSize: 'var(--fs-home-heroTitle)' }}>
+                    <h1 className="text-white text-2xl md:text-6xl font-body font-bold tracking-tight leading-tight md:leading-[1.1] mb-4 md:mb-8 animate-fade-in-up max-w-4xl mx-auto" style={{ fontSize: 'var(--fs-home-heroTitle)' }}>
                         <span dangerouslySetInnerHTML={{ __html: displayTitle }} />
                     </h1>
                     <p className="text-white text-sm md:text-xl mb-4 md:mb-12 max-w-4xl mx-auto leading-relaxed opacity-90 animate-fade-in-up delay-100 font-body whitespace-pre-line" style={{ fontSize: 'var(--fs-home-heroSubtitle)' }}>

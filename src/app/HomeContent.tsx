@@ -87,7 +87,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
             <h2 className="text-primary font-heading text-xs md:text-xl font-bold tracking-[0.3em] mb-1" style={{ fontSize: 'var(--fs-home-introBadge)' }}>
               {intro.badge}
             </h2>
-            <h3 className="text-2xl md:text-5xl font-heading font-semibold mb-3 text-accent leading-tight text-center" style={{ fontSize: 'var(--fs-home-introTitle)' }}>
+            <h3 className="text-2xl md:text-5xl font-body font-semibold mb-3 text-accent leading-tight text-center" style={{ fontSize: 'var(--fs-home-introTitle)' }}>
               {(() => {
                 const title = intro.title || "";
                 if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {
@@ -111,7 +111,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           </motion.div>
 
 
-          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-5 md:gap-6 lg:gap-8 md:px-4">
+          <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-3 md:gap-6 lg:gap-8 md:px-4 max-w-5xl mx-auto">
             {programs.map((prog: any, idx: number) => {
               // Auto-detect correct hash if link is just /courses
               let finalLink = prog.link || "/courses";
@@ -190,7 +190,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   <span className="text-white/40 text-[11px] font-heading font-bold uppercase tracking-widest" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>{campus.system}</span>
                 </div>
 
-                <h3 className="text-lg md:text-4xl font-heading font-semibold mb-2 md:mb-4 leading-tight text-white" style={{ fontSize: 'var(--fs-home-campusTitle)' }}>
+                <h3 className="text-lg md:text-4xl font-body font-semibold mb-2 md:mb-4 leading-tight text-white" style={{ fontSize: 'var(--fs-home-campusTitle)' }}>
                   {(() => {
                     const title = campus.title || "";
                     if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {
@@ -260,7 +260,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
         <div className="absolute top-0 right-0 w-1/4 h-full bg-primary/10 -skew-x-12 translate-x-1/2"></div>
         <div className="container mx-auto px-6 relative z-10 max-w-4xl">
           <h2 className="text-primary font-heading font-bold text-xs md:text-lg uppercase tracking-widest mb-1 md:mb-4" style={{ fontSize: 'var(--fs-home-facultyBadge)' }}>{faculty.badge}</h2>
-          <h3 className="text-lg md:text-3xl lg:text-5xl font-heading font-semibold mb-2 md:mb-6 leading-tight text-accent"
+          <h3 className="text-lg md:text-3xl lg:text-5xl font-body font-semibold mb-2 md:mb-6 leading-tight text-accent"
             style={{ fontSize: 'var(--fs-home-facultyTitle)' }}
             dangerouslySetInnerHTML={{ __html: faculty.title || "" }} />
           <p className="text-slate-600 text-sm md:text-lg mb-4 md:mb-8 leading-relaxed font-body whitespace-pre-line" style={{ fontSize: 'var(--fs-home-facultyDesc)' }}>
@@ -285,7 +285,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
           <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-16 gap-4 md:gap-8">
             <div className="max-w-2xl">
               <h2 className="text-primary font-heading font-black text-[10px] md:text-sm uppercase tracking-[0.4em] mb-1 md:mb-4" style={{ fontSize: 'var(--fs-home-blogBadge)' }}>{homeBlog.badge}</h2>
-              <h3 className="text-xl md:text-6xl font-heading font-black text-accent leading-none uppercase tracking-tighter" style={{ fontSize: 'var(--fs-home-blogTitle)' }}>
+              <h3 className="text-xl md:text-6xl font-body font-black text-accent leading-none uppercase tracking-tighter" style={{ fontSize: 'var(--fs-home-blogTitle)' }}>
                 {(() => {
                   const title = homeBlog.title || "";
                   if (title.includes('<br />') || title.includes('<br/>') || title.includes('<span')) {

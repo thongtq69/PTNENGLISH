@@ -1215,6 +1215,28 @@ export default function TestPage() {
                     text-align: center !important;
                     padding-right: 0.5rem !important;
                 }
+                /* Full-span header row (e.g. <th colspan="2">Comments</th>) —
+                   don't style as a narrow letter column. */
+                .prose table.options-box th[colspan] {
+                    width: auto !important;
+                    color: #1e293b !important;
+                    background: #f1f5f9 !important;
+                    font-size: 0.7rem !important;
+                    text-transform: uppercase !important;
+                    letter-spacing: 0.1em !important;
+                    text-align: center !important;
+                    padding: 0.6rem 1rem !important;
+                }
+                /* Two-column layout: first cell is the letter, second is the
+                   description (e.g. Q25-30 where <td>A</td><td>It illustrates…</td>). */
+                .prose table.options-box tr > td:first-child:not(:last-child) {
+                    width: 2.25rem !important;
+                    text-align: center !important;
+                    font-weight: 800 !important;
+                    color: #C7002B !important;
+                    padding-right: 0.5rem !important;
+                    white-space: nowrap;
+                }
                 .prose table.options-box strong {
                     display: inline-block;
                     min-width: 1.4rem;

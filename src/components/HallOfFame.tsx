@@ -97,7 +97,7 @@ export default function HallOfFame({ config }: { config?: any }) {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-3xl md:text-6xl font-heading font-black text-white mb-4 leading-tight uppercase tracking-tight md:whitespace-nowrap"
+                        className="text-3xl md:text-6xl font-body font-black text-white mb-4 leading-tight uppercase tracking-tight md:whitespace-nowrap"
                         style={{ fontSize: 'var(--fs-home-hallOfFameTitle)' }}
                     >
                         {title}{" "}
@@ -147,18 +147,18 @@ export default function HallOfFame({ config }: { config?: any }) {
                                         </div>
 
                                         <div className="absolute inset-x-0 bottom-0 p-3 md:p-8 transform transition-transform duration-500 group-hover/card:-translate-y-2">
-                                            <div className="flex items-center gap-1 md:gap-2">
-                                                <Award size={12} className="text-primary md:w-[18px] md:h-[18px]" />
-                                                <span className="text-primary font-black uppercase tracking-widest text-[10px] md:text-[10px] line-clamp-1">{item.title}</span>
+                                            <div className="inline-flex items-center gap-1 md:gap-2 bg-primary/90 px-2 py-1 md:px-3 md:py-1.5 rounded-md backdrop-blur-sm shadow-lg">
+                                                <Award size={12} className="text-white md:w-[18px] md:h-[18px]" />
+                                                <span className="text-white font-black uppercase tracking-widest text-[10px] md:text-[10px] line-clamp-1">{item.title}</span>
                                             </div>
                                         </div>
 
                                         {/* Corner Accent */}
-                                        <div className="absolute -top-6 -right-6 w-24 h-24 bg-primary/20 blur-[40px] rounded-full pointer-events-none group-hover/card:bg-primary/40 transition-all"></div>
+                                        <div className="absolute -top-6 -left-6 w-24 h-24 bg-primary/20 blur-[40px] rounded-full pointer-events-none group-hover/card:bg-primary/40 transition-all"></div>
                                     </div>
 
                                     {/* Decorative badge */}
-                                    <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 w-8 h-8 md:w-14 md:h-14 bg-primary rounded-lg md:rounded-xl flex items-center justify-center text-white shadow-2xl rotate-12 group-hover/card:rotate-0 transition-all duration-500 border-2 border-accent flex-col z-20">
+                                    <div className="absolute -top-2 -left-2 md:-top-3 md:-left-3 w-8 h-8 md:w-14 md:h-14 bg-primary rounded-lg md:rounded-xl flex items-center justify-center text-white shadow-2xl -rotate-12 group-hover/card:rotate-0 transition-all duration-500 border-2 border-accent flex-col z-20">
                                         <span className="text-[7px] md:text-[10px] font-black leading-none uppercase">STAR</span>
                                         <Star size={8} fill="white" className="my-0.5 md:w-3 md:h-3" />
                                         <span className="text-[6px] md:text-[8px] font-bold leading-none uppercase">PRO</span>

@@ -3,6 +3,7 @@
 import React, { useState, useRef, useLayoutEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { parseTag, type ParsedQuestion } from "@/lib/questionParser";
+import { applyOptionsBoxStyling } from "@/lib/optionsBox";
 import {
   FillBlank,
   MultipleChoice,
@@ -61,70 +62,7 @@ export default function QuestionsRenderer({
       node.innerHTML = placeholderHtml;
       appliedHtmlRef.current = placeholderHtml;
 
-      // Tag "options" tables via content heuristic: first row's first cell
-      // starts with a single uppercase letter (A, B, C...). Works whether the
-      // letter column uses <td> or <th>.
-      node.querySelectorAll<HTMLTableElement>("table").forEach((t) => {
-        const firstCell = t.querySelector("tr:first-child > td, tr:first-child > th");
-        const firstText = (firstCell?.textContent || "").trim();
-        const looksLikeOption = /^[A-Z](\s|$|[^A-Za-z0-9])/.test(firstText);
-        if (!looksLikeOption) return;
-
-        t.classList.add("options-box");
-
-        // Normalize each cell: replace nbsp AND split multi-option cells
-        // (<strong>A</strong> advice <strong>B</strong> body language ...) into
-        // separate block spans, one per option, so each letter sits on its own row.
-        t.querySelectorAll("td, th").forEach((cell) => {
-          const strongs = cell.querySelectorAll(":scope > strong");
-          if (strongs.length > 1) {
-            // Collect each <strong>...</strong> + following siblings until the next <strong>
-            const groups: Node[][] = [];
-            let current: Node[] | null = null;
-            Array.from(cell.childNodes).forEach((n) => {
-              if (n.nodeType === 1 && (n as Element).tagName === "STRONG") {
-                if (current) groups.push(current);
-                current = [n];
-              } else if (current) {
-                current.push(n);
-              }
-            });
-            if (current) groups.push(current);
-
-            cell.innerHTML = "";
-            groups.forEach((nodes) => {
-              const span = document.createElement("span");
-              span.className = "option-line";
-              nodes.forEach((n) => {
-                if (n.nodeType === 3 && n.textContent) {
-                  n.textContent = n.textContent.replace(/ /g, " ").trim();
-                  if (!n.textContent) return;
-                  // Prepend a space between letter and description
-                  span.appendChild(document.createTextNode(" "));
-                  span.appendChild(document.createTextNode(n.textContent));
-                } else {
-                  span.appendChild(n);
-                }
-              });
-              cell.appendChild(span);
-            });
-          } else {
-            // Simple cell — just normalize nbsp in text nodes
-            cell.childNodes.forEach((n) => {
-              if (n.nodeType === 3 && n.textContent) {
-                n.textContent = n.textContent.replace(/ /g, " ");
-              }
-            });
-          }
-        });
-      });
-
-      // Tag flow-chart containers (div with child <p> holding ⬇)
-      node.querySelectorAll<HTMLDivElement>("div").forEach((d) => {
-        if (Array.from(d.children).some((c) => c.tagName === "P" && /⬇|↓/.test(c.textContent || ""))) {
-          d.classList.add("flow-chart");
-        }
-      });
+      applyOptionsBoxStyling(node);
 
       // Discover placeholder spans only after HTML changes
       const targets: Record<number, HTMLElement> = {};

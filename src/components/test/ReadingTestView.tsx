@@ -19,6 +19,7 @@ import {
   Trash2,
 } from "lucide-react";
 import { parseTag, type ParsedQuestion } from "@/lib/questionParser";
+import { applyOptionsBoxStyling } from "@/lib/optionsBox";
 import {
   FillBlank,
   MultipleChoice,
@@ -417,6 +418,7 @@ function ReadingTestViewInner({
       setPortalTargets({});
       return;
     }
+    applyOptionsBoxStyling(node);
     const targets: Record<number, HTMLElement> = {};
     node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {
       const qIdx = parseInt(el.getAttribute("data-q-placeholder") || "0", 10);
