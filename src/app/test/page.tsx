@@ -1176,10 +1176,9 @@ export default function TestPage() {
                 /* Matching/flow-chart layout — options table floats as left sidebar */
                 .prose table.options-box {
                     float: left !important;
-                    width: 32% !important;
+                    width: 48% !important;
                     min-width: 260px;
-                    max-width: 420px;
-                    margin: 0 1.75rem 1.25rem 0 !important;
+                    margin: 0 2% 1.25rem 0 !important;
                     border: 1.5px solid #cbd5e1 !important;
                     border-radius: 12px !important;
                     overflow: hidden;

@@ -131,7 +131,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     viewport={{ once: true }}
                     className="group cursor-pointer h-full"
                   >
-                    <div className="relative aspect-[9/16] rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
+                    <div className="relative aspect-[3/4] rounded-xl md:rounded-2xl overflow-hidden mb-2 md:mb-6 shadow-xl md:shadow-2xl transition-all group-hover:-translate-y-2 border border-slate-100">
                       <img
                         src={prog.image}
                         alt={prog.name}
@@ -150,8 +150,8 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                       {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
                         <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[7px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 rounded-full uppercase tracking-wider md:tracking-widest z-20 whitespace-nowrap">Coming Soon</div>
                       )}
-                      <div className="absolute inset-x-0 bottom-0 p-2 md:p-5 bg-gradient-to-t from-slate-900/95 via-slate-900/70 to-transparent flex items-end justify-center min-h-[50%]">
-                        <p className="text-white font-heading font-black text-xs md:text-[15px] leading-tight uppercase tracking-tight text-center w-full pb-1 md:pb-2" style={{ fontSize: 'var(--fs-home-programName)' }}>{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
+                      <div className="absolute inset-x-0 bottom-0 h-[28%] px-2 md:px-5 bg-[#c6c9fb] flex items-center justify-center">
+                        <p className="text-white font-heading font-black text-xs md:text-[15px] leading-tight uppercase tracking-tight text-center w-full" style={{ fontSize: 'var(--fs-home-programName)' }}>{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
                       </div>
                     </div>
                   </motion.div>
