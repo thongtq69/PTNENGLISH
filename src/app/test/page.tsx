@@ -1168,14 +1168,65 @@ export default function TestPage() {
                 .prose ul > li::marker { color: #C7002B; }
                 .prose ol > li::marker { color: #C7002B; font-weight: 800; }
 
-                /* Matching layout — stack options above questions on narrow screens */
+                /* Matching/flow-chart layout — options table floats as left sidebar */
+                .prose table.options-box {
+                    float: left;
+                    width: 280px;
+                    margin: 0 1.5rem 1.25rem 0;
+                    display: block;
+                    border: 1.5px solid #cbd5e1 !important;
+                    border-radius: 12px !important;
+                    overflow: hidden;
+                    background: #f8fafc !important;
+                    table-layout: auto;
+                }
+                .prose table.options-box tbody { display: block; }
+                .prose table.options-box tr { display: block; background: transparent !important; }
+                .prose table.options-box td {
+                    display: block;
+                    padding: 0.7rem 1rem !important;
+                    border: none !important;
+                    border-bottom: 1px solid #e2e8f0 !important;
+                    text-align: left !important;
+                    line-height: 1.9 !important;
+                    background: transparent !important;
+                    color: #0f172a !important;
+                    font-weight: 500 !important;
+                }
+                .prose table.options-box tr:last-child td { border-bottom: none !important; }
+                .prose table.options-box td strong {
+                    display: inline-block;
+                    min-width: 1.4rem;
+                    color: #C7002B;
+                    font-weight: 800;
+                }
+
+                /* Flow-chart wrapping around the floated options box */
+                .prose .flow-chart {
+                    overflow: hidden;
+                    margin-left: 0 !important;
+                }
+                .prose .flow-chart > p[style*="padding"] {
+                    text-align: left !important;
+                    padding: 0.9rem 1.1rem !important;
+                    line-height: 1.65 !important;
+                    margin-bottom: 0.5rem !important;
+                }
+                .prose .flow-chart > p[style*="font-size: 1.5rem"] {
+                    color: #94a3b8;
+                    margin: 0.25rem 0 !important;
+                    line-height: 1;
+                }
+
+                /* Clear floats so subsequent question groups don't overlap the sidebar */
+                .prose hr, .prose h3 { clear: both; }
+
+                /* Narrow screens — stop floating, stack vertically */
                 @media (max-width: 900px) {
-                    .prose > div[style*="display: flex"][style*="align-items: flex-start"] {
-                        flex-direction: column !important;
-                    }
-                    .prose > div[style*="display: flex"][style*="align-items: flex-start"] > div[style*="flex: 0 0"] {
-                        flex: 0 0 auto !important;
-                        width: 100% !important;
+                    .prose table.options-box {
+                        float: none;
+                        width: 100%;
+                        margin: 0 0 1rem 0;
                     }
                 }
 

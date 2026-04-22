@@ -61,6 +61,29 @@ export default function QuestionsRenderer({
       node.innerHTML = placeholderHtml;
       appliedHtmlRef.current = placeholderHtml;
 
+      // Tag "options" tables (no <th>, typically matching-task option lists)
+      // and replace their non-breaking spaces so narrow widths can wrap.
+      node.querySelectorAll<HTMLTableElement>("table").forEach((t) => {
+        if (!t.querySelector("th")) {
+          t.classList.add("options-box");
+          t.querySelectorAll("td").forEach((td) => {
+            // Only mutate text nodes; don't touch any nested elements.
+            td.childNodes.forEach((n) => {
+              if (n.nodeType === Node.TEXT_NODE && n.textContent) {
+                n.textContent = n.textContent.replace(/ /g, " ");
+              }
+            });
+          });
+        }
+      });
+
+      // Tag flow-chart containers (div with child <p> holding ⬇)
+      node.querySelectorAll<HTMLDivElement>("div").forEach((d) => {
+        if (Array.from(d.children).some((c) => c.tagName === "P" && /⬇|↓/.test(c.textContent || ""))) {
+          d.classList.add("flow-chart");
+        }
+      });
+
       // Discover placeholder spans only after HTML changes
       const targets: Record<number, HTMLElement> = {};
       node.querySelectorAll<HTMLElement>("[data-q-placeholder]").forEach((el) => {

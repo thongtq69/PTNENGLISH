@@ -49,7 +49,6 @@ export default function Header() {
 
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const isHome = pathname === "/";
     const isAdmin = pathname.startsWith("/admin");
 
     useEffect(() => {
@@ -68,7 +67,7 @@ export default function Header() {
         }
     }, [isMenuOpen]);
 
-    const isTransparent = isHome && !isScrolled && !isMenuOpen;
+    const isTransparent = false;
 
     return (
         <>
