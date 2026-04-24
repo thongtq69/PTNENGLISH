@@ -43,6 +43,7 @@ export default function Header() {
         { name: t.nav.about, href: "/about-us" },
         { name: t.nav.courses, href: "/courses" },
         { name: t.nav.studentCorner, href: "/student-corner" },
+        { name: t.nav.events, href: "/events" },
         { name: t.nav.blog, href: "/blog" },
         { name: t.nav.lms, href: "https://lms.ptelc.edu.vn/" },
     ];

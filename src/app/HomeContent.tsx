@@ -150,7 +150,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                       {(prog.name === "PTE Academic" || prog.nameEn === "PTE Academic") && (
                         <div className="absolute top-1.5 right-1.5 md:top-4 md:right-4 bg-primary text-white text-[7px] md:text-[10px] font-bold px-1.5 py-0.5 md:px-2 rounded-full uppercase tracking-wider md:tracking-widest z-20 whitespace-nowrap">Coming Soon</div>
                       )}
-                      <div className="absolute inset-x-0 bottom-0 h-[28%] px-2 md:px-5 pt-3 md:pt-5 bg-[#c6c9fb] flex items-start justify-center">
+                      <div className="absolute inset-x-0 bottom-0 h-[28%] px-2 md:px-5 pt-3 md:pt-5 bg-[#1E0A3C] flex items-start justify-center">
                         <p className="text-white font-heading font-black text-xs md:text-[15px] leading-tight uppercase tracking-tight text-center w-full" style={{ fontSize: 'var(--fs-home-programName)' }}>{language === "en" && prog.nameEn ? prog.nameEn : prog.name}</p>
                       </div>
                     </div>

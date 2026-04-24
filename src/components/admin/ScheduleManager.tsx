@@ -131,7 +131,8 @@ export default function ScheduleManager() {
                                 compact
                                 value={sched.imageUrl}
                                 onChange={(url) => updateSchedule(idx, 'imageUrl', url)}
-                                label="Flyer"
+                                label="Flyer (object-contain — không crop)"
+                                noCrop
                             />
                         </div>
 

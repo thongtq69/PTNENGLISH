@@ -458,7 +458,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                 {SCHEDULES.map((s, i) => (
                                     <div key={i} className="flex justify-between items-center text-sm">
                                         <span className="text-slate-400 font-bold">{s.label}</span>
-                                        <span className="text-white opacity-80">{s.time}</span>
+                                        <span className="text-white opacity-80 whitespace-pre-line text-center">{s.time?.replace(/\s*\|\s*/g, '\n')}</span>
                                         <span className="text-primary font-black text-xs uppercase tracking-widest">{s.duration}</span>
                                     </div>
                                 ))}

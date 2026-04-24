@@ -52,33 +52,47 @@ export default function BlogContent({ pageData }: { pageData: any }) {
         let isMounted = true;
         let timeoutId: NodeJS.Timeout;
 
-        const fetchPosts = async () => {
+        const fetchAll = async () => {
             setLoading(true);
 
-            // Set a timeout to ensure loading is turned off even if fetch hangs
             timeoutId = setTimeout(() => {
                 if (isMounted) {
                     console.warn("Posts fetch timeout - forcing loading off");
                     setLoading(false);
                 }
-            }, 10000); // 10 second timeout
+            }, 10000);
 
             try {
-                const res = await fetch("/api/posts");
+                const [postsRes, eventsRes] = await Promise.all([
+                    fetch("/api/posts").then(r => r.ok ? r.json() : []).catch(() => []),
+                    fetch("/api/events").then(r => r.ok ? r.json() : []).catch(() => []),
+                ]);
                 if (!isMounted) return;
 
-                if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
-                }
+                const posts = Array.isArray(postsRes) ? postsRes : [];
+                const events = Array.isArray(eventsRes) ? eventsRes : [];
 
-                const data = await res.json();
-                if (isMounted) {
-                    setPosts(Array.isArray(data) ? data : []);
-                }
+                const eventsAsPosts = events
+                    .filter((e: any) => e.showInBlog !== false)
+                    .map((e: any) => ({
+                        ...e,
+                        slug: e.slug,
+                        category: e.category || (language === "vi" ? "Sự kiện" : "Events"),
+                        readTime: e.readTime || "3",
+                        _source: "event",
+                    }));
+
+                const merged = [...eventsAsPosts, ...posts].sort((a, b) => {
+                    const dA = new Date(a.createdAt || 0).getTime();
+                    const dB = new Date(b.createdAt || 0).getTime();
+                    return dB - dA;
+                });
+
+                setPosts(merged);
             } catch (err) {
                 if (isMounted) {
-                    console.error("Failed to fetch posts:", err);
-                    setPosts([]); // Set empty array on error
+                    console.error("Failed to fetch posts/events:", err);
+                    setPosts([]);
                 }
             } finally {
                 clearTimeout(timeoutId);
@@ -88,13 +102,13 @@ export default function BlogContent({ pageData }: { pageData: any }) {
             }
         };
 
-        fetchPosts();
+        fetchAll();
 
         return () => {
             isMounted = false;
             clearTimeout(timeoutId);
         };
-    }, []);
+    }, [language]);
 
 
     // Sync activeTab with language change only when necessary
@@ -195,7 +209,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                         transition={{ delay: idx * 0.1 }}
                                         className="bg-white rounded-[3rem] overflow-hidden group border border-slate-50 shadow-sm hover:shadow-2xl transition-all flex flex-col text-center relative"
                                     >
-                                        <Link href={`/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
+                                        <Link href={post._source === "event" ? `/events/${post.slug || post._id}` : `/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
                                         <div className="h-72 min-h-[18rem] overflow-hidden relative shrink-0">
                                             {(post.originalImage || post.image) ? (
                                                 <div

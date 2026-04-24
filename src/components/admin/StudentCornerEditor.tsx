@@ -259,7 +259,7 @@ export default function StudentCornerEditor() {
                                                 </select>
                                             </div>
                                             <FileUpload
-                                                label="Upload Media"
+                                                label="Upload Media (display tự co giãn — không crop)"
                                                 value={item.src}
                                                 onChange={(url) => {
                                                     const list = [...data.playground.items];
@@ -267,6 +267,7 @@ export default function StudentCornerEditor() {
                                                     setData({ ...data, playground: { ...data.playground, items: list } });
                                                 }}
                                                 folder="student-corner"
+                                                noCrop
                                             />
                                             {item.type === 'video' && (
                                                 <input placeholder="Video Link (FB/YT)" value={item.link} onChange={e => {

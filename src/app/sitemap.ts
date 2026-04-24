@@ -10,6 +10,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/blog',
         '/contact',
         '/courses',
+        '/events',
         '/journey',
         '/student-corner',
         '/teachers',
@@ -25,17 +26,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     try {
         // We can fetch from our internal API if it exists or use a direct DB query if sitemap is server-side
         // For Next.js sitemap.ts, we can import models if we have a DB connection configured
-        const postsRes = await fetch(`${BASE_URL}/api/posts`, { next: { revalidate: 3600 } }).catch(() => null);
+        const [postsRes, eventsRes] = await Promise.all([
+            fetch(`${BASE_URL}/api/posts`, { next: { revalidate: 3600 } }).catch(() => null),
+            fetch(`${BASE_URL}/api/events`, { next: { revalidate: 3600 } }).catch(() => null),
+        ]);
+        const dynamicRoutes: MetadataRoute.Sitemap = [];
         if (postsRes?.ok) {
             const posts = await postsRes.json();
-            const blogRoutes = posts.map((post: any) => ({
-                url: `${BASE_URL}/blog/${post.slug}`,
-                lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
-                changeFrequency: 'monthly' as const,
-                priority: 0.6,
-            }));
-            return [...routes, ...blogRoutes];
+            for (const post of posts) {
+                if (!post.slug) continue;
+                dynamicRoutes.push({
+                    url: `${BASE_URL}/blog/${post.slug}`,
+                    lastModified: new Date(post.updatedAt || post.createdAt || new Date()),
+                    changeFrequency: 'monthly' as const,
+                    priority: 0.6,
+                });
+            }
         }
+        if (eventsRes?.ok) {
+            const events = await eventsRes.json();
+            for (const ev of events) {
+                if (!ev.slug) continue;
+                dynamicRoutes.push({
+                    url: `${BASE_URL}/events/${ev.slug}`,
+                    lastModified: new Date(ev.updatedAt || ev.createdAt || new Date()),
+                    changeFrequency: 'monthly' as const,
+                    priority: 0.7,
+                });
+            }
+        }
+        return [...routes, ...dynamicRoutes];
     } catch (error) {
         console.error('Sitemap generation error:', error);
     }

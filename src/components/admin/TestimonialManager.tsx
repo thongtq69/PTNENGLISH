@@ -98,10 +98,11 @@ export default function TestimonialManager() {
                         </div>
                         <div className="mt-8 pt-8 border-t border-white/5">
                             <FileUpload
-                                label="Profile Image"
+                                label="Profile Image — hiển thị hình tròn, crop vuông 1:1"
                                 value={item.image}
                                 onChange={(url) => updateItem(idx, 'image', url)}
                                 folder="testimonials"
+                                aspect={1}
                             />
                         </div>
                     </motion.div>

@@ -24,7 +24,8 @@ import {
     MessageCircle,
     Loader2,
     Type,
-    BarChart3
+    BarChart3,
+    Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import AdminLogin from './AdminLogin';
@@ -48,6 +49,7 @@ const MENU_ITEMS = [
             { name: 'Schedules', icon: <Calendar size={20} />, href: '/admin/schedules' },
             { name: 'Campaign Ads', icon: <Megaphone size={20} />, href: '/admin/ads' },
             { name: 'Blog Posts', icon: <FileText size={20} />, href: '/admin/blog' },
+            { name: 'Events', icon: <Sparkles size={20} />, href: '/admin/events' },
             { name: 'Testimonials', icon: <Heart size={20} />, href: '/admin/testimonials' },
             { name: 'Hall of Fame', icon: <Trophy size={20} />, href: '/admin/achievements' },
         ]

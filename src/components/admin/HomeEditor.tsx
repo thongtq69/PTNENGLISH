@@ -787,7 +787,7 @@ export default function HomeEditor() {
                                 </div>
                             </div>
                             <FileUpload
-                                label="Program Card Image"
+                                label="Program Card Image — hiển thị tỉ lệ 3:4 (portrait)"
                                 value={prog.image}
                                 onChange={(url) => {
                                     const newList = [...settings.programs];
@@ -795,7 +795,7 @@ export default function HomeEditor() {
                                     setSettings({ ...settings, programs: newList });
                                 }}
                                 folder="home/programs"
-                                aspect={1}
+                                aspect={3 / 4}
                             />
                             <select
                                 value={prog.color}
@@ -902,7 +902,7 @@ export default function HomeEditor() {
                             />
                             <div className="w-full">
                                 <FileUpload
-                                    label="Logo"
+                                    label="Logo (không crop — logo hiển thị object-contain)"
                                     compact
                                     value={p.logo}
                                     onChange={(url) => {
@@ -911,6 +911,7 @@ export default function HomeEditor() {
                                         setSettings({ ...settings, partners: newList });
                                     }}
                                     folder="home/partners"
+                                    noCrop
                                 />
                             </div>
                         </div>

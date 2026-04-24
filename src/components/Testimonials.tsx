@@ -61,12 +61,26 @@ export default function Testimonials() {
                             onClick={() => setSelectedTestimonial(testimonials[index])}
                         >
                             <div className="shrink-0 relative">
-                                <div className="w-28 h-28 md:w-40 md:h-40 rounded-full overflow-hidden border-8 border-slate-50 shadow-inner">
-                                    <img
-                                        src={testimonials[index].image}
-                                        alt={testimonials[index].name}
-                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    />
+                                <div className="w-28 h-28 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-lg bg-slate-100">
+                                    {testimonials[index].image ? (
+                                        <img
+                                            src={testimonials[index].image}
+                                            alt={testimonials[index].name}
+                                            className="w-full h-full object-cover object-top"
+                                            onError={(e) => {
+                                                const img = e.currentTarget;
+                                                if (img.dataset.fallback) return;
+                                                img.dataset.fallback = "1";
+                                                img.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                                                    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'><rect width='160' height='160' fill='#e2e8f0'/><text x='80' y='95' text-anchor='middle' font-family='sans-serif' font-size='56' font-weight='700' fill='#94a3b8'>${(testimonials[index].name || '?').charAt(0).toUpperCase()}</text></svg>`
+                                                );
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-4xl font-bold text-slate-400">
+                                            {(testimonials[index].name || '?').charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
                                 </div>
                                 <Quote className="absolute -top-2 -right-2 text-primary bg-white rounded-full p-2 shadow-lg" size={32} />
                             </div>
@@ -144,12 +158,26 @@ export default function Testimonials() {
                             </button>
 
                             <div className="flex flex-col items-center text-center mb-12">
-                                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-slate-50 shadow-lg mb-6">
-                                    <img
-                                        src={selectedTestimonial.image}
-                                        alt={selectedTestimonial.name}
-                                        className="w-full h-full object-cover"
-                                    />
+                                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg mb-6 bg-slate-100">
+                                    {selectedTestimonial.image ? (
+                                        <img
+                                            src={selectedTestimonial.image}
+                                            alt={selectedTestimonial.name}
+                                            className="w-full h-full object-cover object-top"
+                                            onError={(e) => {
+                                                const img = e.currentTarget;
+                                                if (img.dataset.fallback) return;
+                                                img.dataset.fallback = "1";
+                                                img.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                                                    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect width='96' height='96' fill='#e2e8f0'/><text x='48' y='60' text-anchor='middle' font-family='sans-serif' font-size='36' font-weight='700' fill='#94a3b8'>${(selectedTestimonial.name || '?').charAt(0).toUpperCase()}</text></svg>`
+                                                );
+                                            }}
+                                        />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-slate-400">
+                                            {(selectedTestimonial.name || '?').charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
                                 </div>
                                 <h4 className="text-3xl font-heading font-black text-accent mb-2">{selectedTestimonial.name}</h4>
                                 <p className="text-primary font-bold text-sm uppercase tracking-widest">{selectedTestimonial.sub}</p>

@@ -94,7 +94,7 @@ export default function AdModal() {
         sessionStorage.removeItem(VIEW_STATE_KEY);
     };
 
-    if (ads.length === 0 || !pathname || pathname.startsWith('/admin')) return null;
+    if (ads.length === 0 || !pathname || pathname.startsWith('/admin') || pathname.startsWith('/test')) return null;
 
     const ad = ads[currentIdx];
     const total = ads.length;

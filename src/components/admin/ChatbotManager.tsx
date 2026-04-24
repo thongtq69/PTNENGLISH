@@ -432,10 +432,11 @@ export default function ChatbotManager() {
                                 </h2>
 
                                 <FileUpload
-                                    label="Agent Avatar"
+                                    label="Agent Avatar — hiển thị hình tròn, crop vuông 1:1"
                                     value={config?.agentImage}
                                     onChange={(url) => updateConfigField('agentImage', url)}
                                     folder="chatbot"
+                                    aspect={1}
                                 />
 
                                 <div className="grid grid-cols-2 gap-6">
