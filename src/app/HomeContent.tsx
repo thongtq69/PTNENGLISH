@@ -38,15 +38,17 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
   }, []);
 
   // Use data from DB if available, otherwise fallback to hardcoded (for safety)
+  // For EN users, prefer translation dictionary over DB (DB content is VI).
+  const isEn = language === "en";
   const homeHero = siteSettings?.hero || pageData?.sections?.find((s: any) => s.type === 'hero')?.content;
   const programs = siteSettings?.programs || [];
   const partners = siteSettings?.partners || [];
-  const philosophy = siteSettings?.philosophy || siteSettings?.homeContent?.philosophyText || t.home.philosophy.text;
-  const philosophyTitle = siteSettings?.philosophyTitle || t.home.philosophy.title;
-  const intro = siteSettings?.intro || t.home.intro;
-  const campus = siteSettings?.campus || t.home.campus;
-  const faculty = siteSettings?.faculty || t.home.faculty;
-  const homeBlog = siteSettings?.homeBlog || t.home.blog;
+  const philosophy = isEn ? t.home.philosophy.text : (siteSettings?.philosophy || siteSettings?.homeContent?.philosophyText || t.home.philosophy.text);
+  const philosophyTitle = isEn ? t.home.philosophy.title : (siteSettings?.philosophyTitle || t.home.philosophy.title);
+  const intro = isEn ? t.home.intro : (siteSettings?.intro || t.home.intro);
+  const campus = isEn ? t.home.campus : (siteSettings?.campus || t.home.campus);
+  const faculty = isEn ? t.home.faculty : (siteSettings?.faculty || t.home.faculty);
+  const homeBlog = isEn ? t.home.blog : (siteSettings?.homeBlog || t.home.blog);
 
   return (
     <main className="min-h-screen bg-background">
@@ -394,7 +396,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
       <section className="py-12 md:py-16 bg-white/10 backdrop-blur-sm border-y border-white/5 overflow-hidden">
         <div className="container mx-auto px-6 text-center mb-8 md:mb-12">
           <p className="font-heading font-bold uppercase tracking-[0.3em]" style={{ fontSize: 'var(--fs-home-partnersBadge)', color: '#1E0A3C' }}>
-            {siteSettings?.partnersSection?.badge || t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí"}
+            {isEn ? t.home?.partners?.badge : (siteSettings?.partnersSection?.badge || t.home?.partners?.badge || "Đối tác chiến lược & Khảo thí")}
           </p>
         </div>
 

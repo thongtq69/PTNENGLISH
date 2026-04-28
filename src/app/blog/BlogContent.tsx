@@ -22,30 +22,24 @@ export default function BlogContent({ pageData }: { pageData: any }) {
 
     // Extract dynamic content - Prioritize pageData from admin, then translations
     const hero = {
-        title: heroSection?.title || t.blogPage?.hero?.title || (language === "vi" ? "Góc Tri Thức <br /> Academic Insights" : "Knowledge Hub <br /> Academic Insights"),
-        subtitle: heroSection?.subtitle || t.blogPage?.hero?.subtitle || "Knowledge Navigator & Editorial",
-        description: heroSection?.description || t.blogPage?.hero?.description || (language === "vi"
-            ? "Chia sẻ những kinh nghiệm, phương pháp và lộ trình học thuật quý báu từ đội ngũ chuyên gia MA.TESOL của PTN English."
-            : "Sharing valuable experiences, methods, and academic pathways from PTN English's MA.TESOL expert team.")
+        title: heroSection?.title || t.blogPage.hero.title,
+        subtitle: heroSection?.subtitle || t.blogPage.hero.subtitle,
+        description: heroSection?.description || t.blogPage.hero.description
     };
 
     // Memoize categories to prevent re-render loops - always use translated categories
-    const categories = useMemo(() => {
-        return language === "vi"
-            ? ["Tất cả", "IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập"]
-            : ["All", "IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience"];
-    }, [language]);
+    const categories = useMemo(() => t.blogPage.categories, [t]);
 
     // Initialize activeTab based on language when empty
     useEffect(() => {
         if (!activeTab) {
-            setActiveTab(language === "vi" ? "Tất cả" : "All");
+            setActiveTab(t.blogPage.all);
         }
-    }, [language, activeTab]);
+    }, [t, activeTab]);
     const newsletter = {
-        title: newsletterSection?.title || t.blogPage?.newsletter?.title || (language === "vi" ? "Đăng ký nhận Academic Insights định kỳ" : "Subscribe to Academic Insights"),
-        description: newsletterSection?.description || t.blogPage?.newsletter?.description || (language === "vi" ? "Cập nhật những thay đổi mới nhất về đề thi IELTS và các chương trình học bổng du học Châu Âu ngay hôm nay." : "Get the latest updates on IELTS exams and scholarship programs for studying in Europe today."),
-        buttonText: newsletterSection?.buttonText || t.blogPage?.newsletter?.buttonText || (language === "vi" ? "Đăng Ký Ngay" : "Subscribe Now")
+        title: newsletterSection?.title || t.blogPage.newsletter.title,
+        description: newsletterSection?.description || t.blogPage.newsletter.description,
+        buttonText: newsletterSection?.buttonText || t.blogPage.newsletter.buttonText
     };
 
     useEffect(() => {
@@ -77,7 +71,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                     .map((e: any) => ({
                         ...e,
                         slug: e.slug,
-                        category: e.category || (language === "vi" ? "Sự kiện" : "Events"),
+                        category: e.category || t.blogPage.eventCategory,
                         readTime: e.readTime || "3",
                         _source: "event",
                     }));
@@ -270,7 +264,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                         {loading ? (
                             <div className="py-40 text-center">
                                 <div className="w-16 h-16 mx-auto mb-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-                                <h3 className="text-xl font-heading font-bold text-slate-500">{t.common.loading || "Đang tải..."}</h3>
+                                <h3 className="text-xl font-heading font-bold text-slate-500">{t.common.loading}</h3>
                             </div>
                         ) : filteredPosts.length === 0 && (
                             <div className="py-40 text-center">

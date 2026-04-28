@@ -511,8 +511,8 @@ export default function TestPage() {
                     {!hasAnswers ? (
                         <div className="flex flex-col items-center gap-4 py-6">
                             <AlertCircle size={48} className="text-amber-400" />
-                            <p className="text-lg font-heading font-black text-accent">Chưa có đáp án cho phần {skillName}</p>
-                            <p className="text-sm text-slate-400">Đáp án sẽ được cập nhật sớm. Vui lòng quay lại sau.</p>
+                            <p className="text-lg font-heading font-black text-accent">{t.testPage.noAnswerKeyTitle} {skillName}</p>
+                            <p className="text-sm text-slate-400">{t.testPage.noAnswerKeyDesc}</p>
                         </div>
                     ) : (
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-16">
@@ -676,10 +676,10 @@ export default function TestPage() {
                                     <PenTool size={36} className="text-amber-600" />
                                 </div>
                                 <h3 className="text-2xl sm:text-3xl font-heading font-black text-accent mb-3">
-                                    Writing — Chờ chấm bài
+                                    {t.testPage.writingPendingTitle}
                                 </h3>
                                 <p className="text-slate-500 text-sm sm:text-base max-w-lg mx-auto leading-relaxed">
-                                    Bài Writing của bạn cần được giáo viên chấm thủ công. Vui lòng để lại thông tin liên hệ để chúng tôi gửi kết quả chấm bài cho bạn trong vòng <span className="font-bold text-primary">24 giờ</span>.
+                                    {t.testPage.writingPendingDesc} <span className="font-bold text-primary">{t.testPage.within24h}</span>.
                                 </p>
                             </div>
 
@@ -690,23 +690,23 @@ export default function TestPage() {
                                     className="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center"
                                 >
                                     <CheckCircle2 size={48} className="text-emerald-500 mx-auto mb-4" />
-                                    <h4 className="text-xl font-heading font-black text-emerald-700 mb-2">Đã gửi thành công!</h4>
-                                    <p className="text-emerald-600 text-sm">Chúng tôi sẽ liên hệ bạn sớm nhất với kết quả chấm bài Writing.</p>
+                                    <h4 className="text-xl font-heading font-black text-emerald-700 mb-2">{t.testPage.sentSuccessTitle}</h4>
+                                    <p className="text-emerald-600 text-sm">{t.testPage.sentSuccessDesc}</p>
                                 </motion.div>
                             ) : (
                                 <div className="max-w-md mx-auto space-y-4">
                                     <div>
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Họ và tên *</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">{t.testPage.fullName} *</label>
                                         <input
                                             type="text"
                                             value={writingContact.name}
                                             onChange={(e) => setWritingContact(prev => ({ ...prev, name: e.target.value }))}
-                                            placeholder="Nguyễn Văn A"
+                                            placeholder={t.testPage.namePlaceholder}
                                             className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all text-sm"
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Số điện thoại *</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">{t.testPage.phone} *</label>
                                         <input
                                             type="tel"
                                             value={writingContact.phone}
@@ -728,7 +728,7 @@ export default function TestPage() {
                                     <button
                                         onClick={() => {
                                             if (!writingContact.name.trim() || !writingContact.phone.trim()) {
-                                                alert("Vui lòng điền họ tên và số điện thoại.");
+                                                alert(t.testPage.requireFields);
                                                 return;
                                             }
                                             // TODO: Send to API
@@ -736,7 +736,7 @@ export default function TestPage() {
                                         }}
                                         className="w-full py-4 bg-primary text-white rounded-xl font-black text-sm uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-primary/20 mt-2"
                                     >
-                                        Gửi yêu cầu chấm bài
+                                        {t.testPage.sendRequest}
                                     </button>
                                 </div>
                             )}
@@ -1091,9 +1091,9 @@ export default function TestPage() {
                                         </div>
                                         <div className="text-white">
                                             <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/60">
-                                                Chuẩn bị — Section {activeSectionIdx + 1}
+                                                {t.testPage.preparation} {activeSectionIdx + 1}
                                             </p>
-                                            <p className="text-xs sm:text-sm text-white/80">Lướt qua câu hỏi trước khi audio bắt đầu</p>
+                                            <p className="text-xs sm:text-sm text-white/80">{t.testPage.previewHint}</p>
                                         </div>
                                     </div>
                                     <div className="flex items-center gap-3 sm:gap-4">
@@ -1105,7 +1105,7 @@ export default function TestPage() {
                                             className="px-4 sm:px-6 py-2 sm:py-2.5 bg-primary text-white rounded-xl font-bold text-xs uppercase tracking-wider hover:bg-red-700 transition-all shadow-lg shadow-primary/30 flex items-center gap-2"
                                         >
                                             <Play size={14} />
-                                            Bắt đầu ngay
+                                            {t.testPage.startNow}
                                         </button>
                                     </div>
                                 </div>

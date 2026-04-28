@@ -19,7 +19,7 @@ const TikTokIcon = ({ size = 20, className = "" }: { size?: number; className?: 
 );
 
 export default function Footer() {
-    const { t, language } = useLanguage();
+    const { t } = useLanguage();
     const [settings, setSettings] = useState<any>(null);
 
     useEffect(() => {
@@ -30,16 +30,14 @@ export default function Footer() {
     }, []);
 
     const footerData = {
-        aboutText: t.footer?.about || (language === "en" ? "Shaping a brilliant future through mastering the global language. Committed to providing the best quality education." : "Kiến tạo tương lai rực rỡ thông qua việc làm chủ ngôn ngữ toàn cầu. Cam kết mang đến chất lượng giáo dục tốt nhất."),
-        copyright: t.footer?.copyright || (language === "en" ? "© 2026 Partner To Navigate. All rights reserved." : "© 2026 Partner To Navigate. Bảo lưu mọi quyền.")
+        aboutText: t.footer.about,
+        copyright: t.footer.copyright
     };
-
-
 
     const contactData = settings?.contact || {
         phone: "0902 508 290",
         email: "info@ptelc.edu.vn",
-        address: language === "en" ? "146 Bis Nguyen Van Thu, Da Kao Ward, District 1, HCMC" : "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
+        address: t.footer.address,
         mapsUrl: "https://maps.google.com/maps?q=146%20Bis%20Nguy%E1%BB%85n%20V%C4%83n%20Th%E1%BB%A7%2C%20%C4%90a%20Kao%2C%20Qu%E1%BA%ADn%201%2C%20H%E1%BB%93%20Ch%C3%AD%20Minh&hl=vi&z=17&output=embed"
     };
 
@@ -106,9 +104,9 @@ export default function Footer() {
                     <h4 className="font-heading font-bold text-[13px] md:text-lg mb-3 md:mb-4 text-primary uppercase tracking-[0.2em] border-l-2 border-primary pl-3" style={{ WebkitTextStroke: '0.5px currentColor' }}>{t.footer.courses}</h4>
                     <ul className="grid grid-cols-1 gap-1 md:gap-2">
                         {[
-                            { name: t.courses?.pathway?.ie?.name || (language === "en" ? "IELTS Preparation (IE)" : "Luyện thi IELTS (IE)"), href: "/courses#ie" },
-                            { name: t.courses?.pathway?.eft?.name || (language === "en" ? "Academic English (EfT)" : "Học thuật Thiếu niên (EfT)"), href: "/courses#eft" },
-                            { name: t.courses?.pathway?.ge?.name || (language === "en" ? "General English (GE)" : "Tiếng Anh Giao tiếp (GE)"), href: "/courses#ge" }
+                            { name: t.courses.pathway.ie.name, href: "/courses#ie" },
+                            { name: t.courses.pathway.eft.name, href: "/courses#eft" },
+                            { name: t.courses.pathway.ge.name, href: "/courses#ge" }
                         ].map((course) => (
                             <li key={course.name}>
                                 <a href={course.href} className="font-body font-normal text-[13px] md:text-base hover:text-primary transition-colors" style={{ color: '#1E0A3C' }}>

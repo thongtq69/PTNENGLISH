@@ -9,22 +9,31 @@ import { Compass, Zap, Trophy, Quote, Star, MapPin } from "lucide-react";
 const SUCCESS_STORIES = [
     {
         name: "Phuong Thao Nguyen",
+        nameEn: "Phuong Thao Nguyen",
         target: "Du học sinh Finland",
+        targetEn: "Exchange Student in Finland",
         text: "Trung tâm không chỉ dạy tiếng Anh mà còn hỗ trợ mình rất nhiều trong các bài luận và đồ án ngay cả khi mình đã sang Phần Lan du học. Thầy cô thực sự là những người đồng hành tâm huyết.",
+        textEn: "PTN English not only taught me the language but also supported me with essays and projects even after I moved to Finland to study. The teachers are truly dedicated companions on my journey.",
         image: "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?auto=format&fit=crop&q=80&w=200",
         stars: 5,
     },
     {
         name: "Thanh Son Nguyen",
+        nameEn: "Thanh Son Nguyen",
         target: "Green River College, USA",
+        targetEn: "Green River College, USA",
         text: "Mình cực kỳ thích cách dạy truyền cảm hứng tại PTELC. Phương pháp Active Learning giúp mình tự tin hơn hẳn khi bước chân vào môi trường đại học tại Mỹ.",
+        textEn: "I genuinely loved the inspiring teaching style at PTELC. The Active Learning approach gave me the confidence I needed to thrive in a U.S. university environment.",
         image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200",
         stars: 5,
     },
     {
         name: "Anh Vy Tran",
+        nameEn: "Anh Vy Tran",
         target: "Melbourne, Australia",
+        targetEn: "Melbourne, Australia",
         text: "Thầy cô tại đây như những người thắp lửa (fire-bringers). Mình luôn cảm thấy được hỗ trợ tuyệt đối trong suốt hành trình chinh phục IELTS.",
+        textEn: "The teachers here are true fire-bringers. I always felt fully supported throughout my journey to conquer the IELTS exam.",
         image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200",
         stars: 5,
     }
@@ -32,6 +41,7 @@ const SUCCESS_STORIES = [
 
 export default function JourneyPage() {
     const { t, language } = useLanguage();
+    const pick = <T,>(vi: T, en?: T): T => (language === "en" && en ? en : vi);
 
     const STEPS = [
         {
@@ -129,36 +139,30 @@ export default function JourneyPage() {
                         {t.journey.successWall.title}
                     </h2>
 
-                    {language === "vi" ? (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
-                            {SUCCESS_STORIES.map((story, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    className="bg-white/5 backdrop-blur-lg border border-white/10 p-12 rounded-[4rem] text-center group hover:bg-white/10 transition-all"
-                                >
-                                    <Quote className="text-primary w-12 h-12 mx-auto mb-8 opacity-40" />
-                                    <img src={story.image} alt={story.name} className="w-24 h-24 rounded-full mx-auto mb-8 object-cover ring-4 ring-white/10 group-hover:ring-primary/50 transition-all" />
-                                    <div className="space-y-4 mb-8">
-                                        <p className="text-white font-heading font-bold text-xl">{story.name}</p>
-                                        <p className="text-primary text-[10px] font-bold uppercase tracking-widest">{story.target}</p>
-                                    </div>
-                                    <p className="text-slate-400 font-body text-sm leading-relaxed mb-8">
-                                        "{story.text}"
-                                    </p>
-                                    <div className="flex justify-center space-x-1 text-primary">
-                                        {[...Array(story.stars)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    ) : (
-                        <p className="text-slate-400 font-body text-lg">
-                            Student testimonials coming soon in English.
-                        </p>
-                    )}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-7xl mx-auto">
+                        {SUCCESS_STORIES.map((story, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="bg-white/5 backdrop-blur-lg border border-white/10 p-12 rounded-[4rem] text-center group hover:bg-white/10 transition-all"
+                            >
+                                <Quote className="text-primary w-12 h-12 mx-auto mb-8 opacity-40" />
+                                <img src={story.image} alt={pick(story.name, story.nameEn)} className="w-24 h-24 rounded-full mx-auto mb-8 object-cover ring-4 ring-white/10 group-hover:ring-primary/50 transition-all" />
+                                <div className="space-y-4 mb-8">
+                                    <p className="text-white font-heading font-bold text-xl">{pick(story.name, story.nameEn)}</p>
+                                    <p className="text-primary text-[10px] font-bold uppercase tracking-widest">{pick(story.target, story.targetEn)}</p>
+                                </div>
+                                <p className="text-slate-400 font-body text-sm leading-relaxed mb-8">
+                                    "{pick(story.text, story.textEn)}"
+                                </p>
+                                <div className="flex justify-center space-x-1 text-primary">
+                                    {[...Array(story.stars)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
                 </div>
             </section>
 

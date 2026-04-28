@@ -467,11 +467,34 @@ export const translations = {
                 cta2: "Xem lịch khai giảng mới nhất"
             }
         },
+        about: {
+            explore: "Khám phá giá trị cốt lõi",
+            click: "Nhấn vào biểu tượng để khám phá"
+        },
+        events: {
+            labels: {
+                title: "Sự kiện & Hoạt động",
+                description: "Cập nhật các sự kiện, cuộc thi và hoạt động cộng đồng nổi bật của PTN English.",
+                searchPlaceholder: "Tìm kiếm sự kiện...",
+                readEvent: "Đọc tiếp",
+                empty: "Chưa có sự kiện nào",
+                emptyDesc: "Các sự kiện mới sẽ được cập nhật tại đây.",
+                home: "Trang chủ",
+                events: "Sự kiện",
+                tags: "Nhãn liên quan",
+                related: "Sự kiện khác",
+                copied: "Đã sao chép!",
+                viewMore: "Xem thêm",
+                defaultCategory: "Sự kiện"
+            }
+        },
         blogPage: {
             all: "Tất cả",
             searchPlaceholder: "Tìm bài viết...",
             readTime: "phút đọc",
             author: "Tác giả",
+            eventCategory: "Sự kiện",
+            categories: ["Tất cả", "IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập"],
             emptyState: {
                 title: "Chưa có bài viết phù hợp",
                 desc: "Mời bạn quay lại sau để cập nhật những kiến thức mới nhất."
@@ -624,6 +647,7 @@ export const translations = {
             quickLinks: "Liên kết nhanh",
             courses: "Khóa học",
             contact: "Liên hệ",
+            address: "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
             copyright: "© 2026 Partner To Navigate. Bảo lưu mọi quyền."
         },
         chatbot: {
@@ -646,14 +670,78 @@ export const translations = {
                 phone: "SĐT",
                 interest: "Quan tâm",
                 source: "(Từ Website PTN English)"
-            }
+            },
+            leadFormHint: "Để lại SĐT để chúng tôi tiện tư vấn nhé:",
+            nameInputPlaceholder: "Họ và tên của bạn",
+            phoneInputPlaceholder: "Số điện thoại / Zalo",
+            sendInfoBtn: "Gửi thông tin",
+            messageInputPlaceholder: "Nhập tin nhắn...",
+            thanksConfirmation: "Cảm ơn bạn! Chúng tôi đã ghi nhận thông tin và sẽ liên hệ sớm nhất."
         },
 
 
         common: {
             loading: "Đang tải...",
             retry: "Thử lại",
-            successful: "Thành công"
+            successful: "Thành công",
+            viewDetail: "Xem chi tiết",
+            qualifications: "Trình độ chuyên môn"
+        },
+        adModal: {
+            dismiss: "Đóng",
+            viewPromo: "Xem khuyến mãi",
+            promoLabel: "Khuyến Mãi",
+            nextAd: "Quảng cáo tiếp theo",
+            prevAd: "Quảng cáo trước",
+            minimize: "Thu nhỏ",
+            adIndex: "Quảng cáo",
+            maybeLater: "Để sau"
+        },
+        promo: {
+            admission: "Tuyển sinh 2025",
+            chieuSinh: "CHIÊU SINH",
+            monthsLabel: "THÁNG 11 & 12",
+            withTeam: "Đồng hành cùng đội ngũ chuyên gia",
+            mtTopRated: "hàng đầu.",
+            schedulesTitle: "Lịch Khai Giảng",
+            schedulesDesc: "Hệ thống đào tạo học thuật chuyên sâu.",
+            quote: "\"Quality over speed, mastery over tricks.\"",
+            registerNow: "Đăng ký tư vấn ngay",
+            limitedSpots: "Chỉ tiêu giới hạn cho 2025"
+        },
+        teachersPage: {
+            heroBadge: "Your World-Class Academic Partners",
+            heroTitle1: "Đội Ngũ Giảng Viên",
+            heroTitle2: "Tâm Huyết & Chuyên Môn",
+            heroQuote: "\"Mọi sự thành công của học viên đều bắt đầu từ sự dẫn dắt của những người thầy đủ Tâm và đủ Tầm.\"",
+            experienceLabel: "Kinh nghiệm",
+            studentsSuffix: "Students",
+            ctaTitle: "Trở thành \"Navigation Partner\" tiếp theo?",
+            ctaDesc: "Chúng tôi luôn tìm kiếm những chuyên gia giáo dục sở hữu tâm huyết và chuyên môn cao để cùng cộng tác định hướng tương lai cho thế hệ học viên Việt Nam vươn xa toàn cầu.",
+            ctaButton: "Ứng tuyển giảng viên ngay",
+            yearsSuffix: "Năm"
+        },
+        coursesPage: {
+            noSchedules: "Chưa có lịch khai giảng mới nhất."
+        },
+        testPage: {
+            noAnswerKeyTitle: "Chưa có đáp án cho phần",
+            noAnswerKeyDesc: "Đáp án sẽ được cập nhật sớm. Vui lòng quay lại sau.",
+            writingPendingTitle: "Writing — Chờ chấm bài",
+            writingPendingDesc: "Bài Writing của bạn cần được giáo viên chấm thủ công. Vui lòng để lại thông tin liên hệ để chúng tôi gửi kết quả chấm bài cho bạn trong vòng",
+            within24h: "24 giờ",
+            sentSuccessTitle: "Đã gửi thành công!",
+            sentSuccessDesc: "Chúng tôi sẽ liên hệ bạn sớm nhất với kết quả chấm bài Writing.",
+            fullName: "Họ và tên",
+            namePlaceholder: "Nguyễn Văn A",
+            phone: "Số điện thoại",
+            requireFields: "Vui lòng điền họ tên và số điện thoại.",
+            sendRequest: "Gửi yêu cầu chấm bài",
+            preparation: "Chuẩn bị — Section",
+            previewHint: "Lướt qua câu hỏi trước khi audio bắt đầu",
+            startNow: "Bắt đầu ngay",
+            taskHeading: "Đề bài",
+            essayHeading: "Bài viết"
         },
         test: {
             loading: "Đang tải đề thi...",
@@ -1158,11 +1246,34 @@ export const translations = {
                 cta2: "View latest opening schedules"
             }
         },
+        about: {
+            explore: "Explore our core values",
+            click: "Click icons to explore differences"
+        },
+        events: {
+            labels: {
+                title: "Events & Activities",
+                description: "Updates on events, competitions and community activities at PTN English.",
+                searchPlaceholder: "Search events...",
+                readEvent: "Read more",
+                empty: "No events yet",
+                emptyDesc: "New events will be published here.",
+                home: "Home",
+                events: "Events",
+                tags: "Tags",
+                related: "Other events",
+                copied: "Copied!",
+                viewMore: "View more",
+                defaultCategory: "Events"
+            }
+        },
         blogPage: {
             all: "All",
             searchPlaceholder: "Search articles...",
             readTime: "min read",
             author: "Author",
+            eventCategory: "Events",
+            categories: ["All", "IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience"],
             emptyState: {
                 title: "No matching articles found",
                 desc: "Please check back later for the latest knowledge updates."
@@ -1311,6 +1422,7 @@ export const translations = {
             quickLinks: "Quick Links",
             courses: "Courses",
             contact: "Contact",
+            address: "146 Bis Nguyen Van Thu, Da Kao Ward, District 1, HCMC",
             copyright: "© 2026 Partner To Navigate. All rights reserved."
         },
         chatbot: {
@@ -1333,14 +1445,78 @@ export const translations = {
                 phone: "Phone",
                 interest: "Interested in",
                 source: "(From PTN English Website)"
-            }
+            },
+            leadFormHint: "Please leave your number so we can consult:",
+            nameInputPlaceholder: "Your full name",
+            phoneInputPlaceholder: "Phone number / Zalo",
+            sendInfoBtn: "Send Information",
+            messageInputPlaceholder: "Type a message...",
+            thanksConfirmation: "Thank you! We have received your information and will contact you soon."
         },
 
 
         common: {
             loading: "Loading...",
             retry: "Retry",
-            successful: "Successful"
+            successful: "Successful",
+            viewDetail: "View details",
+            qualifications: "Qualifications"
+        },
+        adModal: {
+            dismiss: "Dismiss",
+            viewPromo: "View promotion",
+            promoLabel: "Promotion",
+            nextAd: "Next ad",
+            prevAd: "Previous ad",
+            minimize: "Minimize",
+            adIndex: "Ad",
+            maybeLater: "Maybe later"
+        },
+        promo: {
+            admission: "Admission 2025",
+            chieuSinh: "ENROLLMENT",
+            monthsLabel: "NOV & DEC",
+            withTeam: "Join our team of leading",
+            mtTopRated: "experts.",
+            schedulesTitle: "Class Schedule",
+            schedulesDesc: "An in-depth academic training system.",
+            quote: "\"Quality over speed, mastery over tricks.\"",
+            registerNow: "Register for consultation",
+            limitedSpots: "Limited spots for 2025"
+        },
+        teachersPage: {
+            heroBadge: "Your World-Class Academic Partners",
+            heroTitle1: "Our Teaching Team",
+            heroTitle2: "Dedicated & Expert",
+            heroQuote: "\"Every learner's success begins with the guidance of teachers who possess both heart and excellence.\"",
+            experienceLabel: "Experience",
+            studentsSuffix: "Students",
+            ctaTitle: "Become the next \"Navigation Partner\"?",
+            ctaDesc: "We are always seeking dedicated, highly qualified education experts to collaborate with us in shaping the future of Vietnamese learners reaching global horizons.",
+            ctaButton: "Apply as a teacher",
+            yearsSuffix: "Years"
+        },
+        coursesPage: {
+            noSchedules: "No upcoming schedule available yet."
+        },
+        testPage: {
+            noAnswerKeyTitle: "No answer key available for",
+            noAnswerKeyDesc: "Answer keys will be updated soon. Please check back later.",
+            writingPendingTitle: "Writing — Awaiting grading",
+            writingPendingDesc: "Your Writing submission requires manual grading. Please leave your contact details so we can send you the result within",
+            within24h: "24 hours",
+            sentSuccessTitle: "Successfully submitted!",
+            sentSuccessDesc: "We will contact you as soon as possible with your Writing result.",
+            fullName: "Full name",
+            namePlaceholder: "John Doe",
+            phone: "Phone number",
+            requireFields: "Please enter your full name and phone number.",
+            sendRequest: "Submit grading request",
+            preparation: "Preparation — Section",
+            previewHint: "Skim the questions before the audio starts",
+            startNow: "Start now",
+            taskHeading: "Task",
+            essayHeading: "Your essay"
         },
         test: {
             loading: "Loading test...",

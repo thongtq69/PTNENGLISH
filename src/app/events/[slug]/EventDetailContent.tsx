@@ -35,28 +35,12 @@ interface RelatedEvent {
 }
 
 export default function EventDetailContent({ event, related }: { event: EventData; related: RelatedEvent[] }) {
-    const { language } = useLanguage();
+    const { t } = useLanguage();
     const [lightbox, setLightbox] = useState<number | null>(null);
     const [copied, setCopied] = useState(false);
     const [activeIdx, setActiveIdx] = useState(0);
 
-    const labels = language === "vi"
-        ? {
-            home: "Trang chủ",
-            events: "Sự kiện",
-            tags: "Nhãn liên quan",
-            related: "Sự kiện khác",
-            copied: "Đã sao chép!",
-            viewMore: "Xem thêm",
-        }
-        : {
-            home: "Home",
-            events: "Events",
-            tags: "Tags",
-            related: "Other events",
-            copied: "Copied!",
-            viewMore: "View more",
-        };
+    const labels = t.events.labels;
 
     const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 

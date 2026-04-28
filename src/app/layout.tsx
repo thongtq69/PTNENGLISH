@@ -93,6 +93,11 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL("https://ptnenglish.edu.vn"),
     alternates: {
       canonical: "/",
+      languages: {
+        "vi": "https://ptnenglish.edu.vn/",
+        "en": "https://ptnenglish.edu.vn/",
+        "x-default": "https://ptnenglish.edu.vn/",
+      },
     },
     openGraph: {
       title: settings.site.title,
@@ -148,8 +153,23 @@ const resolveInitialLanguage = async (): Promise<Language> => {
 
   const headerStore = await headers();
   const acceptLanguage = headerStore.get("accept-language") ?? "";
-  // Only auto-detect English; everything else (and no header) defaults to vi.
-  if (/\ben(?:-|;|,|$)/i.test(acceptLanguage)) return "en";
+  // Parse Accept-Language by q-value, pick the highest-priority tag whose
+  // primary subtag we support. Defaults to vi when nothing matches.
+  const ranked = acceptLanguage
+    .split(",")
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(";");
+      const qParam = params.find((p) => p.trim().startsWith("q="));
+      const q = qParam ? parseFloat(qParam.split("=")[1]) : 1;
+      return { tag: tag.toLowerCase(), q: Number.isFinite(q) ? q : 0 };
+    })
+    .filter((x) => x.tag)
+    .sort((a, b) => b.q - a.q);
+  for (const { tag } of ranked) {
+    const primary = tag.split("-")[0];
+    if (primary === "vi") return "vi";
+    if (primary === "en") return "en";
+  }
   return "vi";
 };
 
@@ -245,6 +265,119 @@ const organizationJsonLd = {
   ]
 };
 
+const organizationJsonLdEn = {
+  "@context": "https://schema.org",
+  "@type": ["EducationalOrganization", "LocalBusiness"],
+  "@id": "https://ptnenglish.edu.vn/#organization-en",
+  "name": "PTN English - Phu Tai Nang Language Center",
+  "alternateName": ["PTN English", "PTELC", "Phu Tai Nang English", "Partner To Navigate"],
+  "url": "https://ptnenglish.edu.vn",
+  "logo": "https://ptnenglish.edu.vn/logo.png",
+  "image": "https://ptnenglish.edu.vn/logo.png",
+  "inLanguage": "en",
+  "description": "An Academic English training center offering IELTS and PTE preparation for teens and adults. Personalized learning pathways guided by an experienced MA.TESOL faculty.",
+  "telephone": "+84902508290",
+  "email": "info@ptelc.edu.vn",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "146 Bis Nguyen Van Thu",
+    "addressLocality": "Da Kao Ward, District 1",
+    "addressRegion": "Ho Chi Minh City",
+    "postalCode": "700000",
+    "addressCountry": "VN"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 10.7871,
+    "longitude": 106.6951
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Ho Chi Minh City"
+  },
+  "priceRange": "$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "08:00",
+      "closes": "21:00"
+    }
+  ],
+  "foundingDate": "2000",
+  "founder": [
+    {
+      "@type": "Person",
+      "name": "Dang Tran Phong",
+      "jobTitle": "Lead Portfolio / Founder",
+      "alumniOf": "University of Canberra"
+    },
+    {
+      "@type": "Person",
+      "name": "Nguyen Le Quynh Tram",
+      "jobTitle": "Lead Teacher / Advisor",
+      "alumniOf": "University of Adelaide"
+    }
+  ],
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "PTN English Programs",
+    "itemListElement": [
+      {
+        "@type": "Course",
+        "name": "IELTS Preparation",
+        "description": "IELTS preparation from Foundation to Advanced with guaranteed outcomes",
+        "provider": { "@id": "https://ptnenglish.edu.vn/#organization" },
+        "educationalLevel": "Intermediate to Advanced",
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Course",
+        "name": "PTE Academic",
+        "description": "International-standard PTE Academic preparation course",
+        "provider": { "@id": "https://ptnenglish.edu.vn/#organization" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Course",
+        "name": "General English",
+        "description": "Communicative English for adults with personalized learning pathways",
+        "provider": { "@id": "https://ptnenglish.edu.vn/#organization" },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "Course",
+        "name": "English for Teens",
+        "description": "Academic English program designed for secondary school students",
+        "provider": { "@id": "https://ptnenglish.edu.vn/#organization" },
+        "educationalLevel": "Secondary",
+        "inLanguage": "en"
+      }
+    ]
+  },
+  "sameAs": [
+    "https://www.facebook.com/ptelc.edu.vn",
+    "https://lms.ptelc.edu.vn"
+  ]
+};
+
+const websiteJsonLdEn = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://ptnenglish.edu.vn/#website-en",
+  "name": "PTN English",
+  "alternateName": "PTELC",
+  "url": "https://ptnenglish.edu.vn",
+  "publisher": { "@id": "https://ptnenglish.edu.vn/#organization" },
+  "inLanguage": "en",
+  "description": "Academic English, IELTS and PTE preparation in Ho Chi Minh City.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://ptnenglish.edu.vn/blog?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
+
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -267,7 +400,7 @@ export default async function RootLayout({
 }>) {
   const initialLanguage = await resolveInitialLanguage();
   return (
-    <html lang={initialLanguage}>
+    <html lang={initialLanguage} suppressHydrationWarning>
       <head>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-MRCJM6N7DN"
@@ -289,6 +422,14 @@ export default async function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLdEn) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLdEn) }}
         />
       </head>
       <body className={`${lora.variable} ${loraSerif.variable} ${beVietnamPro.variable} ${newsreader.variable} ${inter.variable} ${caveat.variable} font-body antialiased`}>

@@ -22,6 +22,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const STORAGE_KEY = "ptn_lang";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+const SAME_TAB_EVENT = "ptn:lang-change";
 
 const isValidLanguage = (value: unknown): value is Language =>
     value === "vi" || value === "en";
@@ -49,21 +50,25 @@ export const LanguageProvider = ({
 }) => {
     const [language, setLanguageState] = useState<Language>(initialLanguage);
 
-    // Reconcile with client-side storage on mount. Covers the case where the
-    // server had no cookie but the user already has a preference in localStorage
-    // (e.g. set before we added cookie persistence).
+    // Reconcile with client-side storage on mount. Cookie is the source of
+    // truth (server can read it for SSR); localStorage is a backwards-compat
+    // fallback that we promote to a cookie when found.
     useEffect(() => {
         const cookieLang = readCookie(STORAGE_KEY);
         if (isValidLanguage(cookieLang)) {
-            if (cookieLang !== language) setLanguageState(cookieLang);
+            setLanguageState((prev) => (prev === cookieLang ? prev : cookieLang));
             return;
         }
-        const stored = localStorage.getItem(STORAGE_KEY);
+        let stored: string | null = null;
+        try {
+            stored = localStorage.getItem(STORAGE_KEY);
+        } catch {
+            // localStorage may throw in private mode — ignore.
+        }
         if (isValidLanguage(stored)) {
-            if (stored !== language) setLanguageState(stored);
+            setLanguageState((prev) => (prev === stored ? prev : stored));
             writeCookie(STORAGE_KEY, stored);
         }
-        // Intentionally run once — subsequent changes go through setLanguage.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -74,25 +79,41 @@ export const LanguageProvider = ({
         }
     }, [language]);
 
-    // Cross-tab sync: another tab changed the language → update this one.
+    // Cross-tab + same-tab sync. `storage` only fires in OTHER tabs, so we
+    // also dispatch a custom event for any sibling providers in this tab.
     useEffect(() => {
         const onStorage = (e: StorageEvent) => {
             if (e.key === STORAGE_KEY && isValidLanguage(e.newValue)) {
                 setLanguageState(e.newValue);
             }
         };
+        const onSameTab = (e: Event) => {
+            const detail = (e as CustomEvent<Language>).detail;
+            if (isValidLanguage(detail)) setLanguageState(detail);
+        };
         window.addEventListener("storage", onStorage);
-        return () => window.removeEventListener("storage", onStorage);
+        window.addEventListener(SAME_TAB_EVENT, onSameTab as EventListener);
+        return () => {
+            window.removeEventListener("storage", onStorage);
+            window.removeEventListener(SAME_TAB_EVENT, onSameTab as EventListener);
+        };
     }, []);
 
     const setLanguage = useCallback((lang: Language) => {
-        setLanguageState((prev) => (prev === lang ? prev : lang));
-        writeCookie(STORAGE_KEY, lang);
-        try {
-            localStorage.setItem(STORAGE_KEY, lang);
-        } catch {
-            // localStorage can throw in private mode / when disabled — cookie is enough.
-        }
+        if (!isValidLanguage(lang)) return;
+        setLanguageState((prev) => {
+            if (prev === lang) return prev;
+            writeCookie(STORAGE_KEY, lang);
+            try {
+                localStorage.setItem(STORAGE_KEY, lang);
+            } catch {
+                // localStorage can throw in private mode — cookie is enough.
+            }
+            if (typeof window !== "undefined") {
+                window.dispatchEvent(new CustomEvent(SAME_TAB_EVENT, { detail: lang }));
+            }
+            return lang;
+        });
     }, []);
 
     const toggleLanguage = useCallback(() => {

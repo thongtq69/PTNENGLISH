@@ -29,7 +29,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                 <div className="container mx-auto px-6 max-w-4xl">
                     <Link href="/blog" className="inline-flex items-center text-slate-500 hover:text-primary mb-6 md:mb-8 transition-colors group">
                         <ChevronLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
-                        {blogPost?.backToBlog || "Quay lại Blog"}
+                        {blogPost.backToBlog}
                     </Link>
 
                     <div className="inline-block px-4 py-1 rounded-full bg-primary text-white text-xs md:text-[10px] font-black uppercase tracking-widest mb-4 md:mb-6 shadow-lg shadow-primary/20">
@@ -47,7 +47,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                         </div>
                         <div className="flex items-center gap-2 border-l border-slate-200 pl-4 md:pl-6">
                             <Clock size={14} className="text-primary" />
-                            {post.readTime || '5'} {blogPost?.readTime || "phút đọc"}
+                            {post.readTime || '5'} {blogPost.readTime}
                         </div>
                         <div className="flex items-center gap-2 border-l border-slate-200 pl-4 md:pl-6">
                             <User size={14} className="text-primary" />
@@ -85,19 +85,19 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
                 <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
                 <div className="container mx-auto px-6 max-w-4xl text-center relative z-10">
                     <h3 className="text-2xl md:text-4xl font-heading font-black text-white mb-6">
-                        {blogPost?.ctaTitle || "Bạn thấy bài viết này hữu ích?"}
+                        {blogPost.ctaTitle}
                     </h3>
                     <p className="text-slate-400 mb-8 max-w-2xl mx-auto">
-                        {blogPost?.ctaDesc || "Đăng ký để nhận những kiến thức học thuật và lộ trình IELTS độc quyền từ PTN English."}
+                        {blogPost.ctaDesc}
                     </p>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">
                         <input
                             type="email"
-                            placeholder={blogPost?.emailPlaceholder || "Email của bạn..."}
+                            placeholder={blogPost.emailPlaceholder}
                             className="px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-80"
                         />
                         <button className="px-8 py-4 bg-primary text-white font-black rounded-xl hover:scale-105 transition-all shadow-xl shadow-primary/20">
-                            {blogPost?.subscribeButton || "ĐĂNG KÝ NGAY"}
+                            {blogPost.subscribeButton}
                         </button>
                     </div>
                 </div>

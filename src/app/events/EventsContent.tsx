@@ -24,7 +24,7 @@ interface EventItem {
 }
 
 export default function EventsContent() {
-    const { language } = useLanguage();
+    const { t } = useLanguage();
     const [events, setEvents] = useState<EventItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState("");
@@ -45,23 +45,7 @@ export default function EventsContent() {
         return () => { mounted = false; };
     }, []);
 
-    const labels = language === "vi"
-        ? {
-            title: "Sự kiện & Hoạt động",
-            description: "Cập nhật các sự kiện, cuộc thi và hoạt động cộng đồng nổi bật của PTN English.",
-            searchPlaceholder: "Tìm kiếm sự kiện...",
-            readEvent: "Đọc tiếp",
-            empty: "Chưa có sự kiện nào",
-            emptyDesc: "Các sự kiện mới sẽ được cập nhật tại đây."
-        }
-        : {
-            title: "Events & Activities",
-            description: "Updates on events, competitions and community activities at PTN English.",
-            searchPlaceholder: "Search events...",
-            readEvent: "Read more",
-            empty: "No events yet",
-            emptyDesc: "New events will be published here."
-        };
+    const labels = t.events.labels;
 
     const filtered = events.filter(e => {
         const s = search.toLowerCase();
@@ -148,7 +132,7 @@ export default function EventsContent() {
 
                                             <div>
                                                 <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">
-                                                    <span className="text-primary">{event.category || "Sự kiện"}</span>
+                                                    <span className="text-primary">{event.category || labels.defaultCategory}</span>
                                                     {event.eventDate && (
                                                         <>
                                                             <span className="text-slate-300">·</span>

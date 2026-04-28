@@ -28,6 +28,7 @@ interface Advertisement {
     rightSlogan: string;
     items: AdItem[];
     showOnce: boolean;
+    displayOrder?: number;
 }
 
 const DEFAULT_AD: Advertisement = {
@@ -44,7 +45,8 @@ const DEFAULT_AD: Advertisement = {
         { icon: 'Calendar', text: 'LUYỆN THI IELTS', link: '/courses' },
         { icon: 'MessageSquare', text: 'ENGLISH FOR TEENS', link: '/courses' }
     ],
-    showOnce: true
+    showOnce: true,
+    displayOrder: 0
 };
 
 export default function AdsManager() {
@@ -231,6 +233,22 @@ export default function AdsManager() {
                                                 >
                                                     {activeAd.showOnce ? <CheckCircle2 size={24} /> : <div className="w-6 h-6 border-2 border-slate-700 rounded-full" />}
                                                 </button>
+                                            </div>
+                                            <div className="flex items-center justify-between gap-4 p-4 bg-slate-950 rounded-2xl">
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs font-bold text-slate-400">Display Order</span>
+                                                    <span className="text-[10px] text-slate-600">Higher = appears first (left slot)</span>
+                                                </div>
+                                                <input
+                                                    type="number"
+                                                    value={activeAd.displayOrder ?? 0}
+                                                    onChange={(e) => {
+                                                        const newList = [...ads];
+                                                        newList[activeIdx!].displayOrder = parseInt(e.target.value, 10) || 0;
+                                                        setAds(newList);
+                                                    }}
+                                                    className="w-20 px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white text-center font-bold focus:outline-none focus:border-primary"
+                                                />
                                             </div>
                                         </div>
 

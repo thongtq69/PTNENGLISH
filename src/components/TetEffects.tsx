@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 // ═══════════════════════════════════════════════
 // 🐴 TẾT BÍNH NGỌ 2026 — MÃ ĐÁO THÀNH CÔNG
@@ -169,6 +170,7 @@ const Fireworks = memo(function Fireworks() {
 
 // ── 🏮 Banner "Mã Đáo Thành Công" ──
 const TetBanner = memo(function TetBanner() {
+  const { language } = useLanguage();
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     if (!sessionStorage.getItem("tet-banner-2026")) setVisible(true);
@@ -206,7 +208,7 @@ const TetBanner = memo(function TetBanner() {
 
               <div className="text-center min-w-0">
                 <p className="text-yellow-300 font-heading font-bold text-[11px] sm:text-sm md:text-base tracking-wide whitespace-nowrap">
-                  ✨ Chúc Mừng Năm Mới 2026 ✨
+                  ✨ {language === "en" ? "Happy New Year 2026" : "Chúc Mừng Năm Mới 2026"} ✨
                 </p>
                 <p className="text-red-200/70 text-[7px] sm:text-[9px] font-medium tracking-wider">
                   Year of the Horse · PTN English wishes you Success & Prosperity

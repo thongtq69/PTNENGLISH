@@ -302,7 +302,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     {/* Central Button Hint */}
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all duration-500 scale-95 group-hover:scale-100 pointer-events-none">
                                         <div className="hidden md:flex bg-white/20 backdrop-blur-md border border-white/30 text-white px-5 py-2.5 rounded-full font-bold text-xs uppercase tracking-widest items-center gap-2 shadow-xl">
-                                            <span>Xem chi tiết</span>
+                                            <span>{t.common.viewDetail}</span>
                                             <ArrowRight size={16} />
                                         </div>
                                     </div>
@@ -357,7 +357,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                             {/* Central Button Hint */}
                                             <div className="absolute inset-0 flex items-center justify-center opacity-0 md:group-hover:opacity-100 transition-all duration-500 scale-95 group-hover:scale-100 pointer-events-none">
                                                 <div className="hidden md:flex bg-white/20 backdrop-blur-md border border-white/30 text-white px-4 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest items-center gap-2 shadow-xl">
-                                                    <span>Xem chi tiết</span>
+                                                    <span>{t.common.viewDetail}</span>
                                                     <ArrowRight size={14} />
                                                 </div>
                                             </div>
@@ -471,7 +471,7 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                     <div className="space-y-8">
                                         <div>
                                             <h4 className="text-accent font-heading font-bold text-lg mb-4 uppercase tracking-[0.1em]">
-                                                Trình độ chuyên môn
+                                                {t.common.qualifications}
                                             </h4>
                                             <div className="text-slate-600 leading-relaxed font-body whitespace-pre-line text-sm md:text-base">
                                                 {selectedTeacher.certs}
@@ -526,10 +526,10 @@ interface DifferenceItem {
 
 function DifferencesHub({ differencesData }: { differencesData: DifferenceItem[] }) {
     const [hovered, setHovered] = useState<number | null>(null);
-    const { language } = useLanguage();
+    const { t } = useLanguage();
 
-    const exploreText = language === 'en' ? 'Explore our core values' : 'Khám phá giá trị cốt lõi';
-    const clickText = language === 'en' ? 'Click icons to explore differences' : 'Nhấn vào biểu tượng để khám phá';
+    const exploreText = t.about.explore;
+    const clickText = t.about.click;
 
     return (
         <div className="relative min-h-[550px] flex items-center justify-center scale-100 md:scale-110">

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Hero({ initialData }: { initialData?: any }) {
-    const { t, language } = useLanguage();
+    const { t } = useLanguage();
     const [settings, setSettings] = useState<any>(initialData || null);
 
     // Sync state with props if they change
@@ -25,20 +25,10 @@ export default function Hero({ initialData }: { initialData?: any }) {
 
     if (!settings) return <div className="h-screen bg-accent" />;
 
-    // Use DB value only if it contains HTML formatting from RichTitleEditor
-    // Otherwise fallback to translations.ts which has the correct formatting
-    const hasHtmlFormatting = (text: string | undefined) =>
-        text && (text.includes('<span') || text.includes('<br'));
-
-    const displayTitle = language === "en"
-        ? (hasHtmlFormatting(settings.titleEn) ? settings.titleEn : t.home.hero.title)
-        : (hasHtmlFormatting(settings.title) ? settings.title : t.home.hero.title);
-
-    const displaySubtitle = language === "en"
-        ? (settings.subtitleEn || t.home.hero.subtitle)
-        : (settings.subtitle || t.home.hero.subtitle);
-    const displayPrimaryText = language === "en" ? t.home.hero.primaryCTA : settings.primaryCTA.text;
-    const displaySecondaryText = language === "en" ? t.home.hero.secondaryCTA : settings.secondaryCTA.text;
+    const displayTitle = t.home.hero.title;
+    const displaySubtitle = t.home.hero.subtitle;
+    const displayPrimaryText = t.home.hero.primaryCTA;
+    const displaySecondaryText = t.home.hero.secondaryCTA;
 
     return (
         <section className="relative w-full bg-accent md:h-screen md:min-h-[620px] md:overflow-hidden md:flex md:items-center md:justify-center">

@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Calendar, Clock, MapPin, Phone, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function PromoPopup() {
+    const { t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
 
     const [schedules, setSchedules] = useState<any[]>([]);
@@ -58,14 +60,14 @@ export default function PromoPopup() {
                             <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent flex flex-col justify-end p-8 md:p-12">
                                 <div className="text-white relative z-10">
                                     <div className="inline-block px-3 py-1 bg-primary text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] mb-4 md:mb-6 rounded-none">
-                                        Admission 2025
+                                        {t.promo.admission}
                                     </div>
                                     <h4 className="text-2xl md:text-6xl font-heading font-black leading-none mb-3 md:mb-6 uppercase tracking-tighter">
-                                        CHIÊU SINH <br />
-                                        <span className="text-white bg-primary px-1.5 py-0.5 md:px-3 md:py-1">THÁNG 11 & 12</span>
+                                        {t.promo.chieuSinh} <br />
+                                        <span className="text-white bg-primary px-1.5 py-0.5 md:px-3 md:py-1">{t.promo.monthsLabel}</span>
                                     </h4>
                                     <p className="text-[11px] md:text-sm font-body text-slate-300 max-w-[240px] md:max-w-xs leading-relaxed border-l-2 border-primary pl-4 hidden sm:block">
-                                        Đồng hành cùng đội ngũ chuyên gia <span className="text-white font-bold">MA.TESOL</span> hàng đầu.
+                                        {t.promo.withTeam} <span className="text-white font-bold">MA.TESOL</span> {t.promo.mtTopRated}
                                     </p>
                                 </div>
                             </div>
@@ -83,10 +85,10 @@ export default function PromoPopup() {
                             </button>
 
                             <div className="mb-6 md:mb-12 border-b-2 md:border-b-4 border-slate-100 pb-6 md:pb-10">
-                                <h3 className="text-3xl md:text-5xl font-heading font-black text-accent mb-3 md:mb-4 uppercase tracking-tighter leading-none">Lịch Khai Giảng</h3>
+                                <h3 className="text-3xl md:text-5xl font-heading font-black text-accent mb-3 md:mb-4 uppercase tracking-tighter leading-none">{t.promo.schedulesTitle}</h3>
                                 <p className="text-slate-500 text-xs md:text-sm leading-relaxed font-body max-w-md">
-                                    Hệ thống đào tạo học thuật chuyên sâu. <br />
-                                    <span className="font-bold text-primary italic">"Quality over speed, mastery over tricks."</span>
+                                    {t.promo.schedulesDesc} <br />
+                                    <span className="font-bold text-primary italic">{t.promo.quote}</span>
                                 </p>
                             </div>
 
@@ -113,12 +115,12 @@ export default function PromoPopup() {
                                     onClick={closePopup}
                                     className="w-full bg-accent hover:bg-primary text-white py-4 md:py-6 font-black uppercase tracking-[0.4em] text-xs md:text-xs text-center shadow-2xl transition-all active:scale-95 rounded-none"
                                 >
-                                    Đăng ký tư vấn ngay
+                                    {t.promo.registerNow}
                                 </Link>
                                 <div className="flex items-center justify-center gap-4 text-slate-300">
                                     <div className="h-px w-8 bg-slate-200"></div>
                                     <p className="text-[11px] uppercase font-black tracking-widest text-slate-400">
-                                        Limited spots for 2025
+                                        {t.promo.limitedSpots}
                                     </p>
                                     <div className="h-px w-8 bg-slate-200"></div>
                                 </div>

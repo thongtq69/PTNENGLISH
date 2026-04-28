@@ -832,7 +832,7 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
                                 ) : (
                                     <div className="text-slate-400 font-bold flex flex-col items-center gap-4">
                                         <Calendar size={48} className="opacity-20" />
-                                        <p>Chưa có lịch khai giảng mới nhất.</p>
+                                        <p>{t.coursesPage.noSchedules}</p>
                                     </div>
                                 )}
                             </div>

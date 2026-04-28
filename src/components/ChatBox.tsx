@@ -7,6 +7,9 @@ import { MessageCircle, X, Send, Minus, ExternalLink, User, Phone, CheckCircle2 
 import Image from "next/image";
 import { useLanguage } from "@/context/LanguageContext";
 
+const pickLang = (viField: string, enField: string, language: string) =>
+    language === 'vi' ? viField : enField;
+
 type Message = {
     id: string;
     text: string;
@@ -125,8 +128,8 @@ export default function ChatBox() {
     const startLocalSequence = () => {
         if (messages.length > 0) return;
         setMessages([
-            { id: "1", text: language === 'vi' ? config.welcomeMsgVi : config.welcomeMsgEn, sender: "bot", timestamp: new Date() },
-            { id: "2", text: language === 'vi' ? config.questionVi : config.questionEn, sender: "bot", timestamp: new Date(), type: "options", options: config.options.map((o: any) => language === 'vi' ? o.vi : o.en) }
+            { id: "1", text: pickLang(config.welcomeMsgVi, config.welcomeMsgEn, language), sender: "bot", timestamp: new Date() },
+            { id: "2", text: pickLang(config.questionVi, config.questionEn, language), sender: "bot", timestamp: new Date(), type: "options", options: config.options.map((o: any) => pickLang(o.vi, o.en, language)) }
         ]);
     };
 
@@ -173,7 +176,7 @@ export default function ChatBox() {
         localStorage.setItem("ptn_chat_leads", JSON.stringify(leads));
         setIsLeadSubmitted(true); // Hide the form right away
 
-        const successText = language === 'vi' ? "Cảm ơn bạn! Chúng tôi đã ghi nhận thông tin và sẽ liên hệ sớm nhất." : "Thank you! We have received your information and will contact you soon.";
+        const successText = t.chatbot.thanksConfirmation;
         const botMsg: Message = { id: Date.now().toString(), text: successText, sender: "bot", timestamp: new Date() };
 
         // Optimistic UI update
@@ -229,7 +232,7 @@ export default function ChatBox() {
                                         <h3 className="text-base font-bold leading-tight">{config.agentName}</h3>
                                         <div className="flex items-center gap-1.5">
                                             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400"></span>
-                                            <p className="text-[11px] font-medium opacity-90">{language === 'vi' ? config.statusVi : config.statusEn}</p>
+                                            <p className="text-[11px] font-medium opacity-90">{pickLang(config.statusVi, config.statusEn, language)}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -269,18 +272,18 @@ export default function ChatBox() {
                             {/* Lead Form Step if needed */}
                             {needsLeads && (
                                 <motion.div initial={{ opacity: 0, scale: 0.95 }} key="leads-form" animate={{ opacity: 1, scale: 1 }} className="rounded-2xl bg-white p-5 border border-primary/10 shadow-xl shadow-primary/5">
-                                    <div className="mb-4 text-center"><p className="text-xs font-bold text-secondary">{language === 'vi' ? "Để lại SĐT để chúng tôi tiện tư vấn nhé:" : "Please leave your number so we can consult:"}</p></div>
+                                    <div className="mb-4 text-center"><p className="text-xs font-bold text-secondary">{t.chatbot.leadFormHint}</p></div>
                                     <form onSubmit={handleLeadsSubmit} className="space-y-3">
                                         <div className="relative">
                                             <User size={14} className="absolute left-3.5 top-3.5 text-slate-400" />
-                                            <input required type="text" placeholder={language === 'vi' ? "Họ và tên của bạn" : "Your full name"} className="w-full rounded-xl border-slate-100 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium focus:ring-primary/20" value={leads.name} onChange={(e) => setLeads({ ...leads, name: e.target.value })} />
+                                            <input required type="text" placeholder={t.chatbot.nameInputPlaceholder} className="w-full rounded-xl border-slate-100 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium focus:ring-primary/20" value={leads.name} onChange={(e) => setLeads({ ...leads, name: e.target.value })} />
                                         </div>
                                         <div className="relative">
                                             <Phone size={14} className="absolute left-3.5 top-3.5 text-slate-400" />
-                                            <input required type="tel" placeholder={language === 'vi' ? "Số điện thoại / Zalo" : "Phone number / Zalo"} className="w-full rounded-xl border-slate-100 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium focus:ring-primary/20" value={leads.phone} onChange={(e) => setLeads({ ...leads, phone: e.target.value })} />
+                                            <input required type="tel" placeholder={t.chatbot.phoneInputPlaceholder} className="w-full rounded-xl border-slate-100 bg-slate-50 py-3 pl-10 pr-4 text-xs font-medium focus:ring-primary/20" value={leads.phone} onChange={(e) => setLeads({ ...leads, phone: e.target.value })} />
                                         </div>
                                         <button type="submit" className="w-full rounded-xl bg-primary py-3 text-xs font-black uppercase tracking-wider text-white shadow-lg transition-all hover:brightness-110 active:scale-[0.98]">
-                                            {language === 'vi' ? "Gửi thông tin" : "Send Information"}
+                                            {t.chatbot.sendInfoBtn}
                                         </button>
                                     </form>
                                 </motion.div>
@@ -297,7 +300,7 @@ export default function ChatBox() {
                                     type="text"
                                     value={inputText}
                                     onChange={(e) => setInputText(e.target.value)}
-                                    placeholder={language === 'vi' ? "Nhập tin nhắn..." : "Type a message..."}
+                                    placeholder={t.chatbot.messageInputPlaceholder}
                                     className="flex-1 rounded-xl bg-slate-50 border border-slate-100 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                                 />
                                 <button
@@ -326,7 +329,7 @@ export default function ChatBox() {
                             <>
                                 <span className="absolute inset-0 -z-10 animate-ping rounded-full bg-primary/40 opacity-75"></span>
                                 <span className="absolute right-full mr-5 hidden whitespace-nowrap rounded-2xl bg-secondary px-5 py-3 text-sm font-black text-white shadow-2xl transition-all group-hover:block fade-in slide-in-from-right-4">
-                                    {language === 'vi' ? config.floatingPromptVi : config.floatingPromptEn}
+                                    {pickLang(config.floatingPromptVi, config.floatingPromptEn, language)}
                                 </span>
                             </>
                         )}

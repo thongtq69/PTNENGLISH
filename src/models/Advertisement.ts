@@ -24,6 +24,7 @@ const AdvertisementSchema = new Schema({
 
     // Display logic
     showOnce: { type: Boolean, default: true }, // Show only once per session
+    displayOrder: { type: Number, default: 0 }, // Higher = appears first (left slot)
 }, { timestamps: true });
 
 export default mongoose.models.Advertisement || mongoose.model('Advertisement', AdvertisementSchema);

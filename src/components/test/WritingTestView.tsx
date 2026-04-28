@@ -14,6 +14,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { applyHighlightsToHtml, getSelectionCharacterOffset } from "@/lib/domUtils";
+import { useLanguage } from "@/context/LanguageContext";
 
 /* ───── Types ───── */
 interface Highlight {
@@ -43,6 +44,7 @@ interface WritingTestViewProps {
 
 /* ───── Component ───── */
 function WritingTestViewInner({ content, backdropUrl, answers, onAnswerChange }: WritingTestViewProps) {
+  const { t } = useLanguage();
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [notes, setNotes] = useState<Note[]>([]);
   const [showNoteInput, setShowNoteInput] = useState(false);
@@ -408,11 +410,11 @@ function WritingTestViewInner({ content, backdropUrl, answers, onAnswerChange }:
           {/* Mobile tab bar */}
           <div className="h-11 bg-white border-t border-slate-200 flex shrink-0 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
             <button onClick={() => setMobileView("prompt")} className={`flex-1 flex items-center justify-center gap-1.5 ${mobileView === "prompt" ? "text-primary border-t-2 border-primary bg-primary/5 font-black" : "text-slate-400"}`}>
-              <BookOpen size={15} /><span className="text-[9px] font-bold uppercase tracking-wider">Đề bài</span>
+              <BookOpen size={15} /><span className="text-[9px] font-bold uppercase tracking-wider">{t.testPage.taskHeading}</span>
             </button>
             <div className="w-px bg-slate-100" />
             <button onClick={() => setMobileView("response")} className={`flex-1 flex items-center justify-center gap-1.5 ${mobileView === "response" ? "text-primary border-t-2 border-primary bg-primary/5 font-black" : "text-slate-400"}`}>
-              <PenTool size={15} /><span className="text-[9px] font-bold uppercase tracking-wider">Bài viết</span>
+              <PenTool size={15} /><span className="text-[9px] font-bold uppercase tracking-wider">{t.testPage.essayHeading}</span>
             </button>
           </div>
         </>
