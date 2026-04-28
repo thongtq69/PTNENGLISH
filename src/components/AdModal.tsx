@@ -128,52 +128,59 @@ export default function AdModal() {
         reopen();
     };
 
-    // Single minimized banner anchored bottom-left. Highest displayOrder ad (ads[0]) appears first.
-    const leftAd = ads[0];
+    // Up to 2 minimized banners stacked side-by-side at bottom-left. Order honors displayOrder + Summer-priority sort.
+    const minimizedAds = ads.slice(0, 2);
 
     return (
         <>
-            {/* Minimized floating widget — left side only */}
+            {/* Minimized floating widgets — both anchored to the LEFT, side-by-side */}
             <AnimatePresence>
-                {viewState === 'minimized' && leftAd && (
+                {viewState === 'minimized' && minimizedAds.length > 0 && (
                     <motion.div
-                        key="left-banner"
-                        initial={{ opacity: 0, scale: 0.5, y: 40 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.5, y: 40 }}
+                        key="left-stack"
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 40 }}
                         transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                        className="fixed bottom-4 md:bottom-6 left-3 md:left-6 z-[998]"
+                        className="fixed bottom-4 md:bottom-6 left-3 md:left-6 z-[998] flex items-end gap-3 md:gap-4"
                     >
                         <button
                             onClick={dismiss}
                             aria-label="Dismiss"
-                            className="absolute -top-2.5 -right-2.5 z-20 w-8 h-8 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
+                            className="absolute -top-3 -right-3 z-30 w-8 h-8 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
                         >
                             <X size={16} />
                         </button>
-                        <button
-                            onClick={() => openAt(0)}
-                            aria-label={t.adModal.viewPromo}
-                            className="group relative w-44 md:w-60 aspect-[9/16] rounded-3xl bg-accent shadow-2xl shadow-primary/50 overflow-hidden hover:scale-[1.04] transition-transform active:scale-95 ring-4 ring-white/60 hover:ring-primary/60"
-                        >
-                            {leftAd.leftImage ? (
-                                <img src={leftAd.leftImage} alt={leftAd.leftLabel || t.adModal.promoLabel} className="absolute inset-0 w-full h-full object-cover" />
-                            ) : (
-                                <Sparkles size={56} className="absolute inset-0 m-auto text-white" />
-                            )}
-                            <div className="absolute top-2 left-2 z-10 bg-primary text-white text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full shadow-lg animate-pulse">
-                                {t.adModal.promoLabel}
-                            </div>
-                            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-accent via-accent/80 to-transparent" />
-                            <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col items-center">
-                                <span className="text-white text-xs md:text-sm font-black uppercase tracking-wide leading-tight text-center line-clamp-2 mb-1">
-                                    {leftAd.name || leftAd.leftHeading}
-                                </span>
-                                <span className="text-white/80 text-[9px] md:text-[10px] font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
-                                    {t.adModal.viewPromo} →
-                                </span>
-                            </div>
-                        </button>
+                        {minimizedAds.map((adItem, idx) => (
+                            <motion.button
+                                key={adItem._id || idx}
+                                initial={{ opacity: 0, scale: 0.5, y: 40 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.5, y: 40 }}
+                                transition={{ type: 'spring', stiffness: 260, damping: 20, delay: idx * 0.08 }}
+                                onClick={() => openAt(idx)}
+                                aria-label={t.adModal.viewPromo}
+                                className="group relative w-36 md:w-48 aspect-[9/16] rounded-3xl bg-accent shadow-2xl shadow-primary/50 overflow-hidden hover:scale-[1.04] transition-transform active:scale-95 ring-4 ring-white/60 hover:ring-primary/60"
+                            >
+                                {adItem.leftImage ? (
+                                    <img src={adItem.leftImage} alt={adItem.leftLabel || t.adModal.promoLabel} className="absolute inset-0 w-full h-full object-cover" />
+                                ) : (
+                                    <Sparkles size={48} className="absolute inset-0 m-auto text-white" />
+                                )}
+                                <div className="absolute top-2 left-2 z-10 bg-primary text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 md:px-2.5 md:py-1 rounded-full shadow-lg animate-pulse">
+                                    {t.adModal.promoLabel}
+                                </div>
+                                <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-accent via-accent/80 to-transparent" />
+                                <div className="absolute inset-x-0 bottom-0 p-2.5 flex flex-col items-center">
+                                    <span className="text-white text-[11px] md:text-xs font-black uppercase tracking-wide leading-tight text-center line-clamp-2 mb-0.5">
+                                        {adItem.name || adItem.leftHeading}
+                                    </span>
+                                    <span className="text-white/80 text-[8px] md:text-[9px] font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
+                                        {t.adModal.viewPromo} →
+                                    </span>
+                                </div>
+                            </motion.button>
+                        ))}
                     </motion.div>
                 )}
             </AnimatePresence>
