@@ -335,17 +335,17 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 <div className="h-px flex-1 bg-slate-200" />
                             </div>
 
-                            <div className="flex flex-wrap justify-center gap-3 md:flex md:flex-wrap md:justify-center md:gap-8">
+                            <div className="flex flex-wrap justify-center gap-4 md:flex md:flex-wrap md:justify-center md:gap-10">
                                 {teachersToDisplay.slice(3).map((teacher: any, idx: number) => (
                                     <motion.div
                                         key={idx}
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: true }}
-                                        className="group w-[46%] md:w-[260px] lg:w-[280px] cursor-pointer"
+                                        className="group w-[45%] md:w-[320px] lg:w-[380px] cursor-pointer"
                                         onClick={() => setSelectedTeacher({ ...teacher, isFounder: false })}
                                     >
-                                        <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-lg bg-white border border-slate-100 transition-all duration-500 group-hover:shadow-2xl">
+                                        <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100 transition-all duration-500 group-hover:shadow-2xl">
                                             <img
                                                 src={teacher.image}
                                                 alt={teacher.name}
