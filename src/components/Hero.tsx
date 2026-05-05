@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Calendar } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import ScheduleModal from "@/components/ScheduleModal";
 
 export default function Hero({ initialData }: { initialData?: any }) {
     const { t } = useLanguage();
     const [settings, setSettings] = useState<any>(initialData || null);
+    const [isScheduleOpen, setIsScheduleOpen] = useState(false);
 
     // Sync state with props if they change
     useEffect(() => {
@@ -66,8 +69,19 @@ export default function Hero({ initialData }: { initialData?: any }) {
                             {displaySecondaryText}
                         </Link>
                     </div>
+                    <div className="flex justify-center mt-3 md:mt-5 animate-fade-in-up delay-300">
+                        <button
+                            onClick={() => setIsScheduleOpen(true)}
+                            className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/15 text-white border border-white/20 backdrop-blur-md px-5 py-2.5 md:px-8 md:py-3 rounded-full font-heading font-semibold text-[11px] md:text-sm transition-all uppercase tracking-wider"
+                        >
+                            <Calendar size={14} className="md:w-4 md:h-4 text-primary" />
+                            {t.courses.bottomCta.cta2}
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <ScheduleModal isOpen={isScheduleOpen} onClose={() => setIsScheduleOpen(false)} />
 
             {/* Scroll indicator — desktop only (doesn't fit the stacked mobile layout) */}
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">

@@ -53,8 +53,6 @@ export default function AdModal() {
     const [viewState, setViewState] = useState<ViewState>('hidden');
 
     useEffect(() => {
-        if (sessionStorage.getItem(DISMISS_KEY)) return;
-
         const fetchAds = async () => {
             try {
                 const res = await fetch('/api/advertisements/active');
@@ -75,6 +73,10 @@ export default function AdModal() {
 
                 setAds(valid);
 
+                // Always keep ads loaded for external triggers (UniPrep card etc.).
+                // Only auto-open / restore minimized view if user hasn't dismissed.
+                if (sessionStorage.getItem(DISMISS_KEY)) return;
+
                 const saved = sessionStorage.getItem(VIEW_STATE_KEY);
                 if (saved === 'minimized') {
                     setViewState('minimized');
@@ -90,6 +92,27 @@ export default function AdModal() {
         };
         fetchAds();
     }, []);
+
+    // Listen for external requests to re-open a specific ad by name (e.g. UniPrep card on home page).
+    useEffect(() => {
+        const handler = (e: Event) => {
+            const detail = ((e as CustomEvent).detail || '').toString().toLowerCase().trim();
+            if (!detail || ads.length === 0) return;
+            const idx = ads.findIndex(a =>
+                (a.name || '').toLowerCase().includes(detail) ||
+                (a.leftHeading || '').toLowerCase().includes(detail) ||
+                (a.rightTitle || '').toLowerCase().includes(detail)
+            );
+            if (idx >= 0) {
+                setCurrentIdx(idx);
+                setViewState('open');
+                sessionStorage.removeItem(DISMISS_KEY);
+                sessionStorage.setItem(VIEW_STATE_KEY, 'open');
+            }
+        };
+        window.addEventListener('open-ad-by-name', handler);
+        return () => window.removeEventListener('open-ad-by-name', handler);
+    }, [ads]);
 
     const minimize = () => {
         setViewState('minimized');
@@ -283,9 +306,10 @@ export default function AdModal() {
                                             else if (text.includes('teens') || text.includes('thiếu niên') || text.includes('eft')) finalLink = '/contact?course=eft#registration-form';
                                             else if (text.includes('general') || text.includes('giao tiếp') || text.includes('tổng quát')) finalLink = '/contact?course=ge#registration-form';
                                             else finalLink = '/contact#registration-form';
-                                        } else if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
+                                        } else if (finalLink.startsWith('/courses') || finalLink === 'https://ptelc.edu.vn/courses' || finalLink.startsWith('https://ptelc.edu.vn/courses')) {
+                                            // Text is the source of truth — even if DB has wrong hash, force correct tab.
                                             if (text.includes('ielts')) finalLink = '/courses#ie';
-                                            else if (text.includes('teens')) finalLink = '/courses#eft';
+                                            else if (text.includes('teens') || text.includes('thiếu niên') || text.includes('eft')) finalLink = '/courses#eft';
                                             else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';
                                         }
 

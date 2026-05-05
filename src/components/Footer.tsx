@@ -48,7 +48,8 @@ export default function Footer() {
         { name: t.nav.blog, href: "/blog" },
         { name: t.nav.lms, href: "https://lms.ptelc.edu.vn/", target: "_blank" },
         { name: t.home.campus.testBtn, href: "/test" },
-        { name: t.topbar.contact, href: "/contact" }
+        { name: t.topbar.contact, href: "/contact" },
+        { name: t.footer.transparency, href: "#" }
     ];
 
     return (

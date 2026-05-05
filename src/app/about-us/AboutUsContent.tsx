@@ -287,14 +287,14 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="group w-[45%] md:w-[320px] lg:w-[380px] cursor-pointer"
+                                className="group w-[45%] md:w-[320px] lg:w-[340px] cursor-pointer"
                                 onClick={() => setSelectedTeacher({ ...teacher, isFounder: true })}
                             >
-                                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100">
+                                <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-slate-50 border border-slate-100">
                                     <img
                                         src={teacher.image}
                                         alt={teacher.name}
-                                        className="w-full h-full object-cover transition-all duration-700 scale-100 group-hover:scale-105"
+                                        className="w-full h-full object-cover object-top transition-all duration-700 scale-100 group-hover:scale-105"
                                     />
                                     {/* Desktop Hover Overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 md:group-hover:opacity-100 transition-all duration-500" />
@@ -342,14 +342,14 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
                                         initial={{ opacity: 0, scale: 0.9 }}
                                         whileInView={{ opacity: 1, scale: 1 }}
                                         viewport={{ once: true }}
-                                        className="group w-[45%] md:w-[320px] lg:w-[380px] cursor-pointer"
+                                        className="group w-[45%] md:w-[320px] lg:w-[340px] cursor-pointer"
                                         onClick={() => setSelectedTeacher({ ...teacher, isFounder: false })}
                                     >
-                                        <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-white border border-slate-100 transition-all duration-500 group-hover:shadow-2xl">
+                                        <div className="relative aspect-[3/4] rounded-[2.5rem] overflow-hidden shadow-2xl bg-slate-50 border border-slate-100 transition-all duration-500 group-hover:shadow-2xl">
                                             <img
                                                 src={teacher.image}
                                                 alt={teacher.name}
-                                                className="w-full h-full object-cover transition-transform duration-700 scale-100 group-hover:scale-105"
+                                                className="w-full h-full object-cover object-top transition-transform duration-700 scale-100 group-hover:scale-105"
                                             />
                                             {/* Desktop Hover Overlay */}
                                             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 md:group-hover:opacity-100 transition-all duration-500" />

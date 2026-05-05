@@ -115,17 +115,29 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
 
           <div className="flex flex-wrap justify-center gap-3 md:grid md:grid-cols-3 lg:grid-cols-3 md:gap-6 lg:gap-8 md:px-4 max-w-5xl mx-auto">
             {programs.map((prog: any, idx: number) => {
+              const text = (prog.nameEn || prog.name || '').toLowerCase();
+              const isUniPrep = text.includes('uniprep');
+
               // Auto-detect correct hash if link is just /courses
               let finalLink = prog.link || "/courses";
               if (finalLink === '/courses' || finalLink === 'https://ptelc.edu.vn/courses') {
-                const text = (prog.nameEn || prog.name || '').toLowerCase();
                 if (text.includes('ielts')) finalLink = '/courses#ie';
                 else if (text.includes('teens')) finalLink = '/courses#eft';
                 else if (text.includes('general') || text.includes('giao tiếp')) finalLink = '/courses#ge';
               }
 
+              const handleUniPrepClick = (e: React.MouseEvent) => {
+                e.preventDefault();
+                window.dispatchEvent(new CustomEvent('open-ad-by-name', { detail: 'uniprep' }));
+              };
+
               return (
-                <Link key={idx} href={finalLink} className="w-[46%] md:w-auto">
+                <Link
+                  key={idx}
+                  href={isUniPrep ? '#' : finalLink}
+                  onClick={isUniPrep ? handleUniPrepClick : undefined}
+                  className="w-[46%] md:w-auto"
+                >
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}

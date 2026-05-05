@@ -22,7 +22,7 @@ export const translations = {
                 title: "<span class='text-primary font-bold'>Kiến tạo</span> hành trình tri thức",
                 subtitle: "Partner to navigate your learning journey",
                 primaryCTA: "Đăng ký học thử ngay",
-                secondaryCTA: "Tìm hiểu phương pháp"
+                secondaryCTA: "Chương trình học"
             },
             philosophy: {
                 title: "PTN Philosophy",
@@ -647,6 +647,7 @@ export const translations = {
             quickLinks: "Liên kết nhanh",
             courses: "Khóa học",
             contact: "Liên hệ",
+            transparency: "Thông tin công khai",
             address: "146 Bis Nguyễn Văn Thủ, P. Đa Kao, Q.1, TP.HCM",
             copyright: "© 2026 Partner To Navigate. Bảo lưu mọi quyền."
         },
@@ -791,7 +792,7 @@ export const translations = {
                 title: "<span class='text-primary font-bold'>Shaping</span> Your Knowledge Journey",
                 subtitle: "Partner to navigate your learning journey",
                 primaryCTA: "Book a Trial Class",
-                secondaryCTA: "Our Methodology"
+                secondaryCTA: "Our Programs"
             },
             philosophy: {
                 title: "PTN Philosophy",
@@ -1422,6 +1423,7 @@ export const translations = {
             quickLinks: "Quick Links",
             courses: "Courses",
             contact: "Contact",
+            transparency: "Public Information",
             address: "146 Bis Nguyen Van Thu, Da Kao Ward, District 1, HCMC",
             copyright: "© 2026 Partner To Navigate. All rights reserved."
         },

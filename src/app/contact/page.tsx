@@ -64,7 +64,7 @@ function ContactFormPageContent() {
             <Header />
 
             {/* Hero Section */}
-            <section className="pt-32 pb-16 md:pt-48 md:pb-24 bg-white border-b border-slate-100 relative overflow-hidden text-center">
+            <section className="pt-28 pb-10 md:pt-36 md:pb-16 bg-white border-b border-slate-100 relative overflow-hidden text-center">
                 <div className="absolute top-0 right-0 w-1/4 h-full bg-accent/5 -skew-x-12 translate-x-1/2"></div>
                 <div className="container mx-auto px-6 max-w-4xl">
                     <motion.div
@@ -74,11 +74,7 @@ function ContactFormPageContent() {
                         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs md:text-[10px] font-bold uppercase tracking-widest mb-6 md:mb-8">
                             {t.contact.badge}
                         </div>
-                        <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-semibold text-accent mb-6 md:mb-10 leading-tight" style={{ fontSize: 'var(--fs-contact-heroTitle)' }}>
-                            {t.contact.title} <br />
-                            {t.contact.subtitle}
-                        </h1>
-                        <p className="text-slate-500 text-base md:text-xl font-body leading-relaxed mb-8 md:mb-12 mx-auto max-w-2xl" style={{ fontSize: 'var(--fs-contact-heroSubtitle)' }}>
+                        <p className="text-slate-500 text-base md:text-xl font-body leading-relaxed mx-auto max-w-2xl" style={{ fontSize: 'var(--fs-contact-heroSubtitle)' }}>
                             {t.contact.desc} <span className="text-primary font-bold">PTN</span> <span className="text-accent font-bold">English</span> {t.contact.descHighlight}
                         </p>
                     </motion.div>
