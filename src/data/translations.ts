@@ -220,8 +220,8 @@ export const translations = {
                 }
             },
             testimonials: {
-                badge: "Success Stories",
-                title: "Cảm nghĩ của phụ huynh & học viên",
+                badge: "Testimonials",
+                title: "Cảm nghĩ",
                 viewDetail: "Xem chi tiết cảm nghĩ",
                 closeBtn: "Đóng cửa sổ"
             },
@@ -1000,7 +1000,7 @@ export const translations = {
                 }
             },
             testimonials: {
-                badge: "Success Stories",
+                badge: "Testimonials",
                 title: "Thoughts from Parents & Students",
                 viewDetail: "View detail",
                 closeBtn: "Close window"
