@@ -690,12 +690,12 @@ export const translations = {
         },
         adModal: {
             dismiss: "Đóng",
-            viewPromo: "Xem khuyến mãi",
-            promoLabel: "Khuyến Mãi",
-            nextAd: "Quảng cáo tiếp theo",
-            prevAd: "Quảng cáo trước",
+            viewPromo: "Tìm hiểu thêm",
+            promoLabel: "Chương trình",
+            nextAd: "Chương trình tiếp theo",
+            prevAd: "Chương trình trước",
             minimize: "Thu nhỏ",
-            adIndex: "Quảng cáo",
+            adIndex: "Chương trình",
             maybeLater: "Để sau"
         },
         promo: {
@@ -1466,12 +1466,12 @@ export const translations = {
         },
         adModal: {
             dismiss: "Dismiss",
-            viewPromo: "View promotion",
-            promoLabel: "Promotion",
-            nextAd: "Next ad",
-            prevAd: "Previous ad",
+            viewPromo: "Learn more",
+            promoLabel: "Program",
+            nextAd: "Next program",
+            prevAd: "Previous program",
             minimize: "Minimize",
-            adIndex: "Ad",
+            adIndex: "Program",
             maybeLater: "Maybe later"
         },
         promo: {

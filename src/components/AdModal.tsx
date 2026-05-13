@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, Calendar, MessageSquare, Clock,
-    BookOpen, Check, ChevronRight, ChevronLeft, Sparkles
+    BookOpen, Check, ChevronRight, ChevronLeft, Sparkles,
+    type LucideIcon
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -32,7 +33,7 @@ interface Advertisement {
     displayOrder?: number;
 }
 
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, LucideIcon> = {
     Calendar: Calendar,
     MessageSquare: MessageSquare,
     Clock: Clock,
@@ -248,7 +249,7 @@ export default function AdModal() {
                                 {ad.leftImage ? (
                                     <img
                                         src={ad.leftImage}
-                                        alt={ad.leftLabel || ad.leftHeading || 'Promotion'}
+                                        alt={ad.leftLabel || ad.leftHeading || t.adModal.promoLabel}
                                         className="absolute inset-0 w-full h-full object-contain"
                                     />
                                 ) : (
@@ -350,7 +351,7 @@ export default function AdModal() {
                                         onClick={closeOrAdvance}
                                         className="text-[10px] font-black text-slate-400 uppercase tracking-widest hover:text-primary transition-colors underline underline-offset-8"
                                     >
-                                        Maybe later
+                                        {t.adModal.maybeLater}
                                     </button>
                                 </motion.div>
                             </div>

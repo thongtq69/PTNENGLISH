@@ -2,15 +2,21 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Calendar, Clock, MapPin, Phone, MessageSquare } from "lucide-react";
+import { X, Calendar, Clock, MessageSquare } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
+
+interface ScheduleItem {
+    title: string;
+    detail: string;
+    schedule: string;
+}
 
 export default function PromoPopup() {
     const { t } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
 
-    const [schedules, setSchedules] = useState<any[]>([]);
+    const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
 
     useEffect(() => {
         // Show on every page load as requested ("như quảng cáo khi vừa vào trang")
@@ -54,7 +60,7 @@ export default function PromoPopup() {
                         <div className="md:w-5/12 relative min-h-[220px] md:min-h-full bg-accent shrink-0">
                             <img
                                 src="/promo-hero.png"
-                                alt="Academic Master Promotion"
+                                alt="Academic Master Program"
                                 className="absolute inset-0 w-full h-full object-cover grayscale-[0.2] contrast-[1.1]"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-accent via-accent/20 to-transparent flex flex-col justify-end p-8 md:p-12">

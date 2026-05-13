@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-    Plus, Trash2, Save, Eye, Layout,
+    Plus, Trash2, Save, Layout,
     Type, Image as ImageIcon, List, CheckCircle2,
     RefreshCw, Megaphone, ToggleLeft, ToggleRight
 } from 'lucide-react';
@@ -32,7 +32,7 @@ interface Advertisement {
 }
 
 const DEFAULT_AD: Advertisement = {
-    name: 'New Promotion',
+    name: 'New Program',
     isActive: false,
     leftImage: '',
     leftLabel: 'ADMISSION 2025',
@@ -89,8 +89,8 @@ export default function AdsManager() {
             }
 
             setAds(newAds);
-            alert("Promotion saved and synced!");
-        } catch (e) {
+            alert("Program saved and synced!");
+        } catch {
             alert("Failed to save");
         } finally {
             setSaving(false);
@@ -98,12 +98,12 @@ export default function AdsManager() {
     };
 
     const deleteAd = async (id: string, idx: number) => {
-        if (!confirm("Delete this promotion permanently?")) return;
+        if (!confirm("Delete this program permanently?")) return;
         try {
             await fetch(`/api/advertisements?id=${id}`, { method: 'DELETE' });
             setAds(ads.filter((_, i) => i !== idx));
             setActiveIdx(null);
-        } catch (e) {
+        } catch {
             alert("Delete failed");
         }
     };
@@ -121,8 +121,8 @@ export default function AdsManager() {
         <div className="space-y-12 pb-32">
             <div className="flex justify-between items-end">
                 <div>
-                    <h1 className="text-3xl font-heading font-black text-white tracking-tight">Advertisement Center</h1>
-                    <p className="text-slate-500 mt-2">Manage popup notifications and promotional campaigns.</p>
+                    <h1 className="text-3xl font-heading font-black text-white tracking-tight">Program Announcement Center</h1>
+                    <p className="text-slate-500 mt-2">Manage popup notifications and program announcements.</p>
                 </div>
                 <button
                     onClick={() => {
