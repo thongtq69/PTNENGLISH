@@ -45,6 +45,25 @@ type ViewState = 'hidden' | 'open' | 'minimized';
 
 const DISMISS_KEY = 'ptn_ad_dismissed';
 const VIEW_STATE_KEY = 'ptn_ad_view_state';
+const IELTS_COURSE_ACTION: AdItem = {
+    icon: 'BookOpen',
+    text: 'Luyện thi IELTS',
+    link: '/courses#ie'
+};
+
+const isSummerTeenAd = (ad: Advertisement) =>
+    /summer|tiếng anh hè|tieng anh he|teens|thcs/i.test(`${ad.name ?? ''} ${ad.leftHeading ?? ''} ${ad.rightTitle ?? ''}`);
+
+const getActionItems = (ad: Advertisement) => {
+    const items = Array.isArray(ad.items) ? ad.items : [];
+    const hasIeltsAction = items.some(item =>
+        /ielts/i.test(`${item.text ?? ''} ${item.link ?? ''}`) || item.link === '/courses#ie'
+    );
+
+    if (!isSummerTeenAd(ad) || hasIeltsAction) return items;
+
+    return [...items, IELTS_COURSE_ACTION];
+};
 
 export default function AdModal() {
     const { t } = useLanguage();
@@ -296,7 +315,7 @@ export default function AdModal() {
                                 </motion.div>
 
                                 <div className="space-y-3 md:space-y-4 mb-6 md:mb-12">
-                                    {ad.items.map((item, i) => {
+                                    {getActionItems(ad).map((item, i) => {
                                         const Icon = ICON_MAP[item.icon] || Check;
                                         let finalLink = item.link;
                                         const text = item.text.toLowerCase();

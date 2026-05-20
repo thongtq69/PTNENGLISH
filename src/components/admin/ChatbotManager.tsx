@@ -3,20 +3,90 @@
 import React, { useState, useEffect } from 'react';
 import {
     MessageCircle, Users, Calendar, Phone, User,
-    Trash2, ExternalLink, CheckCircle2, AlertCircle,
-    Search, Filter, Download, Settings, Save, Plus,
-    Image as ImageIcon, Send, Clock, ChevronRight
+    Trash2, CheckCircle2, AlertCircle,
+    Search, Filter, Settings, Save, Plus,
+    Send, Clock, ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FileUpload from './shared/FileUpload';
 
+interface ChatMessage {
+    id?: string;
+    text: string;
+    sender: string;
+    timestamp: string | Date;
+}
+
+interface ChatSession {
+    sessionId: string;
+    name?: string;
+    phone?: string;
+    messages?: ChatMessage[];
+    unreadAdmin?: number;
+}
+
+interface ChatbotLead {
+    _id: string;
+    name: string;
+    phone: string;
+    interest?: string;
+    source?: string;
+    status: string;
+    createdAt: string | Date;
+}
+
+interface ChatOption {
+    vi: string;
+    en: string;
+}
+
+interface ChatbotConfig {
+    agentImage?: string;
+    agentName?: string;
+    whatsappNumber?: string;
+    statusVi?: string;
+    statusEn?: string;
+    options: ChatOption[];
+    welcomeMsgVi?: string;
+    welcomeMsgEn?: string;
+    questionVi?: string;
+    questionEn?: string;
+    leadsPromptVi?: string;
+    leadsPromptEn?: string;
+    thanksMsgVi?: string;
+    thanksMsgEn?: string;
+    floatingPromptVi?: string;
+    floatingPromptEn?: string;
+    [key: string]: string | ChatOption[] | undefined;
+}
+
+const formatAdminDateTime = (value: string | Date) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    const datePart = new Intl.DateTimeFormat('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'Asia/Ho_Chi_Minh'
+    }).format(date);
+    const timePart = new Intl.DateTimeFormat('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Ho_Chi_Minh'
+    }).format(date);
+
+    return `${datePart} ${timePart}`;
+};
+
 export default function ChatbotManager() {
     const [activeTab, setActiveTab] = useState<'chat' | 'leads' | 'settings'>('chat');
-    const [leads, setLeads] = useState<any[]>([]);
-    const [sessions, setSessions] = useState<any[]>([]);
+    const [leads, setLeads] = useState<ChatbotLead[]>([]);
+    const [sessions, setSessions] = useState<ChatSession[]>([]);
     const [activeSession, setActiveSession] = useState<string | null>(null);
     const [adminInput, setAdminInput] = useState("");
-    const [config, setConfig] = useState<any>(null);
+    const [config, setConfig] = useState<ChatbotConfig | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [search, setSearch] = useState("");
@@ -85,7 +155,7 @@ export default function ChatbotManager() {
                 body: JSON.stringify(config)
             });
             if (res.ok) alert("Settings saved successfully!");
-        } catch (err) {
+        } catch {
             alert("Error saving settings");
         } finally {
             setSaving(false);
@@ -104,23 +174,27 @@ export default function ChatbotManager() {
         }
     };
 
-    const updateConfigField = (field: string, value: any) => {
+    const updateConfigField = (field: string, value: string | ChatOption[]) => {
+        if (!config) return;
         setConfig({ ...config, [field]: value });
     };
 
     const updateOption = (idx: number, lang: 'vi' | 'en', value: string) => {
+        if (!config) return;
         const newOptions = [...config.options];
         newOptions[idx] = { ...newOptions[idx], [lang]: value };
         setConfig({ ...config, options: newOptions });
     };
 
     const addOption = () => {
+        if (!config) return;
         const newOptions = [...config.options, { vi: 'Lựa chọn mới', en: 'New Option' }];
         setConfig({ ...config, options: newOptions });
     };
 
     const removeOption = (idx: number) => {
-        const newOptions = config.options.filter((_: any, i: number) => i !== idx);
+        if (!config) return;
+        const newOptions = config.options.filter((_: ChatOption, i: number) => i !== idx);
         setConfig({ ...config, options: newOptions });
     };
 
@@ -192,12 +266,13 @@ export default function ChatbotManager() {
                                 ) : (
                                     sessions.map(s => {
                                         const lastMsg = s.messages?.[s.messages.length - 1];
+                                        const unreadAdmin = s.unreadAdmin ?? 0;
                                         return (
                                             <button
                                                 key={s.sessionId}
                                                 onClick={async () => {
                                                     setActiveSession(s.sessionId);
-                                                    if (s.unreadAdmin > 0) {
+                                                    if (unreadAdmin > 0) {
                                                         // Update locally instantly
                                                         setSessions(prev => prev.map(x => x.sessionId === s.sessionId ? { ...x, unreadAdmin: 0 } : x));
                                                         // Update on server
@@ -207,18 +282,22 @@ export default function ChatbotManager() {
                                                                 headers: { 'Content-Type': 'application/json' },
                                                                 body: JSON.stringify({ sessionId: s.sessionId, action: 'readAdmin' })
                                                             });
-                                                        } catch (e) { }
+                                                        } catch { }
                                                     }
                                                 }}
                                                 className={`w-full text-left p-4 rounded-2xl transition-all border ${activeSession === s.sessionId ? 'bg-primary/20 border-primary/50 text-white' : 'bg-slate-950 border-white/5 text-slate-400 hover:bg-slate-800 hover:text-white'}`}
                                             >
                                                 <div className="flex justify-between items-start mb-1">
                                                     <span className="font-bold text-sm truncate">{s.name || s.phone || "Khách ẩn danh"}</span>
-                                                    {lastMsg && <span className="text-[10px] text-slate-500 shrink-0"><Clock size={10} className="inline mr-1" />{new Date(lastMsg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>}
+                                                    {lastMsg && (
+                                                        <span className="text-[10px] text-slate-500 shrink-0 whitespace-nowrap">
+                                                            <Clock size={10} className="inline mr-1" />{formatAdminDateTime(lastMsg.timestamp)}
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <div className="flex justify-between items-center">
                                                     <p className="text-xs truncate max-w-[80%]">{lastMsg ? lastMsg.text : "Chưa có tin nhắn"}</p>
-                                                    {s.unreadAdmin > 0 && <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold">{s.unreadAdmin}</span>}
+                                                    {unreadAdmin > 0 && <span className="w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center text-[10px] font-bold">{unreadAdmin}</span>}
                                                 </div>
                                             </button>
                                         );
@@ -249,7 +328,7 @@ export default function ChatbotManager() {
                                         </div>
                                         {/* Messages */}
                                         <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
-                                            {current.messages?.map((m: any, idx: number) => {
+                                            {current.messages?.map((m: ChatMessage, idx: number) => {
                                                 const isAdmin = m.sender === 'admin' || m.sender === 'bot';
                                                 return (
                                                     <div key={idx} className={`flex ${isAdmin ? 'justify-end' : 'justify-start'}`}>
@@ -257,7 +336,7 @@ export default function ChatbotManager() {
                                                             <p className="text-sm">{m.text}</p>
                                                             <p className={`text-[10px] mt-2 opacity-50 ${isAdmin ? 'text-right' : 'text-left'}`}>
                                                                 {m.sender === 'bot' && "(Auto Bot) "}
-                                                                {new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                {formatAdminDateTime(m.timestamp)}
                                                             </p>
                                                         </div>
                                                     </div>
@@ -433,7 +512,7 @@ export default function ChatbotManager() {
 
                                 <FileUpload
                                     label="Agent Avatar — hiển thị hình tròn, crop vuông 1:1"
-                                    value={config?.agentImage}
+                                    value={config?.agentImage ?? ""}
                                     onChange={(url) => updateConfigField('agentImage', url)}
                                     folder="chatbot"
                                     aspect={1}
@@ -490,7 +569,7 @@ export default function ChatbotManager() {
                                 </div>
 
                                 <div className="space-y-4 max-h-[400px] overflow-y-auto pr-4 custom-scrollbar">
-                                    {config?.options?.map((opt: any, idx: number) => (
+                                    {config?.options?.map((opt: ChatOption, idx: number) => (
                                         <div key={idx} className="bg-slate-950 p-6 rounded-2xl border border-white/5 space-y-4 relative group">
                                             <div className="flex gap-4">
                                                 <input
@@ -533,7 +612,7 @@ export default function ChatbotManager() {
                                         <label className="text-xs font-black text-slate-500 uppercase tracking-[0.2em]">{msg.label} (VI)</label>
                                         <textarea
                                             rows={3}
-                                            value={config?.[msg.vi]}
+                                            value={(config?.[msg.vi] as string) ?? ""}
                                             onChange={e => updateConfigField(msg.vi, e.target.value)}
                                             className="w-full bg-slate-950 border border-white/5 rounded-2xl px-6 py-4 text-white text-sm leading-relaxed focus:border-primary/50 transition-all"
                                         />
@@ -542,7 +621,7 @@ export default function ChatbotManager() {
                                         <label className="text-xs font-black text-primary/50 uppercase tracking-[0.2em]">{msg.label} (EN)</label>
                                         <textarea
                                             rows={3}
-                                            value={config?.[msg.en]}
+                                            value={(config?.[msg.en] as string) ?? ""}
                                             onChange={e => updateConfigField(msg.en, e.target.value)}
                                             className="w-full bg-slate-950 border border-primary/10 rounded-2xl px-6 py-4 text-white text-sm leading-relaxed focus:border-primary transition-all"
                                         />

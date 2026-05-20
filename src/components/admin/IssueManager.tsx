@@ -3,30 +3,48 @@
 import React, { useState, useEffect } from 'react';
 import {
     MessageSquare,
-    Clock,
-    User,
     Phone,
     Mail,
     BookOpen,
-    ChevronRight,
     Trash2,
     CheckCircle,
-    AlertTriangle,
-    Circle,
-    MoreVertical,
     Reply
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const STATUS_COLORS: any = {
-    'New': 'bg-blue-500',
-    'In Progress': 'bg-amber-500',
-    'Resolved': 'bg-emerald-500',
-    'Closed': 'bg-slate-500'
+interface Issue {
+    _id: string;
+    status: string;
+    name: string;
+    email?: string;
+    phone?: string;
+    description?: string;
+    course?: string;
+    createdAt: string | Date;
+}
+
+const formatAdminDateTime = (value: string | Date) => {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "";
+
+    const datePart = new Intl.DateTimeFormat('vi-VN', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        timeZone: 'Asia/Ho_Chi_Minh'
+    }).format(date);
+    const timePart = new Intl.DateTimeFormat('vi-VN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Ho_Chi_Minh'
+    }).format(date);
+
+    return `${datePart} ${timePart}`;
 };
 
 export default function IssueManager() {
-    const [issues, setIssues] = useState<any[]>([]);
+    const [issues, setIssues] = useState<Issue[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -48,7 +66,7 @@ export default function IssueManager() {
             });
             const newList = issues.map(i => i._id === id ? { ...i, status } : i);
             setIssues(newList);
-        } catch (e) {
+        } catch {
             alert("Failed to update status");
         }
     };
@@ -79,7 +97,7 @@ export default function IssueManager() {
                                 <p className={`text-[10px] font-black uppercase tracking-widest ${issue.status === 'New' ? 'text-primary' : 'text-slate-500'}`}>
                                     {issue.status}
                                 </p>
-                                <p className="text-[10px] text-slate-600 font-medium">12:30 PM</p>
+                                <p className="text-[10px] text-slate-600 font-medium whitespace-nowrap">{formatAdminDateTime(issue.createdAt)}</p>
                             </div>
                             <h3 className={`font-bold text-sm mb-1 ${issue.status === 'New' ? 'text-white' : 'text-slate-400'}`}>{issue.name}</h3>
                             <p className="text-xs text-slate-500 line-clamp-1 mb-3">{issue.description || 'No description provided'}</p>
@@ -175,7 +193,7 @@ export default function IssueManager() {
                                                 <div className="absolute -left-10 top-1 w-4 h-4 rounded-full bg-primary ring-4 ring-slate-900 border-2 border-white"></div>
                                                 <div>
                                                     <p className="text-xs font-black text-white">Inquiry Received</p>
-                                                    <p className="text-[10px] text-slate-500 mt-1">{new Date(selectedIssue.createdAt).toLocaleString('vi-VN')}</p>
+                                                    <p className="text-[10px] text-slate-500 mt-1">{formatAdminDateTime(selectedIssue.createdAt)}</p>
                                                 </div>
                                             </div>
                                             {selectedIssue.status !== 'New' && (
