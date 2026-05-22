@@ -65,16 +65,16 @@ export default function Hero({ initialData }: { initialData?: any }) {
                         <Link href={settings.primaryCTA.link} className="bg-primary hover:bg-black text-white px-5 py-3 md:px-10 md:py-5 rounded-full font-heading font-semibold text-xs md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-primary/30 flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none md:min-w-[340px] uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
                             {displayPrimaryText}
                         </Link>
-                        <Link href={settings.secondaryCTA.link} className="bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-md px-5 py-3 md:px-10 md:py-5 rounded-full font-heading font-semibold text-xs md:text-lg transition-all flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none md:min-w-[340px] uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
+                        <Link href={settings.secondaryCTA.link} className="bg-[#006BFF] hover:bg-[#0057D9] text-white px-5 py-3 md:px-10 md:py-5 rounded-full font-heading font-semibold text-xs md:text-lg transition-all transform hover:scale-105 shadow-xl shadow-blue-600/30 flex items-center justify-center flex-1 md:flex-none max-w-[160px] md:max-w-none md:min-w-[340px] uppercase" style={{ fontSize: 'var(--fs-home-heroCTA)' }}>
                             {displaySecondaryText}
                         </Link>
                     </div>
                     <div className="flex justify-center mt-3 md:mt-5 animate-fade-in-up delay-300">
                         <button
                             onClick={() => setIsScheduleOpen(true)}
-                            className="inline-flex items-center gap-2 bg-white/5 hover:bg-white/15 text-white border border-white/20 backdrop-blur-md px-5 py-2.5 md:px-8 md:py-3 rounded-full font-heading font-semibold text-[11px] md:text-sm transition-all uppercase tracking-wider"
+                            className="inline-flex items-center gap-2 bg-[#006BFF] hover:bg-[#0057D9] text-white px-5 py-2.5 md:px-8 md:py-3 rounded-full font-heading font-semibold text-[11px] md:text-sm transition-all shadow-xl shadow-blue-600/30 uppercase tracking-wider"
                         >
-                            <Calendar size={14} className="md:w-4 md:h-4 text-primary" />
+                            <Calendar size={14} className="md:w-4 md:h-4 text-white" />
                             {t.courses.bottomCta.cta2}
                         </button>
                     </div>

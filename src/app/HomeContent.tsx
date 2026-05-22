@@ -197,7 +197,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               {/* Consolidated Info - Centered */}
               <div className="max-w-3xl">
                 <div className="flex items-center justify-center gap-3 mb-4">
-                  <div className="px-3 py-1 rounded-full bg-primary/20 border border-primary/30 text-primary text-[11px] font-heading font-black uppercase tracking-widest leading-none" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>
+                  <div className="px-3 py-1 rounded-full bg-white/10 border border-white/25 text-white text-[11px] font-heading font-black uppercase tracking-widest leading-none" style={{ fontSize: 'var(--fs-home-campusBadge)' }}>
                     {campus.badge}
                   </div>
                   <div className="h-px w-12 bg-white/20"></div>
@@ -229,21 +229,21 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               </div>
 
               {/* Action Buttons - Centered */}
-              <div className="flex flex-col sm:flex-row gap-5 w-full sm:w-auto shrink-0 sm:justify-center">
+              <div className="flex flex-col sm:flex-row gap-5 md:gap-6 w-full sm:w-auto shrink-0 sm:justify-center">
                 <motion.a
                   href="https://lms.ptelc.edu.vn/"
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ y: -5, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex-1 lg:min-w-[280px] group relative bg-primary px-6 py-4 md:px-8 md:py-5 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-white shadow-xl shadow-primary/20 transition-all overflow-hidden"
+                  className="flex-1 sm:min-w-[320px] lg:min-w-[360px] group relative bg-primary px-7 py-5 md:px-10 md:py-7 rounded-xl md:rounded-2xl flex items-center gap-4 md:gap-5 text-white shadow-xl shadow-primary/20 transition-all overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <BookOpen size={20} className="md:w-6 md:h-6 group-hover:rotate-12 transition-transform" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                    <BookOpen size={24} className="md:w-8 md:h-8 group-hover:rotate-12 transition-transform" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] md:text-[9px] font-heading font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">LMS Portal</p>
+                    <p className="text-[9px] md:text-[10px] font-heading font-black uppercase tracking-widest opacity-60 mb-1 leading-none">LMS Portal</p>
                     <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase" style={{ fontSize: 'var(--fs-home-campusBtn)' }}>{campus.lmsBtn}</p>
                   </div>
                 </motion.a>
@@ -252,13 +252,13 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   href="/test"
                   whileHover={{ y: -5, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex-1 lg:min-w-[280px] group relative bg-white/5 border border-white/10 px-6 py-4 md:px-8 md:py-5 rounded-xl md:rounded-2xl flex items-center gap-3 md:gap-4 text-white backdrop-blur-md hover:bg-white/10 transition-all"
+                  className="flex-1 sm:min-w-[320px] lg:min-w-[360px] group relative bg-white/5 border border-white/10 px-7 py-5 md:px-10 md:py-7 rounded-xl md:rounded-2xl flex items-center gap-4 md:gap-5 text-white backdrop-blur-md hover:bg-white/10 transition-all"
                 >
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-                    <ExternalLink size={20} className="md:w-6 md:h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center shrink-0">
+                    <ExternalLink size={24} className="md:w-8 md:h-8 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                   </div>
                   <div className="text-left">
-                    <p className="text-[9px] md:text-[9px] font-heading font-black uppercase tracking-widest opacity-60 mb-0.5 leading-none">Practice Test</p>
+                    <p className="text-[9px] md:text-[10px] font-heading font-black uppercase tracking-widest opacity-60 mb-1 leading-none">Practice Test</p>
                     <p className="font-heading font-bold text-sm md:text-[17px] leading-tight uppercase" style={{ fontSize: 'var(--fs-home-campusBtn)' }}>{campus.testBtn}</p>
                   </div>
                 </motion.a>

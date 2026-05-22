@@ -62,7 +62,12 @@ export default function TestPage() {
         fetch("/api/mock-tests")
             .then(res => res.json())
             .then(data => {
-                setAcademicTests(data);
+                const readyTests = (data as Test[]).filter((test) =>
+                    (test.listening?.sections || []).length > 0
+                    && (test.reading?.sections || []).length > 0
+                    && !!(test.writing?.content || test.writing?.pdf)
+                );
+                setAcademicTests(readyTests);
                 setLoading(false);
             });
     }, []);
@@ -220,29 +225,53 @@ export default function TestPage() {
     /* ── Compute reading score for results page ── */
     /* ── Helper: flexible IELTS answer matching ── */
     const isAnswerMatch = (userRaw: string, correctRaw: string): boolean => {
-        const normUser = userRaw.trim().toUpperCase();
+        const normalize = (value: string) => value
+            .trim()
+            .toUpperCase()
+            .replace(/&AMP;/g, "&")
+            .replace(/[^A-Z0-9]/g, "");
+        const normUser = normalize(userRaw);
         if (!normUser) return false;
 
-        // Handle multi-answer (MCM): "B,D" matches "B,D" or "D,B"
-        if (correctRaw.includes(",")) {
-            const userParts = normUser.split(",").map(s => s.trim()).filter(Boolean).sort();
-            const correctParts = correctRaw.toUpperCase().split(",").map(s => s.trim()).filter(Boolean).sort();
-            return userParts.length > 0 && userParts.join(",") === correctParts.join(",");
-        }
+        const expandOptionalText = (value: string): string[] => {
+            const match = value.match(/\(([^()]*)\)/);
+            if (!match || match.index === undefined) return [value];
 
-        // Handle "(s)" pattern: "sculpture(s)" → accept "sculpture" or "sculptures"
-        const parenMatch = correctRaw.match(/^(.+?)\((.+?)\)$/);
-        if (parenMatch) {
-            const base = parenMatch[1].toUpperCase();
-            const suffix = parenMatch[2].toUpperCase();
-            return normUser === base || normUser === (base + suffix);
-        }
+            const prefix = value.slice(0, match.index);
+            const suffix = value.slice(match.index + match[0].length);
+            return [
+                ...expandOptionalText(`${prefix}${suffix}`),
+                ...expandOptionalText(`${prefix}${match[1]}${suffix}`)
+            ];
+        };
 
-        // Handle SC type "D - chemical elements" → just "D"
-        const scUser = normUser.split(" - ")[0].trim();
-        const scCorrect = correctRaw.split(" - ")[0].trim().toUpperCase();
+        const answerOptions = correctRaw
+            .split("||")
+            .flatMap(option => option.includes("/") ? option.split("/") : [option])
+            .flatMap(expandOptionalText)
+            .map(option => option.trim())
+            .filter(Boolean);
 
-        return scUser === scCorrect;
+        return answerOptions.some((option) => {
+            // Handle multi-answer (MCM): "B,D" matches "B,D" or "D,B".
+            if (option.includes(",")) {
+                const userParts = userRaw.split(",").map(normalize).filter(Boolean).sort();
+                const correctParts = option.split(",").map(normalize).filter(Boolean).sort();
+                return userParts.length > 0 && userParts.join(",") === correctParts.join(",");
+            }
+
+            // SC values may include an explanation after the option letter.
+            const optionAnswer = option.split(" - ")[0];
+            return normUser === normalize(optionAnswer);
+        });
+    };
+
+    const hasCompleteAnswerKey = (
+        results: { details: Array<{ correctAnswer: string }> },
+        total: number
+    ) => {
+        return results.details.length === total
+            && results.details.every(({ correctAnswer }) => correctAnswer.trim().length > 0);
     };
 
     /* ── Compute reading score for results page ── */
@@ -485,8 +514,8 @@ export default function TestPage() {
         const listeningPct = Math.round((listeningResults.score / listeningResults.total) * 100);
 
         // Check if listening/reading have answer keys
-        const hasListeningAnswers = (selectedTest?.listening?.sections || []).some((sec: TestSection) => Object.keys(sec.answers || {}).length > 0);
-        const hasReadingAnswers = (selectedTest?.reading?.sections || []).some((sec: TestSection) => Object.keys(sec.answers || {}).length > 0);
+        const hasListeningAnswers = hasCompleteAnswerKey(listeningResults, listeningResults.total);
+        const hasReadingAnswers = hasCompleteAnswerKey(readingResults, readingResults.total);
 
         const renderScoreCard = (
             skillName: string,
@@ -716,7 +745,7 @@ export default function TestPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Email</label>
+                                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1.5 block">Email *</label>
                                         <input
                                             type="email"
                                             value={writingContact.email}
@@ -727,7 +756,7 @@ export default function TestPage() {
                                     </div>
                                     <button
                                         onClick={() => {
-                                            if (!writingContact.name.trim() || !writingContact.phone.trim()) {
+                                            if (!writingContact.name.trim() || !writingContact.phone.trim() || !writingContact.email.trim()) {
                                                 alert(t.testPage.requireFields);
                                                 return;
                                             }

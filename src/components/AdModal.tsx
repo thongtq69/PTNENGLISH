@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     X, Calendar, MessageSquare, Clock,
-    BookOpen, Check, ChevronRight, ChevronLeft, Sparkles,
+    BookOpen, Check, ChevronRight, ChevronLeft,
     type LucideIcon
 } from 'lucide-react';
 import Link from 'next/link';
@@ -41,10 +41,9 @@ const ICON_MAP: Record<string, LucideIcon> = {
     Check: Check
 };
 
-type ViewState = 'hidden' | 'open' | 'minimized';
+type ViewState = 'hidden' | 'open';
 
 const DISMISS_KEY = 'ptn_ad_dismissed';
-const VIEW_STATE_KEY = 'ptn_ad_view_state';
 const IELTS_COURSE_ACTION: AdItem = {
     icon: 'BookOpen',
     text: 'Luyện thi IELTS',
@@ -94,18 +93,13 @@ export default function AdModal() {
                 setAds(valid);
 
                 // Always keep ads loaded for external triggers (UniPrep card etc.).
-                // Only auto-open / restore minimized view if user hasn't dismissed.
+                // Only auto-open if user hasn't dismissed.
                 if (sessionStorage.getItem(DISMISS_KEY)) return;
 
-                const saved = sessionStorage.getItem(VIEW_STATE_KEY);
-                if (saved === 'minimized') {
-                    setViewState('minimized');
-                } else {
-                    setTimeout(() => {
-                        if (sessionStorage.getItem(DISMISS_KEY)) return;
-                        setViewState('open');
-                    }, 2000);
-                }
+                setTimeout(() => {
+                    if (sessionStorage.getItem(DISMISS_KEY)) return;
+                    setViewState('open');
+                }, 2000);
             } catch (e) {
                 console.error('Ad fetch error', e);
             }
@@ -127,27 +121,15 @@ export default function AdModal() {
                 setCurrentIdx(idx);
                 setViewState('open');
                 sessionStorage.removeItem(DISMISS_KEY);
-                sessionStorage.setItem(VIEW_STATE_KEY, 'open');
             }
         };
         window.addEventListener('open-ad-by-name', handler);
         return () => window.removeEventListener('open-ad-by-name', handler);
     }, [ads]);
 
-    const minimize = () => {
-        setViewState('minimized');
-        sessionStorage.setItem(VIEW_STATE_KEY, 'minimized');
-    };
-
-    const reopen = () => {
-        setViewState('open');
-        sessionStorage.setItem(VIEW_STATE_KEY, 'open');
-    };
-
     const dismiss = () => {
         setViewState('hidden');
         sessionStorage.setItem(DISMISS_KEY, 'true');
-        sessionStorage.removeItem(VIEW_STATE_KEY);
     };
 
     if (ads.length === 0 || !pathname || pathname.startsWith('/admin') || pathname.startsWith('/test')) return null;
@@ -157,77 +139,17 @@ export default function AdModal() {
     const next = () => setCurrentIdx(i => (i + 1) % total);
     const prev = () => setCurrentIdx(i => (i - 1 + total) % total);
 
-    // Close behavior: advance to next ad if more remain, otherwise minimize.
+    // Close behavior: advance to next ad if more remain, otherwise hide the ads for this session.
     const closeOrAdvance = () => {
         if (currentIdx < total - 1) {
             setCurrentIdx(currentIdx + 1);
         } else {
-            minimize();
+            dismiss();
         }
     };
 
-    const openAt = (idx: number) => {
-        setCurrentIdx(idx);
-        reopen();
-    };
-
-    // Up to 2 minimized banners stacked side-by-side at bottom-left. Order honors displayOrder + Summer-priority sort.
-    const minimizedAds = ads.slice(0, 2);
-
     return (
         <>
-            {/* Minimized floating widgets — both anchored to the LEFT, side-by-side */}
-            <AnimatePresence>
-                {viewState === 'minimized' && minimizedAds.length > 0 && (
-                    <motion.div
-                        key="left-stack"
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 40 }}
-                        transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-                        className="fixed bottom-4 md:bottom-6 left-3 md:left-6 z-[998] flex items-end gap-3 md:gap-4"
-                    >
-                        <button
-                            onClick={dismiss}
-                            aria-label="Dismiss"
-                            className="absolute -top-3 -right-3 z-30 w-8 h-8 rounded-full bg-white shadow-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-red-500 hover:text-white transition-colors"
-                        >
-                            <X size={16} />
-                        </button>
-                        {minimizedAds.map((adItem, idx) => (
-                            <motion.button
-                                key={adItem._id || idx}
-                                initial={{ opacity: 0, scale: 0.5, y: 40 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.5, y: 40 }}
-                                transition={{ type: 'spring', stiffness: 260, damping: 20, delay: idx * 0.08 }}
-                                onClick={() => openAt(idx)}
-                                aria-label={t.adModal.viewPromo}
-                                className="group relative w-36 md:w-48 aspect-[9/16] rounded-3xl bg-accent shadow-2xl shadow-primary/50 overflow-hidden hover:scale-[1.04] transition-transform active:scale-95 ring-4 ring-white/60 hover:ring-primary/60"
-                            >
-                                {adItem.leftImage ? (
-                                    <img src={adItem.leftImage} alt={adItem.leftLabel || t.adModal.promoLabel} className="absolute inset-0 w-full h-full object-cover" />
-                                ) : (
-                                    <Sparkles size={48} className="absolute inset-0 m-auto text-white" />
-                                )}
-                                <div className="absolute top-2 left-2 z-10 bg-primary text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-2 py-0.5 md:px-2.5 md:py-1 rounded-full shadow-lg animate-pulse">
-                                    {t.adModal.promoLabel}
-                                </div>
-                                <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-accent via-accent/80 to-transparent" />
-                                <div className="absolute inset-x-0 bottom-0 p-2.5 flex flex-col items-center">
-                                    <span className="text-white text-[11px] md:text-xs font-black uppercase tracking-wide leading-tight text-center line-clamp-2 mb-0.5">
-                                        {adItem.name || adItem.leftHeading}
-                                    </span>
-                                    <span className="text-white/80 text-[8px] md:text-[9px] font-bold uppercase tracking-widest group-hover:text-primary transition-colors">
-                                        {t.adModal.viewPromo} →
-                                    </span>
-                                </div>
-                            </motion.button>
-                        ))}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
             {/* Full modal */}
             <AnimatePresence>
                 {viewState === 'open' && (
@@ -250,7 +172,7 @@ export default function AdModal() {
                             {/* Close/Advance Button */}
                             <button
                                 onClick={closeOrAdvance}
-                                aria-label={currentIdx < total - 1 ? t.adModal.nextAd : t.adModal.minimize}
+                                aria-label={currentIdx < total - 1 ? t.adModal.nextAd : t.adModal.dismiss}
                                 className="absolute top-4 right-4 md:top-0 md:right-0 z-50 bg-accent/5 md:bg-accent text-accent md:text-white p-3 md:p-6 hover:bg-primary hover:text-white transition-colors active:scale-95 rounded-full md:rounded-none"
                             >
                                 <X size={20} className="md:w-6 md:h-6" />
@@ -342,7 +264,7 @@ export default function AdModal() {
                                             >
                                                 <Link
                                                     href={finalLink}
-                                                    onClick={minimize}
+                                                    onClick={dismiss}
                                                     className="group flex items-center justify-between p-4 md:p-6 bg-slate-50 hover:bg-primary rounded-xl md:rounded-none transition-all hover:scale-[1.02] border border-slate-100"
                                                 >
                                                     <div className="flex items-center gap-4 md:gap-6">
