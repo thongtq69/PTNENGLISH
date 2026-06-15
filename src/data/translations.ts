@@ -494,7 +494,7 @@ export const translations = {
             readTime: "phút đọc",
             author: "Tác giả",
             eventCategory: "Sự kiện",
-            categories: ["Tất cả", "IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập"],
+            categories: ["Tất cả", "IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập", "Sạp báo"],
             emptyState: {
                 title: "Chưa có bài viết phù hợp",
                 desc: "Mời bạn quay lại sau để cập nhật những kiến thức mới nhất."
@@ -1274,7 +1274,7 @@ export const translations = {
             readTime: "min read",
             author: "Author",
             eventCategory: "Events",
-            categories: ["All", "IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience"],
+            categories: ["All", "IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience", "Newsstand"],
             emptyState: {
                 title: "No matching articles found",
                 desc: "Please check back later for the latest knowledge updates."

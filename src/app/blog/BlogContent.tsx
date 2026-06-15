@@ -113,8 +113,8 @@ export default function BlogContent({ pageData }: { pageData: any }) {
             setActiveTab(expectedAll);
         } else if (!currentIsAll) {
             // Attempt to translate other categories if possible
-            const viCats = ["IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập"];
-            const enCats = ["IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience"];
+            const viCats = ["IELTS Expert", "Học thuật (Teens)", "Lộ trình du học", "Kinh nghiệm học tập", "Sạp báo"];
+            const enCats = ["IELTS Expert", "Academic (Teens)", "Study Abroad Pathway", "Learning Experience", "Newsstand"];
 
             if (language === "vi") {
                 const idx = enCats.indexOf(activeTab);
@@ -163,19 +163,19 @@ export default function BlogContent({ pageData }: { pageData: any }) {
 
                 {/* Categories & Search */}
                 <section className="sticky top-20 z-30 bg-white/90 backdrop-blur-lg border-b border-slate-50 py-8">
-                    <div className="container mx-auto px-6 flex flex-col md:flex-row justify-center items-center gap-12">
-                        <div className="flex bg-slate-50 p-2 rounded-3xl w-full md:w-auto overflow-x-auto no-scrollbar border border-slate-100">
+                    <div className="container mx-auto px-6 flex flex-col md:flex-row justify-center items-center gap-6 xl:gap-10">
+                        <div className="flex bg-slate-50 p-2 rounded-3xl w-full md:w-auto md:min-w-0 md:shrink overflow-x-auto no-scrollbar border border-slate-100">
                             {categories.map((cat: string) => (
                                 <button
                                     key={cat}
                                     onClick={() => setActiveTab(cat)}
-                                    className={`px-8 py-3 rounded-2xl font-bold transition-all whitespace-nowrap text-sm ${activeTab === cat ? "bg-accent text-white shadow-xl" : "text-slate-500 hover:text-accent"}`}
+                                    className={`px-5 2xl:px-8 py-3 rounded-2xl font-bold transition-all whitespace-nowrap text-sm ${activeTab === cat ? "bg-accent text-white shadow-xl" : "text-slate-500 hover:text-accent"}`}
                                 >
                                     {cat}
                                 </button>
                             ))}
                         </div>
-                        <div className="relative w-full md:w-80 group">
+                        <div className="relative w-full md:w-80 md:shrink-0 group">
                             <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 group-hover:text-accent transition-colors" size={18} />
                             <input
                                 type="text"
