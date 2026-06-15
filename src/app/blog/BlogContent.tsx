@@ -9,6 +9,28 @@ import React from "react";
 import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
+const normalizeCategoryLabel = (value?: string) =>
+    (value || "").trim().replace(/\s+/g, " ").toLocaleLowerCase("vi-VN");
+
+const categoryKeyMap: Record<string, string> = {
+    [normalizeCategoryLabel("Tất cả")]: "all",
+    [normalizeCategoryLabel("All")]: "all",
+    [normalizeCategoryLabel("IELTS Expert")]: "ielts-expert",
+    [normalizeCategoryLabel("Học thuật (Teens)")]: "academic-teens",
+    [normalizeCategoryLabel("Academic (Teens)")]: "academic-teens",
+    [normalizeCategoryLabel("Lộ trình du học")]: "study-abroad",
+    [normalizeCategoryLabel("Study Abroad Pathway")]: "study-abroad",
+    [normalizeCategoryLabel("Kinh nghiệm học tập")]: "learning-experience",
+    [normalizeCategoryLabel("Learning Experience")]: "learning-experience",
+    [normalizeCategoryLabel("Sạp báo")]: "newsstand",
+    [normalizeCategoryLabel("Newsstand")]: "newsstand",
+};
+
+const getCategoryKey = (value?: string) => {
+    const normalized = normalizeCategoryLabel(value);
+    return categoryKeyMap[normalized] || normalized;
+};
+
 export default function BlogContent({ pageData }: { pageData: any }) {
     const { t, language } = useLanguage();
     const [posts, setPosts] = useState<any[]>([]);
@@ -107,7 +129,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
 
     // Sync activeTab with language change only when necessary
     useEffect(() => {
-        const currentIsAll = activeTab === "Tất cả" || activeTab === "All";
+        const currentIsAll = getCategoryKey(activeTab) === "all";
         const expectedAll = language === "vi" ? "Tất cả" : "All";
         if (currentIsAll && activeTab !== expectedAll) {
             setActiveTab(expectedAll);
@@ -129,8 +151,9 @@ export default function BlogContent({ pageData }: { pageData: any }) {
 
     const filteredPosts = posts.filter(post => {
         if (!post) return false;
-        const isAllTab = activeTab === "Tất cả" || activeTab === "All";
-        const matchesTab = isAllTab || post.category === activeTab;
+        const activeCategoryKey = getCategoryKey(activeTab);
+        const isAllTab = activeCategoryKey === "all";
+        const matchesTab = isAllTab || getCategoryKey(post.category) === activeCategoryKey;
         const matchesSearch = (post.title?.toLowerCase().includes(search.toLowerCase()) || false) ||
             (post.excerpt?.toLowerCase().includes(search.toLowerCase()) || false);
         return matchesTab && matchesSearch;
@@ -220,7 +243,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                             )}
                                             <div className="absolute inset-0 bg-accent/20 group-hover:bg-transparent transition-colors"></div>
                                             <div className="absolute top-6 left-6 bg-accent text-white text-xs md:text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-xl">
-                                                {post.category}
+                                                {(post.category || "").trim()}
                                             </div>
                                         </div>
 
