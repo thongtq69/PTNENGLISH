@@ -52,6 +52,8 @@ export default function TestPage() {
     const [resultTab, setResultTab] = useState<"listening" | "reading" | "writing">("listening");
     const [writingContact, setWritingContact] = useState({ name: "", phone: "", email: "" });
     const [writingContactSubmitted, setWritingContactSubmitted] = useState(false);
+    const [submissionId, setSubmissionId] = useState<string | null>(null);
+    const [submissionSaving, setSubmissionSaving] = useState(false);
     const [listeningPrepTime, setListeningPrepTime] = useState(60); // 60s preparation
     const [listeningPhase, setListeningPhase] = useState<"prep" | "playing" | "done">("prep");
     const prepTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -216,8 +218,59 @@ export default function TestPage() {
 
     // Audio progress tracking handled via React event props on <audio> below
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (confirm(t.test.testing.confirmSubmit)) {
+            setSubmissionSaving(true);
+            try {
+                const timeSpentSeconds = Math.max(0, 3600 - currentTime);
+                const response = await fetch("/api/mock-test-submissions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        testId: selectedTest?._id,
+                        testName: selectedTest?.name,
+                        contact: writingContact,
+                        answers,
+                        results: {
+                            listening: {
+                                band: getListeningBandScore(listeningResults.score),
+                                score: listeningResults.score,
+                                total: listeningResults.total,
+                                pct: Math.round((listeningResults.score / listeningResults.total) * 100),
+                                hasAnswerKey: hasCompleteAnswerKey(listeningResults, listeningResults.total),
+                                details: listeningResults.details
+                            },
+                            reading: {
+                                band: getBandScore(readingResults.score),
+                                score: readingResults.score,
+                                total: readingResults.total,
+                                pct: Math.round((readingResults.score / readingResults.total) * 100),
+                                hasAnswerKey: hasCompleteAnswerKey(readingResults, readingResults.total),
+                                details: readingResults.details
+                            },
+                            writing: {
+                                status: "pending",
+                                score: "",
+                                feedback: ""
+                            }
+                        },
+                        status: "completed",
+                        submittedAt: new Date().toISOString(),
+                        timeSpentSeconds
+                    })
+                });
+
+                const data = await response.json().catch(() => null);
+                if (response.ok && data?.data?._id) {
+                    setSubmissionId(data.data._id);
+                } else {
+                    alert(data?.error || "Không lưu được bài làm vào admin. Kết quả vẫn hiển thị cho học viên.");
+                }
+            } catch (error) {
+                alert("Không lưu được bài làm vào admin. Vui lòng kiểm tra kết nối/server.");
+            } finally {
+                setSubmissionSaving(false);
+            }
             setStep(3);
         }
     };
@@ -755,12 +808,55 @@ export default function TestPage() {
                                         />
                                     </div>
                                     <button
-                                        onClick={() => {
+                                        onClick={async () => {
                                             if (!writingContact.name.trim() || !writingContact.phone.trim() || !writingContact.email.trim()) {
                                                 alert(t.testPage.requireFields);
                                                 return;
                                             }
-                                            // TODO: Send to API
+                                            if (submissionId) {
+                                                try {
+                                                    const response = await fetch("/api/mock-test-submissions", {
+                                                        method: "PATCH",
+                                                        headers: { "Content-Type": "application/json" },
+                                                        body: JSON.stringify({
+                                                            id: submissionId,
+                                                            contact: writingContact,
+                                                            results: {
+                                                                listening: {
+                                                                    band: listeningBand,
+                                                                    score: listeningResults.score,
+                                                                    total: listeningResults.total,
+                                                                    pct: listeningPct,
+                                                                    hasAnswerKey: hasListeningAnswers,
+                                                                    details: listeningResults.details
+                                                                },
+                                                                reading: {
+                                                                    band: readingBand,
+                                                                    score: readingResults.score,
+                                                                    total: readingResults.total,
+                                                                    pct: readingPct,
+                                                                    hasAnswerKey: hasReadingAnswers,
+                                                                    details: readingResults.details
+                                                                },
+                                                                writing: {
+                                                                    status: "pending",
+                                                                    score: "",
+                                                                    feedback: ""
+                                                                }
+                                                            }
+                                                        })
+                                                    });
+
+                                                    if (!response.ok) {
+                                                        const data = await response.json().catch(() => null);
+                                                        alert(data?.error || "Không cập nhật được thông tin liên hệ.");
+                                                        return;
+                                                    }
+                                                } catch {
+                                                    alert("Không cập nhật được thông tin liên hệ.");
+                                                    return;
+                                                }
+                                            }
                                             setWritingContactSubmitted(true);
                                         }}
                                         className="w-full py-4 bg-primary text-white rounded-xl font-black text-sm uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-primary/20 mt-2"
@@ -962,9 +1058,10 @@ export default function TestPage() {
                     </div>
                     <button
                         onClick={handleSubmit}
-                        className="bg-primary hover:bg-red-700 text-white px-2.5 sm:px-4 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-black text-[7px] sm:text-[9px] md:text-[10px] uppercase tracking-wider transition-all shadow-lg shadow-primary/20 whitespace-nowrap"
+                        disabled={submissionSaving}
+                        className="bg-primary hover:bg-red-700 text-white px-2.5 sm:px-4 md:px-6 py-1.5 sm:py-2 rounded-lg sm:rounded-xl font-black text-[7px] sm:text-[9px] md:text-[10px] uppercase tracking-wider transition-all shadow-lg shadow-primary/20 whitespace-nowrap disabled:opacity-50"
                     >
-                        {t.test.testing.submit}
+                        {submissionSaving ? "Saving..." : t.test.testing.submit}
                     </button>
                 </div>
             </div>

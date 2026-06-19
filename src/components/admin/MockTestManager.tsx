@@ -5,7 +5,7 @@ import {
     Plus, Trash2, Headphones, BookOpen, PenTool,
     Save, Eye, ChevronRight, Settings, PlusCircle,
     FileAudio, FileText, Layout, Info, CheckCircle2,
-    Database, Download, RefreshCw
+    Database, Download, RefreshCw, ClipboardList, User, Phone, Mail
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import FileUpload from './shared/FileUpload';
@@ -32,6 +32,42 @@ interface MockTest {
     writing: { pdf: string; content: string; tasksCount: number };
 }
 
+interface ResultDetail {
+    q: number;
+    userAnswer: string;
+    correctAnswer: string;
+    isCorrect: boolean;
+}
+
+interface SkillResult {
+    band?: string;
+    score?: number;
+    total?: number;
+    pct?: number;
+    hasAnswerKey?: boolean;
+    details?: ResultDetail[];
+}
+
+interface MockTestSubmission {
+    _id: string;
+    testName?: string;
+    contact?: { name?: string; phone?: string; email?: string };
+    answers?: {
+        listening?: Record<string, string>;
+        reading?: Record<string, string>;
+        writing?: Record<string, string>;
+    };
+    results?: {
+        listening?: SkillResult;
+        reading?: SkillResult;
+        writing?: { status?: string; score?: string; feedback?: string };
+    };
+    status?: string;
+    adminNotes?: string;
+    submittedAt?: string;
+    timeSpentSeconds?: number;
+}
+
 const DEFAULT_SECTION: TestSection = {
     title: 'New Section',
     content: '',
@@ -41,9 +77,14 @@ const DEFAULT_SECTION: TestSection = {
 
 export default function MockTestManager() {
     const [tests, setTests] = useState<MockTest[]>([]);
+    const [submissions, setSubmissions] = useState<MockTestSubmission[]>([]);
     const [loading, setLoading] = useState(true);
+    const [submissionsLoading, setSubmissionsLoading] = useState(false);
     const [saving, setSaving] = useState(false);
+    const [submissionSaving, setSubmissionSaving] = useState(false);
+    const [viewMode, setViewMode] = useState<'library' | 'submissions'>('library');
     const [activeIdx, setActiveIdx] = useState<number | null>(null);
+    const [activeSubmissionIdx, setActiveSubmissionIdx] = useState<number | null>(null);
     const [activeSkill, setActiveSkill] = useState<'listening' | 'reading' | 'writing'>('listening');
     const [activeSectionIdx, setActiveSectionIdx] = useState(0);
 
@@ -62,6 +103,31 @@ export default function MockTestManager() {
                 setLoading(false);
             });
     }, []);
+
+    const fetchSubmissions = async () => {
+        setSubmissionsLoading(true);
+        try {
+            const res = await fetch('/api/mock-test-submissions');
+            const data = await res.json();
+            const list = Array.isArray(data) ? data : [];
+            setSubmissions(list);
+            if (list.length > 0 && activeSubmissionIdx === null) {
+                setActiveSubmissionIdx(0);
+            }
+            if (list.length === 0) {
+                setActiveSubmissionIdx(null);
+            }
+        } finally {
+            setSubmissionsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (viewMode === 'submissions') {
+            fetchSubmissions();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [viewMode]);
 
     const handleSave = async () => {
         setSaving(true);
@@ -86,6 +152,38 @@ export default function MockTestManager() {
         setTests(newList);
     };
 
+    const updateSubmission = (updated: MockTestSubmission) => {
+        if (activeSubmissionIdx === null) return;
+        const newList = [...submissions];
+        newList[activeSubmissionIdx] = updated;
+        setSubmissions(newList);
+    };
+
+    const handleSaveSubmission = async () => {
+        if (activeSubmissionIdx === null) return;
+        const submission = submissions[activeSubmissionIdx];
+        setSubmissionSaving(true);
+        try {
+            const res = await fetch('/api/mock-test-submissions', {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(submission)
+            });
+            if (!res.ok) throw new Error('Save failed');
+            const data = await res.json();
+            if (data?.data) {
+                const newList = [...submissions];
+                newList[activeSubmissionIdx] = data.data;
+                setSubmissions(newList);
+            }
+            alert('Submission updated successfully!');
+        } catch {
+            alert('Could not update submission.');
+        } finally {
+            setSubmissionSaving(false);
+        }
+    };
+
     if (loading) return (
         <div className="h-96 flex flex-col items-center justify-center text-slate-500 gap-4">
             <RefreshCw className="animate-spin" />
@@ -104,17 +202,53 @@ export default function MockTestManager() {
                     <p className="text-slate-500 mt-2">Manage structured IELTS/Academic simulation environments. Use [Q1], [Q2]... tags in content.</p>
                 </div>
                 <div className="flex gap-4">
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="bg-primary text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20 disabled:opacity-50"
-                    >
-                        {saving ? <RefreshCw className="animate-spin" size={18} /> : <Database size={18} />}
-                        Sync to Database
-                    </button>
+                    <div className="bg-slate-900 border border-white/5 p-1 rounded-2xl flex">
+                        <button
+                            onClick={() => setViewMode('library')}
+                            className={`px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${viewMode === 'library' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                        >
+                            <Database size={14} /> Test Library
+                        </button>
+                        <button
+                            onClick={() => setViewMode('submissions')}
+                            className={`px-5 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${viewMode === 'submissions' ? 'bg-primary text-white shadow-lg' : 'text-slate-500 hover:text-slate-300'}`}
+                        >
+                            <ClipboardList size={14} /> Submissions
+                        </button>
+                    </div>
+                    {viewMode === 'library' ? (
+                        <button
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="bg-primary text-white px-8 py-4 rounded-2xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20 disabled:opacity-50"
+                        >
+                            {saving ? <RefreshCw className="animate-spin" size={18} /> : <Database size={18} />}
+                            Sync to Database
+                        </button>
+                    ) : (
+                        <button
+                            onClick={fetchSubmissions}
+                            disabled={submissionsLoading}
+                            className="bg-slate-900 border border-white/5 text-white px-6 py-4 rounded-2xl font-bold flex items-center gap-2 hover:border-primary/30 transition-all disabled:opacity-50"
+                        >
+                            <RefreshCw className={submissionsLoading ? 'animate-spin' : ''} size={18} />
+                            Refresh
+                        </button>
+                    )}
                 </div>
             </div>
 
+            {viewMode === 'submissions' ? (
+                <SubmissionsPanel
+                    submissions={submissions}
+                    loading={submissionsLoading}
+                    activeIdx={activeSubmissionIdx}
+                    onSelect={setActiveSubmissionIdx}
+                    onUpdate={updateSubmission}
+                    onSave={handleSaveSubmission}
+                    saving={submissionSaving}
+                />
+            ) : (
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-18rem)]">
                 {/* Left Sidebar: Test List */}
                 <div className="lg:col-span-1 bg-slate-900 border border-white/5 rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl">
@@ -513,9 +647,338 @@ export default function MockTestManager() {
                     )}
                 </div>
             </div>
+            )}
         </div>
     );
 }
+
+const formatSubmissionTime = (value?: string) => {
+    if (!value) return 'No timestamp';
+    return new Intl.DateTimeFormat('vi-VN', {
+        dateStyle: 'short',
+        timeStyle: 'short'
+    }).format(new Date(value));
+};
+
+const formatDuration = (seconds?: number) => {
+    if (!seconds) return '—';
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}m ${secs}s`;
+};
+
+const SubmissionsPanel = ({
+    submissions,
+    loading,
+    activeIdx,
+    onSelect,
+    onUpdate,
+    onSave,
+    saving
+}: {
+    submissions: MockTestSubmission[];
+    loading: boolean;
+    activeIdx: number | null;
+    onSelect: (idx: number) => void;
+    onUpdate: (submission: MockTestSubmission) => void;
+    onSave: () => void;
+    saving: boolean;
+}) => {
+    const submission = activeIdx !== null ? submissions[activeIdx] : null;
+
+    const updateContact = (key: 'name' | 'phone' | 'email', value: string) => {
+        if (!submission) return;
+        onUpdate({
+            ...submission,
+            contact: { ...(submission.contact || {}), [key]: value }
+        });
+    };
+
+    const updateSkillResult = (
+        skill: 'listening' | 'reading',
+        patch: Partial<SkillResult>
+    ) => {
+        if (!submission) return;
+        onUpdate({
+            ...submission,
+            results: {
+                ...(submission.results || {}),
+                [skill]: {
+                    ...(submission.results?.[skill] || {}),
+                    ...patch
+                }
+            }
+        });
+    };
+
+    const updateResultDetail = (
+        skill: 'listening' | 'reading',
+        detailIdx: number,
+        patch: Partial<ResultDetail>
+    ) => {
+        if (!submission) return;
+        const currentResult = submission.results?.[skill] || {};
+        const details = [...(currentResult.details || [])];
+        details[detailIdx] = { ...details[detailIdx], ...patch };
+        const score = details.filter(detail => detail.isCorrect).length;
+        const total = currentResult.total || details.length;
+        updateSkillResult(skill, {
+            details,
+            score,
+            total,
+            pct: total ? Math.round((score / total) * 100) : 0
+        });
+    };
+
+    const updateWriting = (patch: Partial<NonNullable<MockTestSubmission['results']>['writing']>) => {
+        if (!submission) return;
+        onUpdate({
+            ...submission,
+            results: {
+                ...(submission.results || {}),
+                writing: {
+                    ...(submission.results?.writing || {}),
+                    ...patch
+                }
+            }
+        });
+    };
+
+    const updateWritingAnswer = (task: string, value: string) => {
+        if (!submission) return;
+        onUpdate({
+            ...submission,
+            answers: {
+                ...(submission.answers || {}),
+                writing: {
+                    ...(submission.answers?.writing || {}),
+                    [task]: value
+                }
+            }
+        });
+    };
+
+    const updateNotes = (value: string) => {
+        if (!submission) return;
+        onUpdate({ ...submission, adminNotes: value });
+    };
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-18rem)]">
+            <div className="lg:col-span-1 bg-slate-900 border border-white/5 rounded-[2.5rem] flex flex-col overflow-hidden shadow-2xl">
+                <div className="p-6 border-b border-white/5 bg-white/[0.02] flex justify-between items-center">
+                    <div>
+                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest">Student Submissions</h3>
+                        <p className="text-[10px] text-slate-600 mt-1">{submissions.length} completed tests</p>
+                    </div>
+                    {loading && <RefreshCw size={16} className="animate-spin text-primary" />}
+                </div>
+
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-3">
+                    {submissions.length === 0 && !loading ? (
+                        <div className="h-full flex flex-col items-center justify-center text-slate-700 text-center p-8">
+                            <ClipboardList size={40} className="mb-4 opacity-30" />
+                            <p className="text-xs font-black uppercase tracking-widest">No submissions yet</p>
+                        </div>
+                    ) : submissions.map((item, idx) => {
+                        const listening = item.results?.listening;
+                        const reading = item.results?.reading;
+                        return (
+                            <button
+                                key={item._id}
+                                onClick={() => onSelect(idx)}
+                                className={`w-full text-left p-5 rounded-2xl border transition-all ${activeIdx === idx ? 'bg-primary border-primary text-white shadow-lg' : 'bg-slate-950 border-white/5 text-slate-500 hover:border-white/10'}`}
+                            >
+                                <p className={`text-[8px] font-black uppercase mb-1 ${activeIdx === idx ? 'text-white/70' : 'text-primary'}`}>
+                                    {formatSubmissionTime(item.submittedAt)}
+                                </p>
+                                <h4 className="font-bold text-sm truncate">{item.contact?.name || 'Khách ẩn danh'}</h4>
+                                <p className={`text-[10px] truncate mt-1 ${activeIdx === idx ? 'text-white/70' : 'text-slate-600'}`}>{item.testName}</p>
+                                <div className="flex gap-2 mt-3">
+                                    <span className={`text-[9px] font-black px-2 py-1 rounded-lg ${activeIdx === idx ? 'bg-white/15 text-white' : 'bg-white/5 text-slate-400'}`}>
+                                        L {listening?.score ?? '—'}/{listening?.total ?? 40}
+                                    </span>
+                                    <span className={`text-[9px] font-black px-2 py-1 rounded-lg ${activeIdx === idx ? 'bg-white/15 text-white' : 'bg-white/5 text-slate-400'}`}>
+                                        R {reading?.score ?? '—'}/{reading?.total ?? 40}
+                                    </span>
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <div className="lg:col-span-3 bg-slate-900 border border-white/5 rounded-[3rem] overflow-hidden flex flex-col shadow-2xl shadow-black/50">
+                {submission ? (
+                    <>
+                        <div className="px-8 py-6 flex items-center justify-between border-b border-white/5 bg-white/[0.01]">
+                            <div>
+                                <p className="text-[9px] font-black text-primary uppercase tracking-[0.3em]">Completed Mock Test</p>
+                                <h2 className="text-2xl font-heading font-black text-white mt-1">{submission.testName || 'Untitled Test'}</h2>
+                                <p className="text-xs text-slate-500 mt-1">
+                                    {formatSubmissionTime(submission.submittedAt)} · Duration {formatDuration(submission.timeSpentSeconds)}
+                                </p>
+                            </div>
+                            <button
+                                onClick={onSave}
+                                disabled={saving}
+                                className="bg-primary text-white px-7 py-3 rounded-2xl font-bold flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20 disabled:opacity-50"
+                            >
+                                {saving ? <RefreshCw className="animate-spin" size={18} /> : <Save size={18} />}
+                                Save Submission
+                            </button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto custom-scrollbar p-8 space-y-8">
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                                <label className="space-y-2">
+                                    <span className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-2"><User size={12} /> Student Name</span>
+                                    <input value={submission.contact?.name || ''} onChange={e => updateContact('name', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" />
+                                </label>
+                                <label className="space-y-2">
+                                    <span className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-2"><Phone size={12} /> Phone</span>
+                                    <input value={submission.contact?.phone || ''} onChange={e => updateContact('phone', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" />
+                                </label>
+                                <label className="space-y-2">
+                                    <span className="text-[10px] font-black text-slate-500 uppercase flex items-center gap-2"><Mail size={12} /> Email</span>
+                                    <input value={submission.contact?.email || ''} onChange={e => updateContact('email', e.target.value)} className="w-full bg-slate-950 border border-white/5 rounded-xl px-4 py-3 text-white text-sm" />
+                                </label>
+                            </div>
+
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+                                <SkillSummaryEditor title="Listening" result={submission.results?.listening} onChange={(patch) => updateSkillResult('listening', patch)} />
+                                <SkillSummaryEditor title="Reading" result={submission.results?.reading} onChange={(patch) => updateSkillResult('reading', patch)} />
+                                <div className="bg-slate-950 border border-white/5 rounded-3xl p-6 space-y-4">
+                                    <h3 className="text-sm font-heading font-black text-white flex items-center gap-2"><PenTool size={16} className="text-primary" /> Writing</h3>
+                                    <select value={submission.results?.writing?.status || 'pending'} onChange={e => updateWriting({ status: e.target.value })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-4 py-3 text-white text-xs font-bold">
+                                        <option value="pending">Pending Review</option>
+                                        <option value="reviewed">Reviewed</option>
+                                        <option value="emailed">Emailed to Student</option>
+                                    </select>
+                                    <input value={submission.results?.writing?.score || ''} onChange={e => updateWriting({ score: e.target.value })} placeholder="Writing band / score" className="w-full bg-slate-900 border border-white/5 rounded-xl px-4 py-3 text-white text-xs" />
+                                    <textarea value={submission.results?.writing?.feedback || ''} onChange={e => updateWriting({ feedback: e.target.value })} placeholder="Writing feedback..." rows={4} className="w-full bg-slate-900 border border-white/5 rounded-xl px-4 py-3 text-white text-xs resize-none" />
+                                </div>
+                            </div>
+
+                            <AnswerDetailsEditor title="Listening Answers" skill="listening" result={submission.results?.listening} onChange={updateResultDetail} />
+                            <AnswerDetailsEditor title="Reading Answers" skill="reading" result={submission.results?.reading} onChange={updateResultDetail} />
+
+                            <div className="bg-slate-950 border border-white/5 rounded-3xl p-6 space-y-5">
+                                <h3 className="text-sm font-heading font-black text-white flex items-center gap-2"><PenTool size={16} className="text-primary" /> Writing Responses</h3>
+                                {Object.entries(submission.answers?.writing || { 1: '', 2: '' }).map(([task, value]) => (
+                                    <label key={task} className="block space-y-2">
+                                        <span className="text-[10px] font-black text-slate-500 uppercase">Task {task}</span>
+                                        <textarea value={value || ''} onChange={e => updateWritingAnswer(task, e.target.value)} rows={8} className="w-full bg-slate-900 border border-white/5 rounded-2xl px-5 py-4 text-white text-sm resize-y leading-relaxed" />
+                                    </label>
+                                ))}
+                            </div>
+
+                            <div className="bg-slate-950 border border-white/5 rounded-3xl p-6 space-y-3">
+                                <label className="text-[10px] font-black text-slate-500 uppercase">Internal Admin Notes</label>
+                                <textarea value={submission.adminNotes || ''} onChange={e => updateNotes(e.target.value)} rows={4} className="w-full bg-slate-900 border border-white/5 rounded-2xl px-5 py-4 text-white text-sm resize-none" />
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center text-slate-700 gap-6">
+                        <ClipboardList size={48} className="opacity-30" />
+                        <div className="text-center">
+                            <h3 className="text-xl font-heading font-black text-slate-400">No Submission Selected</h3>
+                            <p className="text-xs font-bold text-slate-600 mt-2 uppercase tracking-widest">Select a completed test from the sidebar</p>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const SkillSummaryEditor = ({
+    title,
+    result,
+    onChange
+}: {
+    title: string;
+    result?: SkillResult;
+    onChange: (patch: Partial<SkillResult>) => void;
+}) => (
+    <div className="bg-slate-950 border border-white/5 rounded-3xl p-6 space-y-4">
+        <h3 className="text-sm font-heading font-black text-white flex items-center gap-2">
+            {title === 'Listening' ? <Headphones size={16} className="text-primary" /> : <BookOpen size={16} className="text-primary" />}
+            {title}
+        </h3>
+        <div className="grid grid-cols-2 gap-3">
+            <label className="space-y-1">
+                <span className="text-[9px] font-black text-slate-600 uppercase">Band</span>
+                <input value={result?.band || ''} onChange={e => onChange({ band: e.target.value })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-3 py-2 text-white text-xs" />
+            </label>
+            <label className="space-y-1">
+                <span className="text-[9px] font-black text-slate-600 uppercase">Raw Score</span>
+                <input type="number" value={result?.score ?? ''} onChange={e => onChange({ score: Number(e.target.value) })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-3 py-2 text-white text-xs" />
+            </label>
+            <label className="space-y-1">
+                <span className="text-[9px] font-black text-slate-600 uppercase">Total</span>
+                <input type="number" value={result?.total ?? ''} onChange={e => onChange({ total: Number(e.target.value) })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-3 py-2 text-white text-xs" />
+            </label>
+            <label className="space-y-1">
+                <span className="text-[9px] font-black text-slate-600 uppercase">Percent</span>
+                <input type="number" value={result?.pct ?? ''} onChange={e => onChange({ pct: Number(e.target.value) })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-3 py-2 text-white text-xs" />
+            </label>
+        </div>
+    </div>
+);
+
+const AnswerDetailsEditor = ({
+    title,
+    skill,
+    result,
+    onChange
+}: {
+    title: string;
+    skill: 'listening' | 'reading';
+    result?: SkillResult;
+    onChange: (skill: 'listening' | 'reading', detailIdx: number, patch: Partial<ResultDetail>) => void;
+}) => {
+    const details = result?.details || [];
+    return (
+        <div className="bg-slate-950 border border-white/5 rounded-3xl p-6 space-y-5">
+            <div className="flex items-center justify-between">
+                <h3 className="text-sm font-heading font-black text-white flex items-center gap-2">
+                    {skill === 'listening' ? <Headphones size={16} className="text-primary" /> : <BookOpen size={16} className="text-primary" />}
+                    {title}
+                </h3>
+                <span className="text-[10px] font-black text-slate-500 uppercase">{details.length} questions</span>
+            </div>
+            {details.length === 0 ? (
+                <p className="text-xs text-slate-600 font-bold uppercase tracking-widest py-4">No answer details saved for this skill.</p>
+            ) : (
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-3">
+                    {details.map((detail, idx) => (
+                        <div key={`${skill}-${detail.q}-${idx}`} className={`rounded-2xl border p-4 space-y-3 ${detail.isCorrect ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
+                            <div className="flex items-center justify-between">
+                                <span className="text-xs font-black text-white">Question {detail.q}</span>
+                                <label className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase">
+                                    <input type="checkbox" checked={!!detail.isCorrect} onChange={e => onChange(skill, idx, { isCorrect: e.target.checked })} />
+                                    Correct
+                                </label>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                <label className="space-y-1">
+                                    <span className="text-[9px] font-black text-slate-600 uppercase">Student Answer</span>
+                                    <input value={detail.userAnswer || ''} onChange={e => onChange(skill, idx, { userAnswer: e.target.value })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-3 py-2 text-white text-xs" />
+                                </label>
+                                <label className="space-y-1">
+                                    <span className="text-[9px] font-black text-slate-600 uppercase">Correct Answer</span>
+                                    <input value={detail.correctAnswer || ''} onChange={e => onChange(skill, idx, { correctAnswer: e.target.value })} className="w-full bg-slate-900 border border-white/5 rounded-xl px-3 py-2 text-white text-xs" />
+                                </label>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
 
 const TypographyHint = ({ current }: { current: string }) => (
     <div className="flex flex-col shrink-0">
