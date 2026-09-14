@@ -16,9 +16,10 @@ import Link from "next/link";
 
 // Helper function to merge data with fallback
 const mergeWithFallback = (dbData: any, fallback: any): any => {
-    if (!dbData) return fallback;
-    if (typeof fallback !== 'object' || fallback === null) return dbData ?? fallback;
-    if (Array.isArray(fallback)) return dbData ?? fallback;
+    if (dbData == null) return fallback;
+    if (typeof fallback !== 'object' || fallback === null) return typeof dbData === typeof fallback ? dbData : fallback;
+    if (Array.isArray(fallback)) return Array.isArray(dbData) ? dbData.filter((item: any) => item != null) : fallback;
+    if (typeof dbData !== 'object' || Array.isArray(dbData)) return fallback;
 
     const result: any = { ...fallback };
     for (const key of Object.keys(fallback)) {
@@ -38,16 +39,20 @@ export default function CoursesContent({ pageData: initialPageData }: { pageData
 
     // Fetch dynamic content when language changes
     useEffect(() => {
+        const controller = new AbortController();
         const fetchContent = async () => {
             try {
-                const res = await fetch(`/api/courses-page?lang=${language}`);
+                const res = await fetch(`/api/courses-page?lang=${language}`, { signal: controller.signal });
+                if (!res.ok) return;
                 const data = await res.json();
-                if (data) setDbData(data);
+                if (!controller.signal.aborted) setDbData(data);
             } catch (err) {
+                if (controller.signal.aborted) return;
                 console.error("Failed to fetch language-specific content", err);
             }
         };
         fetchContent();
+        return () => controller.abort();
     }, [language]);
 
     // Get content from database or fallback to translations

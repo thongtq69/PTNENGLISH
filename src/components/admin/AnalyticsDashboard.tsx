@@ -320,7 +320,8 @@ export default function AnalyticsDashboard() {
                     {/* Realtime details grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
                         {/* Pages by path */}
-                        <Card title="Đường dẫn trang & lớp màn hình" icon={<Eye size={14} />} noPad>
+                        <Card title="Đường dẫn trang — hôm nay" icon={<Eye size={14} />} noPad>
+                            <p className="px-5 pt-3 text-xs text-gray-500">Dữ liệu đã xử lý trong ngày, có độ trễ cập nhật.</p>
                             <DT headers={["Đường dẫn trang", "↓ Người dùng", "Số lần xem"]}
                                 rows={rt.realtime.byPagePath.map(p => [p.path, p.users, p.views])} />
                         </Card>
@@ -350,7 +351,8 @@ export default function AnalyticsDashboard() {
                         </Card>
 
                         {/* Sources */}
-                        <Card title="Nguồn cho người dùng lần đầu" icon={<MousePointerClick size={14} />} noPad>
+                        <Card title="Nguồn người dùng lần đầu — hôm nay" icon={<MousePointerClick size={14} />} noPad>
+                            <p className="px-5 pt-3 text-xs text-gray-500">Dữ liệu đã xử lý trong ngày, có độ trễ cập nhật.</p>
                             <DT headers={["Nguồn", "Người dùng"]}
                                 rows={rt.realtime.bySource.map(s => [s.source, s.users])} />
                         </Card>

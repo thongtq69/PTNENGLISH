@@ -21,14 +21,21 @@ import Link from 'next/link';
 import AnalyticsDashboard from '@/components/admin/AnalyticsDashboard';
 
 export default async function AdminDashboard() {
-    await dbConnect();
-
-    const [coursesCount, postsCount, issuesCount, chatbotLeadsCount] = await Promise.all([
-        Course.countDocuments(),
-        Post.countDocuments(),
-        Issue.countDocuments({ status: 'New' }),
-        ChatbotLead.countDocuments({ status: 'new' }),
-    ]);
+    let counts: number[] | null = null;
+    try {
+        await dbConnect();
+        counts = await Promise.all([
+            Course.countDocuments(),
+            Post.countDocuments(),
+            Issue.countDocuments({ status: 'New' }),
+            ChatbotLead.countDocuments({ status: 'new' }),
+        ]);
+    } catch (error) {
+        console.error('[Admin] Dashboard statistics unavailable', {
+            name: error instanceof Error ? error.name : 'UnknownError',
+        });
+    }
+    const [coursesCount, postsCount, issuesCount, chatbotLeadsCount] = counts ?? [null, null, null, null];
 
     const STATS = [
         { name: 'Active Courses', value: coursesCount, icon: <BookOpen />, color: 'from-blue-500 to-indigo-600', href: '/admin/courses' },
@@ -39,6 +46,12 @@ export default async function AdminDashboard() {
 
     return (
         <div className="space-y-12">
+            {!counts && (
+                <div role="alert" className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-amber-200">
+                    Không tải được số liệu từ cơ sở dữ liệu. Vui lòng thử tải lại trang sau ít phút.
+                    Dấu “—” là số liệu chưa tải được, không phải số lượng bằng 0.
+                </div>
+            )}
             {/* Welcome Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
@@ -75,13 +88,13 @@ export default async function AdminDashboard() {
                             <div className="flex items-end justify-between">
                                 <div>
                                     <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.2em] mb-1">{stat.name}</p>
-                                    <p className="text-4xl font-heading font-black text-white tracking-tight">{stat.value}</p>
+                                    <p className="text-4xl font-heading font-black text-white tracking-tight">{stat.value ?? '—'}</p>
                                 </div>
                                 <div className="p-2 rounded-lg bg-white/5 text-slate-400 group-hover:text-white transition-colors">
                                     <ArrowUpRight size={16} />
                                 </div>
                             </div>
-                            {stat.highlight && stat.value > 0 && (
+                            {stat.highlight && (stat.value ?? 0) > 0 && (
                                 <div className="absolute top-4 right-4 animate-pulse">
                                     <span className="flex h-3 w-3">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
@@ -108,7 +121,7 @@ export default async function AdminDashboard() {
 
                     <div className="space-y-6">
                         {[
-                            { label: 'Database Connection', status: 'Healthy', color: 'text-emerald-400' },
+                            { label: 'Database Connection', status: counts ? 'Healthy' : 'Unavailable', color: counts ? 'text-emerald-400' : 'text-amber-400' },
                             { label: 'Cloudinary Storage', status: 'Active (422MB used)', color: 'text-emerald-400' },
                             { label: 'Site Performance', status: '98/100 (Optimized)', color: 'text-amber-400' },
                             { label: 'Last Migration', status: 'Success (Today 06:51)', color: 'text-slate-400' }

@@ -63,11 +63,13 @@ export async function GET() {
             })).sort((a, b) => b.users - a.users).slice(0, 15);
         } catch (e) { console.error("Page realtime error:", e); }
 
-        // 3b. Pages by path (pagePath gives URL path)
+        // Path and acquisition dimensions are Core Reporting only, not Realtime.
+        // These two panels show today's processed data and are labelled accordingly.
         let byPagePath: { path: string; users: number; views: number }[] = [];
         try {
-            const [pathRes] = await client.runRealtimeReport({
+            const [pathRes] = await client.runReport({
                 property: `properties/${propertyId}`,
+                dateRanges: [{ startDate: 'today', endDate: 'today' }],
                 metrics: [{ name: "activeUsers" }, { name: "screenPageViews" }],
                 dimensions: [{ name: "unifiedPagePathScreen" }],
             });
@@ -76,7 +78,7 @@ export async function GET() {
                 users: parseInt(row.metricValues?.[0]?.value || "0"),
                 views: parseInt(row.metricValues?.[1]?.value || "0"),
             })).sort((a, b) => b.views - a.views).slice(0, 15);
-        } catch (e) { console.error("PagePath realtime error:", e); }
+        } catch (e) { console.error("PagePath daily report error:", e); }
 
         // 4. By country
         let byCountry: { country: string; users: number }[] = [];
@@ -123,8 +125,9 @@ export async function GET() {
         // 7. By traffic source
         let bySource: { source: string; users: number }[] = [];
         try {
-            const [sourceRes] = await client.runRealtimeReport({
+            const [sourceRes] = await client.runReport({
                 property: `properties/${propertyId}`,
+                dateRanges: [{ startDate: 'today', endDate: 'today' }],
                 metrics: [{ name: "activeUsers" }],
                 dimensions: [{ name: "firstUserSource" }],
             });

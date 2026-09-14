@@ -35,10 +35,11 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
     const { t, language } = useLanguage();
     const [selectedTeacher, setSelectedTeacher] = useState<any>(null);
 
-    const sections = pageData?.sections || [];
+    const sections = Array.isArray(pageData?.sections) ? pageData.sections.filter((s: any) => s && typeof s === 'object') : [];
 
     // Get differences data from DB if available, otherwise fallback to translations
-    const differencesFromDB = sections.find((s: any) => s.type === 'about-differences')?.content?.items;
+    const differenceItems = sections.find((s: any) => s.type === 'about-differences')?.content?.items;
+    const differencesFromDB = Array.isArray(differenceItems) ? differenceItems.filter((item: any) => item && typeof item === 'object') : [];
 
     const differencesData = useMemo(() => {
         if (differencesFromDB && differencesFromDB.length > 0) {
@@ -106,7 +107,8 @@ export default function AboutUsContent({ pageData }: { pageData: any }) {
 
 
     const storyData = sections.find((s: any) => s.type === 'about-story')?.content || {};
-    const teacherFromDB = sections.find((s: any) => s.type === 'about-teachers')?.content?.items;
+    const teacherItems = sections.find((s: any) => s.type === 'about-teachers')?.content?.items;
+    const teacherFromDB = Array.isArray(teacherItems) ? teacherItems.filter((item: any) => item && typeof item === 'object') : [];
     const teachersToDisplay = (teacherFromDB && teacherFromDB.length > 0) ? teacherFromDB : teachersData;
 
     return (

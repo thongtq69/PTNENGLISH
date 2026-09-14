@@ -1,5 +1,5 @@
 import CoursesContent from "./CoursesContent";
-import dbConnect from "@/lib/mongodb";
+import { loadCmsData } from "@/lib/load-cms-data";
 import Page from "@/models/Page";
 import { Metadata } from "next";
 
@@ -21,10 +21,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-    await dbConnect();
-
     // Load courses page content data (default to Vietnamese on server-side)
-    const pageData = await Page.findOne({ slug: 'courses-content-vi' }).lean();
+    const pageData = await loadCmsData('courses', () => Page.findOne({ slug: 'courses-content-vi' }).lean().exec());
 
-    return <CoursesContent pageData={pageData ? JSON.parse(JSON.stringify(pageData)) : null} />;
+    return <CoursesContent pageData={pageData} />;
 }

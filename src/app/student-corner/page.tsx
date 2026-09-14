@@ -1,5 +1,5 @@
 import StudentCornerContent from "./StudentCornerContent";
-import dbConnect from "@/lib/mongodb";
+import { loadCmsData } from "@/lib/load-cms-data";
 import Page from "@/models/Page";
 import SiteSettings from "@/models/SiteSettings";
 import { Metadata } from "next";
@@ -22,13 +22,10 @@ export const metadata: Metadata = {
 };
 
 export default async function StudentCornerPage() {
-    await dbConnect();
-    const pageData = await Page.findOne({ slug: 'student-corner' }).lean();
-    const siteSettingsData = await SiteSettings.findOne({}).lean();
+    const [pageData, siteSettings] = await Promise.all([
+        loadCmsData('student-corner', () => Page.findOne({ slug: 'student-corner' }).lean().exec()),
+        loadCmsData('student-corner/settings', () => SiteSettings.findOne({}).lean().exec()),
+    ]);
 
-    // Normalize for client component
-    const data = pageData ? JSON.parse(JSON.stringify(pageData)) : null;
-    const settings = siteSettingsData ? JSON.parse(JSON.stringify(siteSettingsData)) : null;
-
-    return <StudentCornerContent pageData={data} siteSettings={settings} />;
+    return <StudentCornerContent pageData={pageData} siteSettings={siteSettings} />;
 }

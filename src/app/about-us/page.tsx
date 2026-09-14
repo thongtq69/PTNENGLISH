@@ -1,5 +1,5 @@
 import AboutUsContent from './AboutUsContent';
-import dbConnect from '@/lib/mongodb';
+import { loadCmsData } from '@/lib/load-cms-data';
 import Page from '@/models/Page';
 import { Metadata } from 'next';
 
@@ -21,8 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutUsPage() {
-    await dbConnect();
-    const pageData = await Page.findOne({ slug: 'about-us' }).lean();
+    const pageData = await loadCmsData('about-us', () => Page.findOne({ slug: 'about-us' }).lean().exec());
 
-    return <AboutUsContent pageData={JSON.parse(JSON.stringify(pageData))} />;
+    return <AboutUsContent pageData={pageData} />;
 }

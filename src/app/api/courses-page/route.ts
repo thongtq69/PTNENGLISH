@@ -22,10 +22,10 @@ const getDefaultData = (lang: string = 'vi') => {
 };
 
 export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
+    const lang = searchParams.get('lang') === 'en' ? 'en' : 'vi';
     try {
         await dbConnect();
-        const { searchParams } = new URL(request.url);
-        const lang = searchParams.get('lang') || 'vi';
         const slug = `courses-content-${lang}`;
 
         const page = await Page.findOne({ slug }).lean();
@@ -37,7 +37,7 @@ export async function GET(request: Request) {
         // Return default data if not found in DB
         return NextResponse.json(getDefaultData(lang));
     } catch (error: any) {
-        return NextResponse.json(getDefaultData());
+        return NextResponse.json(getDefaultData(lang));
     }
 }
 

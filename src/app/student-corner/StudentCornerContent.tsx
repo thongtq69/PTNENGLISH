@@ -26,7 +26,7 @@ export default function StudentCornerContent({ pageData, siteSettings }: { pageD
     const fb = <T extends string | string[]>(vi: T, en: T): T => language === 'en' ? en : vi;
 
     // Extract sections with fallbacks
-    const sections = pageData?.sections || [];
+    const sections = Array.isArray(pageData?.sections) ? pageData.sections.filter((s: any) => s && typeof s === 'object') : [];
 
     const heroData = sections.find((s: any) => s.type === 'student-hero')?.content;
     const hero = {
@@ -114,7 +114,7 @@ export default function StudentCornerContent({ pageData, siteSettings }: { pageD
             "Những dòng chữ chân thành từ các học viên PTN English được lưu giữ qua từng khoảnh khắc",
             "Sincere words from PTN English students preserved through every moment"
         ),
-        notes: studentMessagesData?.notes || [
+        notes: Array.isArray(studentMessagesData?.notes) ? studentMessagesData.notes.filter((note: any) => note && typeof note === 'object') : [
 
             {
                 id: 1,

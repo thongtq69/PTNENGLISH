@@ -2,10 +2,6 @@ import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
-if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-}
-
 /**
  * Global is used here to maintain a cached connection across hot reloads
  * in development. This prevents connections growing exponentially during
@@ -30,6 +26,11 @@ if (!global.mongoose) {
 const CONNECTION_TIMEOUT = 8000; // 8 seconds
 
 async function dbConnect(): Promise<typeof mongoose> {
+    // Reject inside the call so callers can handle missing configuration.
+    if (!MONGODB_URI) {
+        throw new Error('Please define the MONGODB_URI environment variable');
+    }
+
     // If we have an active connection, return it
     if (cached.conn && mongoose.connection.readyState === 1) {
         return cached.conn;
