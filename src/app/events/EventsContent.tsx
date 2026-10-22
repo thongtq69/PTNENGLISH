@@ -116,7 +116,7 @@ export default function EventsContent() {
                                     >
                                         <Link
                                             href={`/events/${event.slug || event._id}`}
-                                            className="group grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] gap-6 md:gap-10 items-center p-4 md:p-6 rounded-2xl hover:bg-slate-50 transition-colors"
+                                            className="group grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-6 md:gap-10 items-center rounded-2xl hover:bg-slate-50 transition-colors"
                                         >
                                             <div className="relative rounded-2xl overflow-hidden aspect-[4/3] bg-slate-100">
                                                 {(event.image || event.originalImage) ? (

@@ -31,6 +31,7 @@ export default function BlogManager() {
     const [editingPost, setEditingPost] = useState<any>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [isUploadingContent, setIsUploadingContent] = useState(false);
 
     useEffect(() => {
         Promise.all([
@@ -94,6 +95,7 @@ export default function BlogManager() {
 
     const handleSavePost = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (isUploadingImage || isUploadingContent || saving) return;
         setSaving(true);
 
         let newList;
@@ -107,11 +109,12 @@ export default function BlogManager() {
         }
 
         try {
-            await fetch('/api/posts', {
+            const response = await fetch('/api/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newList)
             });
+            if (!response.ok) throw new Error('Không thể lưu bài viết. Vui lòng thử lại.');
             // Re-fetch to get real DB IDs for new posts
             const updatedPosts = await fetch('/api/posts', { cache: 'no-store' }).then(res => res.json());
             setPosts(updatedPosts);
@@ -504,6 +507,7 @@ export default function BlogManager() {
                                         value={editingPost.content}
                                         onChange={(val: string) => setEditingPost({ ...editingPost, content: val })}
                                         placeholder="Paste your content from Word or start writing here..."
+                                        onUploadingChange={setIsUploadingContent}
                                     />
                                 </div>
 
@@ -517,10 +521,10 @@ export default function BlogManager() {
                                     </button>
                                     <button
                                         type="submit"
-                                        disabled={saving || isUploadingImage}
-                                        className={`bg-primary text-white px-12 py-4 rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2 ${(saving || isUploadingImage) ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
+                                        disabled={saving || isUploadingImage || isUploadingContent}
+                                        className={`bg-primary text-white px-12 py-4 rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2 ${(saving || isUploadingImage || isUploadingContent) ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
                                     >
-                                        {saving ? "Saving..." : isUploadingImage ? "Uploading Image..." : "Publish Article"}
+                                        {saving ? "Saving..." : (isUploadingImage || isUploadingContent) ? "Uploading Image..." : "Publish Article"}
                                     </button>
                                 </div>
                             </form>

@@ -58,7 +58,7 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
             </section>
 
             {/* Featured Image - Display original uncropped image */}
-            <div className="container mx-auto px-6 max-w-4xl -mt-10">
+            <div className="container mx-auto px-6 max-w-6xl -mt-10">
                 <div className="w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white bg-white">
                     <img src={post.originalImage || post.image} alt={post.title} className="w-full h-auto block" />
                 </div>
@@ -66,9 +66,9 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
 
             {/* Post Content */}
             <article className="py-20 overflow-x-hidden">
-                <div className="container mx-auto px-6 max-w-3xl w-full">
+                <div className="container mx-auto px-6 max-w-5xl w-full">
                     <div
-                        className="prose prose-lg prose-slate max-w-none w-full break-words
+                        className="article-content prose prose-lg prose-slate max-w-none w-full break-words
                         prose-headings:font-heading prose-headings:font-black prose-headings:text-accent
                         prose-p:font-body prose-p:text-slate-600 prose-p:leading-relaxed
                         prose-li:font-body prose-li:text-slate-600

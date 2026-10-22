@@ -54,7 +54,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
 
     const galleryImages = event.gallery && event.gallery.length > 0
         ? event.gallery
-        : (event.image ? [event.image] : []);
+        : ((event.originalImage || event.image) ? [event.originalImage || event.image!] : []);
 
     const hasMany = galleryImages.length > 1;
     const currentImage = galleryImages[activeIdx] || event.originalImage || event.image;
@@ -65,7 +65,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
         <>
             {/* Breadcrumb */}
             <section className="pt-28 md:pt-32 pb-4 bg-white">
-                <div className="container mx-auto px-6 max-w-6xl">
+                <div className="container mx-auto px-6 max-w-7xl">
                     <nav className="flex items-center gap-2 text-sm text-slate-500">
                         <Link href="/" className="hover:text-primary transition-colors">{labels.home}</Link>
                         <ChevronRight size={14} className="text-slate-300" />
@@ -78,8 +78,8 @@ export default function EventDetailContent({ event, related }: { event: EventDat
 
             {/* Two-column layout */}
             <section className="pb-10 md:pb-14 bg-white">
-                <div className="container mx-auto px-6 max-w-6xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8 lg:gap-14">
+                <div className="container mx-auto px-6 max-w-7xl">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-8 lg:gap-12 items-start">
                         {/* Left: Main media with prev/next navigation */}
                         <div>
                             <div className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[4/3] group">
@@ -91,7 +91,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
                                         <img
                                             src={currentImage}
                                             alt={event.title}
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-contain"
                                         />
                                     </button>
                                 ) : null}
@@ -202,9 +202,9 @@ export default function EventDetailContent({ event, related }: { event: EventDat
             {/* Full content */}
             {event.content && (
                 <article className="pb-12 md:pb-16 bg-white">
-                    <div className="container mx-auto px-6 max-w-3xl w-full">
+                    <div className="container mx-auto px-6 max-w-5xl w-full">
                         <div
-                            className="prose prose-slate max-w-none w-full break-words
+                            className="article-content prose prose-slate max-w-none w-full break-words
                             prose-headings:font-heading prose-headings:font-bold prose-headings:text-accent
                             prose-p:font-body prose-p:text-slate-600 prose-p:leading-[1.8] prose-p:my-4
                             prose-li:font-body prose-li:text-slate-600

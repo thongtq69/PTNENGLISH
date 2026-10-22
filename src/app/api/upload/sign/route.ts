@@ -12,13 +12,15 @@ export async function POST(request: Request) {
         const { paramsToSign } = await request.json();
 
         const apiSecret = process.env.CLOUDINARY_API_SECRET;
-        if (!apiSecret) {
-            return NextResponse.json({ error: 'Cloudinary API Secret not found' }, { status: 500 });
+        const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+        const apiKey = process.env.CLOUDINARY_API_KEY;
+        if (!apiSecret || !cloudName || !apiKey) {
+            return NextResponse.json({ error: 'Chưa cấu hình đầy đủ kho ảnh Cloudinary.' }, { status: 500 });
         }
 
         const signature = cloudinary.utils.api_sign_request(paramsToSign, apiSecret);
 
-        return NextResponse.json({ signature });
+        return NextResponse.json({ signature, cloudName, apiKey });
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
     }

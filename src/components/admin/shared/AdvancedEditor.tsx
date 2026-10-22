@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import type { SelectionBookmark } from '@tiptap/pm/state';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -23,6 +24,7 @@ interface AdvancedEditorProps {
     onChange: (content: string) => void;
     label?: string;
     placeholder?: string;
+    onUploadingChange?: (uploading: boolean) => void;
 }
 
 const MenuButton = ({ onClick, isActive = false, disabled = false, children, title }: any) => (
@@ -31,6 +33,8 @@ const MenuButton = ({ onClick, isActive = false, disabled = false, children, tit
         onClick={onClick}
         disabled={disabled}
         title={title}
+        aria-label={title}
+        aria-pressed={isActive}
         className={`p-2 rounded-lg transition-all ${isActive
             ? 'bg-primary text-white shadow-lg shadow-primary/20'
             : 'text-slate-400 hover:bg-white/5 hover:text-white'
@@ -40,65 +44,73 @@ const MenuButton = ({ onClick, isActive = false, disabled = false, children, tit
     </button>
 );
 
-const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorProps) => {
+const AdvancedEditor = ({ value, onChange, label, placeholder, onUploadingChange }: AdvancedEditorProps) => {
     const [uploadProgress, setUploadProgress] = useState<{ total: number; current: number } | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState<string | null>(null);
+    const [showImageControls, setShowImageControls] = useState(false);
+    const [imageUrl, setImageUrl] = useState('');
+    const [imageAlt, setImageAlt] = useState('');
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const imagePositionRef = useRef<SelectionBookmark | null>(null);
 
-    const uploadImage = async (file: string | Blob): Promise<string | null> => {
-        try {
-            // 1. Prepare blob
-            let blob: Blob;
-            if (typeof file === 'string') {
-                const res = await fetch(file);
-                blob = await res.blob();
-            } else {
-                blob = file;
-            }
+    useEffect(() => {
+        onUploadingChange?.(isUploading);
+        return () => onUploadingChange?.(false);
+    }, [isUploading, onUploadingChange]);
 
-            // 2. Get signature
-            const timestamp = Math.round(new Date().getTime() / 1000);
-            const folderPath = 'ptn_english/blog/content';
-
-            const paramsToSign = {
-                timestamp,
-                folder: folderPath,
-            };
-
-            const signRes = await fetch('/api/upload/sign', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ paramsToSign }),
-            });
-
-            const { signature, error: signError } = await signRes.json();
-            if (signError) throw new Error(signError);
-
-            // 3. Upload direct to Cloudinary
-            const formData = new FormData();
-            formData.append('file', blob);
-            formData.append('api_key', '798193785297581');
-            formData.append('timestamp', timestamp.toString());
-            formData.append('signature', signature);
-            formData.append('folder', folderPath);
-
-            const cloudName = 'dtzegtrxb';
-            const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
-                method: 'POST',
-                body: formData,
-            });
-
-            const uploadData = await uploadRes.json();
-            return uploadData.secure_url || null;
-        } catch (e) {
-            console.error('Image upload failed:', e);
-            return null;
+    const uploadImage = async (file: string | Blob): Promise<string> => {
+        let blob: Blob;
+        if (typeof file === 'string') {
+            const res = await fetch(file);
+            blob = await res.blob();
+        } else {
+            blob = file;
         }
+        if (!blob.type.startsWith('image/')) throw new Error('Vui lòng chọn tệp hình ảnh.');
+        if (blob.size > 10 * 1024 * 1024) throw new Error('Mỗi ảnh cần nhỏ hơn 10 MB.');
+
+        const timestamp = Math.round(new Date().getTime() / 1000);
+        const folderPath = 'ptn_english/blog/content';
+
+        const paramsToSign = { timestamp, folder: folderPath };
+
+        const signRes = await fetch('/api/upload/sign', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ paramsToSign }),
+        });
+
+        const { signature, cloudName, apiKey, error: signError } = await signRes.json();
+        if (!signRes.ok || !signature || !cloudName || !apiKey) {
+            throw new Error(signError || 'Không thể kết nối kho ảnh. Vui lòng thử lại.');
+        }
+
+        const formData = new FormData();
+        formData.append('file', blob);
+        formData.append('api_key', apiKey);
+        formData.append('timestamp', timestamp.toString());
+        formData.append('signature', signature);
+        formData.append('folder', folderPath);
+
+        const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+            method: 'POST',
+            body: formData,
+        });
+
+        const uploadData = await uploadRes.json();
+        if (!uploadRes.ok || !uploadData.secure_url) {
+            throw new Error(uploadData.error?.message || 'Tải ảnh thất bại. Vui lòng thử lại.');
+        }
+        return uploadData.secure_url;
     };
 
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
                 heading: { levels: [1, 2, 3, 4] },
+                link: false,
+                underline: false,
             }),
             Underline,
             Link.configure({
@@ -109,7 +121,7 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
             }),
             Image.configure({
                 HTMLAttributes: {
-                    class: 'rounded-3xl shadow-xl my-8 max-w-full h-auto mx-auto border-4 border-white/5 block',
+                    class: 'rounded-2xl my-8 w-full max-w-full h-auto mx-auto block',
                 },
             }),
             Table.configure({
@@ -159,30 +171,40 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
                         .replace(/<\/font>/gi, '');
                 }
 
-                const dataUriRegex = /src="data:image\/[^;]+;base64,[^"]+"/g;
+                const dataUriRegex = /src=["']data:image\/[^;]+;base64,[^"']+["']/g;
                 const matches = html ? html.match(dataUriRegex) : null;
 
                 if (html && matches && matches.length > 0) {
+                    event.preventDefault();
+                    const bookmark = view.state.selection.getBookmark();
                     setIsUploading(true);
+                    setUploadError(null);
+                    editor?.setEditable(false, false);
                     setUploadProgress({ total: matches.length, current: 0 });
 
                     const processImages = async () => {
-                        let currentContent = editor?.getHTML() || "";
-                        let pastedHtml = html;
+                        try {
+                            let pastedHtml = html;
 
-                        for (let i = 0; i < matches.length; i++) {
-                            const match = matches[i];
-                            const base64 = match.substring(5, match.length - 1);
-                            const cloudUrl = await uploadImage(base64);
-                            if (cloudUrl) {
+                            for (let i = 0; i < matches.length; i++) {
+                                const match = matches[i];
+                                const base64 = match.substring(5, match.length - 1);
+                                const cloudUrl = await uploadImage(base64);
                                 pastedHtml = pastedHtml.replace(match, `src="${cloudUrl}"`);
+                                setUploadProgress(prev => prev ? { ...prev, current: i + 1 } : null);
                             }
-                            setUploadProgress(prev => prev ? { ...prev, current: i + 1 } : null);
-                        }
 
-                        editor?.commands.setContent(currentContent + pastedHtml);
-                        setIsUploading(false);
-                        setUploadProgress(null);
+                            if (editor && !editor.isDestroyed) {
+                                const selection = bookmark.resolve(editor.state.doc);
+                                editor.chain().focus().setTextSelection({ from: selection.from, to: selection.to }).insertContent(pastedHtml).run();
+                            }
+                        } catch (error) {
+                            setUploadError(error instanceof Error ? error.message : 'Không thể tải ảnh đã dán.');
+                        } finally {
+                            if (editor && !editor.isDestroyed) editor.setEditable(true, false);
+                            setIsUploading(false);
+                            setUploadProgress(null);
+                        }
                     };
 
                     processImages();
@@ -193,25 +215,9 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
                 const imageItems = items.filter(item => item.type.startsWith('image/'));
 
                 if (imageItems.length > 0) {
-                    setIsUploading(true);
-                    setUploadProgress({ total: imageItems.length, current: 0 });
-
-                    const processFiles = async () => {
-                        for (let i = 0; i < imageItems.length; i++) {
-                            const file = imageItems[i].getAsFile();
-                            if (file) {
-                                const url = await uploadImage(file);
-                                if (url) {
-                                    editor?.chain().focus().setImage({ src: url }).run();
-                                }
-                            }
-                            setUploadProgress(prev => prev ? { ...prev, current: i + 1 } : null);
-                        }
-                        setIsUploading(false);
-                        setUploadProgress(null);
-                    };
-
-                    processFiles();
+                    event.preventDefault();
+                    const files = imageItems.map(item => item.getAsFile()).filter((file): file is File => !!file);
+                    void insertFiles(files, view.state.selection.getBookmark());
                     return true;
                 }
 
@@ -226,11 +232,70 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
         }
     }, [value, editor]);
 
+    const insertFiles = async (files: File[], bookmark: SelectionBookmark | null) => {
+        if (!editor || editor.isDestroyed || !files.length || isUploading) return;
+        setIsUploading(true);
+        setUploadError(null);
+        setUploadProgress({ total: files.length, current: 0 });
+        editor.setEditable(false, false);
+        try {
+            const images = [];
+            for (let i = 0; i < files.length; i++) {
+                const src = await uploadImage(files[i]);
+                images.push({ type: 'image', attrs: { src, alt: imageAlt || files[i].name.replace(/\.[^.]+$/, '') } });
+                setUploadProgress({ total: files.length, current: i + 1 });
+            }
+            if (editor.isDestroyed) return;
+            const selection = (bookmark || editor.state.selection.getBookmark()).resolve(editor.state.doc);
+            editor.chain().focus().setTextSelection({ from: selection.from, to: selection.to })
+                .insertContent([...images, { type: 'paragraph' }]).run();
+            setShowImageControls(false);
+            setImageAlt('');
+        } catch (error) {
+            setUploadError(error instanceof Error ? error.message : 'Không thể tải ảnh. Vui lòng thử lại.');
+        } finally {
+            if (!editor.isDestroyed) editor.setEditable(true, false);
+            setIsUploading(false);
+            setUploadProgress(null);
+        }
+    };
+
+    const insertImageUrl = () => {
+        if (!editor || isUploading) return;
+        try {
+            const url = new URL(imageUrl.trim(), window.location.origin);
+            if (!imageUrl.trim() || !['https:', 'http:'].includes(url.protocol)) throw new Error('Vui lòng nhập đường dẫn ảnh hợp lệ (https://…).');
+            const selection = (imagePositionRef.current || editor.state.selection.getBookmark()).resolve(editor.state.doc);
+            editor.chain().focus().setTextSelection({ from: selection.from, to: selection.to })
+                .insertContent([{ type: 'image', attrs: { src: url.href, alt: imageAlt } }, { type: 'paragraph' }]).run();
+            setImageUrl('');
+            setImageAlt('');
+            setUploadError(null);
+            setShowImageControls(false);
+        } catch (error) {
+            setUploadError(error instanceof Error ? error.message : 'Không thể chèn ảnh.');
+        }
+    };
+
     if (!editor) return null;
 
     return (
         <div className="space-y-4 w-full">
             {label && <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-1">{label}</label>}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                aria-label="Chọn ảnh chèn vào bài viết"
+                className="hidden"
+                onChange={e => {
+                    const files = Array.from(e.target.files || []);
+                    e.target.value = '';
+                    void insertFiles(files, imagePositionRef.current);
+                }}
+            />
+            {uploadError && <p role="alert" className="text-sm text-red-400">{uploadError}</p>}
 
             {isUploading && (
                 <div className="bg-slate-900 border border-primary/20 rounded-2xl p-4 animate-in fade-in slide-in-from-top-4 duration-500">
@@ -255,7 +320,7 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
             )}
 
             <div className="rounded-[2.5rem] border border-white/5 bg-slate-900 overflow-hidden shadow-2xl relative">
-                <div className="p-4 border-b border-white/5 bg-white/[0.02] flex flex-wrap gap-1 items-center sticky top-0 z-10 backdrop-blur-md">
+                <div inert={isUploading} className="p-4 border-b border-white/5 bg-white/[0.02] flex flex-wrap gap-1 items-center sticky top-0 z-10 backdrop-blur-md">
                     <div className="flex items-center gap-1 pr-2 border-r border-white/5">
                         <MenuButton onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} isActive={editor.isActive('heading', { level: 1 })} title="H1"><span className="font-black text-xs">H1</span></MenuButton>
                         <MenuButton onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })} title="H2"><span className="font-black text-xs">H2</span></MenuButton>
@@ -282,6 +347,17 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
                     </div>
 
                     <div className="flex items-center gap-1 px-2 border-r border-white/5">
+                        <button
+                            type="button"
+                            title="Chèn ảnh tại vị trí con trỏ"
+                            aria-expanded={showImageControls}
+                            onClick={() => {
+                                imagePositionRef.current = editor.state.selection.getBookmark();
+                                setUploadError(null);
+                                setShowImageControls(!showImageControls);
+                            }}
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/15 text-white hover:bg-primary/30 text-sm font-bold"
+                        ><ImageIcon size={18} /> Chèn ảnh</button>
                         <MenuButton onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} title="Table"><TableIcon size={18} /></MenuButton>
                         <MenuButton onClick={() => editor.chain().focus().setHorizontalRule().run()} title="Divider"><Minus size={18} /></MenuButton>
                         <MenuButton
@@ -300,6 +376,22 @@ const AdvancedEditor = ({ value, onChange, label, placeholder }: AdvancedEditorP
                         <MenuButton onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} title="Redo"><Redo size={18} /></MenuButton>
                     </div>
                 </div>
+
+                {showImageControls && (
+                    <div role="group" aria-label="Chèn ảnh vào nội dung" className="p-5 border-b border-white/10 bg-slate-950 space-y-4">
+                        <p className="text-sm text-slate-300">Ảnh sẽ được chèn tại vị trí con trỏ đã chọn trong bài viết.</p>
+                        <label className="block text-sm text-slate-300">
+                            Mô tả ảnh (không bắt buộc)
+                            <input value={imageAlt} onChange={e => setImageAlt(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') e.preventDefault(); }} disabled={isUploading} className="mt-2 w-full rounded-lg bg-slate-900 border border-white/10 p-3 text-white" />
+                        </label>
+                        <button type="button" disabled={isUploading} onClick={() => fileInputRef.current?.click()} className="px-4 py-3 rounded-lg bg-primary text-white font-bold disabled:opacity-50">Tải ảnh từ thiết bị</button>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <input type="url" aria-label="Đường dẫn ảnh" placeholder="Hoặc dán đường dẫn ảnh https://…" value={imageUrl} onChange={e => setImageUrl(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); insertImageUrl(); } }} disabled={isUploading} className="min-w-0 flex-1 rounded-lg bg-slate-900 border border-white/10 p-3 text-white text-sm" />
+                            <button type="button" onClick={insertImageUrl} disabled={isUploading || !imageUrl.trim()} className="px-4 py-3 rounded-lg bg-white/10 text-white font-bold disabled:opacity-40">Chèn đường dẫn ảnh</button>
+                        </div>
+                        <p className="text-xs text-slate-500">Có thể chọn nhiều ảnh. Mỗi ảnh tối đa 10 MB.</p>
+                    </div>
+                )}
 
                 <div className="relative">
                     <EditorContent editor={editor} />

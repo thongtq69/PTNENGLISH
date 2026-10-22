@@ -65,6 +65,7 @@ export default function EventsManager() {
     const [editing, setEditing] = useState<EventData | null>(null);
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [isUploadingImage, setIsUploadingImage] = useState(false);
+    const [isUploadingContent, setIsUploadingContent] = useState(false);
     const [isUploadingGallery, setIsUploadingGallery] = useState(false);
     const [galleryInput, setGalleryInput] = useState('');
     const [tagInput, setTagInput] = useState('');
@@ -126,6 +127,7 @@ export default function EventsManager() {
     const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!editing) return;
+        if (saving || isUploadingImage || isUploadingGallery || isUploadingContent) return;
         setSaving(true);
 
         let newList: EventData[];
@@ -137,11 +139,12 @@ export default function EventsManager() {
         }
 
         try {
-            await fetch('/api/events', {
+            const response = await fetch('/api/events', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newList)
             });
+            if (!response.ok) throw new Error('Không thể lưu sự kiện.');
             const updated = await fetch('/api/events', { cache: 'no-store' }).then(r => r.json());
             setEvents(updated);
             setIsEditorOpen(false);
@@ -602,6 +605,7 @@ export default function EventsManager() {
                                         value={editing.content}
                                         onChange={(val: string) => setEditing({ ...editing, content: val })}
                                         placeholder="Dán nội dung bài viết từ Facebook hoặc viết mới..."
+                                        onUploadingChange={setIsUploadingContent}
                                     />
                                 </div>
 
@@ -642,10 +646,10 @@ export default function EventsManager() {
                                     </button>
                                     <button
                                         type="submit"
-                                        disabled={saving || isUploadingImage}
-                                        className={`bg-primary text-white px-12 py-4 rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2 ${(saving || isUploadingImage) ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
+                                        disabled={saving || isUploadingImage || isUploadingGallery || isUploadingContent}
+                                        className={`bg-primary text-white px-12 py-4 rounded-xl font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-all flex items-center gap-2 ${(saving || isUploadingImage || isUploadingGallery || isUploadingContent) ? 'opacity-50 cursor-not-allowed grayscale' : ''}`}
                                     >
-                                        {saving ? "Đang lưu..." : isUploadingImage ? "Đang tải ảnh..." : "Đăng sự kiện"}
+                                        {saving ? "Đang lưu..." : (isUploadingImage || isUploadingGallery || isUploadingContent) ? "Đang tải ảnh..." : "Đăng sự kiện"}
                                     </button>
                                 </div>
                             </form>

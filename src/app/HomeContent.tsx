@@ -14,28 +14,53 @@ import { useState, useEffect } from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { DynamicText } from "@/context/FontSizeContext";
 
+interface HomeNewsItem {
+  _id?: string;
+  slug?: string;
+  title: string;
+  excerpt?: string;
+  category?: string;
+  image?: string;
+  originalImage?: string;
+  date?: string;
+  createdAt?: string;
+}
+
 export default function HomeContent({ pageData, siteSettings }: { pageData: any; siteSettings: any }) {
   const { t, language } = useLanguage();
-  const [latestPosts, setLatestPosts] = useState<any[]>([]);
+  const [newsFeed, setNewsFeed] = useState<{ source: string; posts: HomeNewsItem[] } | null>(null);
+  const newsSource = siteSettings?.homeNewsSource === 'blog' ? 'blog' : 'events';
+  const newsPath = newsSource === 'blog' ? '/blog' : '/events';
+  const latestPosts = newsFeed?.source === newsSource ? newsFeed.posts : [];
+  const newsLoading = newsFeed?.source !== newsSource;
 
   useEffect(() => {
-    fetch("/api/posts", { cache: 'no-store' })
-      .then(res => res.json())
+    const controller = new AbortController();
+    fetch(newsSource === 'blog' ? '/api/posts' : '/api/events', { cache: 'no-store', signal: controller.signal })
+      .then(res => {
+        if (!res.ok) throw new Error('Unable to load homepage news');
+        return res.json();
+      })
       .then(data => {
         if (!Array.isArray(data)) {
-          console.error("Posts data is not an array:", data);
-          return;
+          throw new Error('Homepage news must be an array');
         }
         // Sort by createdAt descending to get the most recent posts
-        const sorted = [...data].sort((a: any, b: any) => {
-          const dateA = new Date(a.createdAt || a.date || 0).getTime();
-          const dateB = new Date(b.createdAt || b.date || 0).getTime();
+        const sorted = data.filter((item: HomeNewsItem | null): item is HomeNewsItem => !!item && typeof item.title === 'string' && !!(item.slug || item._id)).sort((a, b) => {
+          const dateA = Date.parse(a.createdAt || '') || 0;
+          const dateB = Date.parse(b.createdAt || '') || 0;
           return dateB - dateA;
         });
-        setLatestPosts(sorted.slice(0, 3).filter(p => !!p));
+        if (!controller.signal.aborted) setNewsFeed({ source: newsSource, posts: sorted.slice(0, 3) });
       })
-      .catch(err => console.error("Error fetching posts:", err));
-  }, []);
+      .catch(err => {
+        if (!controller.signal.aborted) {
+          console.error('Error fetching homepage news:', err);
+          setNewsFeed({ source: newsSource, posts: [] });
+        }
+      });
+    return () => controller.abort();
+  }, [newsSource]);
 
   // Use data from DB if available, otherwise fallback to hardcoded (for safety)
   // For EN users, prefer translation dictionary over DB (DB content is VI).
@@ -48,7 +73,13 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
   const intro = isEn ? t.home.intro : (siteSettings?.intro || t.home.intro);
   const campus = isEn ? t.home.campus : (siteSettings?.campus || t.home.campus);
   const faculty = isEn ? t.home.faculty : (siteSettings?.faculty || t.home.faculty);
-  const homeBlog = isEn ? t.home.blog : (siteSettings?.homeBlog || t.home.blog);
+  const newsDefaults = newsSource === 'events' ? t.home.events : t.home.blog;
+  const newsSettings = newsSource === 'events' ? siteSettings?.homeEvents : siteSettings?.homeBlog;
+  const homeBlog = {
+    badge: (!isEn && newsSettings?.badge) || newsDefaults.badge,
+    title: (!isEn && newsSettings?.title) || newsDefaults.title,
+    viewAll: (!isEn && newsSettings?.viewAll) || newsDefaults.viewAll,
+  };
 
   return (
     <main className="min-h-screen bg-background">
@@ -325,7 +356,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                 })()}
               </h3>
             </div>
-            <Link href="/blog" className="group flex items-center gap-2 text-accent font-black uppercase tracking-widest text-xs md:text-xs border-b-2 border-primary pb-1 md:pb-2 hover:text-primary transition-colors">
+            <Link href={newsPath} className="group flex items-center gap-2 text-accent font-black uppercase tracking-widest text-xs md:text-xs border-b-2 border-primary pb-1 md:pb-2 hover:text-primary transition-colors">
               {homeBlog.viewAll}
               <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform md:w-4 md:h-4" />
             </Link>
@@ -341,10 +372,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                   viewport={{ once: true }}
                   className="md:col-span-7 md:row-span-2 group cursor-pointer relative"
                 >
-                  <Link href={`/blog/${latestPosts[0].slug || latestPosts[0]._id}`} className="absolute inset-0 z-20" />
+                  <Link href={`${newsPath}/${latestPosts[0].slug || latestPosts[0]._id}`} aria-label={latestPosts[0].title.replace(/<[^>]*>/g, '')} className="absolute inset-0 z-20" />
                   <div className="relative aspect-[16/10] md:h-full bg-slate-100 overflow-hidden border-2 md:border-4 border-accent">
                     <img
-                      src={latestPosts[0].image || "/news/workshop.png"}
+                      src={latestPosts[0].image || latestPosts[0].originalImage || "/news/workshop.png"}
                       alt={latestPosts[0].title}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 grayscale-[0.3] group-hover:grayscale-0"
                     />
@@ -375,11 +406,11 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                     viewport={{ once: true }}
                     className="md:col-span-5 group cursor-pointer relative"
                   >
-                    <Link href={`/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
+                    <Link href={`${newsPath}/${post.slug || post._id}`} aria-label={post.title.replace(/<[^>]*>/g, '')} className="absolute inset-0 z-20" />
                     <div className="flex flex-col md:flex-row h-full border-2 border-slate-100 hover:border-accent transition-all p-6 md:p-8 bg-white gap-6">
                       <div className="md:w-1/3 aspect-square shrink-0 overflow-hidden bg-slate-100">
                         <img
-                          src={post.image || "/news/achievement.png"}
+                          src={post.image || post.originalImage || "/news/achievement.png"}
                           className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all"
                           alt={post.title}
                         />
@@ -398,7 +429,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
               </>
             ) : (
               <div className="md:col-span-12 py-20 text-center text-slate-400 font-bold uppercase tracking-widest">
-                {t.common.loading}
+                {newsLoading ? t.common.loading : newsSource === 'events' ? t.home.events.empty : (isEn ? 'Posts will be updated soon.' : 'Các bài viết sẽ được cập nhật sớm.')}
               </div>
             )}
           </div>

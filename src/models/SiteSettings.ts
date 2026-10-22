@@ -37,6 +37,12 @@ const SiteSettingsSchema = new Schema({
         description: String,
         btn: String
     },
+    homeNewsSource: { type: String, enum: ['blog', 'events'], default: 'events' },
+    homeEvents: {
+        badge: String,
+        title: String,
+        viewAll: String
+    },
     homeBlog: {
         badge: String,
         title: String,

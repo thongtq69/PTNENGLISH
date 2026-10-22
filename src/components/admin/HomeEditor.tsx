@@ -20,7 +20,10 @@ export default function HomeEditor() {
         fetch('/api/site-settings', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
-                setSettings(data);
+                if (!data || typeof data !== 'object' || Array.isArray(data) || data.error) {
+                    throw new Error('Không thể tải cài đặt trang chủ.');
+                }
+                setSettings({ ...data, hero: { ...data.hero, primaryCTA: data.hero?.primaryCTA || {}, secondaryCTA: data.hero?.secondaryCTA || {} } });
                 setLoading(false);
             })
             .catch(err => {
@@ -81,6 +84,13 @@ export default function HomeEditor() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary"></div>
         </div>
     );
+
+    if (!settings) return <p role="alert" className="text-red-400">{error || 'Không thể tải cài đặt trang chủ. Vui lòng tải lại trang.'}</p>;
+
+    const newsSection = settings.homeNewsSource === 'blog' ? 'homeBlog' : 'homeEvents';
+    const newsDefaults = newsSection === 'homeBlog'
+        ? { badge: 'Insights', title: 'Tin tức & Học thuật', viewAll: 'Xem tất cả bài viết' }
+        : { badge: 'PTN English', title: 'Sự kiện & Hoạt động', viewAll: 'Xem tất cả sự kiện' };
 
     return (
         <div className="space-y-12 pb-20">
@@ -545,11 +555,24 @@ export default function HomeEditor() {
                         <ImageIcon size={24} />
                     </div>
                     <div>
-                        <h2 className="text-xl font-black text-white">Home Blog Section</h2>
-                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Titles for latest news section</p>
+                        <h2 className="text-xl font-black text-white">Blog / Sự kiện trên trang chủ</h2>
+                        <p className="text-xs font-bold text-slate-500 mt-1">Chọn nội dung và chỉnh tiêu đề hiển thị trên trang chủ</p>
                     </div>
                 </div>
                 <div className="p-10 space-y-8">
+                    <div className="space-y-3">
+                        <label htmlFor="home-news-source" className="text-sm font-bold text-white block">Nội dung hiển thị</label>
+                        <select
+                            id="home-news-source"
+                            value={settings.homeNewsSource === 'blog' ? 'blog' : 'events'}
+                            onChange={e => setSettings({ ...settings, homeNewsSource: e.target.value })}
+                            className="w-full md:max-w-sm bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-primary"
+                        >
+                            <option value="events">Sự kiện</option>
+                            <option value="blog">Blog</option>
+                        </select>
+                        <p className="text-sm text-slate-400">Trang chủ sẽ hiển thị 3 bài mới nhất của mục đã chọn. Nhấn “Save All Changes” để lưu. Tiêu đề của Blog và Sự kiện được lưu riêng.</p>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="space-y-4">
                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
@@ -562,8 +585,8 @@ export default function HomeEditor() {
                                 />
                             </label>
                             <input
-                                value={settings.homeBlog?.badge || ''}
-                                onChange={e => updateSection('homeBlog', 'badge', e.target.value)}
+                                value={settings[newsSection]?.badge ?? newsDefaults.badge}
+                                onChange={e => updateSection(newsSection, 'badge', e.target.value)}
                                 className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
                             />
                         </div>
@@ -578,18 +601,18 @@ export default function HomeEditor() {
                                 />
                             </label>
                             <input
-                                value={settings.homeBlog?.title || ''}
-                                onChange={e => updateSection('homeBlog', 'title', e.target.value)}
+                                value={settings[newsSection]?.title ?? newsDefaults.title}
+                                onChange={e => updateSection(newsSection, 'title', e.target.value)}
                                 placeholder="e.g. Tin tức & Học thuật"
                                 className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
                             />
                         </div>
                     </div>
-                    <div className="w-1/3 space-y-4">
+                    <div className="w-full md:w-1/3 space-y-4">
                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block">View All Text</label>
                         <input
-                            value={settings.homeBlog?.viewAll || ''}
-                            onChange={e => updateSection('homeBlog', 'viewAll', e.target.value)}
+                            value={settings[newsSection]?.viewAll ?? newsDefaults.viewAll}
+                            onChange={e => updateSection(newsSection, 'viewAll', e.target.value)}
                             className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white outline-none"
                         />
                     </div>

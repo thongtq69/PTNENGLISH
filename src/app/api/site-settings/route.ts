@@ -15,10 +15,15 @@ export async function POST(request: Request) {
         const data = await request.json();
         const { _id, __v, createdAt, updatedAt, ...cleanData } = data;
 
+        if (cleanData.homeNewsSource !== undefined && !['blog', 'events'].includes(cleanData.homeNewsSource)) {
+            return NextResponse.json({ error: 'Nguồn nội dung trang chủ phải là Blog hoặc Sự kiện.' }, { status: 400 });
+        }
+
         await SiteSettings.findOneAndUpdate({}, cleanData, {
             upsert: true,
             new: true,
-            setDefaultsOnInsert: true
+            setDefaultsOnInsert: true,
+            runValidators: true
         });
         return NextResponse.json({ success: true });
     } catch (error) {

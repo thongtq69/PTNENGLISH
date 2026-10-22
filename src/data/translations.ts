@@ -54,6 +54,12 @@ export const translations = {
                 title: "Tin tức & Học thuật",
                 viewAll: "Xem tất cả bài viết"
             },
+            events: {
+                badge: "PTN English",
+                title: "Sự kiện & Hoạt động",
+                viewAll: "Xem tất cả sự kiện",
+                empty: "Các sự kiện sẽ được cập nhật sớm."
+            },
             hallOfFame: {
                 badge: "Hall of Fame",
                 title: "Tôn vinh",
@@ -823,6 +829,12 @@ export const translations = {
                 badge: "Insights",
                 title: "News & Academic",
                 viewAll: "View all posts"
+            },
+            events: {
+                badge: "PTN English",
+                title: "Events & Activities",
+                viewAll: "View all events",
+                empty: "Events will be updated soon."
             },
             hallOfFame: {
                 badge: "Hall of Fame",
