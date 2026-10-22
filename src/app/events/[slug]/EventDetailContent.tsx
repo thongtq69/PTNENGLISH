@@ -64,7 +64,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
     return (
         <>
             {/* Breadcrumb */}
-            <section className="pt-28 md:pt-32 pb-5 md:pb-6 bg-white">
+            <section className="pt-28 md:pt-32 lg:pt-40 pb-5 md:pb-6 bg-white">
                 <div className="container mx-auto px-6 max-w-7xl">
                     <nav className="flex items-center gap-2 text-sm text-slate-500">
                         <Link href="/" className="hover:text-primary transition-colors">{labels.home}</Link>
