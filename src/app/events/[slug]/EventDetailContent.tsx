@@ -64,7 +64,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
     return (
         <>
             {/* Breadcrumb */}
-            <section className="pt-28 md:pt-32 pb-4 bg-white">
+            <section className="pt-28 md:pt-32 pb-5 md:pb-6 bg-white">
                 <div className="container mx-auto px-6 max-w-7xl">
                     <nav className="flex items-center gap-2 text-sm text-slate-500">
                         <Link href="/" className="hover:text-primary transition-colors">{labels.home}</Link>
@@ -77,9 +77,9 @@ export default function EventDetailContent({ event, related }: { event: EventDat
             </section>
 
             {/* Two-column layout */}
-            <section className="pb-10 md:pb-14 bg-white">
+            <section className="pb-10 md:pb-12 lg:pb-16 bg-white">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] gap-8 lg:gap-12 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-[44%_minmax(0,1fr)] gap-7 md:gap-8 lg:gap-10 xl:gap-12 items-start">
                         {/* Left: Main media with prev/next navigation */}
                         <div className="min-w-0">
                             <div className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[4/3] group">
@@ -130,12 +130,12 @@ export default function EventDetailContent({ event, related }: { event: EventDat
                             />
 
                             {event.excerpt && (
-                                <p className="text-slate-600 font-body text-base leading-relaxed mb-8">
+                                <p className="text-slate-600 font-body text-base leading-relaxed mb-6">
                                     {event.excerpt}
                                 </p>
                             )}
 
-                            <div className="space-y-3 pt-5 border-t border-slate-100 text-sm">
+                            <div className="space-y-2.5 pt-4 border-t border-slate-100 text-sm">
                                 {event.eventDate && (
                                     <div className="flex items-center gap-3 text-slate-500">
                                         <Calendar size={15} className="text-primary shrink-0" />
@@ -154,7 +154,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
                                 </div>
                             </div>
 
-                            <div className="mt-7 pt-5 border-t border-slate-100">
+                            <div className="mt-5 pt-4 border-t border-slate-100">
                                 <p className="text-primary text-xs font-bold uppercase tracking-[0.2em]">
                                     {event.category}
                                 </p>
@@ -164,7 +164,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
                             </div>
 
                             {/* Share */}
-                            <div className="mt-7 flex items-center gap-3">
+                            <div className="mt-5 flex items-center gap-3">
                                 <a
                                     href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
                                     target="_blank"
