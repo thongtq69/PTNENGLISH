@@ -79,9 +79,9 @@ export default function EventDetailContent({ event, related }: { event: EventDat
             {/* Two-column layout */}
             <section className="pb-10 md:pb-14 bg-white">
                 <div className="container mx-auto px-6 max-w-7xl">
-                    <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-8 lg:gap-12 items-start">
+                    <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] gap-8 lg:gap-12 items-start">
                         {/* Left: Main media with prev/next navigation */}
-                        <div>
+                        <div className="min-w-0">
                             <div className="relative rounded-2xl overflow-hidden bg-slate-100 aspect-[4/3] group">
                                 {currentImage ? (
                                     <button
@@ -123,9 +123,9 @@ export default function EventDetailContent({ event, related }: { event: EventDat
                         </div>
 
                         {/* Right: Info */}
-                        <div>
+                        <div className="min-w-0">
                             <h1
-                                className="text-2xl md:text-3xl lg:text-[2.25rem] font-heading font-bold text-accent leading-tight mb-5"
+                                className="text-2xl md:text-3xl lg:text-[2.25rem] font-heading font-bold text-accent leading-tight mb-5 break-words [&_span]:whitespace-normal"
                                 dangerouslySetInnerHTML={{ __html: event.title }}
                             />
 
@@ -255,7 +255,7 @@ export default function EventDetailContent({ event, related }: { event: EventDat
                                         )}
                                     </div>
                                     <h3
-                                        className="text-sm md:text-base font-heading font-bold text-accent group-hover:text-primary transition-colors line-clamp-2 leading-snug mb-3"
+                                        className="text-sm md:text-base font-heading font-bold text-accent group-hover:text-primary transition-colors line-clamp-2 leading-snug mb-3 break-words [&_span]:whitespace-normal"
                                         dangerouslySetInnerHTML={{ __html: r.title }}
                                     />
                                     <div className="flex items-center gap-2 text-[11px] text-slate-400">

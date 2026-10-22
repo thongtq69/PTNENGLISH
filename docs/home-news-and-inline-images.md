@@ -13,6 +13,7 @@
 - Danh sách Blog có hai cột trên máy tính; ảnh dùng khung 4:3 lớn hơn.
 - Danh sách Sự kiện dành nhiều chiều rộng hơn cho ảnh.
 - Ảnh đầu bài Sự kiện có vùng hiển thị lớn hơn, giữ trọn ảnh; khi không có thư viện ảnh, ưu tiên ảnh gốc.
+- Tiêu đề dài có nhãn không xuống dòng từ dữ liệu cũ được phép xuống dòng trong thẻ bài và trang chi tiết, tránh ép nhỏ ảnh hoặc cắt chữ trên điện thoại.
 - Ảnh đầu bài Blog và vùng nội dung Blog/Sự kiện được mở rộng. Ảnh trong nội dung co theo chiều rộng bài viết, giữ tỷ lệ và vừa màn hình điện thoại.
 
 ## Kiểm tra

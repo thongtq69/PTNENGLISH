@@ -385,7 +385,7 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                         {latestPosts[0].category}
                       </div>
                       <h4
-                        className="text-lg md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-2 group-hover:text-primary transition-colors"
+                        className="text-lg md:text-5xl font-heading font-black text-white leading-tight uppercase tracking-tighter mb-2 group-hover:text-primary transition-colors break-words [&_span]:whitespace-normal"
                         style={{ fontSize: 'var(--fs-home-blogPostTitle)' }}
                         dangerouslySetInnerHTML={{ __html: latestPosts[0].title }}
                       />
@@ -415,10 +415,10 @@ export default function HomeContent({ pageData, siteSettings }: { pageData: any;
                           alt={post.title}
                         />
                       </div>
-                      <div className="flex flex-col justify-center">
+                      <div className="min-w-0 flex flex-col justify-center">
                         <div className="text-primary text-xs font-black uppercase tracking-widest mb-2">{post.category}</div>
                         <h4
-                          className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors line-clamp-2"
+                          className="text-xl font-heading font-black text-accent uppercase leading-tight tracking-tight mb-3 group-hover:text-primary transition-colors line-clamp-2 break-words [&_span]:whitespace-normal"
                           dangerouslySetInnerHTML={{ __html: post.title }}
                         />
                         <p className="text-xs text-slate-400 font-bold font-mono">{post.date}</p>

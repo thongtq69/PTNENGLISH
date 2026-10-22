@@ -130,7 +130,7 @@ export default function EventsContent() {
                                                 )}
                                             </div>
 
-                                            <div>
+                                            <div className="min-w-0">
                                                 <div className="flex items-center gap-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-4">
                                                     <span className="text-primary">{event.category || labels.defaultCategory}</span>
                                                     {event.eventDate && (
@@ -145,7 +145,7 @@ export default function EventsContent() {
                                                 </div>
 
                                                 <h2
-                                                    className="text-xl md:text-2xl lg:text-3xl font-heading font-bold text-accent leading-snug mb-4 group-hover:text-primary transition-colors"
+                                                    className="text-xl md:text-2xl lg:text-3xl font-heading font-bold text-accent leading-snug mb-4 group-hover:text-primary transition-colors break-words [&_span]:whitespace-normal"
                                                     dangerouslySetInnerHTML={{ __html: event.title }}
                                                 />
 

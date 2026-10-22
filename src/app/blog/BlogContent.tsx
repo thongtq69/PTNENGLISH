@@ -255,7 +255,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                             </div>
 
                                             <h2
-                                                className="text-lg md:text-2xl font-heading font-bold text-accent mb-4 md:mb-6 leading-snug group-hover:text-primary transition-colors line-clamp-2"
+                                                className="text-lg md:text-2xl font-heading font-bold text-accent mb-4 md:mb-6 leading-snug group-hover:text-primary transition-colors line-clamp-2 break-words [&_span]:whitespace-normal"
                                                 style={{ fontSize: 'var(--fs-blog-postTitle)' }}
                                                 dangerouslySetInnerHTML={{ __html: post.title }}
                                             />
