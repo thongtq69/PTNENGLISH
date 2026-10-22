@@ -214,7 +214,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                 {/* Blog Grid */}
                 <section className="py-16 md:py-32">
                     <div className="container mx-auto px-6 max-w-7xl">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-16">
                             <AnimatePresence mode="popLayout">
                                 {filteredPosts.map((post, idx) => (
                                     <motion.article
@@ -227,7 +227,7 @@ export default function BlogContent({ pageData }: { pageData: any }) {
                                         className="bg-white rounded-[3rem] overflow-hidden group border border-slate-50 shadow-sm hover:shadow-2xl transition-all flex flex-col text-center relative"
                                     >
                                         <Link href={post._source === "event" ? `/events/${post.slug || post._id}` : `/blog/${post.slug || post._id}`} className="absolute inset-0 z-20" />
-                                        <div className="aspect-[4/3] overflow-hidden relative shrink-0">
+                                        <div className="h-72 min-h-[18rem] overflow-hidden relative shrink-0">
                                             {(post.originalImage || post.image) ? (
                                                 <div
                                                     className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-700 group-hover:scale-105"
